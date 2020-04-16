@@ -88,34 +88,91 @@ extension ViewController {
 
 extension ViewController {
     func startTracking() {
-        
+        self.setState(state: .on)
     }
     
     func stopTracking() {
+        self.setState(state: .off)
+    }
+
+    private func setState(state: CTManagerState) {
+        self.stateSetRequest?.invalidate()
         
+        self.isSettingState = true
+        
+        if let indexPath = self.indexPath(rowType: .startStopTracking) {
+            if let cell = self.tableView.cellForRow(at: indexPath) {
+                self.updateStartStopTrackingCell(cell: cell)
+            }
+        }
+        
+        let request = CTStateSetRequest()
+        request.state = state
+        request.completionHandler = { error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                }
+                else {
+                    self.trackingStatus = state
+                }
+                
+                self.isSettingState = false
+
+                var indexPaths: [IndexPath] = []
+                
+                if let indexPath = self.indexPath(rowType: .trackingState) {
+                    indexPaths.append(indexPath)
+                }
+
+                if let indexPath = self.indexPath(rowType: .startStopTracking) {
+                    indexPaths.append(indexPath)
+                }
+                
+                if indexPaths.count > 0 {
+                    self.tableView.reloadRows(at: indexPaths, with: .automatic)
+                }
+            }
+        }
+        
+        self.stateSetRequest = request
+        
+        request.perform()
     }
 }
 
 extension ViewController {
     func updateStartStopTrackingCell(cell: UITableViewCell) {
+        
+        let accessoryType: UITableViewCell.AccessoryType
+        
         switch self.trackingStatus {
         case .off:
             cell.textLabel?.text = "Start Tracking"
             cell.detailTextLabel?.text = "Available"
-            cell.accessoryType = .disclosureIndicator
+            accessoryType = .disclosureIndicator
 
         case .on:
             cell.textLabel?.text = "Stop Tracking"
             cell.detailTextLabel?.text = nil
-            cell.accessoryType = .none
+            accessoryType = .none
             
         case .unknown:
             cell.textLabel?.text = "Start Tracking"
             cell.detailTextLabel?.text = "Not available"
-            cell.accessoryType = .none
+            accessoryType = .none
         }
         
-        cell.accessoryView = nil
+        if self.isSettingState {
+            let indicator = UIActivityIndicatorView(style: .medium)
+            indicator.startAnimating()
+            cell.accessoryView = indicator
+        }
+        else {
+            cell.accessoryView = nil
+            cell.accessoryType = accessoryType
+        }
     }
 }
 
@@ -253,6 +310,8 @@ extension ViewController {
                 }))
                 
                 alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+
+                self.present(alert, animated: true, completion: nil)
             }
             
         case .checkIfExposed:
