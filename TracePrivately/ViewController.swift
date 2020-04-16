@@ -321,12 +321,12 @@ extension ViewController {
             
             tableView.deselectRow(at: indexPath, animated: true)
 
-            let alert = UIAlertController(title: "Are You Sure?", message: "This will submit your keys. False reports may be illegal in your jurisdiction.", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Are You Sure?", message: "Click OK to create your anonymous profile.\n\nYou will be prompted again before it is submitted to the authorities.", preferredStyle: .alert)
             
             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-            alert.addAction(UIAlertAction(title: "I Have COVID-19", style: .destructive, handler: { action in
+            alert.addAction(UIAlertAction(title: "OK", style: .destructive, handler: { action in
                 
-                let loadingAlert = UIAlertController(title: "Finding Your Keys...", message: nil, preferredStyle: .alert)
+                let loadingAlert = UIAlertController(title: "Creating Your Profile...", message: nil, preferredStyle: .alert)
 
                 self.present(loadingAlert, animated: true, completion: nil)
 
@@ -336,7 +336,7 @@ extension ViewController {
                     /// I'm not exactly sure what the difference is between dailyTrackingKeys being nil or empty. I would assume it should never be nil, and only be empty if tracking has not been enabled. Hopefully this becomes clearer with more documentation.
                     
                     guard let keys = info?.dailyTracingKeys else {
-                        let alert = UIAlertController(title: "Error", message: error?.localizedDescription ?? "Unable to retrieve your private keys", preferredStyle: .alert)
+                        let alert = UIAlertController(title: "Error", message: error?.localizedDescription ?? "Unable to create your anonymouse profile.", preferredStyle: .alert)
                         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                         
                         self.dismiss(animated: true) {
@@ -347,7 +347,7 @@ extension ViewController {
                     }
                     
                     guard keys.count > 0 else {
-                        let alert = UIAlertController(title: "No Keys", message: "You have no private keys. Perhaps you haven't had tracking enabled?", preferredStyle: .alert)
+                        let alert = UIAlertController(title: "No Information", message: "Unable to find your tracking information. Perhaps you haven't had tracking enabled?", preferredStyle: .alert)
                         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
 
                         self.dismiss(animated: true) {
@@ -359,12 +359,12 @@ extension ViewController {
                     
                     print("Found keys: \(keys)")
                     self.dismiss(animated: true) {
-                        let alert = UIAlertController(title: "Confirm", message: "Please confirm you want to submit.", preferredStyle: .alert)
+                        let alert = UIAlertController(title: "Confirm", message: "Please confirm you want to submit.\n\nThis will allow people who have been near you to know they may have been exposed.", preferredStyle: .alert)
                         
                         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-                        alert.addAction(UIAlertAction(title: "I Have COVID-19", style: .destructive, handler: { action in
+                        alert.addAction(UIAlertAction(title: "Submit", style: .destructive, handler: { action in
                             
-                            
+                            self.submitKeys(keys: keys)
                             
                         }))
                         
@@ -376,6 +376,25 @@ extension ViewController {
             }))
             
             self.present(alert, animated: true, completion: nil)
+        }
+    }
+}
+
+extension ViewController {
+    func submitKeys(keys: [CTDailyTracingKey]) {
+        
+        let loadingAlert = UIAlertController(title: "One Moment...", message: "Submitting your anonymous information.", preferredStyle: .alert)
+
+        self.present(loadingAlert, animated: true, completion: nil)
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.dismiss(animated: true) {
+                let alert = UIAlertController(title: "Thank You", message: "Your information has been submitted.", preferredStyle: .alert)
+                
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                
+                self.present(alert, animated: true, completion: nil)
+            }
         }
     }
 }
