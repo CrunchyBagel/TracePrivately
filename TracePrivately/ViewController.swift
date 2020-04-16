@@ -318,7 +318,64 @@ extension ViewController {
             break
             
         case .markAsInfected:
-            break
+            
+            tableView.deselectRow(at: indexPath, animated: true)
+
+            let alert = UIAlertController(title: "Are You Sure?", message: "This will submit your keys. False reports may be illegal in your jurisdiction.", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "I Have COVID-19", style: .destructive, handler: { action in
+                
+                let loadingAlert = UIAlertController(title: "Finding Your Keys...", message: nil, preferredStyle: .alert)
+
+                self.present(loadingAlert, animated: true, completion: nil)
+
+                let request = CTSelfTracingInfoRequest()
+                
+                request.completionHandler = { info, error in
+                    /// I'm not exactly sure what the difference is between dailyTrackingKeys being nil or empty. I would assume it should never be nil, and only be empty if tracking has not been enabled. Hopefully this becomes clearer with more documentation.
+                    
+                    guard let keys = info?.dailyTracingKeys else {
+                        let alert = UIAlertController(title: "Error", message: error?.localizedDescription ?? "Unable to retrieve your private keys", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        
+                        self.dismiss(animated: true) {
+                            self.present(alert, animated: true, completion: nil)
+                        }
+                        
+                        return
+                    }
+                    
+                    guard keys.count > 0 else {
+                        let alert = UIAlertController(title: "No Keys", message: "You have no private keys. Perhaps you haven't had tracking enabled?", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+
+                        self.dismiss(animated: true) {
+                            self.present(alert, animated: true, completion: nil)
+                        }
+                        
+                        return
+                    }
+                    
+                    print("Found keys: \(keys)")
+                    self.dismiss(animated: true) {
+                        let alert = UIAlertController(title: "Confirm", message: "Please confirm you want to submit.", preferredStyle: .alert)
+                        
+                        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                        alert.addAction(UIAlertAction(title: "I Have COVID-19", style: .destructive, handler: { action in
+                            
+                            
+                            
+                        }))
+                        
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                }
+
+                request.perform()
+            }))
+            
+            self.present(alert, animated: true, completion: nil)
         }
     }
 }

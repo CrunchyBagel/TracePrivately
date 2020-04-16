@@ -14,7 +14,7 @@ typealias CTExposureDetectionFinishHandler = (CTExposureDetectionSummary?, Error
 typealias CTExposureDetectionContactHandler = ([CTContactInfo]?, Error?) -> Void
 
 ///The type definition for the completion handler.
-typealias CTSelfTracingInfoGetCompletion = (CTSelfTracingInfo?, Error?)
+typealias CTSelfTracingInfoGetCompletion = (CTSelfTracingInfo?, Error?) -> Void
 
 /// I'm only guessing at these states
 enum CTManagerState {
@@ -176,7 +176,40 @@ class CTSelfTracingInfoRequest: CTBaseRequest {
     
     /// Asynchronously performs the request to get the state, and invokes the completion handler when it's done.
     func perform() {
+        guard !self.isInvalidated else {
+            completionHandler?(nil, CTError.requestIsInvalidated)
+            self.completionHandler = nil
+            return
+        }
         
+        guard !self.isRunning else {
+            // Silently fail?
+            return
+        }
+        
+        self.isRunning = true
+        
+        let queue: DispatchQueue = dispatchQueue ?? .main
+        
+        let delay: TimeInterval = 0.5
+        
+        queue.asyncAfter(deadline: .now() + delay) {
+            guard !self.isInvalidated else {
+                // I guess don't call handler here
+                self.completionHandler = nil
+                return
+            }
+            
+            let keys: [CTDailyTracingKey] = CTInternalState.shared.dailyKeys.map { CTDailyTracingKey(keyData: $0) }
+            
+            let summary = CTSelfTracingInfo()
+            summary.dailyTracingKeys = keys
+            
+            self.completionHandler?(summary, nil)
+            self.completionHandler = nil
+            
+            self.isRunning = false
+        }
     }
 }
 
@@ -199,6 +232,10 @@ class CTContactInfo {
 class CTDailyTracingKey {
     /// This property contains the Daily Tracing Key information.
     var keyData: Data?
+    
+    init(keyData: Data) {
+        self.keyData = keyData
+    }
 }
 
 
@@ -230,6 +267,28 @@ private class CTInternalState {
 
     private init() {
         
+    }
+    
+    // There's currently no stability with the keys here so it's going to tricky to properly test for now
+    var dailyKeys: [Data] {
+        return ctQueue.sync {
+            
+            var keys: [UUID] = []
+            
+            for _ in 0 ..< 14 {
+                keys.append(UUID())
+            }
+            
+            return keys.map { $0.data }
+        }
+    }
+}
+
+extension UUID {
+    var data: Data {
+        return withUnsafePointer(to: self.uuid) {
+            Data(bytes: $0, count: MemoryLayout.size(ofValue: self.uuid))
+        }
     }
 }
 
