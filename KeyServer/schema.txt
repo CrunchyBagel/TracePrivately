@@ -1,0 +1,4 @@
+CREATE TABLE infected_keys (
+    infected_key blob,
+    timestamp integer
+);
