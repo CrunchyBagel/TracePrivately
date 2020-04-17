@@ -36,9 +36,10 @@ class ExposedViewController: UITableViewController {
     
     lazy var durationFormatter: DateComponentsFormatter = {
         let ret = DateComponentsFormatter()
-        ret.allowedUnits = [ .hour, .minute, .second ]
-        ret.unitsStyle = .short
-        ret.collapsesLargestUnit = true
+        ret.allowedUnits = [ .day, .hour, .minute ]
+        ret.unitsStyle = .abbreviated
+        ret.zeroFormattingBehavior = .dropLeading
+        ret.maximumUnitCount = 2
         
         return ret
     }()
@@ -54,9 +55,14 @@ class ExposedViewController: UITableViewController {
             ]
         }
         else {
+            
+            let sortedContacts = self.exposureContacts.sorted { (a, b) -> Bool in
+                return a.timestamp < b.timestamp
+            }
+            
             self.sections = [
-                Section(header: nil, footer: "We believe you have come in contact with COVID-19:", rows: []),
-                Section(header: nil, footer: nil, rows: self.exposureContacts.map { .contact($0)} ),
+                Section(header: nil, footer: "We believe you have come in contact with COVID-19.", rows: []),
+                Section(header: "Exposure Times", footer: nil, rows: sortedContacts.map { .contact($0)} ),
                 Section(header: nil, footer: nil, rows: [ .nextSteps ])
             ]
         }
@@ -88,7 +94,14 @@ extension ExposedViewController {
         switch rowType {
         case .contact(let contact):
             cell.textLabel?.text = self.timeFormatter.string(from: contact.timestamp)
-            cell.detailTextLabel?.text = self.durationFormatter.string(from: contact.duration)
+            
+            if let str = self.durationFormatter.string(from: contact.duration) {
+                cell.detailTextLabel?.text = "Duration: " + str
+            }
+            else {
+                cell.detailTextLabel?.text = nil
+            }
+            
             cell.selectionStyle = .none
             cell.accessoryType = .none
             
@@ -102,6 +115,22 @@ extension ExposedViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let rowType = self.sections[indexPath.section].rows[indexPath.row]
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+
+        switch rowType {
+        case .contact:
+            break
+            
+        case .nextSteps:
+            let alert = UIAlertController(title: "Next Steps", message: "Follow the steps as outlined by your authorities.", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            
+            self.present(alert, animated: true, completion: nil)
+        }
         
     }
 }

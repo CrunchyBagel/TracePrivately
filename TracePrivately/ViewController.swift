@@ -5,6 +5,8 @@
 
 import UIKit
 
+// TODO: Remember when the user has been exposed so they can subsequently confirm or deny an infection
+
 class ViewController: UITableViewController {
 
     enum RowType {
@@ -31,6 +33,8 @@ class ViewController: UITableViewController {
     
     fileprivate var isSettingState = false
     fileprivate var stateSetRequest: CTStateSetRequest?
+    
+    fileprivate var isCheckingExposure = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,10 +119,8 @@ extension ViewController {
         
         self.isSettingState = true
         
-        if let indexPath = self.indexPath(rowType: .startStopTracking) {
-            if let cell = self.tableView.cellForRow(at: indexPath) {
-                self.updateStartStopTrackingCell(cell: cell)
-            }
+        if let cell = self.visibleCell(rowType: .startStopTracking) {
+            self.updateStartStopTrackingCell(cell: cell)
         }
         
         let request = CTStateSetRequest()
@@ -192,6 +194,14 @@ extension ViewController {
 }
 
 extension ViewController {
+    func visibleCell(rowType: RowType) -> UITableViewCell? {
+        guard let indexPath = self.indexPath(rowType: rowType) else {
+            return nil
+        }
+        
+        return self.tableView.cellForRow(at: indexPath)
+    }
+    
     func indexPath(rowType: RowType) -> IndexPath? {
         for (s, section) in self.sections.enumerated() {
             for (r, row) in section.rows.enumerated() {
@@ -203,7 +213,9 @@ extension ViewController {
         
         return nil
     }
-    
+}
+
+extension ViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         return self.sections.count
     }
@@ -253,7 +265,8 @@ extension ViewController {
         case .checkIfExposed:
             cell.textLabel?.text = "Check Your Exposure"
             cell.detailTextLabel?.text = nil
-            cell.accessoryType = .disclosureIndicator
+            
+            self.updateCheckExposureIndicator(cell: cell)
             
         case .markAsInfected:
             cell.textLabel?.text = "I Have COVID-19"
@@ -262,6 +275,18 @@ extension ViewController {
         }
         
         return cell
+    }
+    
+    func updateCheckExposureIndicator(cell: UITableViewCell) {
+        if self.isCheckingExposure {
+            let indicator = UIActivityIndicatorView(style: .medium)
+            indicator.startAnimating()
+            cell.accessoryView = indicator
+        }
+        else {
+            cell.accessoryView = nil
+            cell.accessoryType = .disclosureIndicator
+        }
     }
     
     private func updateGetStateIndicator(cell: UITableViewCell) {
@@ -337,7 +362,7 @@ extension ViewController {
             
             tableView.deselectRow(at: indexPath, animated: true)
 
-            let alert = UIAlertController(title: "Are You Sure?", message: "Click OK to create your anonymous profile.\n\nYou will be prompted again before it is submitted to the authorities.", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Are You Sure?", message: "Click OK to create your anonymous profile.\n\nYou will be prompted again before it is submitted to your jurisdiction's anonymous tracing database.", preferredStyle: .alert)
             
             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
             alert.addAction(UIAlertAction(title: "OK", style: .destructive, handler: { action in
@@ -432,81 +457,127 @@ extension ViewController {
 
 extension ViewController {
     func beginExposureWorkflow() {
-        
+        guard !self.isCheckingExposure else {
+            return
+        }
+
         let session = CTExposureDetectionSession()
         
         // This prompts a permission dialog
         session.activateWithCompletion { error in
             if let error = error {
-                var showAlert = true
-                
-                if let error = error as? CTError {
-                    if error == .permissionDenied {
-                        showAlert = false
-                    }
-                }
-                
-                if showAlert {
-                    let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                DispatchQueue.main.async {
+                    var showAlert = true
                     
-                    self.present(alert, animated: true, completion: nil)
+                    if let error = error as? CTError {
+                        if error == .permissionDenied {
+                            showAlert = false
+                        }
+                    }
+                    
+                    if showAlert {
+                        let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        
+                        self.present(alert, animated: true, completion: nil)
+                    }
                 }
                 
                 return
             }
 
-            
-            // Permission allowed, now we can start exposure detection
-            
-            // 1. Retrieve infected keys from server
-            // 2. Add them to addPositiveDiagnosis
-            // 3. Finish diagnosis
-            // 4. Display infection contact summary
-            
-            let date = Date().addingTimeInterval(14 * 86400) // TODO: This should be a last successful request date. Although may it should be limited to 14 days. Not 100% sure just yet.
-            
-            KeyServer.shared.retrieveInfectedKeys(since: date) { keys, error in
-                
-                guard let keys = keys else {
-                    // TODO: Handle no keys / error
-                    return
-                }
-                
-                // TODO: This isn't splitting to maxKeyCount yet
-                session.addPositiveDiagnosisKey(inKeys: keys) { error in
-                    guard error == nil else {
-                        return
-                    }
 
-                    session.finishedPositiveDiagnosisKeys { summary, error in
-                        guard let matchedKeys = summary?.matchedKeyCount else {
-                            return
-                        }
-                        
-                        if matchedKeys == 0 {
-                            DispatchQueue.main.async {
-                                let alert = UIAlertController(title: "Great News", message: "No contact detect with a COVID-19 infection!\n\nStay safe and wash your hands.", preferredStyle: .alert)
-                                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                                self.present(alert, animated: true, completion: nil)
+            DispatchQueue.main.async {
+                self.isCheckingExposure = true
+                
+                if let cell = self.visibleCell(rowType: .checkIfExposed) {
+                    self.updateCheckExposureIndicator(cell: cell)
+                }
+
+                // Permission allowed, now we can start exposure detection
+                
+                // 1. Retrieve infected keys from server
+                // 2. Add them to addPositiveDiagnosis
+                // 3. Finish diagnosis
+                // 4. Display infection contact summary
+                
+                let date = Date().addingTimeInterval(14 * 86400) // TODO: This should be a last successful request date. Although may it should be limited to 14 days. Not 100% sure just yet.
+                
+                KeyServer.shared.retrieveInfectedKeys(since: date) { keys, error in
+                    
+                    guard let keys = keys else {
+                        // TODO: Handle no keys / error
+                        DispatchQueue.main.async {
+                            self.isCheckingExposure = false
+
+                            if let cell = self.visibleCell(rowType: .checkIfExposed) {
+                                self.updateCheckExposureIndicator(cell: cell)
                             }
                         }
 
-                        session.getContactInfoWithHandler { info, error in
-                            guard let info = info, info.count > 0 else {
+                        return
+                    }
+                    
+                    // TODO: This isn't splitting to maxKeyCount yet
+                    session.addPositiveDiagnosisKey(inKeys: keys) { error in
+                        guard error == nil else {
+                            DispatchQueue.main.async {
+                                self.isCheckingExposure = false
+
+                                if let cell = self.visibleCell(rowType: .checkIfExposed) {
+                                    self.updateCheckExposureIndicator(cell: cell)
+                                }
+                            }
+
+                            return
+                        }
+
+                        session.finishedPositiveDiagnosisKeys { summary, error in
+                            guard let summary = summary else {
+                                DispatchQueue.main.async {
+                                    self.isCheckingExposure = false
+
+                                    if let cell = self.visibleCell(rowType: .checkIfExposed) {
+                                        self.updateCheckExposureIndicator(cell: cell)
+                                    }
+                                }
+
                                 return
                             }
                             
-                            DispatchQueue.main.async {
-                                self.performSegue(withIdentifier: "ExposedSegue", sender: info)
+                            if summary.matchedKeyCount == 0 {
+                                DispatchQueue.main.async {
+                                    let alert = UIAlertController(title: "Great News", message: "No contact detect with a COVID-19 infection!\n\nStay safe and wash your hands.", preferredStyle: .alert)
+                                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                                    self.present(alert, animated: true, completion: nil)
+
+                                    self.isCheckingExposure = false
+                                    
+                                    if let cell = self.visibleCell(rowType: .checkIfExposed) {
+                                        self.updateCheckExposureIndicator(cell: cell)
+                                    }
+                                }
+                            }
+
+                            session.getContactInfoWithHandler { info, error in
+                                guard let info = info, info.count > 0 else {
+                                    return
+                                }
+                                
+                                DispatchQueue.main.async {
+                                    self.isCheckingExposure = false
+                                    
+                                    if let cell = self.visibleCell(rowType: .checkIfExposed) {
+                                        self.updateCheckExposureIndicator(cell: cell)
+                                    }
+                                    
+                                    self.performSegue(withIdentifier: "ExposedSegue", sender: info)
+                                }
                             }
                         }
                     }
                 }
             }
-            
-            
-            
         }
     }
 }

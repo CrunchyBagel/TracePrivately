@@ -22,7 +22,10 @@ class KeyServer {
     func retrieveInfectedKeys(since: Date, completion: @escaping ([CTDailyTracingKey]?, Error?) -> Void) {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            completion([], nil)
+            
+            let key = CTDailyTracingKey(keyData: UUID().data)
+            
+            completion([ key ], nil)
         }
 
     }

@@ -137,6 +137,8 @@ class CTExposureDetectionSession: CTBaseRequest {
     /// This property contains the maximum number of keys to provide to this API at once. This property’s value updates after each operation complete and before the completion handler is invoked. Use this property to throttle key downloads to avoid excessive buffering of keys in memory.
     var maxKeyCount: Int = 0
     
+    private var _infectedKeys: [CTDailyTracingKey] = []
+    
     private var _permissionAllowed = false
     fileprivate var permissionAllowed: Bool {
         get {
@@ -158,7 +160,7 @@ class CTExposureDetectionSession: CTBaseRequest {
             let queue: DispatchQueue = self.dispatchQueue ?? .main
             
             queue.async {
-                completion(CTError.invalidState)
+                completion(CTError.requestIsInvalidated)
             }
             
             return
@@ -179,7 +181,7 @@ class CTExposureDetectionSession: CTBaseRequest {
             
             queue.async {
                 self.permissionAllowed = true
-                completion(CTError.permissionDenied)
+                completion(nil)
             }
         }))
         
@@ -196,51 +198,97 @@ class CTExposureDetectionSession: CTBaseRequest {
     /// Asynchronously adds the specified keys to the session to allow them to be checked for exposure. Each call to this method must include more keys than specified by the current value of <maxKeyCount>.
     func addPositiveDiagnosisKey(inKeys keys: [CTDailyTracingKey], completion: @escaping (CTErrorHandler)) {
         
+        let queue: DispatchQueue = self.dispatchQueue ?? .main
+
         guard !self.isInvalidated else {
-            let queue: DispatchQueue = self.dispatchQueue ?? .main
             
             queue.async {
-                completion(CTError.invalidState)
+                completion(CTError.requestIsInvalidated)
             }
             
             return
         }
+        
+        ctQueue.sync {
+            self._infectedKeys.append(contentsOf: keys)
+        }
 
+        queue.asyncAfter(deadline: .now() + 0.5) {
+            completion(nil)
+        }
     }
     
     /// Indicates all of the available keys have been provided. Any remaining detection will be performed and the completion handler will be invoked with the results.
     func finishedPositiveDiagnosisKeys(completion: @escaping CTExposureDetectionFinishHandler) {
+        let queue: DispatchQueue = dispatchQueue ?? .main
+
         guard !self.isInvalidated else {
-            let queue: DispatchQueue = self.dispatchQueue ?? .main
-            
             queue.async {
-                completion(nil, CTError.invalidState)
+                completion(nil, CTError.requestIsInvalidated)
             }
             
             return
         }
+        
+        let delay: TimeInterval = 0.5
+        
+        queue.asyncAfter(deadline: .now() + delay) {
+            guard !self.isInvalidated else {
+                completion(nil, CTError.requestIsInvalidated)
+                return
+            }
+            
+            let keys = ctQueue.sync { return self._infectedKeys }
 
+            let summary = CTExposureDetectionSummary(matchedKeyCount: keys.count)
+            completion(summary, nil)
+        }
     }
     
     /// Obtains information on each incident. This can only be called once the detector finishes. The handler may be invoked multiple times. An empty array indicates the final invocation of the hander.
     func getContactInfoWithHandler(completion: @escaping CTExposureDetectionContactHandler) {
+        let queue: DispatchQueue = self.dispatchQueue ?? .main
+
         guard !self.isInvalidated else {
-            let queue: DispatchQueue = self.dispatchQueue ?? .main
-            
             queue.async {
-                completion(nil, CTError.invalidState)
+                completion(nil, CTError.requestIsInvalidated)
             }
             
             return
         }
+        
+        let delay: TimeInterval = 0.5
+        
+        queue.asyncAfter(deadline: .now() + delay) {
+            guard !self.isInvalidated else {
+                completion(nil, CTError.requestIsInvalidated)
+                return
+            }
 
+            // For now this is assuming that every key is infected. Obviously this isn't accurate, just useful for testing.
+            let keys: [CTDailyTracingKey] = ctQueue.sync { self._infectedKeys }
+            
+            let contacts: [CTContactInfo] = keys.map { _ in
+                let duration = TimeInterval.random(in: 3 ... 7200)
+                
+                let age = TimeInterval.random(in: 300 ... 604800)
+                
+                return CTContactInfo(duration: duration, timestamp: Date().addingTimeInterval(-age))
+            }
+
+            completion(contacts, nil)
+        }
     }
 }
 
 /// Provides a summary on exposures.
 class CTExposureDetectionSummary {
     /// This property holds the number of keys that matched for an exposure detection.
-    var matchedKeyCount: Int?
+    let matchedKeyCount: Int
+    
+    init(matchedKeyCount: Int) {
+        self.matchedKeyCount = matchedKeyCount
+    }
 }
 
 /// Requests the daily tracing keys used by this device to share with a server.
