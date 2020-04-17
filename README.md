@@ -1,9 +1,9 @@
 # TracePrivately
 A sample app using Apple's contact tracing framework
 
-![Main Window](screenshots/trace-main.jpg?raw=true)
+![Main Window](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/trace-main.png?raw=true)
 
-![Exposed Window](screenshots/trace-exposed.jpg?raw=true)
+![Exposed Window](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/trace-exposed.png?raw=true)
 
 It shows how to start and stop tracking, as well how to indicate if you've been infected or exposed.
 
