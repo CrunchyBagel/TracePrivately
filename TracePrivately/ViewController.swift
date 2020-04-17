@@ -547,7 +547,7 @@ extension ViewController {
                             
                             if summary.matchedKeyCount == 0 {
                                 DispatchQueue.main.async {
-                                    let alert = UIAlertController(title: "Great News", message: "No contact detect with a COVID-19 infection!\n\nStay safe and wash your hands.", preferredStyle: .alert)
+                                    let alert = UIAlertController(title: "Great News", message: "No contact detected with a COVID-19 infection!\n\nStay safe and wash your hands.", preferredStyle: .alert)
                                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                                     self.present(alert, animated: true, completion: nil)
 
