@@ -182,7 +182,15 @@ extension ViewController {
         }
         
         if self.isSettingState {
-            let indicator = UIActivityIndicatorView(style: .medium)
+            let style: UIActivityIndicatorView.Style
+            
+            if #available(iOS 13.0, *) {
+                style = .medium
+            } else {
+                style = .gray
+            }
+            
+            let indicator = UIActivityIndicatorView(style: style)
             indicator.startAnimating()
             cell.accessoryView = indicator
         }
@@ -249,7 +257,15 @@ extension ViewController {
             }
             
             if self.isDeterminingState {
-                let indicator = UIActivityIndicatorView(style: .medium)
+                let style: UIActivityIndicatorView.Style
+                
+                if #available(iOS 13.0, *) {
+                    style = .medium
+                } else {
+                    style = .gray
+                }
+
+                let indicator = UIActivityIndicatorView(style: style)
                 indicator.startAnimating()
                 cell.accessoryView = indicator
             }
@@ -279,7 +295,15 @@ extension ViewController {
     
     func updateCheckExposureIndicator(cell: UITableViewCell) {
         if self.isCheckingExposure {
-            let indicator = UIActivityIndicatorView(style: .medium)
+            let style: UIActivityIndicatorView.Style
+            
+            if #available(iOS 13.0, *) {
+                style = .medium
+            } else {
+                style = .gray
+            }
+
+            let indicator = UIActivityIndicatorView(style: style)
             indicator.startAnimating()
             cell.accessoryView = indicator
         }
@@ -291,7 +315,15 @@ extension ViewController {
     
     private func updateGetStateIndicator(cell: UITableViewCell) {
         if self.isDeterminingState {
-            let indicator = UIActivityIndicatorView(style: .medium)
+            let style: UIActivityIndicatorView.Style
+            
+            if #available(iOS 13.0, *) {
+                style = .medium
+            } else {
+                style = .gray
+            }
+
+            let indicator = UIActivityIndicatorView(style: style)
             indicator.startAnimating()
             cell.accessoryView = indicator
         }

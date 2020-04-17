@@ -31,8 +31,11 @@ class KeyServer {
         config.allowsCellularAccess     = true
         config.isDiscretionary          = false
         config.sessionSendsLaunchEvents = true
-        config.waitsForConnectivity     = true
         config.requestCachePolicy       = .reloadIgnoringLocalCacheData
+
+        if #available(iOS 11.0, *) {
+            config.waitsForConnectivity     = true
+        }
         
         return URLSession(configuration: config, delegate: nil, delegateQueue: nil)
     }()
