@@ -279,8 +279,7 @@ class CTSelfTracingInfoRequest: CTBaseRequest {
             
             let keys: [CTDailyTracingKey] = CTInternalState.shared.dailyKeys.map { CTDailyTracingKey(keyData: $0) }
             
-            let summary = CTSelfTracingInfo()
-            summary.dailyTracingKeys = keys
+            let summary = CTSelfTracingInfo(dailyTracingKeys: keys)
             
             self.completionHandler?(summary, nil)
             self.completionHandler = nil
@@ -293,22 +292,31 @@ class CTSelfTracingInfoRequest: CTBaseRequest {
 /// Contains the Daily Tracing Keys.
 class CTSelfTracingInfo {
     /// Daily tracing keys available at the time of the request.
-    var dailyTracingKeys: [CTDailyTracingKey]?
+    let dailyTracingKeys: [CTDailyTracingKey]
+    
+    init(dailyTracingKeys: [CTDailyTracingKey]) {
+        self.dailyTracingKeys = dailyTracingKeys
+    }
 }
 
 
 /// Contains information about a single contact incident.
 class CTContactInfo {
     /// How long the contact was in proximity. Minimum duration is 5 minutes and increments by 5 minutes: 5, 10, 15, etc.
-    var duration: TimeInterval?
+    let duration: TimeInterval
     /// This property contains the time when the contact occurred. This may have reduced precision, such as within one day of the actual time.
-    var timestamp: CFAbsoluteTime?
+    let timestamp: Date // TODO: This uses CFAbsoluteTime
+    
+    init(duration: TimeInterval, timestamp: Date) {
+        self.duration = duration
+        self.timestamp = timestamp
+    }
 }
 
 /// The Daily Tracing Key object
 class CTDailyTracingKey {
     /// This property contains the Daily Tracing Key information.
-    var keyData: Data?
+    let keyData: Data
     
     init(keyData: Data) {
         self.keyData = keyData

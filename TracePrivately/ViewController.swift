@@ -47,6 +47,21 @@ class ViewController: UITableViewController {
         
         self.refreshTrackingState()
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ExposedSegue" {
+            guard let nc = segue.destination as? UINavigationController, let vc = nc.viewControllers.first as? ExposedViewController else {
+                return
+            }
+            
+            if let contacts = sender as? [CTContactInfo] {
+                vc.exposureContacts = contacts
+            }
+        }
+        else {
+            super.prepare(for: segue, sender: sender)
+        }
+    }
 }
 
 extension ViewController {
@@ -444,17 +459,54 @@ extension ViewController {
             
             // Permission allowed, now we can start exposure detection
             
-            session.addPositiveDiagnosisKey(inKeys: []) { error in
+            // 1. Retrieve infected keys from server
+            // 2. Add them to addPositiveDiagnosis
+            // 3. Finish diagnosis
+            // 4. Display infection contact summary
+            
+            let date = Date().addingTimeInterval(14 * 86400) // TODO: This should be a last successful request date. Although may it should be limited to 14 days. Not 100% sure just yet.
+            
+            KeyServer.shared.retrieveInfectedKeys(since: date) { keys, error in
                 
+                guard let keys = keys else {
+                    // TODO: Handle no keys / error
+                    return
+                }
+                
+                // TODO: This isn't splitting to maxKeyCount yet
+                session.addPositiveDiagnosisKey(inKeys: keys) { error in
+                    guard error == nil else {
+                        return
+                    }
+
+                    session.finishedPositiveDiagnosisKeys { summary, error in
+                        guard let matchedKeys = summary?.matchedKeyCount else {
+                            return
+                        }
+                        
+                        if matchedKeys == 0 {
+                            DispatchQueue.main.async {
+                                let alert = UIAlertController(title: "Great News", message: "No contact detect with a COVID-19 infection!\n\nStay safe and wash your hands.", preferredStyle: .alert)
+                                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                                self.present(alert, animated: true, completion: nil)
+                            }
+                        }
+
+                        session.getContactInfoWithHandler { info, error in
+                            guard let info = info, info.count > 0 else {
+                                return
+                            }
+                            
+                            DispatchQueue.main.async {
+                                self.performSegue(withIdentifier: "ExposedSegue", sender: info)
+                            }
+                        }
+                    }
+                }
             }
             
-            session.finishedPositiveDiagnosisKeys { summary, error in
-                
-            }
             
-            session.getContactInfoWithHandler { info, error in
-                
-            }
+            
         }
     }
 }
