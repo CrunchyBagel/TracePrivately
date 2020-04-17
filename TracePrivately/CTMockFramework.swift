@@ -82,9 +82,16 @@ class CTStateSetRequest: CTBaseRequest {
     /// Asynchronously performs the request to get the state, and invokes the completion handler when it's done.
     func perform() {
      
+        let queue: DispatchQueue = dispatchQueue ?? .main
+
         guard !self.isInvalidated else {
-            completionHandler?(CTError.requestIsInvalidated)
+            let completion = self.completionHandler
             self.completionHandler = nil
+
+            queue.async {
+                completion?(CTError.requestIsInvalidated)
+            }
+            
             return
         }
         
@@ -105,7 +112,6 @@ class CTStateSetRequest: CTBaseRequest {
         
         self.isRunning = true
         
-        let queue: DispatchQueue = dispatchQueue ?? .main
         
         let delay: TimeInterval = 0.5
         
@@ -127,36 +133,107 @@ class CTStateSetRequest: CTBaseRequest {
 }
 
 /// Performs exposure detection bad on previously collected proximity data and keys.
-class CTExposureDetectionSession {
-    /// This property holds the the dispatch queue used to invoke handlers on. If this property isn’t set, the framework uses the main queue.
-    var dispatchQueue: DispatchQueue?
-    
+class CTExposureDetectionSession: CTBaseRequest {
     /// This property contains the maximum number of keys to provide to this API at once. This property’s value updates after each operation complete and before the completion handler is invoked. Use this property to throttle key downloads to avoid excessive buffering of keys in memory.
     var maxKeyCount: Int = 0
+    
+    private var _permissionAllowed = false
+    fileprivate var permissionAllowed: Bool {
+        get {
+            return ctQueue.sync {
+                return self._permissionAllowed
+            }
+        }
+        set {
+            ctQueue.sync {
+                self._permissionAllowed = newValue
+            }
+        }
+    }
 
     /// Activates the session and requests authorization for the app with the user. Properties and methods cannot be used until this completes successfully.
-    func activateWithCompletion(_ inCompletion: CTErrorHandler) {
+    func activateWithCompletion(_ completion: @escaping CTErrorHandler) {
         
-    }
-    
-    /// Invalidates the session. Any outstanding completion handlers will be invoked with an error. The session cannot be used after this is called. A new session must be created if another detection is needed.
-    func invalidate() {
+        guard !self.isInvalidated else {
+            let queue: DispatchQueue = self.dispatchQueue ?? .main
+            
+            queue.async {
+                completion(CTError.invalidState)
+            }
+            
+            return
+        }
         
+        let alert = UIAlertController(title: "Permission", message: "Press OK to allow this app to check if you have been exposed to COVID-19.", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Deny", style: .cancel, handler: { action in
+            let queue: DispatchQueue = self.dispatchQueue ?? .main
+            
+            queue.async {
+                completion(CTError.permissionDenied)
+            }
+        }))
+
+        alert.addAction(UIAlertAction(title: "Allow", style: .default, handler: { action in
+            let queue: DispatchQueue = self.dispatchQueue ?? .main
+            
+            queue.async {
+                self.permissionAllowed = true
+                completion(CTError.permissionDenied)
+            }
+        }))
+        
+        guard let vc = UIApplication.shared.windows.first?.rootViewController else {
+            completion(CTError.unknownError)
+            return
+        }
+        
+        DispatchQueue.main.async {
+            vc.present(alert, animated: true, completion: nil)
+        }
     }
     
     /// Asynchronously adds the specified keys to the session to allow them to be checked for exposure. Each call to this method must include more keys than specified by the current value of <maxKeyCount>.
     func addPositiveDiagnosisKey(inKeys keys: [CTDailyTracingKey], completion: @escaping (CTErrorHandler)) {
         
+        guard !self.isInvalidated else {
+            let queue: DispatchQueue = self.dispatchQueue ?? .main
+            
+            queue.async {
+                completion(CTError.invalidState)
+            }
+            
+            return
+        }
+
     }
     
     /// Indicates all of the available keys have been provided. Any remaining detection will be performed and the completion handler will be invoked with the results.
-    func finishedPositiveDiagnosisKeys(completion: CTExposureDetectionFinishHandler) {
-        
+    func finishedPositiveDiagnosisKeys(completion: @escaping CTExposureDetectionFinishHandler) {
+        guard !self.isInvalidated else {
+            let queue: DispatchQueue = self.dispatchQueue ?? .main
+            
+            queue.async {
+                completion(nil, CTError.invalidState)
+            }
+            
+            return
+        }
+
     }
     
     /// Obtains information on each incident. This can only be called once the detector finishes. The handler may be invoked multiple times. An empty array indicates the final invocation of the hander.
-    func getContactInfoWithHandler(completion: CTExposureDetectionContactHandler) {
-        
+    func getContactInfoWithHandler(completion: @escaping CTExposureDetectionContactHandler) {
+        guard !self.isInvalidated else {
+            let queue: DispatchQueue = self.dispatchQueue ?? .main
+            
+            queue.async {
+                completion(nil, CTError.invalidState)
+            }
+            
+            return
+        }
+
     }
 }
 
@@ -296,12 +373,17 @@ enum CTError: LocalizedError {
     case requestIsInvalidated
     case requestAlreadyRunning
     case invalidState
+    case unknownError
+    case permissionDenied
     
     var errorDescription: String? {
         switch self {
         case .requestIsInvalidated: return "Invalidated request"
         case .requestAlreadyRunning: return "Already running"
         case .invalidState: return "Invalid state"
+            
+        case .unknownError: return "Unknown error"
+        case .permissionDenied: return "Permission denied"
         }
     }
 }

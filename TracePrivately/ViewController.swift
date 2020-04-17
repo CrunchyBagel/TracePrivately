@@ -42,7 +42,7 @@ class ViewController: UITableViewController {
             Section(header: "About", footer: "This is an example only of contact tracing using Apple's newly-announced framework.", rows: []),
             Section(header: "Tracking", footer: nil, rows: [ .trackingState, .startStopTracking ]),
             Section(header: "Infection", footer: nil, rows: [ .markAsInfected ]),
-            Section(header: "Exposure", footer: nil, rows: [ .checkIfExposed ])
+            Section(header: "Exposure", footer: "This step would likely be triggered automatically in the background, rather than manually.", rows: [ .checkIfExposed ])
         ]
         
         self.refreshTrackingState()
@@ -315,7 +315,8 @@ extension ViewController {
             }
             
         case .checkIfExposed:
-            break
+            tableView.deselectRow(at: indexPath, animated: true)
+            self.beginExposureWorkflow()
             
         case .markAsInfected:
             
@@ -325,54 +326,7 @@ extension ViewController {
             
             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
             alert.addAction(UIAlertAction(title: "OK", style: .destructive, handler: { action in
-                
-                let loadingAlert = UIAlertController(title: "Creating Your Profile...", message: nil, preferredStyle: .alert)
-
-                self.present(loadingAlert, animated: true, completion: nil)
-
-                let request = CTSelfTracingInfoRequest()
-                
-                request.completionHandler = { info, error in
-                    /// I'm not exactly sure what the difference is between dailyTrackingKeys being nil or empty. I would assume it should never be nil, and only be empty if tracking has not been enabled. Hopefully this becomes clearer with more documentation.
-                    
-                    guard let keys = info?.dailyTracingKeys else {
-                        let alert = UIAlertController(title: "Error", message: error?.localizedDescription ?? "Unable to create your anonymouse profile.", preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                        
-                        self.dismiss(animated: true) {
-                            self.present(alert, animated: true, completion: nil)
-                        }
-                        
-                        return
-                    }
-                    
-                    guard keys.count > 0 else {
-                        let alert = UIAlertController(title: "No Information", message: "Unable to find your tracking information. Perhaps you haven't had tracking enabled?", preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-
-                        self.dismiss(animated: true) {
-                            self.present(alert, animated: true, completion: nil)
-                        }
-                        
-                        return
-                    }
-                    
-                    print("Found keys: \(keys)")
-                    self.dismiss(animated: true) {
-                        let alert = UIAlertController(title: "Confirm", message: "Please confirm you want to submit.\n\nThis will allow people who have been near you to know they may have been exposed.", preferredStyle: .alert)
-                        
-                        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-                        alert.addAction(UIAlertAction(title: "Submit", style: .destructive, handler: { action in
-                            
-                            self.submitKeys(keys: keys)
-                            
-                        }))
-                        
-                        self.present(alert, animated: true, completion: nil)
-                    }
-                }
-
-                request.perform()
+                self.beginInfectionWorkflow()
             }))
             
             self.present(alert, animated: true, completion: nil)
@@ -381,24 +335,129 @@ extension ViewController {
 }
 
 extension ViewController {
+    func beginInfectionWorkflow() {
+        let loadingAlert = UIAlertController(title: "Creating Your Profile...", message: nil, preferredStyle: .alert)
+
+        self.present(loadingAlert, animated: true, completion: nil)
+
+        let request = CTSelfTracingInfoRequest()
+        
+        request.completionHandler = { info, error in
+            /// I'm not exactly sure what the difference is between dailyTrackingKeys being nil or empty. I would assume it should never be nil, and only be empty if tracking has not been enabled. Hopefully this becomes clearer with more documentation.
+            
+            guard let keys = info?.dailyTracingKeys else {
+                let alert = UIAlertController(title: "Error", message: error?.localizedDescription ?? "Unable to create your anonymouse profile.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                
+                self.dismiss(animated: true) {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                
+                return
+            }
+            
+            guard keys.count > 0 else {
+                let alert = UIAlertController(title: "No Information", message: "Unable to find your tracking information. Perhaps you haven't had tracking enabled?", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+
+                self.dismiss(animated: true) {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                
+                return
+            }
+            
+            print("Found keys: \(keys)")
+            self.dismiss(animated: true) {
+                let alert = UIAlertController(title: "Confirm", message: "Please confirm you want to submit.\n\nThis will allow people who have been near you to know they may have been exposed.", preferredStyle: .alert)
+                
+                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: "Submit", style: .destructive, handler: { action in
+                    
+                    self.submitKeys(keys: keys)
+                    
+                }))
+                
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+
+        request.perform()
+    }
+    
     func submitKeys(keys: [CTDailyTracingKey]) {
         
         let loadingAlert = UIAlertController(title: "One Moment...", message: "Submitting your anonymous information.", preferredStyle: .alert)
 
         self.present(loadingAlert, animated: true, completion: nil)
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.dismiss(animated: true) {
-                let alert = UIAlertController(title: "Thank You", message: "Your information has been submitted.", preferredStyle: .alert)
-                
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                
-                self.present(alert, animated: true, completion: nil)
+        
+        KeyServer.shared.submitInfectedKeys(keys: keys) { success, error in
+            DispatchQueue.main.async {
+                self.dismiss(animated: true) {
+                    
+                    if success {
+                        let alert = UIAlertController(title: "Thank You", message: "Your information has been submitted.", preferredStyle: .alert)
+                        
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                    else {
+                        let alert = UIAlertController(title: "Error", message: error?.localizedDescription ?? "Unable to submit your information.", preferredStyle: .alert)
+                        
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                }
             }
         }
     }
 }
 
+extension ViewController {
+    func beginExposureWorkflow() {
+        
+        let session = CTExposureDetectionSession()
+        
+        // This prompts a permission dialog
+        session.activateWithCompletion { error in
+            if let error = error {
+                var showAlert = true
+                
+                if let error = error as? CTError {
+                    if error == .permissionDenied {
+                        showAlert = false
+                    }
+                }
+                
+                if showAlert {
+                    let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    
+                    self.present(alert, animated: true, completion: nil)
+                }
+                
+                return
+            }
+
+            
+            // Permission allowed, now we can start exposure detection
+            
+            session.addPositiveDiagnosisKey(inKeys: []) { error in
+                
+            }
+            
+            session.finishedPositiveDiagnosisKeys { summary, error in
+                
+            }
+            
+            session.getContactInfoWithHandler { info, error in
+                
+            }
+        }
+    }
+}
 
 extension CTManagerState {
     var localizedTitle: String {
