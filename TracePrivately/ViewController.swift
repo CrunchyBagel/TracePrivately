@@ -407,7 +407,6 @@ extension ViewController {
                 return
             }
             
-            print("Found keys: \(keys)")
             self.dismiss(animated: true) {
                 let alert = UIAlertController(title: "Confirm", message: "Please confirm you want to submit.\n\nThis will allow people who have been near you to know they may have been exposed.", preferredStyle: .alert)
                 
@@ -425,6 +424,7 @@ extension ViewController {
         request.perform()
     }
     
+    // TODO: Make it super clear to the user if an error occurred, so they have an opportunity to submit again
     func submitKeys(keys: [CTDailyTracingKey]) {
         
         let loadingAlert = UIAlertController(title: "One Moment...", message: "Submitting your anonymous information.", preferredStyle: .alert)

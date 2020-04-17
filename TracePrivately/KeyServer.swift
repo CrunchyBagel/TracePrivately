@@ -14,6 +14,16 @@ class KeyServer {
         case responseDataNotReceived
         case jsonDecodingError
         case keyDataMissing
+        case okStatusNotReceived
+        
+        var errorDescription: String? {
+            switch self {
+            case .responseDataNotReceived: return "Response Data Not Received"
+            case .jsonDecodingError: return "Error Decoding Response"
+            case .keyDataMissing: return "Key Data Missing"
+            case .okStatusNotReceived: return "OK Status Not Received"
+            }
+        }
     }
     
     lazy var urlSession: URLSession = {
@@ -29,7 +39,7 @@ class KeyServer {
 
     private init() {}
     
-    enum RequestEndpoint {
+    fileprivate enum RequestEndpoint {
         case submitInfectedKeys
         case retrieveInfectedKeys
         
@@ -68,13 +78,34 @@ class KeyServer {
         }
     }
     
-    // TODO: Complete server stub
+    /**
+        Sends a JSON packet of the current device's keys. Each key is Base 64 encoded
+
+            {
+                "keys": [
+                     "Base64-Encoded-String-1",
+                     "Base64-Encoded-String-2",
+                     ...
+                ]
+            }
+     
+        If successful, the following response is expected:
+     
+             {
+                 "status" : "OK"
+             }
+
+     */
     func submitInfectedKeys(keys: [CTDailyTracingKey], completion: @escaping (Bool, Swift.Error?) -> Void) {
         
         let endPoint: RequestEndpoint = .submitInfectedKeys
         
         var request = endPoint.urlRequest
-        let requestData: [String] = []
+        let encodedKeys: [String] = keys.map { $0.keyData.base64EncodedString() }
+        
+        let requestData: [String: Any] = [
+            "keys": encodedKeys
+        ]
 
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: requestData, options: [])
@@ -90,7 +121,25 @@ class KeyServer {
                     return
                 }
                 
-                // TODO: Validate the response
+                guard let data = data else {
+                    completion(false, Error.responseDataNotReceived)
+                    return
+                }
+
+                guard let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+                    if let str = String(data: data, encoding: .utf8) {
+                        print("Response: \(str)")
+                    }
+                    
+                    completion(false, Error.jsonDecodingError)
+                    return
+                }
+                
+                guard let status = json["status"] as? String, status == "OK" else {
+                    completion(false, Error.okStatusNotReceived)
+                    return
+                }
+
                 completion(true, nil)
             }
             
@@ -103,11 +152,11 @@ class KeyServer {
     }
     
     /**
-            Expects a json response like the following. Each key is a Base 64 encoded string.
+        Expects a JSON response like the following. Each key is a Base 64 encoded string.
      
             {
-                "status":"OK",
-                "keys":[
+                "status" : "OK",
+                "keys" : [
                     "Base64-Encoded-String-1",
                     "Base64-Encoded-String-2",
                     ...
