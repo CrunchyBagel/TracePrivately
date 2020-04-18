@@ -9,6 +9,14 @@ import UIKit
 
 class ViewController: UITableViewController {
 
+    struct Cells {
+        static let standard = "Cell"
+    }
+    
+    struct Segues {
+        static let exposed = "ExposedSegue"
+    }
+    
     enum RowType {
         case trackingState
         case startStopTracking
@@ -40,20 +48,37 @@ class ViewController: UITableViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        self.title = "Trace Privately"
+        self.title = NSLocalizedString("app.title", comment: "")
         
         self.sections = [
-            Section(header: "About", footer: "This is an example only of contact tracing using Apple's newly-announced framework.", rows: []),
-            Section(header: "Tracking", footer: nil, rows: [ .trackingState, .startStopTracking ]),
-            Section(header: "Infection", footer: nil, rows: [ .markAsInfected ]),
-            Section(header: "Exposure", footer: "This step would likely be triggered automatically in the background, rather than manually.", rows: [ .checkIfExposed ])
+            Section(
+                header: NSLocalizedString("about.title", comment: ""),
+                footer: NSLocalizedString("about.message", comment: ""),
+                rows: []
+            ),
+            Section(
+                header: NSLocalizedString("tracking.title", comment: ""),
+                footer: nil,
+                rows: [ .trackingState, .startStopTracking ]
+            ),
+            Section(
+                header: NSLocalizedString("infection.title", comment: ""),
+                footer: nil,
+                rows: [ .markAsInfected ]
+            ),
+            Section(
+                header: NSLocalizedString("exposure.title", comment: ""),
+                footer: NSLocalizedString("exposure.message", comment: ""),
+                rows: [ .checkIfExposed ]
+            )
         ]
         
         self.refreshTrackingState()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ExposedSegue" {
+        switch segue.identifier {
+        case Segues.exposed:
             guard let nc = segue.destination as? UINavigationController, let vc = nc.viewControllers.first as? ExposedViewController else {
                 return
             }
@@ -61,8 +86,8 @@ class ViewController: UITableViewController {
             if let contacts = sender as? [CTContactInfo] {
                 vc.exposureContacts = contacts
             }
-        }
-        else {
+            
+        default:
             super.prepare(for: segue, sender: sender)
         }
     }
@@ -128,8 +153,8 @@ extension ViewController {
         request.completionHandler = { error in
             DispatchQueue.main.async {
                 if let error = error {
-                    let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .cancel, handler: nil))
                 }
                 else {
                     self.trackingStatus = state
@@ -166,18 +191,18 @@ extension ViewController {
         
         switch self.trackingStatus {
         case .off:
-            cell.textLabel?.text = "Start Tracking"
-            cell.detailTextLabel?.text = "Available"
+            cell.textLabel?.text = NSLocalizedString("tracking.start.title", comment: "")
+            cell.detailTextLabel?.text = NSLocalizedString("tracking.available", comment: "")
             accessoryType = .disclosureIndicator
 
         case .on:
-            cell.textLabel?.text = "Stop Tracking"
+            cell.textLabel?.text = NSLocalizedString("tracking.stop.title", comment: "")
             cell.detailTextLabel?.text = nil
             accessoryType = .none
             
         case .unknown:
-            cell.textLabel?.text = "Start Tracking"
-            cell.detailTextLabel?.text = "Not available"
+            cell.textLabel?.text = NSLocalizedString("tracking.start.title", comment: "")
+            cell.detailTextLabel?.text = NSLocalizedString("tracking.not_available", comment: "")
             accessoryType = .none
         }
         
@@ -241,13 +266,13 @@ extension ViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: Cells.standard, for: indexPath)
         
         let rowType = self.sections[indexPath.section].rows[indexPath.row]
         
         switch rowType {
         case .trackingState:
-            cell.textLabel?.text = "Tracking State"
+            cell.textLabel?.text = NSLocalizedString("tracking.state.title", comment: "")
             
             if let error = self.trackingStatusError {
                 cell.detailTextLabel?.text = error.localizedDescription
@@ -279,13 +304,15 @@ extension ViewController {
             self.updateStartStopTrackingCell(cell: cell)
             
         case .checkIfExposed:
-            cell.textLabel?.text = "Check Your Exposure"
+            cell.textLabel?.text = NSLocalizedString("exposure.check.title", comment: "")
             cell.detailTextLabel?.text = nil
             
             self.updateCheckExposureIndicator(cell: cell)
             
         case .markAsInfected:
-            cell.textLabel?.text = "I Have COVID-19"
+            
+            cell.textLabel?.text = String(format: NSLocalizedString("infection.report.title", comment: ""), Disease.current.localizedTitle)
+            
             cell.detailTextLabel?.text = nil
             cell.accessoryType = .disclosureIndicator
         }
@@ -349,14 +376,14 @@ extension ViewController {
             
             switch self.trackingStatus {
             case .unknown:
-                let alert = UIAlertController(title: "Error", message: "Unable to start tracking at this time", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: NSLocalizedString("tracking.start.error", comment: ""), preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .cancel, handler: nil))
                 self.present(alert, animated: true, completion: nil)
                 
             case .off:
-                let alert = UIAlertController(title: "Start Tracking", message: "Click Start to enable tracking on your device.\n\nIt is achieved in a private and secure way, with minimal impact on your battery life.", preferredStyle: .alert)
+                let alert = UIAlertController(title: NSLocalizedString("tracking.start.title", comment: ""), message: NSLocalizedString("tracking.start.message", comment: ""), preferredStyle: .alert)
                 
-                alert.addAction(UIAlertAction(title: "Start", style: .destructive, handler: { action in
+                alert.addAction(UIAlertAction(title: NSLocalizedString("tracking.start.button.title", comment: ""), style: .destructive, handler: { action in
                    
                     let haptics = UINotificationFeedbackGenerator()
                     haptics.notificationOccurred(.success)
@@ -365,14 +392,14 @@ extension ViewController {
                     
                 }))
                 
-                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
                 
                 self.present(alert, animated: true, completion: nil)
                 
             case .on:
-                let alert = UIAlertController(title: "Stop Tracking", message: "Are you sure? It is extremely helpful to society if tracking is enabled whenever you're around other people.", preferredStyle: .alert)
+                let alert = UIAlertController(title: NSLocalizedString("tracking.stop.title", comment: ""), message: NSLocalizedString("tracking.stop.message", comment: ""), preferredStyle: .alert)
 
-                alert.addAction(UIAlertAction(title: "Stop", style: .destructive, handler: { action in
+                alert.addAction(UIAlertAction(title: NSLocalizedString("tracking.stop.button.title", comment: ""), style: .destructive, handler: { action in
 
                     let haptics = UINotificationFeedbackGenerator()
                     haptics.notificationOccurred(.success)
@@ -381,7 +408,7 @@ extension ViewController {
 
                 }))
                 
-                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
 
                 self.present(alert, animated: true, completion: nil)
             }
@@ -394,10 +421,10 @@ extension ViewController {
             
             tableView.deselectRow(at: indexPath, animated: true)
 
-            let alert = UIAlertController(title: "Are You Sure?", message: "Click OK to create your anonymous profile.\n\nYou will be prompted again before it is submitted to your jurisdiction's anonymous tracing database.", preferredStyle: .alert)
+            let alert = UIAlertController(title: NSLocalizedString("infection.report.confirm.title", comment: ""), message: NSLocalizedString("infection.report.confirm.message", comment: ""), preferredStyle: .alert)
             
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-            alert.addAction(UIAlertAction(title: "OK", style: .destructive, handler: { action in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .destructive, handler: { action in
                 self.beginInfectionWorkflow()
             }))
             
@@ -408,7 +435,7 @@ extension ViewController {
 
 extension ViewController {
     func beginInfectionWorkflow() {
-        let loadingAlert = UIAlertController(title: "Creating Your Profile...", message: nil, preferredStyle: .alert)
+        let loadingAlert = UIAlertController(title: NSLocalizedString("infection.report.gathering_data.title", comment: ""), message: nil, preferredStyle: .alert)
 
         self.present(loadingAlert, animated: true, completion: nil)
 
@@ -418,8 +445,8 @@ extension ViewController {
             /// I'm not exactly sure what the difference is between dailyTrackingKeys being nil or empty. I would assume it should never be nil, and only be empty if tracking has not been enabled. Hopefully this becomes clearer with more documentation.
             
             guard let keys = info?.dailyTracingKeys else {
-                let alert = UIAlertController(title: "Error", message: error?.localizedDescription ?? "Unable to create your anonymouse profile.", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: error?.localizedDescription ?? NSLocalizedString("infection.report.gathering_data.error", comment: ""), preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
                 
                 self.dismiss(animated: true) {
                     self.present(alert, animated: true, completion: nil)
@@ -429,8 +456,8 @@ extension ViewController {
             }
             
             guard keys.count > 0 else {
-                let alert = UIAlertController(title: "No Information", message: "Unable to find your tracking information. Perhaps you haven't had tracking enabled?", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                let alert = UIAlertController(title: NSLocalizedString("infection.report.gathering.empty.title", comment: ""), message: NSLocalizedString("infection.report.gathering.empty.message", comment: ""), preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
 
                 self.dismiss(animated: true) {
                     self.present(alert, animated: true, completion: nil)
@@ -440,10 +467,10 @@ extension ViewController {
             }
             
             self.dismiss(animated: true) {
-                let alert = UIAlertController(title: "Confirm", message: "Please confirm you want to submit.\n\nThis will allow people who have been near you to know they may have been exposed.", preferredStyle: .alert)
+                let alert = UIAlertController(title: NSLocalizedString("infection.report.submit.title", comment: ""), message: NSLocalizedString("infection.report.submit.message", comment: ""), preferredStyle: .alert)
                 
-                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-                alert.addAction(UIAlertAction(title: "Submit", style: .destructive, handler: { action in
+                alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: NSLocalizedString("submit", comment: ""), style: .destructive, handler: { action in
                     
                     self.submitKeys(keys: keys)
                     
@@ -459,7 +486,7 @@ extension ViewController {
     // TODO: Make it super clear to the user if an error occurred, so they have an opportunity to submit again
     func submitKeys(keys: [CTDailyTracingKey]) {
         
-        let loadingAlert = UIAlertController(title: "One Moment...", message: "Submitting your anonymous information.", preferredStyle: .alert)
+        let loadingAlert = UIAlertController(title: NSLocalizedString("infection.report.submitting.title", comment: ""), message: NSLocalizedString("infection.report.submitting.message", comment: ""), preferredStyle: .alert)
 
         self.present(loadingAlert, animated: true, completion: nil)
         
@@ -468,16 +495,16 @@ extension ViewController {
                 self.dismiss(animated: true) {
                     
                     if success {
-                        let alert = UIAlertController(title: "Thank You", message: "Your information has been submitted.", preferredStyle: .alert)
+                        let alert = UIAlertController(title: NSLocalizedString("infection.report.submitted.title", comment: ""), message: NSLocalizedString("infection.report.submitted.message", comment: ""), preferredStyle: .alert)
                         
-                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
                         
                         self.present(alert, animated: true, completion: nil)
                     }
                     else {
-                        let alert = UIAlertController(title: "Error", message: error?.localizedDescription ?? "Unable to submit your information.", preferredStyle: .alert)
+                        let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: error?.localizedDescription ?? NSLocalizedString("infection.report.submit.error", comment: "" ), preferredStyle: .alert)
                         
-                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
                         
                         self.present(alert, animated: true, completion: nil)
                     }
@@ -508,8 +535,8 @@ extension ViewController {
                     }
                     
                     if showAlert {
-                        let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
                         
                         self.present(alert, animated: true, completion: nil)
                     }
@@ -536,7 +563,6 @@ extension ViewController {
                 let date = Date().addingTimeInterval(14 * 86400) // TODO: This should be a last successful request date. Although may it should be limited to 14 days. Not 100% sure just yet.
                 
                 KeyServer.shared.retrieveInfectedKeys(since: date) { keys, error in
-                    
                     guard let keys = keys else {
                         // TODO: Handle no keys / error
                         DispatchQueue.main.async {
@@ -579,8 +605,11 @@ extension ViewController {
                             
                             if summary.matchedKeyCount == 0 {
                                 DispatchQueue.main.async {
-                                    let alert = UIAlertController(title: "Great News", message: "No contact detected with a COVID-19 infection!\n\nStay safe and wash your hands.", preferredStyle: .alert)
-                                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                                    
+                                    let message = String(format: NSLocalizedString("exposure.none.message", comment: ""), Disease.current.localizedTitle)
+                                    
+                                    let alert = UIAlertController(title: "Great News", message: message, preferredStyle: .alert)
+                                    alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
                                     self.present(alert, animated: true, completion: nil)
 
                                     self.isCheckingExposure = false
@@ -589,6 +618,8 @@ extension ViewController {
                                         self.updateCheckExposureIndicator(cell: cell)
                                     }
                                 }
+                                
+                                return
                             }
 
                             session.getContactInfoWithHandler { info, error in
@@ -603,7 +634,7 @@ extension ViewController {
                                         self.updateCheckExposureIndicator(cell: cell)
                                     }
                                     
-                                    self.performSegue(withIdentifier: "ExposedSegue", sender: info)
+                                    self.performSegue(withIdentifier: Segues.exposed, sender: info)
                                 }
                             }
                         }
@@ -617,9 +648,9 @@ extension ViewController {
 extension CTManagerState {
     var localizedTitle: String {
         switch self {
-        case .unknown: return "Unknown"
-        case .on: return "On"
-        case .off: return "Off"
+        case .unknown: return NSLocalizedString("unknown", comment: "")
+        case .on: return NSLocalizedString("on", comment: "")
+        case .off: return NSLocalizedString("off", comment: "")
         }
     }
 }

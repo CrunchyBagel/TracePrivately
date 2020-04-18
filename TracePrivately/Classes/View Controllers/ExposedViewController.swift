@@ -10,6 +10,10 @@ import UIKit
 
 class ExposedViewController: UITableViewController {
 
+    struct Cells {
+        static let standard = "Cell"
+    }
+
     enum RowType {
         case contact(CTContactInfo)
         case nextSteps
@@ -47,11 +51,12 @@ class ExposedViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Exposed"
+        self.title = NSLocalizedString("exposure.exposed.title", comment: "")
         
         if self.exposureContacts.count == 0 {
+            let title = String(format: "exposure.none.message", Disease.current.localizedTitle)
             self.sections = [
-                Section(header: nil, footer: "We have not detected exposure to COVID-19.", rows: [])
+                Section(header: nil, footer: title, rows: [])
             ]
         }
         else {
@@ -60,9 +65,11 @@ class ExposedViewController: UITableViewController {
                 return a.timestamp < b.timestamp
             }
             
+            let title = String(format: "exposure.exposed.message", Disease.current.localizedTitle)
+
             self.sections = [
-                Section(header: nil, footer: "We believe you have come in contact with COVID-19.", rows: []),
-                Section(header: "Exposure Times", footer: nil, rows: sortedContacts.map { .contact($0)} ),
+                Section(header: nil, footer: title, rows: []),
+                Section(header: NSLocalizedString("exposure.times.title", comment: ""), footer: nil, rows: sortedContacts.map { .contact($0)} ),
                 Section(header: nil, footer: nil, rows: [ .nextSteps ])
             ]
         }
@@ -87,7 +94,7 @@ extension ExposedViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: Cells.standard, for: indexPath)
 
         let rowType = self.sections[indexPath.section].rows[indexPath.row]
         
@@ -96,7 +103,7 @@ extension ExposedViewController {
             cell.textLabel?.text = self.timeFormatter.string(from: contact.timestamp)
             
             if let str = self.durationFormatter.string(from: contact.duration) {
-                cell.detailTextLabel?.text = "Duration: " + str
+                cell.detailTextLabel?.text = String(format: "exposure.times.duration", str)
             }
             else {
                 cell.detailTextLabel?.text = nil
@@ -106,7 +113,7 @@ extension ExposedViewController {
             cell.accessoryType = .none
             
         case .nextSteps:
-            cell.textLabel?.text = "Next Steps"
+            cell.textLabel?.text = NSLocalizedString("exposure.next_steps.title", comment: "")
             cell.detailTextLabel?.text = nil
             cell.accessoryType = .disclosureIndicator
         }
@@ -125,9 +132,9 @@ extension ExposedViewController {
             break
             
         case .nextSteps:
-            let alert = UIAlertController(title: "Next Steps", message: "Follow the steps as outlined by your authorities.", preferredStyle: .alert)
+            let alert = UIAlertController(title: NSLocalizedString("exposure.next_steps.title", comment: ""), message: NSLocalizedString("exposure.next_steps.message", comment: ""), preferredStyle: .alert)
             
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
             
             self.present(alert, animated: true, completion: nil)
         }

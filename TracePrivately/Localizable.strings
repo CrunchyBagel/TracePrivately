@@ -1,0 +1,74 @@
+/* 
+  Localizable.strings
+  TracePrivately
+*/
+
+"app.title" = "Trace Privately";
+"about.title" = "About";
+"about.message" = "This is an example only of contact tracing using Apple's newly-announced framework.";
+
+"tracking.title" = "Tracking";
+"tracking.start.title" = "Start Tracking";
+"tracking.start.message" = "Click Start to enable tracking on your device.\n\nIt is achieved in a private and secure way, with minimal impact on your battery life.";
+"tracking.start.button.title" = "Start";
+"tracking.start.error" = "Unable to start tracking at this time";
+"tracking.stop.title" = "Stop Tracking";
+"tracking.stop.message" = "Are you sure? It is extremely helpful to society if tracking is enabled whenever you're around other people.";
+"tracking.stop.button.title" = "Stop";
+
+"disease.covid19.title" = "COVID-19";
+
+"infection.title" = "Infection";
+
+/* Parameter is name of disease being tracked */
+"infection.report.title" = "I Have %@";
+"infection.report.confirm.title" = "Are You Sure?";
+"infection.report.confirm.message" = "Click OK to create your anonymous profile.\n\nYou will be prompted again before it is submitted to your jurisdiction's anonymous tracing database.";
+"infection.report.gathering_data.title" = "Creating Your Profile…";
+"infection.report.gathering_data.error" = "Unable to create your anonymous profile.";
+"infection.report.gathering.empty.title" = "No Information";
+"infection.report.gathering.empty.message" = "Unable to find your tracking information. Perhaps you haven't had tracking enabled?";
+"infection.report.submit.title" = "Confirm";
+"infection.report.submit.message" = "Please confirm you want to submit.\n\nThis will allow people who have been near you to know they may have been exposed.";
+"infection.report.submit.error" = "Unable to submit your information.";
+"infection.report.submitting.title" = "One Moment…";
+"infection.report.submitting.message" = "Submitting your anonymous information.";
+"infection.report.submitted.title" = "Thank You";
+"infection.report.submitted.message" = "Your information has been submitted.";
+
+"exposure.title" = "Exposure";
+"exposure.message" = "This step would likely be triggered automatically in the background, rather than manually.";
+"exposure.check.title" = "Check Your Exposure";
+"exposure.none.title" = "Great News";
+/* parameter is localized disease name */
+"exposure.none.message" = "No contact detected with a %@ infection!\n\nStay safe and wash your hands.";
+"exposure.exposed.title" = "Exposed";
+/* parameter is localized disease name */
+"exposure.exposed.message" = "We believe you have come in contact with %@.";
+"exposure.times.title" = "Exposure Times";
+/* parameter is a localized duration */
+"exposure.times.duration" = "Duration: %@";
+
+"exposure.next_steps.title" = "Next Steps";
+"exposure.next_steps.message" = "Follow the steps as outlined by your authorities.";
+
+"unknown" = "Unknown";
+"on" = "On";
+"off" = "Off";
+"submit" = "Submit";
+
+"ok" = "OK";
+"cancel" = "Cancel";
+
+"tracking.start.title" = "Start Tracking";
+"tracking.stop.title" = "Stop Tracking";
+"tracking.available" = "Available";
+"tracking.not_available" = "Not available";
+"tracking.state.title" = "Tracking State";
+
+"error.title" = "Error";
+
+"keyserver.error.no_response_data" = "Response Data Not Received";
+"keyserver.error.response_decoding_error" = "Error Decoding Response";
+"keyserver.error.key_data_missing" = "Key Data Missing";
+"keyserver.error.not_ok" = "OK Status Not Received";

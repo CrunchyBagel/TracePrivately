@@ -18,10 +18,10 @@ class KeyServer {
         
         var errorDescription: String? {
             switch self {
-            case .responseDataNotReceived: return "Response Data Not Received"
-            case .jsonDecodingError: return "Error Decoding Response"
-            case .keyDataMissing: return "Key Data Missing"
-            case .okStatusNotReceived: return "OK Status Not Received"
+            case .responseDataNotReceived: return NSLocalizedString("keyserver.error.no_response_data", comment: "")
+            case .jsonDecodingError: return NSLocalizedString("keyserver.error.response_decoding_error", comment: "")
+            case .keyDataMissing: return NSLocalizedString("keyserver.error.key_data_missing", comment: "")
+            case .okStatusNotReceived: return NSLocalizedString("keyserver.error.not_ok", comment: "")
             }
         }
     }
@@ -67,18 +67,6 @@ class KeyServer {
                 return "POST"
             }
         }
-        
-        var urlRequest: URLRequest {
-            var request = URLRequest(
-                url: self.url,
-                cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
-                timeoutInterval: 30
-            )
-
-            request.httpMethod = self.httpMethod
-            
-            return request
-        }
     }
     
     /**
@@ -103,7 +91,14 @@ class KeyServer {
         
         let endPoint: RequestEndpoint = .submitInfectedKeys
         
-        var request = endPoint.urlRequest
+        var request = URLRequest(
+            url: endPoint.url,
+            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
+            timeoutInterval: 30
+        )
+
+        request.httpMethod = endPoint.httpMethod
+
         let encodedKeys: [String] = keys.map { $0.keyData.base64EncodedString() }
         
         let requestData: [String: Any] = [
@@ -159,6 +154,7 @@ class KeyServer {
      
             {
                 "status" : "OK",
+                "since": "2020-04-18T12:00:00"
                 "keys" : [
                     "Base64-Encoded-String-1",
                     "Base64-Encoded-String-2",
@@ -166,12 +162,38 @@ class KeyServer {
                 ]
             }
      */
-    func retrieveInfectedKeys(since: Date, completion: @escaping ([CTDailyTracingKey]?, Swift.Error?) -> Void) {
+    
+    func retrieveInfectedKeys(since date: Date?, completion: @escaping ([CTDailyTracingKey]?, Swift.Error?) -> Void) {
 
         let endPoint: RequestEndpoint = .retrieveInfectedKeys
 
-        let request = endPoint.urlRequest
+        var url = endPoint.url
         
+        if let date = date, var components = URLComponents(url: url, resolvingAgainstBaseURL: false) {
+            
+            let df = DateFormatter()
+            df.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+
+            var queryItems = components.queryItems ?? []
+
+            let queryItem = URLQueryItem(name: "since", value: df.string(from: date))
+            queryItems.append(queryItem)
+
+            components.queryItems = queryItems
+            
+            if let u = components.url {
+                url = u
+            }
+        }
+
+        var request = URLRequest(
+            url: url,
+            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
+            timeoutInterval: 30
+        )
+
+        request.httpMethod = endPoint.httpMethod
+
         let task = self.urlSession.dataTask(with: request) { data, response, error in
             if let error = error {
                 completion(nil, error)
@@ -184,6 +206,10 @@ class KeyServer {
             }
 
             guard let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+                if let str = String(data: data, encoding: .utf8) {
+                    print("Response: \(str)")
+                }
+                
                 completion(nil, Error.jsonDecodingError)
                 return
             }
