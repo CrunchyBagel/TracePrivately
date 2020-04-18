@@ -585,11 +585,9 @@ extension ViewController {
                 // 3. Finish diagnosis
                 // 4. Display infection contact summary
                 
-                let date = Date().addingTimeInterval(14 * 86400) // TODO: This should be a last successful request date. Although may it should be limited to 14 days. Not 100% sure just yet.
-                
-                KeyServer.shared.retrieveInfectedKeys(since: date) { keys, error in
+                // TODO: This isn't splitting to maxKeyCount yet
+                DataManager.shared.allInfectedKeys { keys, error in
                     guard let keys = keys else {
-                        // TODO: Handle no keys / error
                         DispatchQueue.main.async {
                             self.isCheckingExposure = false
 
@@ -600,12 +598,7 @@ extension ViewController {
 
                         return
                     }
-                    
-                    DataManager.shared.saveInfectedKeys(keys: keys) { _ in
-                        
-                    }
-                    
-                    // TODO: This isn't splitting to maxKeyCount yet
+
                     session.addPositiveDiagnosisKey(inKeys: keys) { error in
                         guard error == nil else {
                             DispatchQueue.main.async {

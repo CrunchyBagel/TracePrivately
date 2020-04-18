@@ -353,7 +353,7 @@ class CTContactInfo {
     /// How long the contact was in proximity. Minimum duration is 5 minutes and increments by 5 minutes: 5, 10, 15, etc.
     let duration: TimeInterval
     /// This property contains the time when the contact occurred. This may have reduced precision, such as within one day of the actual time.
-    let timestamp: Date // TODO: This uses CFAbsoluteTime
+    let timestamp: Date // TODO: The framework docs indicate CFAbsoluteTime should be used
     
     init(duration: TimeInterval, timestamp: Date) {
         self.duration = duration
@@ -402,17 +402,25 @@ private class CTInternalState {
         
     }
     
-    // There's currently no stability with the keys here so it's going to tricky to properly test for now
+    // These keys are stable for this device as they use a device specific ID with an index appended
     var dailyKeys: [Data] {
         return ctQueue.sync {
             
-            var keys: [UUID] = []
+            var keys: [String] = []
             
-            for _ in 0 ..< 14 {
-                keys.append(UUID())
+            guard let deviceId = UIDevice.current.identifierForVendor?.uuidString else {
+                return []
             }
             
-            return keys.map { $0.data }
+            for idx in 0 ..< 14 {
+                
+                let str = deviceId + "_\(idx)"
+                keys.append(str)
+            }
+            
+            print("Generated keys: \(keys)")
+            
+            return keys.compactMap { $0.data(using: .utf8) }
         }
     }
 }

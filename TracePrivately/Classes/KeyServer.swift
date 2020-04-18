@@ -14,6 +14,7 @@ class KeyServer {
         case responseDataNotReceived
         case jsonDecodingError
         case keyDataMissing
+        case dateMissing
         case okStatusNotReceived
         
         var errorDescription: String? {
@@ -21,6 +22,7 @@ class KeyServer {
             case .responseDataNotReceived: return NSLocalizedString("keyserver.error.no_response_data", comment: "")
             case .jsonDecodingError: return NSLocalizedString("keyserver.error.response_decoding_error", comment: "")
             case .keyDataMissing: return NSLocalizedString("keyserver.error.key_data_missing", comment: "")
+            case .dateMissing: return NSLocalizedString("keyserver.error.date_missing", comment: "")
             case .okStatusNotReceived: return NSLocalizedString("keyserver.error.not_ok", comment: "")
             }
         }
@@ -47,7 +49,8 @@ class KeyServer {
         case retrieveInfectedKeys
         
         var host: String {
-            return "https://example.com"
+            return "https://trace.crunchybagel.dev"
+//            return "https://example.com"
         }
         
         var url: URL {
@@ -163,7 +166,12 @@ class KeyServer {
             }
      */
     
-    func retrieveInfectedKeys(since date: Date?, completion: @escaping ([CTDailyTracingKey]?, Swift.Error?) -> Void) {
+    struct InfectedKeysResponse {
+        let date: Date
+        let keys: [CTDailyTracingKey]
+    }
+    
+    func retrieveInfectedKeys(since date: Date?, completion: @escaping (InfectedKeysResponse?, Swift.Error?) -> Void) {
 
         let endPoint: RequestEndpoint = .retrieveInfectedKeys
 
@@ -171,8 +179,7 @@ class KeyServer {
         
         if let date = date, var components = URLComponents(url: url, resolvingAgainstBaseURL: false) {
             
-            let df = DateFormatter()
-            df.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+            let df = ISO8601DateFormatter()
 
             var queryItems = components.queryItems ?? []
 
@@ -185,6 +192,8 @@ class KeyServer {
                 url = u
             }
         }
+        
+        print("Retrieving \(url)")
 
         var request = URLRequest(
             url: url,
@@ -219,11 +228,22 @@ class KeyServer {
                 return
             }
             
+            let df = ISO8601DateFormatter()
+
+            guard let dateStr = json["date"] as? String, let date = df.date(from: dateStr) else {
+                completion(nil, Error.dateMissing)
+                return
+            }
+            
+
+            
             let keysData = keyData.compactMap { Data(base64Encoded: $0) }
             
             let tracingKeys = keysData.map { CTDailyTracingKey(keyData: $0) }
             
-            completion(tracingKeys, nil)
+            let response = InfectedKeysResponse(date: date, keys: tracingKeys)
+            
+            completion(response, nil)
         }
         
         task.resume()

@@ -2,19 +2,18 @@
 //  DataManager.swift
 //  TracePrivately
 //
-//  Created by Quentin Zervaas on 18/4/20.
-//  Copyright © 2020 Quentin Zervaas. All rights reserved.
-//
 
 import CoreData
 
 class DataManager {
     static let shared = DataManager()
     
+    static let backgroundProcessingTaskIdentifier = "dm.processor"
+
     private init() {
         
     }
-
+    
     lazy var persistentContainer: NSPersistentContainer = {
         /*
          The persistent container for the application. This implementation
@@ -79,10 +78,22 @@ class DataManager {
 }
 
 extension DataManager {
-    func saveInfectedKeys(keys: [CTDailyTracingKey], completion: @escaping (Swift.Error?) -> Void) {
+    // TODO: Need to automatically purge old keys
+    private static let lastRecievedInfectedKeysKey = "lastRecievedInfectedKeysKey"
+    
+    private var lastRecievedInfectedKeys: Date? {
+        return UserDefaults.standard.object(forKey: Self.lastRecievedInfectedKeysKey) as? Date
+    }
+
+    func saveLastReceivedInfectedKeys(date: Date) {
+        UserDefaults.standard.set(date, forKey: Self.lastRecievedInfectedKeysKey)
+        UserDefaults.standard.synchronize()
+    }
+
+    func saveInfectedKeys(keys: [CTDailyTracingKey], completion: @escaping (_ numNewKeys: Int, _ error: Swift.Error?) -> Void) {
         
         guard keys.count > 0 else {
-            completion(nil)
+            completion(0, nil)
             return
         }
         
@@ -93,6 +104,8 @@ extension DataManager {
             
             let date = Date()
                 
+            var numNewKeys = 0
+
             for key in keys {
                 
                 let data = key.keyData
@@ -107,10 +120,12 @@ extension DataManager {
                         let entity = RemoteInfectedKeyEntity(context: context)
                         entity.dateAdded = date
                         entity.infectedKey = data
+                        
+                        numNewKeys += 1
                     }
                 }
                 catch {
-                    completion(error)
+                    completion(0, error)
                     return
                 }
             }
@@ -120,12 +135,48 @@ extension DataManager {
                     try context.save()
                 }
                 
-                completion()
+                completion(numNewKeys, nil)
             }
             catch {
-                completion(error)
+                completion(numNewKeys, error)
             }
         }
-
+    }
+    
+    func fetchLatestInfectedKeys(completion: @escaping (_ numNewKeys: Int, _ error: Swift.Error?) -> Void) {
+        KeyServer.shared.retrieveInfectedKeys(since: self.lastRecievedInfectedKeys) { response, error in
+            guard let response = response else {
+                completion(0, error)
+                return
+            }
+            
+            self.saveInfectedKeys(keys: response.keys) { numNewKeys, error in
+                if let error = error {
+                    completion(0, error)
+                    return
+                }
+                
+                self.saveLastReceivedInfectedKeys(date: response.date)
+                completion(numNewKeys, nil)
+            }
+        }
+    }
+    
+    func allInfectedKeys(completion: @escaping ([CTDailyTracingKey]?, Swift.Error?) -> Void) {
+        let context = self.persistentContainer.newBackgroundContext()
+        
+        context.perform {
+            let request: NSFetchRequest<RemoteInfectedKeyEntity> = RemoteInfectedKeyEntity.fetchRequest()
+            
+            do {
+                let entities = try context.fetch(request)
+                
+                let keys: [CTDailyTracingKey] = entities.compactMap { $0.infectedKey }.map { CTDailyTracingKey(keyData: $0) }
+                completion(keys, nil)
+            }
+            catch {
+                completion(nil, error)
+            }
+        }
     }
 }

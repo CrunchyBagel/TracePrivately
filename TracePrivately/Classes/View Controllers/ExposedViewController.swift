@@ -2,9 +2,6 @@
 //  ExposedViewController.swift
 //  TracePrivately
 //
-//  Created by Quentin Zervaas on 17/4/20.
-//  Copyright © 2020 Quentin Zervaas. All rights reserved.
-//
 
 import UIKit
 

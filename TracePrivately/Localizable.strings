@@ -71,4 +71,5 @@
 "keyserver.error.no_response_data" = "Response Data Not Received";
 "keyserver.error.response_decoding_error" = "Error Decoding Response";
 "keyserver.error.key_data_missing" = "Key Data Missing";
+"keyserver.error.date_missing" = "Date Missing";
 "keyserver.error.not_ok" = "OK Status Not Received";
