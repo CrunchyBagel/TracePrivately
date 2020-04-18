@@ -13,6 +13,8 @@ https://www.apple.com/covid19/contacttracing
 
 ## Screenshots
 
+Demo Video: https://youtu.be/rVaz8VQLoaE
+
 ![Main Window](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/trace-main.png?raw=true)
 
 ![Exposed Window](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/trace-exposed.png?raw=true)
