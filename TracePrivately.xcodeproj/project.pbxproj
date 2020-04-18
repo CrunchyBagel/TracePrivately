@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		66437F74244A73F0000B8C6C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 66437F73244A73F0000B8C6C /* Localizable.strings */; };
 		66437F76244A86AE000B8C6C /* Disease.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F75244A86AE000B8C6C /* Disease.swift */; };
+		66437F9E244A9A02000B8C6C /* TracePrivately.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */; };
+		66437FA0244A9B2C000B8C6C /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9F244A9B2C000B8C6C /* DataManager.swift */; };
 		6698C57024492BC500F046E4 /* KeyServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6698C56F24492BC500F046E4 /* KeyServer.swift */; };
 		6698C572244936AF00F046E4 /* ExposedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6698C571244936AF00F046E4 /* ExposedViewController.swift */; };
 		66F8186B2448FD5C0043AC2D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F8186A2448FD5C0043AC2D /* AppDelegate.swift */; };
@@ -22,6 +24,8 @@
 /* Begin PBXFileReference section */
 		66437F73244A73F0000B8C6C /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		66437F75244A86AE000B8C6C /* Disease.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disease.swift; sourceTree = "<group>"; };
+		66437F9D244A9A02000B8C6C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		66437F9F244A9B2C000B8C6C /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		6698C56F24492BC500F046E4 /* KeyServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyServer.swift; sourceTree = "<group>"; };
 		6698C571244936AF00F046E4 /* ExposedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposedViewController.swift; sourceTree = "<group>"; };
 		66F818672448FD5C0043AC2D /* TracePrivately.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TracePrivately.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -53,6 +57,7 @@
 				6698C56F24492BC500F046E4 /* KeyServer.swift */,
 				66F818822448FE020043AC2D /* CTMockFramework.swift */,
 				66437F75244A86AE000B8C6C /* Disease.swift */,
+				66437F9F244A9B2C000B8C6C /* DataManager.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -88,6 +93,7 @@
 				66437F77244A8A4C000B8C6C /* Classes */,
 				66F818702448FD5C0043AC2D /* Main.storyboard */,
 				66F818732448FD5E0043AC2D /* Assets.xcassets */,
+				66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */,
 				66F818752448FD5E0043AC2D /* LaunchScreen.storyboard */,
 				66F818782448FD5E0043AC2D /* Info.plist */,
 				66437F73244A73F0000B8C6C /* Localizable.strings */,
@@ -169,8 +175,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				66437F76244A86AE000B8C6C /* Disease.swift in Sources */,
+				66437FA0244A9B2C000B8C6C /* DataManager.swift in Sources */,
 				66F8186F2448FD5C0043AC2D /* ViewController.swift in Sources */,
 				66F8186B2448FD5C0043AC2D /* AppDelegate.swift in Sources */,
+				66437F9E244A9A02000B8C6C /* TracePrivately.xcdatamodeld in Sources */,
 				6698C57024492BC500F046E4 /* KeyServer.swift in Sources */,
 				6698C572244936AF00F046E4 /* ExposedViewController.swift in Sources */,
 				66F818832448FE020043AC2D /* CTMockFramework.swift in Sources */,
@@ -376,6 +384,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				66437F9D244A9A02000B8C6C /* Model.xcdatamodel */,
+			);
+			currentVersion = 66437F9D244A9A02000B8C6C /* Model.xcdatamodel */;
+			path = TracePrivately.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 66F8185F2448FD5C0043AC2D /* Project object */;
 }

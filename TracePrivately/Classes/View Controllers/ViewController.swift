@@ -490,23 +490,48 @@ extension ViewController {
 
         self.present(loadingAlert, animated: true, completion: nil)
         
-        KeyServer.shared.submitInfectedKeys(keys: keys) { success, error in
-            DispatchQueue.main.async {
-                self.dismiss(animated: true) {
-                    
-                    if success {
-                        let alert = UIAlertController(title: NSLocalizedString("infection.report.submitted.title", comment: ""), message: NSLocalizedString("infection.report.submitted.message", comment: ""), preferredStyle: .alert)
+        let context = DataManager.shared.persistentContainer.newBackgroundContext()
+        
+        context.perform {
+            let entity = LocalInfectionEntity(context: context)
+            entity.dateAdded = Date()
+            entity.status = "P"
+            
+            try? context.save()
+        
+            KeyServer.shared.submitInfectedKeys(keys: keys) { success, error in
+                
+                if success {
+                    context.perform {
+                        entity.status = "S" // Submitted
                         
-                        alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
-                        
-                        self.present(alert, animated: true, completion: nil)
-                    }
-                    else {
-                        let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: error?.localizedDescription ?? NSLocalizedString("infection.report.submit.error", comment: "" ), preferredStyle: .alert)
-                        
-                        alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
-                        
-                        self.present(alert, animated: true, completion: nil)
+                        for key in keys {
+                            let keyEntity = LocalInfectionKeyEntity(context: context)
+                            keyEntity.infectedKey = key.keyData
+                            keyEntity.infection = entity
+                        }
+
+                        try? context.save()
+
+                        DispatchQueue.main.async {
+                            self.dismiss(animated: true) {
+                                
+                                if success {
+                                    let alert = UIAlertController(title: NSLocalizedString("infection.report.submitted.title", comment: ""), message: NSLocalizedString("infection.report.submitted.message", comment: ""), preferredStyle: .alert)
+                                    
+                                    alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
+                                    
+                                    self.present(alert, animated: true, completion: nil)
+                                }
+                                else {
+                                    let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: error?.localizedDescription ?? NSLocalizedString("infection.report.submit.error", comment: "" ), preferredStyle: .alert)
+                                    
+                                    alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
+                                    
+                                    self.present(alert, animated: true, completion: nil)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -574,6 +599,10 @@ extension ViewController {
                         }
 
                         return
+                    }
+                    
+                    DataManager.shared.saveInfectedKeys(keys: keys) { _ in
+                        
                     }
                     
                     // TODO: This isn't splitting to maxKeyCount yet

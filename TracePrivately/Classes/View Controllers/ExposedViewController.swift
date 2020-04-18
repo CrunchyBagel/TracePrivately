@@ -54,7 +54,7 @@ class ExposedViewController: UITableViewController {
         self.title = NSLocalizedString("exposure.exposed.title", comment: "")
         
         if self.exposureContacts.count == 0 {
-            let title = String(format: "exposure.none.message", Disease.current.localizedTitle)
+            let title = String(format: NSLocalizedString("exposure.none.message", comment: ""), Disease.current.localizedTitle)
             self.sections = [
                 Section(header: nil, footer: title, rows: [])
             ]
@@ -65,7 +65,7 @@ class ExposedViewController: UITableViewController {
                 return a.timestamp < b.timestamp
             }
             
-            let title = String(format: "exposure.exposed.message", Disease.current.localizedTitle)
+            let title = String(format: NSLocalizedString("exposure.exposed.message", comment: "") , Disease.current.localizedTitle)
 
             self.sections = [
                 Section(header: nil, footer: title, rows: []),
@@ -102,8 +102,9 @@ extension ExposedViewController {
         case .contact(let contact):
             cell.textLabel?.text = self.timeFormatter.string(from: contact.timestamp)
             
+            
             if let str = self.durationFormatter.string(from: contact.duration) {
-                cell.detailTextLabel?.text = String(format: "exposure.times.duration", str)
+                cell.detailTextLabel?.text = String(format: NSLocalizedString("exposure.times.duration", comment: ""), str)
             }
             else {
                 cell.detailTextLabel?.text = nil

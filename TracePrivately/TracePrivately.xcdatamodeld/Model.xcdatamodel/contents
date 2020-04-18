@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19E287" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="LocalInfectionEntity" representedClassName="LocalInfectionEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="dateAdded" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="status" optional="YES" attributeType="String"/>
+        <relationship name="infectedKey" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="LocalInfectionKeyEntity" inverseName="infection" inverseEntity="LocalInfectionKeyEntity"/>
+    </entity>
+    <entity name="LocalInfectionKeyEntity" representedClassName="LocalInfectionKeyEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="infectedKey" optional="YES" attributeType="Binary"/>
+        <relationship name="infection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="LocalInfectionEntity" inverseName="infectedKey" inverseEntity="LocalInfectionEntity"/>
+    </entity>
+    <entity name="RemoteInfectedKeyEntity" representedClassName="RemoteInfectedKeyEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="dateAdded" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="infectedKey" optional="YES" attributeType="Binary"/>
+        <fetchIndex name="byInfectedKey">
+            <fetchIndexElement property="infectedKey" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <elements>
+        <element name="RemoteInfectedKeyEntity" positionX="-63" positionY="-18" width="128" height="73"/>
+        <element name="LocalInfectionKeyEntity" positionX="-54" positionY="9" width="128" height="73"/>
+        <element name="LocalInfectionEntity" positionX="-36" positionY="18" width="128" height="88"/>
+    </elements>
+</model>
