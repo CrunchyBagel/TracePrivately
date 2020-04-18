@@ -153,11 +153,13 @@ class KeyServer {
     }
     
     /**
-        Expects a JSON response like the following. Each key is a Base 64 encoded string.
+        Accepts an optional date in the `since` parameter (and ISO 8601 formatted date). Only infected keys submitted after this date are returned
+     
+        Expects a JSON response like the following. Each key is a Base 64 encoded string. The date is an ISO 8601 formatted date.
      
             {
                 "status" : "OK",
-                "since": "2020-04-18T12:00:00"
+                "date": "2020-04-18T12:00:00"
                 "keys" : [
                     "Base64-Encoded-String-1",
                     "Base64-Encoded-String-2",
