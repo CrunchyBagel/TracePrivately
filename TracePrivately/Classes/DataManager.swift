@@ -101,8 +101,9 @@ extension DataManager {
                 
                 do {
                     let count = try context.count(for: request)
+                    let alreadyHasKey = count > 0
                     
-                    if count == 0 {
+                    if !alreadyHasKey {
                         let entity = RemoteInfectedKeyEntity(context: context)
                         entity.dateAdded = date
                         entity.infectedKey = data
@@ -112,17 +113,17 @@ extension DataManager {
                     completion(error)
                     return
                 }
-                
+            }
+            
+            do {
                 if context.hasChanges {
-                    do {
-                        try context.save()
-                        completion(nil)
-                    }
-                    catch {
-                        completion(error)
-                    }
-                    
+                    try context.save()
                 }
+                
+                completion()
+            }
+            catch {
+                completion(error)
             }
         }
 
