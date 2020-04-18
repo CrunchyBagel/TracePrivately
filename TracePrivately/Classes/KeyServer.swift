@@ -49,8 +49,7 @@ class KeyServer {
         case retrieveInfectedKeys
         
         var host: String {
-            return "https://trace.crunchybagel.dev"
-//            return "https://example.com"
+            return "https://example.com"
         }
         
         var url: URL {
