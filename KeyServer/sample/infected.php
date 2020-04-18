@@ -2,13 +2,23 @@
 $path = realpath(dirname(__FILE__) . '/../data/trace.sqlite');
 $db = new SQLite3($path, SQLITE3_OPEN_READWRITE);
 
-$time = time() - (86400 * 14);
+$minTime = time() - (86400 * 14);
+$time = $minTime;
+
+if (array_key_exists('since', $_GET)) {
+    try {
+        $dateTime = new DateTime($_GET['since']);
+        $time = max($minTime, $dateTime->getTimestamp());
+    }
+    catch (Exception $e) {
+	
+    }
+}
 
 $stmt = $db->prepare('SELECT infected_key FROM infected_keys WHERE timestamp >= :t');
 $stmt->bindValue(':t', $time, SQLITE3_INTEGER);
 
 $result = $stmt->execute();
-
 
 $keys = array();
 
@@ -16,8 +26,11 @@ while (($row = $result->fetchArray(SQLITE3_NUM))) {
     $keys[] = $row[0];
 }
 
+$date = new DateTime();
+
 $json = array(
     'status' => 'OK',
+    'date' => $date->format(DateTimeInterface::ISO8601),
     'keys' => $keys
 );
 
