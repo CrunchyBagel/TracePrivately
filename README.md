@@ -3,13 +3,21 @@ A sample app using Apple's contact tracing framework, as documented here:
 
 https://www.apple.com/covid19/contacttracing
 
+## Objectives
+
+* Create a fully-functioning prototype that governments can rebrand as necessary and use
+* Implement correct security and privacy principles to maximise uptake of said government apps
+* Remain open source for independent verification
+* Properly use the Apple / Google contact tracing specification
+* Create a function server prototype that can be used as a basis for more robust solutions that fit into governments' existing architecture.
+
+## Screenshots
+
 ![Main Window](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/trace-main.png?raw=true)
 
 ![Exposed Window](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/trace-exposed.png?raw=true)
 
-It shows how to start and stop tracking, as well how to indicate if you've been infected or exposed.
-
-The goal of this app to build a baseline app that Governments can use to implement sane and private solutions to contact tracing for COVID-19.
+## Other
 
 Please submit suggestions and pull requests so this can function as best as possible.
 
