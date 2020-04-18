@@ -22,3 +22,7 @@ https://www.apple.com/covid19/contacttracing
 Please submit suggestions and pull requests so this can function as best as possible.
 
 Refer to the `KeyServer` directory for information about the server-side aspect of contact tracing.
+
+## Disclaimer
+
+This code is offered as-is. I offer no warranty or accept any responsibility for the use or misuse of this source code or any apps that are derived from it.
