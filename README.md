@@ -13,9 +13,4 @@ The goal of this app to build a baseline app that Governments can use to impleme
 
 Please submit suggestions and pull requests so this can function as best as possible.
 
-It also needs a server side component to manage anonymous device keys.
-
-The server needs:
-
-* Accept keys of newly-infected users
-* Allow infected keys to be received by the app, so they can be cross-referenced
+Refer to the `KeyServer` directory for information about the server-side aspect of contact tracing.
