@@ -250,7 +250,7 @@ extension DataManager {
 
                 for contact in insert {
                     let entity = ExposureContactInfoEntity(context: context)
-                    entity.timestamp = contact.timestamp
+                    entity.timestamp = contact.date
                     entity.duration = contact.duration
                     entity.status = ExposureStatus.detected.rawValue
                 }
@@ -273,7 +273,7 @@ fileprivate extension ExposureContactInfoEntity {
             return nil
         }
         
-        return CTContactInfo(duration: self.duration, timestamp: timestamp)
+        return CTContactInfo(duration: self.duration, timestamp: timestamp.timeIntervalSinceReferenceDate)
     }
     
     func matches(contact: CTContactInfo) -> Bool {
@@ -281,7 +281,7 @@ fileprivate extension ExposureContactInfoEntity {
             return false
         }
         
-        if contact.timestamp != self.timestamp {
+        if contact.date != self.timestamp {
             return false
         }
         

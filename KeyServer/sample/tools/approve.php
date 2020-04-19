@@ -21,14 +21,18 @@ $db->query('BEGIN');
 $status = 'A';
 $oldStatus = 'P';
 
-$stmt = $db->prepare('UPDATE infected_key_submissions SET status = :s WHERE submission_id = :i AND status = :o');
+$time = time();
+
+$stmt = $db->prepare('UPDATE infected_key_submissions SET status = :s, status_updated = :d WHERE submission_id = :i AND status = :o');
 $stmt->bindValue(':s', $status, SQLITE3_TEXT);
+$stmt->bindValue(':d', $time, SQLITE3_INTEGER);
 $stmt->bindValue(':o', $oldStatus, SQLITE3_TEXT);
 $stmt->bindValue(':i', $submissionId, SQLITE3_INTEGER);
 $stmt->execute();
 
-$stmt = $db->prepare('UPDATE infected_keys SET status = :s WHERE submission_id = :i AND status = :o');
+$stmt = $db->prepare('UPDATE infected_keys SET status = :s, status_updated = :d WHERE submission_id = :i AND status = :o');
 $stmt->bindValue(':s', $status, SQLITE3_TEXT);
+$stmt->bindValue(':d', $time, SQLITE3_INTEGER);
 $stmt->bindValue(':o', $oldStatus, SQLITE3_TEXT);
 $stmt->bindValue(':i', $submissionId, SQLITE3_INTEGER);
 $stmt->execute();

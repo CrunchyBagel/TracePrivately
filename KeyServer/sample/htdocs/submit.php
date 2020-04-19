@@ -27,19 +27,21 @@ if (count($keys) > 0) {
     
     $db->query('BEGIN');
 
-    $stmt = $db->prepare('INSERT INTO infected_key_submissions (status, timestamp) VALUES (:s, :t)');
+    $stmt = $db->prepare('INSERT INTO infected_key_submissions (status, status_updated, timestamp) VALUES (:s, :d, :t)');
     $stmt->bindValue(':s', 'P', SQLITE3_TEXT); // Pending state, must be approved
+    $stmt->bindValue(':d', $time, SQLITE3_INTEGER);
     $stmt->bindValue(':t', $time, SQLITE3_INTEGER);
     $stmt->execute();
 
     $submissionId = $db->lastInsertRowID();
 
-    $stmt = $db->prepare('INSERT INTO infected_keys (infected_key, timestamp, status, submission_id) VALUES (:k, :t, :s, :i)');
+    $stmt = $db->prepare('INSERT INTO infected_keys (infected_key, timestamp, status, status_updated, submission_id) VALUES (:k, :t, :s, :d, :i)');
 
     foreach ($json['keys'] as $encodedKey) {
         $stmt->bindValue(':k', $encodedKey, SQLITE3_TEXT);
         $stmt->bindValue(':t', $time, SQLITE3_INTEGER);
 	$stmt->bindValue(':s', 'P', SQLITE3_TEXT); // Pending state, must be approved
+        $stmt->bindValue(':d', $time, SQLITE3_INTEGER);
 	$stmt->bindValue(':i', $submissionId, SQLITE3_INTEGER);
 
         $stmt->execute();

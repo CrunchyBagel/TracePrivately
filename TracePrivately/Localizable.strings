@@ -56,6 +56,7 @@
 "on" = "On";
 "off" = "Off";
 "submit" = "Submit";
+"error" = "Error";
 
 "ok" = "OK";
 "cancel" = "Cancel";
@@ -65,8 +66,6 @@
 "tracking.available" = "Available";
 "tracking.not_available" = "Not available";
 "tracking.state.title" = "Tracking State";
-
-"error.title" = "Error";
 
 "keyserver.error.no_response_data" = "Response Data Not Received";
 "keyserver.error.response_decoding_error" = "Error Decoding Response";

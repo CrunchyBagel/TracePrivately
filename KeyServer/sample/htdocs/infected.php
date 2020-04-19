@@ -15,7 +15,7 @@ if (array_key_exists('since', $_GET)) {
     }
 }
 
-$stmt = $db->prepare('SELECT infected_key FROM infected_keys WHERE status = :s AND timestamp >= :t');
+$stmt = $db->prepare('SELECT infected_key FROM infected_keys WHERE status = :s AND status_updated >= :t');
 $stmt->bindValue(':t', $time, SQLITE3_INTEGER);
 $stmt->bindValue(':s', 'A', SQLITE3_TEXT);
 
@@ -33,7 +33,7 @@ $json = array(
     'status' => 'OK',
     'date' => $date->format(DateTimeInterface::ISO8601),
     'keys' => $keys,
-    'deleted_keys' => array() // Placeholder for deleted keys so clients can subsequently purge them
+    'deleted_keys' => array()
 );
 
 //$data = json_encode($json, JSON_PRETTY_PRINT);

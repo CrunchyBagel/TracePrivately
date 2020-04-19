@@ -97,7 +97,7 @@ extension ExposedViewController {
         
         switch rowType {
         case .contact(let contact):
-            cell.textLabel?.text = self.timeFormatter.string(from: contact.timestamp)
+            cell.textLabel?.text = self.timeFormatter.string(from: contact.date)
             
             
             if let str = self.durationFormatter.string(from: contact.duration) {

@@ -501,8 +501,8 @@ extension ViewController {
         
             KeyServer.shared.submitInfectedKeys(keys: keys) { success, error in
                 
-                if success {
-                    context.perform {
+                context.perform {
+                    if success {
                         entity.status = "S" // Submitted
                         
                         for key in keys {
@@ -512,24 +512,24 @@ extension ViewController {
                         }
 
                         try? context.save()
+                    }
 
-                        DispatchQueue.main.async {
-                            self.dismiss(animated: true) {
+                    DispatchQueue.main.async {
+                        self.dismiss(animated: true) {
+                            
+                            if success {
+                                let alert = UIAlertController(title: NSLocalizedString("infection.report.submitted.title", comment: ""), message: NSLocalizedString("infection.report.submitted.message", comment: ""), preferredStyle: .alert)
                                 
-                                if success {
-                                    let alert = UIAlertController(title: NSLocalizedString("infection.report.submitted.title", comment: ""), message: NSLocalizedString("infection.report.submitted.message", comment: ""), preferredStyle: .alert)
-                                    
-                                    alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
-                                    
-                                    self.present(alert, animated: true, completion: nil)
-                                }
-                                else {
-                                    let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: error?.localizedDescription ?? NSLocalizedString("infection.report.submit.error", comment: "" ), preferredStyle: .alert)
-                                    
-                                    alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
-                                    
-                                    self.present(alert, animated: true, completion: nil)
-                                }
+                                alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
+                                
+                                self.present(alert, animated: true, completion: nil)
+                            }
+                            else {
+                                let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: error?.localizedDescription ?? NSLocalizedString("infection.report.submit.error", comment: "" ), preferredStyle: .alert)
+                                
+                                alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
+                                
+                                self.present(alert, animated: true, completion: nil)
                             }
                         }
                     }
