@@ -32,7 +32,8 @@ $date = new DateTime();
 $json = array(
     'status' => 'OK',
     'date' => $date->format(DateTimeInterface::ISO8601),
-    'keys' => $keys
+    'keys' => $keys,
+    'deleted_keys' => array() // Placeholder for deleted keys so clients can subsequently purge them
 );
 
 //$data = json_encode($json, JSON_PRETTY_PRINT);

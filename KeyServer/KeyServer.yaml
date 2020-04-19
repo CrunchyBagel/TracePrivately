@@ -1,0 +1,100 @@
+swagger: '2.0'
+info:
+    title: Trace Privately KeyServer API
+    description: |
+        This is the format of the API that the Trace Privately app expects from its corresponding key server.
+
+    version: "0.1"
+
+host: example.com
+
+schemes:
+    - https
+
+basePath: /api
+
+produces:
+    - application/json
+
+paths:
+
+    /infected:
+        get:
+            operationId: "keyserver_infected"
+            summary: Retrieve a list of active infected keys
+            description: |
+                This endpoint returns a list of keys for users that have indicated that have contracted COVID-19.
+            produces:
+            - "application/json"
+            parameters:
+                - name: since
+                  description: |
+                      This restricts the date for which keys are returned. In other words, only return keys submitted after this date. The server
+                      may impose its only minimum date if this date isn't specified, such as a maximum of 14 days worth of infected keys. Expects a date time in ISO 8601 format.
+                  in: query
+                  required: false
+                  type: string
+                  format: date-time
+
+            responses:
+                200:
+                    description: A list of infected keys since the specified date.
+                    schema:
+                        type: object
+                        properties:
+                            status:
+                                type: string
+                                example: "OK"
+                                description: OK
+                            date:
+                                type: string
+                                format: date-time
+                                description: The date from which infected keys are returned
+                            keys:
+                                type: array
+                                items:
+                                    type: string
+                                    example: "Base 64 Encoded String"
+                                    description: Base 64 encoded binary data representing a single key
+                            deleted_keys:
+                                type: array
+                                description: A list of keys that have subsequently been marked as not infected. Client should remove them from their cache.
+                                items:
+                                    type: string
+                                    example: "Base 64 Encoded String"
+                                    description: Base 64 encoded binary data representing a single key
+
+    /submit:
+        post:
+            operationId: "keyserver_submit"
+            summary: Submit keys that represent a person who has contracted COVID-19.
+            description: |
+                This endpoint allows the client to submit keys after its user has indicated they have contracted COVID-19.
+            consumes:
+            - "application/json"
+            produces:
+            - "application/json"
+
+            parameters:
+                - in: body
+                  name: Request data
+                  schema:
+                      type: object
+                      properties:
+                          keys:
+                              type: array
+                              description: List of infected keys
+                              items:
+                                  type: string
+                                  example: "Base 64 Encoded String"
+                                  description: Base 64 encoded binary data representing a single key
+            responses:
+                200:
+                    description: A list of infected keys since the specified date.
+                    schema:
+                        type: object
+                        properties:
+                            status:
+                                type: string
+                                example: "OK"
+                                description: OK
