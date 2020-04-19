@@ -15,8 +15,9 @@ if (array_key_exists('since', $_GET)) {
     }
 }
 
-$stmt = $db->prepare('SELECT infected_key FROM infected_keys WHERE timestamp >= :t');
+$stmt = $db->prepare('SELECT infected_key FROM infected_keys WHERE status = :s AND timestamp >= :t');
 $stmt->bindValue(':t', $time, SQLITE3_INTEGER);
+$stmt->bindValue(':s', 'A', SQLITE3_TEXT);
 
 $result = $stmt->execute();
 
@@ -39,3 +40,4 @@ $data = json_encode($json);
 
 header('Content-type: application/json; charset=utf-8');
 echo $data;
+
