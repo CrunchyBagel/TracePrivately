@@ -73,3 +73,5 @@
 "keyserver.error.key_data_missing" = "Key Data Missing";
 "keyserver.error.date_missing" = "Date Missing";
 "keyserver.error.not_ok" = "OK Status Not Received";
+"keyserver.error.invalid_config" = "Invalid KeyServer config";
+

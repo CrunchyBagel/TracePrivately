@@ -16,6 +16,7 @@ class KeyServer {
         case keyDataMissing
         case dateMissing
         case okStatusNotReceived
+        case invalidConfig
         
         var errorDescription: String? {
             switch self {
@@ -24,6 +25,7 @@ class KeyServer {
             case .keyDataMissing: return NSLocalizedString("keyserver.error.key_data_missing", comment: "")
             case .dateMissing: return NSLocalizedString("keyserver.error.date_missing", comment: "")
             case .okStatusNotReceived: return NSLocalizedString("keyserver.error.not_ok", comment: "")
+            case .invalidConfig: return NSLocalizedString("keyserver.error.invalid_config", comment: "")
             }
         }
     }
@@ -44,26 +46,45 @@ class KeyServer {
 
     private init() {}
     
-    fileprivate enum RequestEndpoint {
-        case submitInfectedKeys
-        case retrieveInfectedKeys
-        
-        var host: String {
-            return "https://example.com"
+    lazy var configDictionary: NSDictionary? = {
+        guard let configUrl = Bundle.main.url(forResource: "KeyServer", withExtension: "plist") else {
+            return nil
         }
         
-        var url: URL {
-            switch self {
-            case .retrieveInfectedKeys:
-                return URL(string: self.host + "/api/infected")!
-            case .submitInfectedKeys:
-                return URL(string: self.host + "/api/submit")!
+        return NSDictionary(contentsOf: configUrl)
+    }()
+    
+    fileprivate enum RequestEndpoint {
+        case submitInfectedKeys
+        case getInfectedKeys
+        
+        func url(config: NSDictionary) -> URL? {
+            
+            let prefix = config.object(forKey: "BaseUrl") as? String ?? ""
+            
+            guard let endpoints = config.object(forKey: "EndPoints") as? [String: String] else {
+                return nil
             }
+
+            let endPointKey: String
+            
+            switch self {
+            case .getInfectedKeys:
+                endPointKey = "GetInfectedKeys"
+            case .submitInfectedKeys:
+                endPointKey = "SubmitInfectedKeys"
+            }
+            
+            guard let endpoint = endpoints[endPointKey] else {
+                return nil
+            }
+            
+            return URL(string: prefix + endpoint)
         }
         
         var httpMethod: String {
             switch self {
-            case .retrieveInfectedKeys:
+            case .getInfectedKeys:
                 return "GET"
             case .submitInfectedKeys:
                 return "POST"
@@ -92,9 +113,14 @@ class KeyServer {
     func submitInfectedKeys(keys: [CTDailyTracingKey], completion: @escaping (Bool, Swift.Error?) -> Void) {
         
         let endPoint: RequestEndpoint = .submitInfectedKeys
+
+        guard let config = self.configDictionary, let url = endPoint.url(config: config) else {
+            completion(false, Error.invalidConfig)
+            return
+        }
         
         var request = URLRequest(
-            url: endPoint.url,
+            url: url,
             cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
             timeoutInterval: 30
         )
@@ -174,10 +200,13 @@ class KeyServer {
     
     func retrieveInfectedKeys(since date: Date?, completion: @escaping (InfectedKeysResponse?, Swift.Error?) -> Void) {
 
-        let endPoint: RequestEndpoint = .retrieveInfectedKeys
+        let endPoint: RequestEndpoint = .getInfectedKeys
 
-        var url = endPoint.url
-        
+        guard let config = self.configDictionary, var url = endPoint.url(config: config) else {
+            completion(nil, Error.invalidConfig)
+            return
+        }
+
         if let date = date, var components = URLComponents(url: url, resolvingAgainstBaseURL: false) {
             
             let df = ISO8601DateFormatter()
