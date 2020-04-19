@@ -267,7 +267,7 @@ extension DataManager {
     }
 }
 
-fileprivate extension ExposureContactInfoEntity {
+extension ExposureContactInfoEntity {
     var contactInfo: CTContactInfo? {
         guard let timestamp = self.timestamp else {
             return nil
@@ -286,5 +286,43 @@ fileprivate extension ExposureContactInfoEntity {
         }
         
         return true
+    }
+}
+
+struct ExposureFetchRequest {
+    enum SortDirection {
+        case timestampAsc
+        case timestampDesc
+
+        var sortDescriptors: [NSSortDescriptor] {
+            switch self {
+            case .timestampAsc:
+                return [
+                    NSSortDescriptor(key: "timestamp", ascending: true),
+                    NSSortDescriptor(key: "duration", ascending: false)
+                ]
+            case .timestampDesc:
+                return [
+                    NSSortDescriptor(key: "timestamp", ascending: false),
+                    NSSortDescriptor(key: "duration", ascending: true)
+                ]
+            }
+        }
+    }
+    
+    let includeStatuses: Set<DataManager.ExposureStatus>
+    let sortDirection: SortDirection
+    
+    var fetchRequest: NSFetchRequest<ExposureContactInfoEntity> {
+        
+        let fetchRequest: NSFetchRequest<ExposureContactInfoEntity> = ExposureContactInfoEntity.fetchRequest()
+        
+        if includeStatuses.count > 0 {
+            fetchRequest.predicate = NSPredicate(format: "status IN %@", includeStatuses.map { $0.rawValue })
+        }
+        
+        fetchRequest.sortDescriptors = sortDirection.sortDescriptors
+
+        return fetchRequest
     }
 }

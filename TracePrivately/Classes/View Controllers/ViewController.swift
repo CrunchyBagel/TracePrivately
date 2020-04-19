@@ -5,12 +5,11 @@
 
 import UIKit
 
-// TODO: Remember when the user has been exposed so they can subsequently confirm or deny an infection
-
 class ViewController: UITableViewController {
 
     struct Cells {
         static let standard = "Cell"
+        static let exposed = "ExposedCell"
     }
     
     struct Segues {
@@ -22,6 +21,7 @@ class ViewController: UITableViewController {
         case startStopTracking
         case checkIfExposed
         case markAsInfected
+        case exposureConfirmed
     }
     
     struct Section {
@@ -46,11 +46,10 @@ class ViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         
         self.title = NSLocalizedString("app.title", comment: "")
         
-        self.sections = [
+        var sections: [Section] = [
             Section(
                 header: NSLocalizedString("about.title", comment: ""),
                 footer: NSLocalizedString("about.message", comment: ""),
@@ -73,23 +72,64 @@ class ViewController: UITableViewController {
             )
         ]
         
+        if self.shouldShowExposureCell {
+            sections.insert(self.createExposureSection(), at: 1)
+        }
+        
+        self.sections = sections
+        
         self.refreshTrackingState()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case Segues.exposed:
-            guard let nc = segue.destination as? UINavigationController, let vc = nc.viewControllers.first as? ExposedViewController else {
-                return
-            }
-            
-            if let contacts = sender as? [CTContactInfo] {
-                vc.exposureContacts = contacts
-            }
+            break
             
         default:
             super.prepare(for: segue, sender: sender)
         }
+    }
+}
+
+extension ViewController {
+    var shouldShowExposureCell: Bool {
+        let request = ExposureFetchRequest(includeStatuses: [ .detected ], sortDirection: .timestampAsc)
+        
+        let context = DataManager.shared.persistentContainer.viewContext
+        
+        let numContacts = (try? context.count(for: request.fetchRequest)) ?? 0
+        
+        return numContacts > 0
+    }
+
+    func updateExposureCell() {
+        if let indexPath = self.indexPath(rowType: .exposureConfirmed) {
+            if self.shouldShowExposureCell {
+                // Nothing to do
+            }
+            else {
+                self.sections.remove(at: indexPath.section)
+                self.tableView.deleteSections(IndexSet(integer: indexPath.section), with: .automatic)
+            }
+        }
+        else {
+            let sectionNumber = 1
+            let indexSet = IndexSet(integer: sectionNumber)
+
+            if self.shouldShowExposureCell {
+                let section = self.createExposureSection()
+                self.sections.insert(section, at: sectionNumber)
+                self.tableView.insertSections(indexSet, with: .automatic)
+            }
+            else {
+                // Nothing to do
+            }
+        }
+    }
+    
+    func createExposureSection() -> Section {
+        return Section(header: nil, footer: nil, rows: [ .exposureConfirmed ])
     }
 }
 
@@ -266,12 +306,13 @@ extension ViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Cells.standard, for: indexPath)
         
         let rowType = self.sections[indexPath.section].rows[indexPath.row]
         
         switch rowType {
         case .trackingState:
+            let cell = tableView.dequeueReusableCell(withIdentifier: Cells.standard, for: indexPath)
+
             cell.textLabel?.text = NSLocalizedString("tracking.state.title", comment: "")
             
             if let error = self.trackingStatusError {
@@ -300,24 +341,43 @@ extension ViewController {
             
             self.updateGetStateIndicator(cell: cell)
             
+            return cell
+            
         case .startStopTracking:
+            let cell = tableView.dequeueReusableCell(withIdentifier: Cells.standard, for: indexPath)
             self.updateStartStopTrackingCell(cell: cell)
             
+            return cell
+            
         case .checkIfExposed:
+            let cell = tableView.dequeueReusableCell(withIdentifier: Cells.standard, for: indexPath)
+
             cell.textLabel?.text = NSLocalizedString("exposure.check.title", comment: "")
             cell.detailTextLabel?.text = nil
             
             self.updateCheckExposureIndicator(cell: cell)
             
-        case .markAsInfected:
+            return cell
             
+        case .markAsInfected:
+            let cell = tableView.dequeueReusableCell(withIdentifier: Cells.standard, for: indexPath)
+
             cell.textLabel?.text = String(format: NSLocalizedString("infection.report.title", comment: ""), Disease.current.localizedTitle)
             
             cell.detailTextLabel?.text = nil
             cell.accessoryType = .disclosureIndicator
+            
+            return cell
+            
+        case .exposureConfirmed:
+            let cell = tableView.dequeueReusableCell(withIdentifier: Cells.exposed, for: indexPath)
+
+            cell.textLabel?.text = NSLocalizedString("exposure.exposed.title", comment: "")
+            cell.detailTextLabel?.text = String(format: NSLocalizedString("exposure.exposed.message", comment: ""), Disease.current.localizedTitle)
+            cell.accessoryType = .disclosureIndicator
+
+            return cell
         }
-        
-        return cell
     }
     
     func updateCheckExposureIndicator(cell: UITableViewCell) {
@@ -416,6 +476,10 @@ extension ViewController {
         case .checkIfExposed:
             tableView.deselectRow(at: indexPath, animated: true)
             self.beginExposureWorkflow()
+            
+        case .exposureConfirmed:
+            tableView.deselectRow(at: indexPath, animated: true)
+            self.performSegue(withIdentifier: Segues.exposed, sender: nil)
             
         case .markAsInfected:
             
@@ -628,11 +692,7 @@ extension ViewController {
                             if summary.matchedKeyCount == 0 {
                                 DispatchQueue.main.async {
                                     
-                                    let message = String(format: NSLocalizedString("exposure.none.message", comment: ""), Disease.current.localizedTitle)
-                                    
-                                    let alert = UIAlertController(title: "Great News", message: message, preferredStyle: .alert)
-                                    alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
-                                    self.present(alert, animated: true, completion: nil)
+                                    self.showNoExposureMessage()
 
                                     self.isCheckingExposure = false
                                     
@@ -645,25 +705,31 @@ extension ViewController {
                             }
 
                             session.getContactInfoWithHandler { contacts, error in
-                                guard let contacts = contacts, contacts.count > 0 else {
+                                guard let contacts = contacts else {
+                                    // TODO: Handle this case properly
                                     return
                                 }
 
                                 DataManager.shared.saveExposures(contacts: contacts) { error in
-                                    
                                     if let error = error {
                                         print("Error: \(error)")
                                     }
                                     
                                     DispatchQueue.main.async {
+                                        self.updateExposureCell()
+                                        
                                         self.isCheckingExposure = false
                                         
                                         if let cell = self.visibleCell(rowType: .checkIfExposed) {
                                             self.updateCheckExposureIndicator(cell: cell)
                                         }
                                         
-                                        // TODO: This should passing the records stored in the database rather than all received from getContactInfoWithHandler
-                                        self.performSegue(withIdentifier: Segues.exposed, sender: contacts)
+                                        if contacts.count == 0 {
+                                            self.showNoExposureMessage()
+                                        }
+                                        else {
+                                            self.performSegue(withIdentifier: Segues.exposed, sender: nil)
+                                        }
                                     }
                                 }
                             }
@@ -672,6 +738,14 @@ extension ViewController {
                 }
             }
         }
+    }
+    
+    func showNoExposureMessage() {
+        let message = String(format: NSLocalizedString("exposure.none.message", comment: ""), Disease.current.localizedTitle)
+        
+        let alert = UIAlertController(title: "Great News", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
 }
 

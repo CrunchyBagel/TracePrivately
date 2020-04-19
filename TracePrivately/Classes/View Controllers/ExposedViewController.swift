@@ -4,6 +4,7 @@
 //
 
 import UIKit
+import CoreData
 
 class ExposedViewController: UITableViewController {
 
@@ -25,8 +26,6 @@ class ExposedViewController: UITableViewController {
     
     var sections: [Section] = []
 
-    var exposureContacts: [CTContactInfo] = []
-    
     lazy var timeFormatter: DateFormatter = {
         let ret = DateFormatter()
         ret.dateStyle = .medium
@@ -45,12 +44,50 @@ class ExposedViewController: UITableViewController {
         return ret
     }()
     
+    lazy var fetchResultsController: NSFetchedResultsController<ExposureContactInfoEntity> = {
+
+        let request = ExposureFetchRequest(includeStatuses: [ .detected ], sortDirection: .timestampAsc)
+        
+        let controller = NSFetchedResultsController(
+            fetchRequest: request.fetchRequest,
+            managedObjectContext: DataManager.shared.persistentContainer.viewContext,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
+        
+        controller.delegate = self
+        
+        return controller
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.title = NSLocalizedString("exposure.exposed.title", comment: "")
         
-        if self.exposureContacts.count == 0 {
+        do {
+            try self.fetchResultsController.performFetch()
+        }
+        catch {
+            
+        }
+        
+        let request = ExposureFetchRequest(includeStatuses: [ .detected ], sortDirection: .timestampAsc)
+        
+        let context = DataManager.shared.persistentContainer.viewContext
+        
+        let entities: [ExposureContactInfoEntity]
+        
+        do {
+            entities = try context.fetch(request.fetchRequest)
+        }
+        catch {
+            entities = []
+        }
+        
+        let contacts: [CTContactInfo] = entities.compactMap { $0.contactInfo }
+
+        if contacts.count == 0 {
             let title = String(format: NSLocalizedString("exposure.none.message", comment: ""), Disease.current.localizedTitle)
             self.sections = [
                 Section(header: nil, footer: title, rows: [])
@@ -58,15 +95,11 @@ class ExposedViewController: UITableViewController {
         }
         else {
             
-            let sortedContacts = self.exposureContacts.sorted { (a, b) -> Bool in
-                return a.timestamp < b.timestamp
-            }
-            
             let title = String(format: NSLocalizedString("exposure.exposed.message", comment: "") , Disease.current.localizedTitle)
 
             self.sections = [
                 Section(header: nil, footer: title, rows: []),
-                Section(header: NSLocalizedString("exposure.times.title", comment: ""), footer: nil, rows: sortedContacts.map { .contact($0)} ),
+                Section(header: NSLocalizedString("exposure.times.title", comment: ""), footer: nil, rows: contacts.map { .contact($0)} ),
                 Section(header: nil, footer: nil, rows: [ .nextSteps ])
             ]
         }
@@ -138,4 +171,8 @@ extension ExposedViewController {
         }
         
     }
+}
+
+extension ExposedViewController: NSFetchedResultsControllerDelegate {
+    
 }
