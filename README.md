@@ -9,10 +9,11 @@ This app will be evolving quickly as I'm trying to publish new functionality as 
 
 ## Objectives
 
-* Create a fully-functioning prototype that governments can use as an almost-turnkey solution that they can rebrand as necessary and use.
+* Create a fully-functioning prototype that governments can use as an almost-turnkey solution that they can rebrand as necessary and use
 * Implement correct security and privacy principles to maximise uptake of said government apps
 * Remain open source for independent verification
 * Properly use the Apple / Google contact tracing specification
+* Work in a localized manner so it can be used in any language or jurisdiction
 * Create a functioning server prototype that can be used as a basis for more robust solutions that fit into governments' existing architecture.
 
 ## Screenshots
