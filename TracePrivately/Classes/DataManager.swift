@@ -180,3 +180,111 @@ extension DataManager {
         }
     }
 }
+
+extension DataManager {
+    // Other statuses could be added here to allow the user to flag each
+    // exposure with a level of confidence. For example, maybe they know
+    // for a fact they were in their car alone, so they could mark an
+    // exposure as not possible
+    enum ExposureStatus: String {
+        case detected = "D"
+    }
+    
+    func saveExposures(contacts: [CTContactInfo], completion: @escaping (Error?) -> Void) {
+        
+        let context = self.persistentContainer.newBackgroundContext()
+        
+        context.perform {
+            
+            var delete: [ExposureContactInfoEntity] = []
+            var insert: [CTContactInfo] = []
+
+            let fetchRequest: NSFetchRequest<ExposureContactInfoEntity> = ExposureContactInfoEntity.fetchRequest()
+            
+            do {
+                let existingEntities = try context.fetch(fetchRequest)
+                
+                for entity in existingEntities {
+                    var found = false
+                    
+                    for contact in contacts {
+                        if entity.matches(contact: contact) {
+                            found = true
+                            break
+                        }
+                    }
+                    
+                    if found {
+                        // Already have this contact
+                        print("Contact already exists, skipping")
+                    }
+                    else {
+                        print("Contact not found in new list, deleting: \(entity)")
+                        delete.append(entity)
+                    }
+                }
+                
+                for contact in contacts {
+                    var found = false
+                    
+                    for entity in existingEntities {
+                        if entity.matches(contact: contact) {
+                            found = true
+                            break
+                        }
+                    }
+                    
+                    if found {
+                        // Already have this contact
+                    }
+                    else {
+                        print("New exposure detected: \(contact)")
+                        insert.append(contact)
+                    }
+                }
+                
+                print("Deleting: \(delete.count)")
+                print("Inserting: \(insert.count)")
+
+                delete.forEach { context.delete($0) }
+
+                for contact in insert {
+                    let entity = ExposureContactInfoEntity(context: context)
+                    entity.timestamp = contact.timestamp
+                    entity.duration = contact.duration
+                    entity.status = ExposureStatus.detected.rawValue
+                }
+                
+                try context.save()
+                
+                completion(nil)
+            }
+            catch {
+                completion(error)
+            }
+        }
+        
+    }
+}
+
+fileprivate extension ExposureContactInfoEntity {
+    var contactInfo: CTContactInfo? {
+        guard let timestamp = self.timestamp else {
+            return nil
+        }
+        
+        return CTContactInfo(duration: self.duration, timestamp: timestamp)
+    }
+    
+    func matches(contact: CTContactInfo) -> Bool {
+        if contact.duration != self.duration {
+            return false
+        }
+        
+        if contact.timestamp != self.timestamp {
+            return false
+        }
+        
+        return true
+    }
+}

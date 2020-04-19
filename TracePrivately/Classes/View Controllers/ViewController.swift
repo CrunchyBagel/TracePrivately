@@ -644,19 +644,27 @@ extension ViewController {
                                 return
                             }
 
-                            session.getContactInfoWithHandler { info, error in
-                                guard let info = info, info.count > 0 else {
+                            session.getContactInfoWithHandler { contacts, error in
+                                guard let contacts = contacts, contacts.count > 0 else {
                                     return
                                 }
-                                
-                                DispatchQueue.main.async {
-                                    self.isCheckingExposure = false
+
+                                DataManager.shared.saveExposures(contacts: contacts) { error in
                                     
-                                    if let cell = self.visibleCell(rowType: .checkIfExposed) {
-                                        self.updateCheckExposureIndicator(cell: cell)
+                                    if let error = error {
+                                        print("Error: \(error)")
                                     }
                                     
-                                    self.performSegue(withIdentifier: Segues.exposed, sender: info)
+                                    DispatchQueue.main.async {
+                                        self.isCheckingExposure = false
+                                        
+                                        if let cell = self.visibleCell(rowType: .checkIfExposed) {
+                                            self.updateCheckExposureIndicator(cell: cell)
+                                        }
+                                        
+                                        // TODO: This should passing the records stored in the database rather than all received from getContactInfoWithHandler
+                                        self.performSegue(withIdentifier: Segues.exposed, sender: contacts)
+                                    }
                                 }
                             }
                         }
