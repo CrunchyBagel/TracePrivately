@@ -15,8 +15,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+        ContactTraceManager.shared.applicationDidFinishLaunching()
+        
         if #available(iOS 13, *) {
-            BGTaskScheduler.shared.register(forTaskWithIdentifier: DataManager.backgroundProcessingTaskIdentifier, using: .main) { task in
+            BGTaskScheduler.shared.register(forTaskWithIdentifier: ContactTraceManager.backgroundProcessingTaskIdentifier, using: .main) { task in
             
                 self.handleBackgroundTask(task: task)
             }
@@ -26,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
-        DataManager.shared.fetchLatestInfectedKeys { _, _ in
+        ContactTraceManager.shared.performBackgroundUpdate { _ in
             self.scheduleNextBackgroundProcess(minimumDate: Date().addingTimeInterval(Self.backgroundProcessingInterval))
         }
     }
@@ -36,13 +38,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        DataManager.shared.fetchLatestInfectedKeys { numNewKeys, error in
+        ContactTraceManager.shared.performBackgroundUpdate { error in
             guard error == nil else {
                 completionHandler(.failed)
                 return
             }
             
-            completionHandler(numNewKeys > 0 ? .newData : .noData)
+            completionHandler(.newData)
             self.scheduleNextBackgroundProcess(minimumDate: Date().addingTimeInterval(Self.backgroundProcessingInterval))
         }
     }
@@ -51,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate {
     func scheduleNextBackgroundProcess(minimumDate: Date) {
         if #available(iOS 13, *) {
-            let request = BGAppRefreshTaskRequest(identifier: DataManager.backgroundProcessingTaskIdentifier)
+            let request = BGAppRefreshTaskRequest(identifier: ContactTraceManager.backgroundProcessingTaskIdentifier)
             request.earliestBeginDate = minimumDate
             do {
                 try BGTaskScheduler.shared.submit(request)
@@ -69,8 +71,8 @@ extension AppDelegate {
     @available(iOS 13, *)
     func handleBackgroundTask(task: BGTask) {
         switch task.identifier {
-        case DataManager.backgroundProcessingTaskIdentifier:
-            DataManager.shared.fetchLatestInfectedKeys { _, error in
+        case ContactTraceManager.backgroundProcessingTaskIdentifier:
+            ContactTraceManager.shared.performBackgroundUpdate { error in
                 task.setTaskCompleted(success: error == nil)
                 self.scheduleNextBackgroundProcess(minimumDate: Date().addingTimeInterval(Self.backgroundProcessingInterval))
             }

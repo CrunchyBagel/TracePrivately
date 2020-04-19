@@ -8,12 +8,13 @@ import CoreData
 class DataManager {
     static let shared = DataManager()
     
-    static let backgroundProcessingTaskIdentifier = "dm.processor"
 
     private init() {
         
     }
     
+    static let exposureContactsUpdateNotification = Notification.Name("exposureContactsUpdateNotification")
+
     lazy var persistentContainer: NSPersistentContainer = {
         /*
          The persistent container for the application. This implementation
@@ -79,16 +80,6 @@ class DataManager {
 
 extension DataManager {
     // TODO: Need to automatically purge old keys
-    private static let lastRecievedInfectedKeysKey = "lastRecievedInfectedKeysKey"
-    
-    private var lastRecievedInfectedKeys: Date? {
-        return UserDefaults.standard.object(forKey: Self.lastRecievedInfectedKeysKey) as? Date
-    }
-
-    func saveLastReceivedInfectedKeys(date: Date) {
-        UserDefaults.standard.set(date, forKey: Self.lastRecievedInfectedKeysKey)
-        UserDefaults.standard.synchronize()
-    }
 
     func saveInfectedKeys(keys: [CTDailyTracingKey], completion: @escaping (_ numNewKeys: Int, _ error: Swift.Error?) -> Void) {
         
@@ -139,25 +130,6 @@ extension DataManager {
             }
             catch {
                 completion(numNewKeys, error)
-            }
-        }
-    }
-    
-    func fetchLatestInfectedKeys(completion: @escaping (_ numNewKeys: Int, _ error: Swift.Error?) -> Void) {
-        KeyServer.shared.retrieveInfectedKeys(since: self.lastRecievedInfectedKeys) { response, error in
-            guard let response = response else {
-                completion(0, error)
-                return
-            }
-            
-            self.saveInfectedKeys(keys: response.keys) { numNewKeys, error in
-                if let error = error {
-                    completion(0, error)
-                    return
-                }
-                
-                self.saveLastReceivedInfectedKeys(date: response.date)
-                completion(numNewKeys, nil)
             }
         }
     }
@@ -256,6 +228,8 @@ extension DataManager {
                 }
                 
                 try context.save()
+                
+                NotificationCenter.default.post(name: Self.exposureContactsUpdateNotification, object: nil)
                 
                 completion(nil)
             }
