@@ -3,7 +3,7 @@ A sample app using Apple's contact tracing framework, as documented here:
 
 https://www.apple.com/covid19/contacttracing
 
-*Note: This framework is not actually released. This app being developed using a mock version of the framework based on the published documentation. This will generate false exposures for the purposes of testing and development.*
+*Note: The Apple framework is not actually yet released. This app being developed using a mock version of the framework based on the published documentation. This will generate false exposures for the purposes of testing and development.*
 
 This app will be evolving quickly as I'm trying to publish new functionality as quickly as possible.
 
