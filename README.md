@@ -34,9 +34,9 @@ Demo Video: https://youtu.be/rVaz8VQLoaE
 
 ## Other
 
-Please submit suggestions and pull requests so this can function as best as possible.
-
-Refer to the `KeyServer` directory for information about the server-side aspect of contact tracing.
+* Please submit suggestions and pull requests so this can function as best as possible.
+* Refer to the `KeyServer` directory for information about the server-side aspect of contact tracing.
+* Android? If you would like to build a clone of this iOS app in Android we can include or link to it from this repo.
 
 ## License
 
