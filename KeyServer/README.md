@@ -1,14 +1,28 @@
 # KeyServer
 
-This is the web service that tracks private keys of infected users.
+The key server is is the web service that tracks private keys of infected users.
 
 It has two primary functions:
 
 1. Accepting new keys. When a user indicates they have COVID 19, their app uploads all of their keys for the past 14 days
 2. Providing keys to the app. The app will periodically query for new infected keys so it can check if its owner has potentially been exposed.
 
+## Implementations
+
+* PHP: This repository contains a basic implementation in PHP
+* Ruby: https://github.com/tatey/trace_privately
+
+Want to build your own? Use the `KeyServer.yaml` for the requests and responses the mobile app expects.
+
+## Additional Functionality
+
+We are open to suggestions on additions/changes to the API specification, especially related to authentication and performance improvements.
+
+Note however these will subsequently need to be support in the mobile app.
+
 ## This Implementation
 
+This implementation is 
 Currently this is a very crude implementation. It is in PHP, so may not be suitable for your environment.
 
 Further improvements required include:

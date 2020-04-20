@@ -16,6 +16,14 @@ This app will be evolving quickly as I'm trying to publish new functionality as 
 * Work in a localized manner so it can be used in any language or jurisdiction
 * Create a functioning server prototype that can be used as a basis for more robust solutions that fit into governments' existing architecture.
 
+## Instructions
+
+1. Set up a key server using the sample code in `KeyServer`
+2. In the iOS project, configure `KeyServer.plist` to point to your server
+3. Build and run in Xcode
+4. The sample key server requires manual approval of infection submissions, using the `./tools/pending.php` and `./tools/approve.php` scripts.
+5. In this proof of concept, every client will detect an exposure for any infection submitted
+
 ## Screenshots
 
 Demo Video: https://youtu.be/rVaz8VQLoaE
@@ -26,9 +34,9 @@ Demo Video: https://youtu.be/rVaz8VQLoaE
 
 ## Other
 
-Please submit suggestions and pull requests so this can function as best as possible.
-
-Refer to the `KeyServer` directory for information about the server-side aspect of contact tracing.
+* Please submit suggestions and pull requests so this can function as best as possible.
+* Refer to the `KeyServer` directory for information about the server-side aspect of contact tracing.
+* Android? If you would like to build a clone of this iOS app in Android we can include or link to it from this repo.
 
 ## License
 
