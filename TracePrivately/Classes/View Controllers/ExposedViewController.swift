@@ -46,7 +46,7 @@ class ExposedViewController: UITableViewController {
     
     lazy var fetchResultsController: NSFetchedResultsController<ExposureContactInfoEntity> = {
 
-        let request = ExposureFetchRequest(includeStatuses: [ .detected ], sortDirection: .timestampAsc)
+        let request = ExposureFetchRequest(includeStatuses: [ .detected ], includeNotificationStatuses: [], sortDirection: .timestampAsc)
         
         let controller = NSFetchedResultsController(
             fetchRequest: request.fetchRequest,
@@ -72,7 +72,7 @@ class ExposedViewController: UITableViewController {
             
         }
         
-        let request = ExposureFetchRequest(includeStatuses: [ .detected ], sortDirection: .timestampAsc)
+        let request = ExposureFetchRequest(includeStatuses: [ .detected ], includeNotificationStatuses: [], sortDirection: .timestampAsc)
         
         let context = DataManager.shared.persistentContainer.viewContext
         

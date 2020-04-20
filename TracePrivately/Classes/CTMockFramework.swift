@@ -220,6 +220,21 @@ class CTExposureDetectionSession: CTBaseRequest {
     
     private static let maximumFakeMatches = 1
     
+    private var remoteInfectedKeys: [CTDailyTracingKey] {
+        // Filters out keys for local device for the purposes of better testing
+        
+        let localDeviceId = CTInternalState.shared.localDeviceId
+        
+        return self._infectedKeys.filter { key in
+            guard let str = key.stringValue else {
+                return false
+            }
+            
+            return !str.hasPrefix(localDeviceId)
+        }
+    }
+
+    
     /// Indicates all of the available keys have been provided. Any remaining detection will be performed and the completion handler will be invoked with the results.
     func finishedPositiveDiagnosisKeys(completion: @escaping CTExposureDetectionFinishHandler) {
         let queue: DispatchQueue = dispatchQueue ?? .main
@@ -240,7 +255,7 @@ class CTExposureDetectionSession: CTBaseRequest {
                 return
             }
             
-            let keys = ctQueue.sync { return self._infectedKeys }
+            let keys = ctQueue.sync { return self.remoteInfectedKeys }
 
             let summary = CTExposureDetectionSummary(matchedKeyCount: min(Self.maximumFakeMatches, keys.count))
             completion(summary, nil)
@@ -268,14 +283,32 @@ class CTExposureDetectionSession: CTBaseRequest {
             }
 
             // For now this is assuming that every key is infected. Obviously this isn't accurate, just useful for testing.
-            let keys: [CTDailyTracingKey] = ctQueue.sync { self._infectedKeys }
+            let keys: [CTDailyTracingKey] = ctQueue.sync { self.remoteInfectedKeys }
             
-            let contacts: [CTContactInfo] = keys.map { _ in
-                let duration = TimeInterval.random(in: 3 ... 7200)
+            let calendar = Calendar(identifier: .gregorian)
+            
+            let contacts: [CTContactInfo] = keys.compactMap { key in
                 
-                let age = TimeInterval.random(in: 300 ... 604800)
+                guard var dc = key.ymd else {
+                    return nil
+                }
                 
-                return CTContactInfo(duration: duration, timestamp: Date().addingTimeInterval(-age).timeIntervalSinceReferenceDate)
+                dc.hour = 12
+                dc.minute = 12
+                dc.second = 0
+                
+                guard let date = calendar.date(from: dc) else {
+                    return nil
+                }
+                
+                let duration: TimeInterval = 15 * 60
+                
+                return CTContactInfo(duration: duration, timestamp: date.timeIntervalSinceReferenceDate)
+                
+//                let duration = TimeInterval.random(in: 3 ... 7200)
+//                let age = TimeInterval.random(in: 300 ... 604800)
+//
+//                return CTContactInfo(duration: duration, timestamp: Date().addingTimeInterval(-age).timeIntervalSinceReferenceDate)
             }
             
             let numItems = min(Self.maximumFakeMatches, contacts.count)
@@ -307,6 +340,8 @@ class CTSelfTracingInfoRequest: CTBaseRequest {
 
     /// This property invokes this completion handler when the request completes and clears the property to break any potential retain cycles.
     var completionHandler: CTSelfTracingInfoGetCompletion?
+    
+    // TODO: This needs to show a system authorization prompt
     
     /// Asynchronously performs the request to get the state, and invokes the completion handler when it's done.
     func perform() {
@@ -386,7 +421,51 @@ class CTDailyTracingKey {
     }
 }
 
+extension CTDailyTracingKey {
+    fileprivate var stringValue: String? {
+        return String(data: self.keyData, encoding: .utf8)
+    }
 
+    // This is used so we can resolve a date from the key
+    var ymd: DateComponents? {
+        guard let str = self.stringValue else {
+            return nil
+        }
+        
+        let parts = str.components(separatedBy: "_")
+        
+        guard parts.count == 2 else {
+            return nil
+        }
+        
+        let yyyymmdd = parts[1]
+        
+        guard yyyymmdd.count == 8 else {
+            return nil
+        }
+        
+        let y = Int(String(yyyymmdd[0 ... 3]))
+        let m = Int(String(yyyymmdd[4 ... 5]))
+        let d = Int(String(yyyymmdd[6 ... 7]))
+        
+        var dc = DateComponents()
+        dc.year = y
+        dc.month = m
+        dc.day = d
+        
+        return dc
+    }
+}
+
+extension String {
+    subscript (r: CountableClosedRange<Int>) -> String {
+        get {
+            let startIndex =  self.index(self.startIndex, offsetBy: r.lowerBound)
+            let endIndex = self.index(startIndex, offsetBy: r.upperBound - r.lowerBound)
+            return String(self[startIndex...endIndex])
+        }
+    }
+}
 
 
 
@@ -417,20 +496,44 @@ private class CTInternalState {
         
     }
     
+    // This is only for testing as it would otherwise be considered identifiable. This class is purely
+    // a mock implementation of Apple's framework, so allowances like this are made in order to help
+    // develop and test.
+    fileprivate lazy var localDeviceId: String = {
+        return UIDevice.current.identifierForVendor!.uuidString
+    }()
+    
     // These keys are stable for this device as they use a device specific ID with an index appended
     var dailyKeys: [Data] {
         return ctQueue.sync {
             
             var keys: [String] = []
             
-            guard let deviceId = UIDevice.current.identifierForVendor?.uuidString else {
+            let deviceId = self.localDeviceId
+            
+            let calendar = Calendar(identifier: .gregorian)
+            
+            var todayDc = calendar.dateComponents([ .day, .month, .year ], from: Date())
+            todayDc.hour = 12
+            todayDc.minute = 0
+            todayDc.second = 0
+            
+            guard let todayMidday = calendar.date(from: todayDc) else {
                 return []
             }
             
             for idx in 0 ..< 14 {
+                guard let date = calendar.date(byAdding: .day, value: -idx, to: todayMidday, wrappingComponents: false) else {
+                    continue
+                }
+
+                let dc = calendar.dateComponents([ .day, .month, .year ], from: date)
                 
-                let str = deviceId + "_\(idx)"
+                let dateStr = String(format: "%04d%02d%02d", dc.year!, dc.month!, dc.day!)
+                
+                let str = deviceId + "_" + dateStr
                 keys.append(str)
+                
             }
             
             print("Generated keys: \(keys)")

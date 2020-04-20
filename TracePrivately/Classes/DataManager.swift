@@ -162,6 +162,11 @@ extension DataManager {
         case detected = "D"
     }
     
+    enum ExposureLocalNotificationStatus: String {
+        case notSent = "P"
+        case sent = "S"
+    }
+    
     func saveExposures(contacts: [CTContactInfo], completion: @escaping (Error?) -> Void) {
         
         let context = self.persistentContainer.newBackgroundContext()
@@ -171,10 +176,9 @@ extension DataManager {
             var delete: [ExposureContactInfoEntity] = []
             var insert: [CTContactInfo] = []
 
-            let fetchRequest: NSFetchRequest<ExposureContactInfoEntity> = ExposureContactInfoEntity.fetchRequest()
-            
             do {
-                let existingEntities = try context.fetch(fetchRequest)
+                let request = ExposureFetchRequest(includeStatuses: [], includeNotificationStatuses: [], sortDirection: nil)
+                let existingEntities = try context.fetch(request.fetchRequest)
                 
                 for entity in existingEntities {
                     var found = false
@@ -225,6 +229,7 @@ extension DataManager {
                     entity.timestamp = contact.date
                     entity.duration = contact.duration
                     entity.status = ExposureStatus.detected.rawValue
+                    entity.localNotificationStatus = ExposureLocalNotificationStatus.notSent.rawValue
                 }
                 
                 try context.save()
@@ -285,7 +290,8 @@ struct ExposureFetchRequest {
     }
     
     let includeStatuses: Set<DataManager.ExposureStatus>
-    let sortDirection: SortDirection
+    let includeNotificationStatuses: Set<DataManager.ExposureLocalNotificationStatus>
+    let sortDirection: SortDirection?
     
     var fetchRequest: NSFetchRequest<ExposureContactInfoEntity> {
         
@@ -295,7 +301,13 @@ struct ExposureFetchRequest {
             fetchRequest.predicate = NSPredicate(format: "status IN %@", includeStatuses.map { $0.rawValue })
         }
         
-        fetchRequest.sortDescriptors = sortDirection.sortDescriptors
+        if includeNotificationStatuses.count > 0 {
+            fetchRequest.predicate = NSPredicate(format: "localNotificationStatus IN %@", includeNotificationStatuses.map { $0.rawValue })
+        }
+
+        if let sortDirection = sortDirection {
+            fetchRequest.sortDescriptors = sortDirection.sortDescriptors
+        }
 
         return fetchRequest
     }

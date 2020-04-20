@@ -5,9 +5,10 @@
 
 "app.title" = "Trace Privately";
 "about.title" = "About";
-"about.message" = "This is an example only of contact tracing using Apple's newly-announced framework.";
+"about.message" = "This is an example implementation of contact tracing using Apple's newly-announced framework.\n\nIt is not fully functional and therefore should not yet be used for real-world applications.";
 
 "tracing.title" = "Tracing";
+"tracing.message" = "Used for securely exchanging anonymous information when you encounter other people.";
 "tracing.start.title" = "Start Tracing";
 "tracing.start.message" = "Click Start to enable tracing on your device.\n\nIt is achieved in a private and secure way, with minimal impact on your battery life.";
 "tracing.start.button.title" = "Start";

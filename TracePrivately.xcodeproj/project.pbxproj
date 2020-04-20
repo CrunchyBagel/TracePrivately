@@ -33,6 +33,7 @@
 		66437F9F244A9B2C000B8C6C /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		66848C2C244D5F8800497D2A /* AsyncBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AsyncBlockOperation.swift; path = TracePrivately/Classes/AsyncBlockOperation.swift; sourceTree = "<group>"; };
 		668CE842244D01F50065960A /* ContactTraceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactTraceManager.swift; sourceTree = "<group>"; };
+		668D4B22244D705100D90C26 /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
 		6698C56F24492BC500F046E4 /* KeyServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyServer.swift; sourceTree = "<group>"; };
 		6698C571244936AF00F046E4 /* ExposedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposedViewController.swift; sourceTree = "<group>"; };
 		6698C573244BFAB600F046E4 /* KeyServer.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = KeyServer.plist; sourceTree = "<group>"; };
@@ -413,9 +414,10 @@
 		66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				668D4B22244D705100D90C26 /* Model 2.xcdatamodel */,
 				66437F9D244A9A02000B8C6C /* Model.xcdatamodel */,
 			);
-			currentVersion = 66437F9D244A9A02000B8C6C /* Model.xcdatamodel */;
+			currentVersion = 668D4B22244D705100D90C26 /* Model 2.xcdatamodel */;
 			path = TracePrivately.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

@@ -50,14 +50,14 @@ class ViewController: UITableViewController {
         
         var sections: [Section] = [
             Section(
-                header: NSLocalizedString("about.title", comment: ""),
-                footer: NSLocalizedString("about.message", comment: ""),
-                rows: []
+                header: NSLocalizedString("tracing.title", comment: ""),
+                footer: NSLocalizedString("tracing.message", comment: ""),
+                rows: [ .startStopTracing ]
             ),
             Section(
-                header: NSLocalizedString("tracing.title", comment: ""),
-                footer: nil,
-                rows: [ .startStopTracing ]
+                header: nil,
+                footer: NSLocalizedString("exposure.turn_on.message", comment: ""),
+                rows: [ .startStopExposureChecking ]
             ),
             Section(
                 header: NSLocalizedString("infection.title", comment: ""),
@@ -65,14 +65,14 @@ class ViewController: UITableViewController {
                 rows: [ .markAsInfected ]
             ),
             Section(
-                header: NSLocalizedString("exposure.title", comment: ""),
-                footer: NSLocalizedString("exposure.turn_on.message", comment: ""),
-                rows: [ .startStopExposureChecking ]
+                header: NSLocalizedString("about.title", comment: ""),
+                footer: NSLocalizedString("about.message", comment: ""),
+                rows: []
             )
         ]
         
         if self.shouldShowExposureCell {
-            sections.insert(self.createExposureSection(), at: 1)
+            sections.insert(self.createExposureSection(), at: 0)
         }
         
         self.sections = sections
@@ -97,7 +97,7 @@ class ViewController: UITableViewController {
 
 extension ViewController {
     var shouldShowExposureCell: Bool {
-        let request = ExposureFetchRequest(includeStatuses: [ .detected ], sortDirection: .timestampAsc)
+        let request = ExposureFetchRequest(includeStatuses: [ .detected ], includeNotificationStatuses: [], sortDirection: .timestampAsc)
         
         let context = DataManager.shared.persistentContainer.viewContext
         
@@ -117,7 +117,7 @@ extension ViewController {
             }
         }
         else {
-            let sectionNumber = 1
+            let sectionNumber = 0
             let indexSet = IndexSet(integer: sectionNumber)
 
             if self.shouldShowExposureCell {

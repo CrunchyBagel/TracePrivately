@@ -121,6 +121,7 @@ extension ContactTraceManager {
                     return
                 }
                 
+                // TODO: Documentation indicates that maybe this needs to be continually called until contacts is empty
                 session.getContactInfoWithHandler { contacts, error in
                     guard let contacts = contacts else {
                         completion(error)
@@ -133,7 +134,7 @@ extension ContactTraceManager {
                             UIApplication.shared.applicationIconBadgeNumber = contacts.count == 0 ? -1 : contacts.count
                         }
                         
-                        self.sendExposureNotification(contacts: contacts) { notificationError in
+                        self.sendExposureNotificationForPendingContacts { notificationError in
                             completion(error ?? notificationError)
                         }
                     }
@@ -154,15 +155,50 @@ extension ContactTraceManager {
     }
     
     // TODO: Don't repeat notification for a single exposure
-    private func sendExposureNotification(contacts: [CTContactInfo], completion: @escaping (Swift.Error?) -> Void) {
+    private func sendExposureNotificationForPendingContacts(completion: @escaping (Swift.Error?) -> Void) {
+        
+        let request = ExposureFetchRequest(includeStatuses: [.detected], includeNotificationStatuses: [.notSent], sortDirection: nil)
+        
+        let context = DataManager.shared.persistentContainer.newBackgroundContext()
+        
+        context.perform {
+            do {
+                let entities = try context.fetch(request.fetchRequest)
+                
+                self.sendLocalNotification(entities: entities) { error in
+                    context.perform {
+                        entities.forEach { $0.localNotificationStatus = DataManager.ExposureLocalNotificationStatus.sent.rawValue }
+                    
+                        do {
+                            try context.save()
+                            completion(nil)
+                        }
+                        catch {
+                            completion(error)
+                        }
+                    }
+                }
+            }
+            catch {
+                completion(nil)
+            }
+            
+        }
+        
+
+    }
+    
+    private func sendLocalNotification(entities: [ExposureContactInfoEntity], completion: @escaping (Swift.Error?) -> Void) {
+        
+        let contacts = entities.compactMap { $0.contactInfo }
         
         guard contacts.count > 0 else {
             completion(nil)
             return
         }
-        
+
         let content = UNMutableNotificationContent()
-        content.badge = contacts.count as NSNumber
+        content.badge = entities.count as NSNumber
         
         content.title = String(format: NSLocalizedString("notification.exposure_detected.title", comment: ""), Disease.current.localizedTitle)
         
