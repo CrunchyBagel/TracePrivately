@@ -6,8 +6,6 @@
 import UIKit
 import CoreData
 
-// TODO: Ensure this view can be dismissed prior to iOS 13
-
 class ExposedViewController: UITableViewController {
 
     struct Cells {
@@ -67,6 +65,11 @@ class ExposedViewController: UITableViewController {
         
         self.title = NSLocalizedString("exposure.exposed.title", comment: "")
         
+        // Swipe down to dismiss also available on iOS 13+
+        let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(Self.doneTapped(_:)))
+        self.navigationItem.leftBarButtonItem = button
+
+        
         do {
             try self.fetchResultsController.performFetch()
         }
@@ -105,6 +108,10 @@ class ExposedViewController: UITableViewController {
                 Section(header: nil, footer: nil, rows: [ .nextSteps ])
             ]
         }
+    }
+    
+    @objc func doneTapped(_ sender: UIBarButtonItem) {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 

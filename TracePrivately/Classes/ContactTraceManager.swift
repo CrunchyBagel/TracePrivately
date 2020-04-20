@@ -21,20 +21,38 @@ class ContactTraceManager: NSObject {
 
     fileprivate var exposureDetectionSession: CTExposureDetectionSession?
     
-    private var _exposureCheckingEnabled = false
-    var exposureCheckingEnabled: Bool {
+    private var _isUpdatingEnabledState = false
+    @objc dynamic var isUpdatingEnabledState: Bool {
         get {
             return queue.sync {
-                return self._exposureCheckingEnabled
+                return self._isUpdatingEnabledState
             }
         }
         set {
+            self.willChangeValue(for: \.isUpdatingEnabledState)
             queue.sync {
-                self._exposureCheckingEnabled = newValue
+                self._isUpdatingEnabledState = newValue
             }
+            self.didChangeValue(for: \.isUpdatingEnabledState)
         }
     }
     
+    private var _isContactTracingEnabled = false
+    @objc dynamic  var isContactTracingEnabled: Bool {
+        get {
+            return queue.sync {
+                return self._isContactTracingEnabled
+            }
+        }
+        set {
+            self.willChangeValue(for: \.isContactTracingEnabled)
+            queue.sync {
+                self._isContactTracingEnabled = newValue
+            }
+            self.didChangeValue(for: \.isContactTracingEnabled)
+        }
+    }
+
     private var _isUpdatingExposures = false
     fileprivate var isUpdatingExposures: Bool {
         get {
@@ -258,28 +276,66 @@ extension ContactTraceManager {
 }
 
 extension ContactTraceManager {
-    func startTracing(completion: @escaping () -> Void) {
-        // TODO: Implement
-    }
-    
-    func stopTracing() {
-        // TODO: Implement
-    }
-    
-}
-
-extension ContactTraceManager {
-    func startExposureChecking(completion: @escaping (Swift.Error?) -> Void) {
-        guard !self.isUpdatingExposures else {
+    func startTracing(completion: @escaping (Swift.Error?) -> Void) {
+        
+        guard !self.isUpdatingEnabledState else {
             completion(nil)
             return
         }
         
-        guard !self.exposureCheckingEnabled else {
+        guard !self.isUpdatingEnabledState else {
+            completion(nil)
+            return
+        }
+        
+        guard !self.isUpdatingExposures else {
             completion(nil)
             return
         }
 
+        self.isUpdatingEnabledState = true
+        
+        let request = CTStateSetRequest()
+        request.state = .on
+        request.completionHandler = { error in
+            if let error = error {
+                self.isUpdatingEnabledState = false
+                self.isContactTracingEnabled = false
+                completion(error)
+                return
+            }
+            
+            self.startExposureChecking { error in
+                self.isContactTracingEnabled = error == nil
+                self.isUpdatingEnabledState = false
+                completion(error)
+            }
+        }
+
+        request.perform()
+    }
+    
+    func stopTracing() {
+        guard self.isContactTracingEnabled && !self.isUpdatingEnabledState else {
+            return
+        }
+
+        self.isUpdatingEnabledState = true
+        self.stopExposureChecking()
+
+        let request = CTStateSetRequest()
+        request.state = .on
+        request.completionHandler = { error in
+            self.isUpdatingEnabledState = false
+            self.isContactTracingEnabled = false
+        }
+        
+        request.perform()
+    }
+}
+
+extension ContactTraceManager {
+    fileprivate func startExposureChecking(completion: @escaping (Swift.Error?) -> Void) {
         let dispatchGroup = DispatchGroup()
         
         let unc = UNUserNotificationCenter.current()
@@ -296,8 +352,6 @@ extension ContactTraceManager {
         
         dispatchGroup.enter()
         session.activateWithCompletion { error in
-            self.exposureCheckingEnabled = true
-
             sessionError = error
             
             DataManager.shared.allInfectedKeys { keys, error in
@@ -327,12 +381,7 @@ extension ContactTraceManager {
         }
     }
     
-    func stopExposureChecking() {
-        guard !self.isUpdatingExposures else {
-            return
-        }
-        
-        self.exposureCheckingEnabled = false
+    fileprivate func stopExposureChecking() {
         self.exposureDetectionSession = nil
     }
 }

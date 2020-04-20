@@ -38,6 +38,14 @@ class SubmitInfectionViewController: UITableViewController {
             ),
             Section(header: nil, footer: nil, rows: [ .submit ])
         ]
+
+        // Swipe down to dismiss also available on iOS 13+
+        let button = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(Self.cancelTapped(_:)))
+        self.navigationItem.leftBarButtonItem = button
+    }
+    
+    @objc func cancelTapped(_ sender: UIBarButtonItem) {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 

@@ -14,5 +14,14 @@ class SubmittedInfectionViewController: UITableViewController {
         super.viewDidLoad()
         
         self.title = NSLocalizedString("infection.infected.title", comment: "")
+
+        // Swipe down to dismiss also available on iOS 13+
+        let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(Self.doneTapped(_:)))
+        self.navigationItem.leftBarButtonItem = button
+    }
+
+    
+    @objc func doneTapped(_ sender: UIBarButtonItem) {
+        self.dismiss(animated: true, completion: nil)
     }
 }
