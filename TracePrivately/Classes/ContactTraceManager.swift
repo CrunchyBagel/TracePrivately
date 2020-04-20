@@ -163,7 +163,6 @@ extension ContactTraceManager {
         }
     }
     
-    // TODO: Don't repeat notification for a single exposure
     private func sendExposureNotificationForPendingContacts(completion: @escaping (Swift.Error?) -> Void) {
         
         let request = ExposureFetchRequest(includeStatuses: [.detected], includeNotificationStatuses: [.notSent], sortDirection: nil)

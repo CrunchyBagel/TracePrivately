@@ -328,8 +328,6 @@ class CTSelfTracingInfoRequest: CTBaseRequest {
     /// This property invokes this completion handler when the request completes and clears the property to break any potential retain cycles.
     var completionHandler: CTSelfTracingInfoGetCompletion?
     
-    // TODO: This needs to show a system authorization prompt
-    
     /// Asynchronously performs the request to get the state, and invokes the completion handler when it's done.
     func perform() {
         guard !self.isInvalidated else {
