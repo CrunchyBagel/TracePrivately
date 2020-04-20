@@ -49,7 +49,7 @@
 	</array>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
-		<string>dm.processor</string>
+		<string>ctm.processor</string>
 	</array>
 </dict>
 </plist>

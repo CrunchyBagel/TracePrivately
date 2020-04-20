@@ -1,3 +1,8 @@
+BEGIN;
+
+DROP TABLE IF EXISTS infected_keys;
+DROP TABLE IF EXISTS infected_key_submissions;
+
 CREATE TABLE infected_key_submissions (
     submission_id INTEGER PRIMARY KEY AUTOINCREMENT,
     status TEXT,
@@ -24,3 +29,4 @@ CREATE INDEX infected_keys_status ON infected_keys (status);
 CREATE INDEX infected_keys_status_updated ON infected_keys (status_updated);
 CREATE INDEX infected_keys_timestamp ON infected_keys (timestamp);
 
+COMMIT;
