@@ -5,6 +5,7 @@
 
 import Foundation
 import UserNotifications
+import UIKit
 
 class ContactTraceManager: NSObject {
     
@@ -123,9 +124,13 @@ extension ContactTraceManager {
                             
                             DataManager.shared.saveExposures(contacts: contacts) { error in
                                 
-                                self.sendExposureNotification(contacts: contacts) {
+                                DispatchQueue.main.sync {
+                                    UIApplication.shared.applicationIconBadgeNumber = contacts.count == 0 ? -1 : contacts.count
+                                }
+                                
+                                self.sendExposureNotification(contacts: contacts) { notificationError in
                                     self.isUpdatingExposures = false
-                                    completion(error)
+                                    completion(error ?? notificationError)
                                 }
                             }
                         }
@@ -146,9 +151,62 @@ extension ContactTraceManager {
         }
     }
     
-    private func sendExposureNotification(contacts: [CTContactInfo], completion: @escaping () -> Void) {
-        // TODO: Implement
-        completion()
+    private func sendExposureNotification(contacts: [CTContactInfo], completion: @escaping (Swift.Error?) -> Void) {
+        
+        guard contacts.count > 0 else {
+            completion(nil)
+            return
+        }
+        
+        let content = UNMutableNotificationContent()
+        content.badge = contacts.count as NSNumber
+        
+        content.title = String(format: NSLocalizedString("notification.exposure_detected.title", comment: ""), Disease.current.localizedTitle)
+        
+        if contacts.count > 1 {
+            content.body = NSLocalizedString("notification.exposure_detected.multiple.body", comment: "")
+        }
+        else {
+            let contact = contacts[0]
+            
+            let df = DateFormatter()
+            df.dateStyle = .medium
+            df.timeStyle = .medium
+
+            let dcf = DateComponentsFormatter()
+            dcf.allowedUnits = [ .day, .hour, .minute ]
+            dcf.unitsStyle = .abbreviated
+            dcf.zeroFormattingBehavior = .dropLeading
+            dcf.maximumUnitCount = 2
+
+            let formattedTimestamp = df.string(from: contact.date)
+            let formattedDuration: String
+                
+            if let str = dcf.string(from: contact.duration) {
+                formattedDuration = str
+            }
+            else {
+                // Fallback for formatter, although I doubt this can be reached
+                let numMinutes = max(1, Int(contact.duration / 60))
+                formattedDuration = "\(numMinutes)m"
+            }
+                
+            content.body = String(
+                format: NSLocalizedString("notification.exposure_detected.single.body", comment: ""),
+                formattedTimestamp,
+                formattedDuration
+            )
+        }
+        
+        let request = UNNotificationRequest(
+            identifier: "exposure",
+            content: content,
+            trigger: nil // Deliver immediately
+        )
+        
+        UNUserNotificationCenter.current().add(request) { error in
+            completion(error)
+        }
     }
 }
 
@@ -217,5 +275,10 @@ extension ContactTraceManager {
 }
  
 extension ContactTraceManager: UNUserNotificationCenterDelegate {
-    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        
+        // This prevents the notification from appearing when in the foreground
+        completionHandler([])
+        
+    }
 }
