@@ -5,8 +5,6 @@
 
 import Foundation
 
-// TODO: The server needs to be appropriately secured. Perhaps use receipt validation to determine the requester is a validly downloaded app from the App Store.
-
 class KeyServer {
     static let shared = KeyServer()
     

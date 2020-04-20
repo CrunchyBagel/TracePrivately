@@ -7,27 +7,30 @@
 "about.title" = "About";
 "about.message" = "This is an example only of contact tracing using Apple's newly-announced framework.";
 
-"tracking.title" = "Tracking";
-"tracking.start.title" = "Start Tracking";
-"tracking.start.message" = "Click Start to enable tracking on your device.\n\nIt is achieved in a private and secure way, with minimal impact on your battery life.";
-"tracking.start.button.title" = "Start";
-"tracking.start.error" = "Unable to start tracking at this time";
-"tracking.stop.title" = "Stop Tracking";
-"tracking.stop.message" = "Are you sure? It is extremely helpful to society if tracking is enabled whenever you're around other people.";
-"tracking.stop.button.title" = "Stop";
+"tracing.title" = "Tracing";
+"tracing.start.title" = "Start Tracing";
+"tracing.start.message" = "Click Start to enable tracing on your device.\n\nIt is achieved in a private and secure way, with minimal impact on your battery life.";
+"tracing.start.button.title" = "Start";
+"tracing.start.error" = "Unable to start tracing at this time";
+"tracing.stop.message" = "Are you sure? It is extremely helpful to society if tracing is enabled whenever you're around other people.";
+"tracing.stop.button.title" = "Stop";
+"tracing.stop.title" = "Stop Tracing";
+"tracing.available" = "Available";
+"tracing.not_available" = "Not available";
+"tracing.state.title" = "Tracing State";
 
 "disease.covid19.title" = "COVID-19";
 
 "infection.title" = "Infection";
 
-/* Parameter is name of disease being tracked */
+/* parameter is localized disease name */
 "infection.report.title" = "I Have %@";
 "infection.report.confirm.title" = "Are You Sure?";
 "infection.report.confirm.message" = "Click OK to create your anonymous profile.\n\nYou will be prompted again before it is submitted to your jurisdiction's anonymous tracing database.";
 "infection.report.gathering_data.title" = "Creating Your Profile…";
 "infection.report.gathering_data.error" = "Unable to create your anonymous profile.";
 "infection.report.gathering.empty.title" = "No Information";
-"infection.report.gathering.empty.message" = "Unable to find your tracking information. Perhaps you haven't had tracking enabled?";
+"infection.report.gathering.empty.message" = "Unable to find your tracing information. Perhaps you haven't had tracing enabled?";
 "infection.report.submit.title" = "Confirm";
 "infection.report.submit.message" = "Please confirm you want to submit.\n\nThis will allow people who have been near you to know they may have been exposed.";
 "infection.report.submit.error" = "Unable to submit your information.";
@@ -37,8 +40,9 @@
 "infection.report.submitted.message" = "Your information has been submitted.";
 
 "exposure.title" = "Exposure";
-"exposure.message" = "This step would likely be triggered automatically in the background, rather than manually.";
-"exposure.check.title" = "Check Your Exposure";
+"exposure.turn_on.message" = "Automatically check if you've been exposed and notify you if exposure is detected.";
+"exposure.turn_on.title" = "Turn On Exposure Checking";
+"exposure.turn_off.title" = "Turn Off Exposure Checking";
 "exposure.none.title" = "Great News";
 /* parameter is localized disease name */
 "exposure.none.message" = "No contact detected with a %@ infection!\n\nStay safe and wash your hands.";
@@ -61,12 +65,6 @@
 "ok" = "OK";
 "cancel" = "Cancel";
 
-"tracking.start.title" = "Start Tracking";
-"tracking.stop.title" = "Stop Tracking";
-"tracking.available" = "Available";
-"tracking.not_available" = "Not available";
-"tracking.state.title" = "Tracking State";
-
 "keyserver.error.no_response_data" = "Response Data Not Received";
 "keyserver.error.response_decoding_error" = "Error Decoding Response";
 "keyserver.error.key_data_missing" = "Key Data Missing";
@@ -77,6 +75,6 @@
 /* parameter is localized disease name */
 "notification.exposure_detected.title" = "Alert: %@ Exposure Detected";
 /* 1st parameter is formatted localized time, 2nd parameter is formatted localized duration */
-"notification.exposure_detected.single.body" = "You were potentially exposed at %1$@ for %2$@";
+"notification.exposure_detected.single.body" = "You were potentially exposed: %1$@ for %2$@";
 "notification.exposure_detected.multiple.body" = "We have detected that you may have been exposed multiple times.";
 

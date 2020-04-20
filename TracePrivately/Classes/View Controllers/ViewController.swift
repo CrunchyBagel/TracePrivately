@@ -17,9 +17,8 @@ class ViewController: UITableViewController {
     }
     
     enum RowType {
-        case trackingState
-        case startStopTracking
-        case checkIfExposed
+        case startStopTracing
+        case startStopExposureChecking
         case markAsInfected
         case exposureConfirmed
     }
@@ -31,8 +30,8 @@ class ViewController: UITableViewController {
         let rows: [RowType]
     }
     
-    var trackingStatusError: Error?
-    var trackingStatus: CTManagerState = .unknown
+    var tracingStatusError: Error?
+    var tracingStatus: CTManagerState = .unknown
     
     var sections: [Section] = []
     
@@ -42,7 +41,7 @@ class ViewController: UITableViewController {
     fileprivate var isSettingState = false
     fileprivate var stateSetRequest: CTStateSetRequest?
     
-    fileprivate var isCheckingExposure = false
+    fileprivate var isEnablingExposureChecking = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,9 +55,9 @@ class ViewController: UITableViewController {
                 rows: []
             ),
             Section(
-                header: NSLocalizedString("tracking.title", comment: ""),
+                header: NSLocalizedString("tracing.title", comment: ""),
                 footer: nil,
-                rows: [ .trackingState, .startStopTracking ]
+                rows: [ .startStopTracing ]
             ),
             Section(
                 header: NSLocalizedString("infection.title", comment: ""),
@@ -67,8 +66,8 @@ class ViewController: UITableViewController {
             ),
             Section(
                 header: NSLocalizedString("exposure.title", comment: ""),
-                footer: NSLocalizedString("exposure.message", comment: ""),
-                rows: [ .checkIfExposed ]
+                footer: NSLocalizedString("exposure.turn_on.message", comment: ""),
+                rows: [ .startStopExposureChecking ]
             )
         ]
         
@@ -78,7 +77,11 @@ class ViewController: UITableViewController {
         
         self.sections = sections
         
-        self.refreshTrackingState()
+        self.refreshTracingState()
+        
+        NotificationCenter.default.addObserver(forName: DataManager.exposureContactsUpdateNotification, object: nil, queue: .main) { _ in
+            self.updateExposureCell()
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -134,7 +137,7 @@ extension ViewController {
 }
 
 extension ViewController {
-    func refreshTrackingState() {
+    func refreshTracingState() {
         self.stateGetRequest?.invalidate()
         
         self.isDeterminingState = true
@@ -143,18 +146,14 @@ extension ViewController {
         request.completionHandler = { error in
             // In this example the request is running on main queue anyway, but I've put the dispatch in anyway
             DispatchQueue.main.async {
-                self.trackingStatusError = error
-                self.trackingStatus = request.state
+                self.tracingStatusError = error
+                self.tracingStatus = request.state
                 
                 self.isDeterminingState = false
                 
                 var indexPaths: [IndexPath] = []
                 
-                if let indexPath = self.indexPath(rowType: .trackingState) {
-                    indexPaths.append(indexPath)
-                }
-
-                if let indexPath = self.indexPath(rowType: .startStopTracking) {
+                if let indexPath = self.indexPath(rowType: .startStopTracing) {
                     indexPaths.append(indexPath)
                 }
             
@@ -170,12 +169,13 @@ extension ViewController {
     }
 }
 
+// TODO: Move this to ContactTracingManager
 extension ViewController {
-    func startTracking() {
+    func startTracing() {
         self.setState(state: .on)
     }
     
-    func stopTracking() {
+    func stopTracing() {
         self.setState(state: .off)
     }
 
@@ -184,8 +184,8 @@ extension ViewController {
         
         self.isSettingState = true
         
-        if let cell = self.visibleCell(rowType: .startStopTracking) {
-            self.updateStartStopTrackingCell(cell: cell)
+        if let cell = self.visibleCell(rowType: .startStopTracing) {
+            self.updateStartStopTracingCell(cell: cell)
         }
         
         let request = CTStateSetRequest()
@@ -197,18 +197,14 @@ extension ViewController {
                     alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .cancel, handler: nil))
                 }
                 else {
-                    self.trackingStatus = state
+                    self.tracingStatus = state
                 }
                 
                 self.isSettingState = false
 
                 var indexPaths: [IndexPath] = []
                 
-                if let indexPath = self.indexPath(rowType: .trackingState) {
-                    indexPaths.append(indexPath)
-                }
-
-                if let indexPath = self.indexPath(rowType: .startStopTracking) {
+                if let indexPath = self.indexPath(rowType: .startStopTracing) {
                     indexPaths.append(indexPath)
                 }
                 
@@ -225,24 +221,24 @@ extension ViewController {
 }
 
 extension ViewController {
-    func updateStartStopTrackingCell(cell: UITableViewCell) {
+    func updateStartStopTracingCell(cell: UITableViewCell) {
         
         let accessoryType: UITableViewCell.AccessoryType
         
-        switch self.trackingStatus {
+        switch self.tracingStatus {
         case .off:
-            cell.textLabel?.text = NSLocalizedString("tracking.start.title", comment: "")
-            cell.detailTextLabel?.text = NSLocalizedString("tracking.available", comment: "")
+            cell.textLabel?.text = NSLocalizedString("tracing.start.title", comment: "")
+            cell.detailTextLabel?.text = NSLocalizedString("tracing.available", comment: "")
             accessoryType = .disclosureIndicator
 
         case .on:
-            cell.textLabel?.text = NSLocalizedString("tracking.stop.title", comment: "")
+            cell.textLabel?.text = NSLocalizedString("tracing.stop.title", comment: "")
             cell.detailTextLabel?.text = nil
             accessoryType = .none
             
         case .unknown:
-            cell.textLabel?.text = NSLocalizedString("tracking.start.title", comment: "")
-            cell.detailTextLabel?.text = NSLocalizedString("tracking.not_available", comment: "")
+            cell.textLabel?.text = NSLocalizedString("tracing.start.title", comment: "")
+            cell.detailTextLabel?.text = NSLocalizedString("tracing.not_available", comment: "")
             accessoryType = .none
         }
         
@@ -310,49 +306,16 @@ extension ViewController {
         let rowType = self.sections[indexPath.section].rows[indexPath.row]
         
         switch rowType {
-        case .trackingState:
+
+        case .startStopTracing:
             let cell = tableView.dequeueReusableCell(withIdentifier: Cells.standard, for: indexPath)
-
-            cell.textLabel?.text = NSLocalizedString("tracking.state.title", comment: "")
-            
-            if let error = self.trackingStatusError {
-                cell.detailTextLabel?.text = error.localizedDescription
-            }
-            else {
-                cell.detailTextLabel?.text = self.trackingStatus.localizedTitle
-            }
-            
-            if self.isDeterminingState {
-                let style: UIActivityIndicatorView.Style
-                
-                if #available(iOS 13.0, *) {
-                    style = .medium
-                } else {
-                    style = .gray
-                }
-
-                let indicator = UIActivityIndicatorView(style: style)
-                indicator.startAnimating()
-                cell.accessoryView = indicator
-            }
-            else {
-                cell.accessoryView = nil
-            }
-            
-            self.updateGetStateIndicator(cell: cell)
+            self.updateStartStopTracingCell(cell: cell)
             
             return cell
             
-        case .startStopTracking:
-            let cell = tableView.dequeueReusableCell(withIdentifier: Cells.standard, for: indexPath)
-            self.updateStartStopTrackingCell(cell: cell)
-            
-            return cell
-            
-        case .checkIfExposed:
+        case .startStopExposureChecking:
             let cell = tableView.dequeueReusableCell(withIdentifier: Cells.standard, for: indexPath)
 
-            cell.textLabel?.text = NSLocalizedString("exposure.check.title", comment: "")
             cell.detailTextLabel?.text = nil
             
             self.updateCheckExposureIndicator(cell: cell)
@@ -381,9 +344,9 @@ extension ViewController {
     }
     
     func updateCheckExposureIndicator(cell: UITableViewCell) {
-        if self.isCheckingExposure {
+        if self.isEnablingExposureChecking {
             let style: UIActivityIndicatorView.Style
-            
+
             if #available(iOS 13.0, *) {
                 style = .medium
             } else {
@@ -396,7 +359,14 @@ extension ViewController {
         }
         else {
             cell.accessoryView = nil
-            cell.accessoryType = .disclosureIndicator
+            cell.accessoryType = .none
+        }
+
+        if ContactTraceManager.shared.exposureCheckingEnabled {
+            cell.textLabel?.text = NSLocalizedString("exposure.turn_off.title", comment: "")
+        }
+        else {
+            cell.textLabel?.text = NSLocalizedString("exposure.turn_on.title", comment: "")
         }
     }
     
@@ -408,6 +378,8 @@ extension ViewController {
                 style = .medium
             } else {
                 style = .gray
+            
+                
             }
 
             let indicator = UIActivityIndicatorView(style: style)
@@ -423,32 +395,25 @@ extension ViewController {
         let rowType = self.sections[indexPath.section].rows[indexPath.row]
         
         switch rowType {
-        case .trackingState:
-            self.refreshTrackingState()
+            
+        case .startStopTracing:
             tableView.deselectRow(at: indexPath, animated: true)
             
-            if let cell = tableView.cellForRow(at: indexPath) {
-                self.updateGetStateIndicator(cell: cell)
-            }
-            
-        case .startStopTracking:
-            tableView.deselectRow(at: indexPath, animated: true)
-            
-            switch self.trackingStatus {
+            switch self.tracingStatus {
             case .unknown:
-                let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: NSLocalizedString("tracking.start.error", comment: ""), preferredStyle: .alert)
+                let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: NSLocalizedString("tracing.start.error", comment: ""), preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .cancel, handler: nil))
                 self.present(alert, animated: true, completion: nil)
                 
             case .off:
-                let alert = UIAlertController(title: NSLocalizedString("tracking.start.title", comment: ""), message: NSLocalizedString("tracking.start.message", comment: ""), preferredStyle: .alert)
+                let alert = UIAlertController(title: NSLocalizedString("tracing.start.title", comment: ""), message: NSLocalizedString("tracing.start.message", comment: ""), preferredStyle: .alert)
                 
-                alert.addAction(UIAlertAction(title: NSLocalizedString("tracking.start.button.title", comment: ""), style: .destructive, handler: { action in
+                alert.addAction(UIAlertAction(title: NSLocalizedString("tracing.start.button.title", comment: ""), style: .destructive, handler: { action in
                    
                     let haptics = UINotificationFeedbackGenerator()
                     haptics.notificationOccurred(.success)
 
-                    self.startTracking()
+                    self.startTracing()
                     
                 }))
                 
@@ -457,14 +422,14 @@ extension ViewController {
                 self.present(alert, animated: true, completion: nil)
                 
             case .on:
-                let alert = UIAlertController(title: NSLocalizedString("tracking.stop.title", comment: ""), message: NSLocalizedString("tracking.stop.message", comment: ""), preferredStyle: .alert)
+                let alert = UIAlertController(title: NSLocalizedString("tracing.stop.title", comment: ""), message: NSLocalizedString("tracing.stop.message", comment: ""), preferredStyle: .alert)
 
-                alert.addAction(UIAlertAction(title: NSLocalizedString("tracking.stop.button.title", comment: ""), style: .destructive, handler: { action in
+                alert.addAction(UIAlertAction(title: NSLocalizedString("tracing.stop.button.title", comment: ""), style: .destructive, handler: { action in
 
                     let haptics = UINotificationFeedbackGenerator()
                     haptics.notificationOccurred(.success)
                     
-                    self.stopTracking()
+                    self.stopTracing()
 
                 }))
                 
@@ -473,9 +438,18 @@ extension ViewController {
                 self.present(alert, animated: true, completion: nil)
             }
             
-        case .checkIfExposed:
+        case .startStopExposureChecking:
             tableView.deselectRow(at: indexPath, animated: true)
-            self.beginExposureWorkflow()
+            
+            if self.isEnablingExposureChecking {
+                // Not possible
+            }
+            else if ContactTraceManager.shared.exposureCheckingEnabled {
+                self.turnOffExposureChecking()
+            }
+            else {
+                self.turnOnExposureChecking()
+            }
             
         case .exposureConfirmed:
             tableView.deselectRow(at: indexPath, animated: true)
@@ -506,7 +480,7 @@ extension ViewController {
         let request = CTSelfTracingInfoRequest()
         
         request.completionHandler = { info, error in
-            /// I'm not exactly sure what the difference is between dailyTrackingKeys being nil or empty. I would assume it should never be nil, and only be empty if tracking has not been enabled. Hopefully this becomes clearer with more documentation.
+            /// I'm not exactly sure what the difference is between dailyTracingKeys being nil or empty. I would assume it should never be nil, and only be empty if tracing has not been enabled. Hopefully this becomes clearer with more documentation.
             
             guard let keys = info?.dailyTracingKeys else {
                 let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: error?.localizedDescription ?? NSLocalizedString("infection.report.gathering_data.error", comment: ""), preferredStyle: .alert)
@@ -604,148 +578,46 @@ extension ViewController {
 }
 
 extension ViewController {
-    func beginExposureWorkflow() {
-        guard !self.isCheckingExposure else {
-            return
-        }
-
-        let session = CTExposureDetectionSession()
+    func turnOffExposureChecking() {
+        ContactTraceManager.shared.stopExposureChecking()
+        self.isEnablingExposureChecking = false
         
-        // This prompts a permission dialog
-        session.activateWithCompletion { error in
-            if let error = error {
-                DispatchQueue.main.async {
-                    var showAlert = true
-                    
-                    if let error = error as? CTError {
-                        if error == .permissionDenied {
-                            showAlert = false
-                        }
-                    }
-                    
-                    if showAlert {
-                        let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
-                        
-                        self.present(alert, animated: true, completion: nil)
-                    }
-                }
-                
-                return
-            }
-
-
-            DispatchQueue.main.async {
-                self.isCheckingExposure = true
-                
-                if let cell = self.visibleCell(rowType: .checkIfExposed) {
-                    self.updateCheckExposureIndicator(cell: cell)
-                }
-
-                // Permission allowed, now we can start exposure detection
-                
-                // 1. Retrieve infected keys from server
-                // 2. Add them to addPositiveDiagnosis
-                // 3. Finish diagnosis
-                // 4. Display infection contact summary
-                
-                // TODO: This isn't splitting to maxKeyCount yet
-                DataManager.shared.allInfectedKeys { keys, error in
-                    guard let keys = keys else {
-                        DispatchQueue.main.async {
-                            self.isCheckingExposure = false
-
-                            if let cell = self.visibleCell(rowType: .checkIfExposed) {
-                                self.updateCheckExposureIndicator(cell: cell)
-                            }
-                        }
-
-                        return
-                    }
-
-                    session.addPositiveDiagnosisKey(inKeys: keys) { error in
-                        guard error == nil else {
-                            DispatchQueue.main.async {
-                                self.isCheckingExposure = false
-
-                                if let cell = self.visibleCell(rowType: .checkIfExposed) {
-                                    self.updateCheckExposureIndicator(cell: cell)
-                                }
-                            }
-
-                            return
-                        }
-
-                        session.finishedPositiveDiagnosisKeys { summary, error in
-                            guard let summary = summary else {
-                                DispatchQueue.main.async {
-                                    self.isCheckingExposure = false
-
-                                    if let cell = self.visibleCell(rowType: .checkIfExposed) {
-                                        self.updateCheckExposureIndicator(cell: cell)
-                                    }
-                                }
-
-                                return
-                            }
-                            
-                            if summary.matchedKeyCount == 0 {
-                                DispatchQueue.main.async {
-                                    
-                                    self.showNoExposureMessage()
-
-                                    self.isCheckingExposure = false
-                                    
-                                    if let cell = self.visibleCell(rowType: .checkIfExposed) {
-                                        self.updateCheckExposureIndicator(cell: cell)
-                                    }
-                                }
-                                
-                                return
-                            }
-
-                            session.getContactInfoWithHandler { contacts, error in
-                                guard let contacts = contacts else {
-                                    // TODO: Handle this case properly
-                                    return
-                                }
-
-                                DataManager.shared.saveExposures(contacts: contacts) { error in
-                                    if let error = error {
-                                        print("Error: \(error)")
-                                    }
-                                    
-                                    DispatchQueue.main.async {
-                                        self.updateExposureCell()
-                                        
-                                        self.isCheckingExposure = false
-                                        
-                                        if let cell = self.visibleCell(rowType: .checkIfExposed) {
-                                            self.updateCheckExposureIndicator(cell: cell)
-                                        }
-                                        
-                                        if contacts.count == 0 {
-                                            self.showNoExposureMessage()
-                                        }
-                                        else {
-                                            self.performSegue(withIdentifier: Segues.exposed, sender: nil)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        if let cell = self.visibleCell(rowType: .startStopExposureChecking) {
+            self.updateCheckExposureIndicator(cell: cell)
         }
     }
     
-    func showNoExposureMessage() {
-        let message = String(format: NSLocalizedString("exposure.none.message", comment: ""), Disease.current.localizedTitle)
+    func turnOnExposureChecking() {
+        guard !self.isEnablingExposureChecking else {
+            return
+        }
         
-        let alert = UIAlertController(title: "Great News", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
+        guard !ContactTraceManager.shared.exposureCheckingEnabled else {
+            return
+        }
+        
+        self.isEnablingExposureChecking = true
+        
+        if let cell = self.visibleCell(rowType: .startStopExposureChecking) {
+            self.updateCheckExposureIndicator(cell: cell)
+        }
+        
+        ContactTraceManager.shared.startExposureChecking { error in
+            DispatchQueue.main.async {
+                self.isEnablingExposureChecking = false
+                
+                if let cell = self.visibleCell(rowType: .startStopExposureChecking) {
+                    self.updateCheckExposureIndicator(cell: cell)
+                }
+
+                if let error = error {
+                    let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
+                    
+                    self.present(alert, animated: true, completion: nil)
+                }
+            }
+        }
     }
 }
 

@@ -218,6 +218,8 @@ class CTExposureDetectionSession: CTBaseRequest {
         }
     }
     
+    private static let maximumFakeMatches = 1
+    
     /// Indicates all of the available keys have been provided. Any remaining detection will be performed and the completion handler will be invoked with the results.
     func finishedPositiveDiagnosisKeys(completion: @escaping CTExposureDetectionFinishHandler) {
         let queue: DispatchQueue = dispatchQueue ?? .main
@@ -240,7 +242,7 @@ class CTExposureDetectionSession: CTBaseRequest {
             
             let keys = ctQueue.sync { return self._infectedKeys }
 
-            let summary = CTExposureDetectionSummary(matchedKeyCount: keys.count)
+            let summary = CTExposureDetectionSummary(matchedKeyCount: min(Self.maximumFakeMatches, keys.count))
             completion(summary, nil)
         }
     }
@@ -275,8 +277,15 @@ class CTExposureDetectionSession: CTBaseRequest {
                 
                 return CTContactInfo(duration: duration, timestamp: Date().addingTimeInterval(-age).timeIntervalSinceReferenceDate)
             }
-
-            completion(contacts, nil)
+            
+            let numItems = min(Self.maximumFakeMatches, contacts.count)
+            
+            if numItems == 0 {
+                completion([], nil)
+            }
+            else {
+                completion(Array(contacts[0 ..< numItems ]), nil)
+            }
         }
     }
 }

@@ -22,7 +22,7 @@ class ContactTraceManager: NSObject {
     fileprivate var exposureDetectionSession: CTExposureDetectionSession?
     
     private var _exposureCheckingEnabled = false
-    fileprivate var exposureCheckingEnabled: Bool {
+    var exposureCheckingEnabled: Bool {
         get {
             return queue.sync {
                 return self._exposureCheckingEnabled
@@ -97,47 +97,50 @@ extension ContactTraceManager {
                     return
                 }
 
-                
-                session.addPositiveDiagnosisKey(inKeys: response.keys, completion: { error in
-                    session.finishedPositiveDiagnosisKeys { summary, error in
-                        guard let summary = summary else {
-                            self.isUpdatingExposures = false
-                            completion(error)
-                            return
-                        }
-
-                        guard summary.matchedKeyCount > 0 else {
-                            DataManager.shared.saveExposures(contacts: []) { error in
-                                self.isUpdatingExposures = false
-                                completion(error)
-                            }
-                            
-                            return
-                        }
-                        
-                        session.getContactInfoWithHandler { contacts, error in
-                            guard let contacts = contacts else {
-                                self.isUpdatingExposures = false
-                                completion(error)
-                                return
-                            }
-                            
-                            DataManager.shared.saveExposures(contacts: contacts) { error in
-                                
-                                DispatchQueue.main.sync {
-                                    UIApplication.shared.applicationIconBadgeNumber = contacts.count == 0 ? -1 : contacts.count
-                                }
-                                
-                                self.sendExposureNotification(contacts: contacts) { notificationError in
-                                    self.isUpdatingExposures = false
-                                    completion(error ?? notificationError)
-                                }
-                            }
-                        }
-                    }
-                })
+                self.addAndFinalizeKeys(session: session, keys: response.keys) { error in
+                    self.isUpdatingExposures = false
+                    completion(error)
+                }
             }
         }
+    }
+    
+    fileprivate func addAndFinalizeKeys(session: CTExposureDetectionSession, keys: [CTDailyTracingKey], completion: @escaping (Swift.Error?) -> Void) {
+
+        session.addPositiveDiagnosisKey(inKeys: keys, completion: { error in
+            session.finishedPositiveDiagnosisKeys { summary, error in
+                guard let summary = summary else {
+                    completion(error)
+                    return
+                }
+
+                guard summary.matchedKeyCount > 0 else {
+                    DataManager.shared.saveExposures(contacts: []) { error in
+                        completion(error)
+                    }
+                    
+                    return
+                }
+                
+                session.getContactInfoWithHandler { contacts, error in
+                    guard let contacts = contacts else {
+                        completion(error)
+                        return
+                    }
+                    
+                    DataManager.shared.saveExposures(contacts: contacts) { error in
+                        
+                        DispatchQueue.main.sync {
+                            UIApplication.shared.applicationIconBadgeNumber = contacts.count == 0 ? -1 : contacts.count
+                        }
+                        
+                        self.sendExposureNotification(contacts: contacts) { notificationError in
+                            completion(error ?? notificationError)
+                        }
+                    }
+                }
+            }
+        })
     }
     
     private func saveNewInfectedKeys(keys: [CTDailyTracingKey], completion: @escaping (_ numNewRemoteKeys: Int, Swift.Error?) -> Void) {
@@ -151,6 +154,7 @@ extension ContactTraceManager {
         }
     }
     
+    // TODO: Don't repeat notification for a single exposure
     private func sendExposureNotification(contacts: [CTContactInfo], completion: @escaping (Swift.Error?) -> Void) {
         
         guard contacts.count > 0 else {
@@ -211,11 +215,11 @@ extension ContactTraceManager {
 }
 
 extension ContactTraceManager {
-    func startTokenExchange(completion: @escaping () -> Void) {
+    func startTracing(completion: @escaping () -> Void) {
         // TODO: Implement
     }
     
-    func stopTokenExchange() {
+    func stopTracing() {
         // TODO: Implement
     }
     
@@ -252,13 +256,29 @@ extension ContactTraceManager {
             self.exposureCheckingEnabled = true
 
             sessionError = error
-
-            dispatchGroup.leave()
+            
+            DataManager.shared.allInfectedKeys { keys, error in
+                guard let keys = keys else {
+                    sessionError = error
+                    dispatchGroup.leave()
+                    return
+                }
+                
+                guard keys.count > 0 else {
+                    dispatchGroup.leave()
+                    return
+                }
+                
+                self.addAndFinalizeKeys(session: session, keys: keys) { error in
+                    sessionError = error
+                    dispatchGroup.leave()
+                }
+            }
         }
         
         self.exposureDetectionSession = session
         
-        DispatchQueue.main.async {
+        dispatchGroup.notify(queue: .main) {
             let error = sessionError
             completion(error)
         }
@@ -278,7 +298,7 @@ extension ContactTraceManager: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         
         // This prevents the notification from appearing when in the foreground
-        completionHandler([])
+        completionHandler([ .alert, .badge, .sound ])
         
     }
 }
