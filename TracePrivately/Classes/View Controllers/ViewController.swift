@@ -139,11 +139,11 @@ extension ViewController {
         let infectionRequest = InfectionFetchRequest(minDate: nil, includeStatuses: [ .submitted ])
         let numInfections = (try? context.count(for: infectionRequest.fetchRequest)) ?? 0
 
-        if numContacts > 0 {
-            return .exposed
-        }
-        else if numInfections > 0 {
+        if numInfections > 0 {
             return .infected
+        }
+        else if numContacts > 0 {
+            return .exposed
         }
         else {
             return .nothingDetected
@@ -168,16 +168,13 @@ extension ViewController {
             let section = Section(header: nil, footer: nil, rows: [ .infectionConfirmed ])
 
             if infectionIndexPath != nil {
-                print(">>>> A")
                 // Nothing to do
             }
             else if let exposureIndexPath = exposureIndexPath {
-                print(">>>> B")
                 self.sections[exposureIndexPath.section] = section
                 reloadSections.insert(exposureIndexPath.section)
             }
             else {
-                print(">>>> C")
                 let sectionNumber = 0
 
                 self.sections.insert(section, at: sectionNumber)
@@ -188,24 +185,19 @@ extension ViewController {
             let section = Section(header: nil, footer: nil, rows: [ .exposureConfirmed ])
 
             if exposureIndexPath != nil {
-                print(">>>> D")
                 // Nothing to do
             }
             else if let infectionIndexPath = infectionIndexPath {
-                print(">>>> E")
-
                 self.sections[infectionIndexPath.section] = section
                 reloadSections.insert(infectionIndexPath.section)
             }
             else {
-                print(">>>> F")
                 let sectionNumber = 0
                 self.sections.insert(section, at: sectionNumber)
                 insertSections.insert(sectionNumber)
             }
 
         case .nothingDetected:
-            print(">>>> G")
             let indexPath = infectionIndexPath ?? exposureIndexPath
             
             if let indexPath = indexPath {
@@ -234,7 +226,6 @@ extension ViewController {
 
         if let indexPath = self.indexPath(rowType: .markAsInfected) {
             if !showInfectedRow {
-                print(">>>> H")
                 self.sections.remove(at: indexPath.section)
                 self.tableView.deleteSections(IndexSet(integer: indexPath.section), with: .automatic)
                 deleteSections.insert(indexPath.section)
@@ -242,7 +233,6 @@ extension ViewController {
         }
         else {
             if showInfectedRow {
-                print(">>>> I")
                 let section = self.sections.count - 1
                 self.sections.insert(self.createSubmitInfectionSection(), at: section)
                 self.tableView.insertSections(IndexSet(integer: section), with: .automatic)
