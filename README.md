@@ -21,7 +21,7 @@ This app will be evolving quickly as I'm trying to publish new functionality as 
 1. Set up a key server using the sample code in `KeyServer`
 2. In the iOS project, configure `KeyServer.plist` to point to your server
 3. Build and run in Xcode
-4. The sample key server requires manual approval of infection submissions, using the `./tools/pending.php` and `/tools/approve.php` scripts.
+4. The sample key server requires manual approval of infection submissions, using the `./tools/pending.php` and `./tools/approve.php` scripts.
 5. In this proof of concept, every client will detect an exposure for any infection submitted
 
 ## Screenshots
