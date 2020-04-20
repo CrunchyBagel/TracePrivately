@@ -81,7 +81,6 @@ extension ContactTraceManager {
         self.isUpdatingExposures = true
         
         KeyServer.shared.retrieveInfectedKeys(since: self.lastReceivedInfectedKeys) { response, error in
-            
             guard let response = response else {
                 self.isUpdatingExposures = false
                 completion(error ?? Error.unknownError)

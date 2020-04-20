@@ -92,21 +92,8 @@ class KeyServer {
     
     /**
         Sends a JSON packet of the current device's keys. Each key is Base 64 encoded
-
-            {
-                "keys": [
-                     "Base64-Encoded-String-1",
-                     "Base64-Encoded-String-2",
-                     ...
-                ]
-            }
      
-        If successful, the following response is expected:
-     
-             {
-                 "status" : "OK"
-             }
-
+        Refer to `KeyServer.yaml` for expected request and response format.
      */
     func submitInfectedKeys(keys: [CTDailyTracingKey], completion: @escaping (Bool, Swift.Error?) -> Void) {
         
@@ -176,19 +163,9 @@ class KeyServer {
     }
     
     /**
-        Accepts an optional date in the `since` parameter (and ISO 8601 formatted date). Only infected keys submitted after this date are returned
+        Accepts an optional date in the `since` parameter (and ISO 8601 formatted date). Only infected keys submitted after this date are returned.
      
-        Expects a JSON response like the following. Each key is a Base 64 encoded string. The date is an ISO 8601 formatted date.
-     
-            {
-                "status" : "OK",
-                "date": "2020-04-18T12:00:00"
-                "keys" : [
-                    "Base64-Encoded-String-1",
-                    "Base64-Encoded-String-2",
-                    ...
-                ]
-            }
+        Refer to `KeyServer.yaml` for expected response format.
      */
     
     struct InfectedKeysResponse {
@@ -262,8 +239,6 @@ class KeyServer {
                 completion(nil, Error.dateMissing)
                 return
             }
-            
-
             
             let keysData = keyData.compactMap { Data(base64Encoded: $0) }
             
