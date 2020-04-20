@@ -6,6 +6,8 @@
 import UIKit
 import CoreData
 
+// TODO: Ensure this view can be dismissed prior to iOS 13
+
 class ExposedViewController: UITableViewController {
 
     struct Cells {

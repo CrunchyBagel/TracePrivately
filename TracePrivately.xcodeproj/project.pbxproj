@@ -17,6 +17,10 @@
 		6698C57024492BC500F046E4 /* KeyServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6698C56F24492BC500F046E4 /* KeyServer.swift */; };
 		6698C572244936AF00F046E4 /* ExposedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6698C571244936AF00F046E4 /* ExposedViewController.swift */; };
 		6698C574244BFAB600F046E4 /* KeyServer.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6698C573244BFAB600F046E4 /* KeyServer.plist */; };
+		66EAEB60244DA70E0044FF70 /* SubmitInfection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66EAEB5F244DA70E0044FF70 /* SubmitInfection.storyboard */; };
+		66EAEB62244DA72E0044FF70 /* SubmitInfectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EAEB61244DA72E0044FF70 /* SubmitInfectionViewController.swift */; };
+		66EAEB64244DC5E40044FF70 /* SubmittedInfection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66EAEB63244DC5E40044FF70 /* SubmittedInfection.storyboard */; };
+		66EAEB66244DC62A0044FF70 /* SubmittedInfectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EAEB65244DC62A0044FF70 /* SubmittedInfectionViewController.swift */; };
 		66F8186B2448FD5C0043AC2D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F8186A2448FD5C0043AC2D /* AppDelegate.swift */; };
 		66F8186F2448FD5C0043AC2D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F8186E2448FD5C0043AC2D /* ViewController.swift */; };
 		66F818722448FD5C0043AC2D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66F818702448FD5C0043AC2D /* Main.storyboard */; };
@@ -37,6 +41,10 @@
 		6698C56F24492BC500F046E4 /* KeyServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyServer.swift; sourceTree = "<group>"; };
 		6698C571244936AF00F046E4 /* ExposedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposedViewController.swift; sourceTree = "<group>"; };
 		6698C573244BFAB600F046E4 /* KeyServer.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = KeyServer.plist; sourceTree = "<group>"; };
+		66EAEB5F244DA70E0044FF70 /* SubmitInfection.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SubmitInfection.storyboard; sourceTree = "<group>"; };
+		66EAEB61244DA72E0044FF70 /* SubmitInfectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitInfectionViewController.swift; sourceTree = "<group>"; };
+		66EAEB63244DC5E40044FF70 /* SubmittedInfection.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SubmittedInfection.storyboard; sourceTree = "<group>"; };
+		66EAEB65244DC62A0044FF70 /* SubmittedInfectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmittedInfectionViewController.swift; sourceTree = "<group>"; };
 		66F818672448FD5C0043AC2D /* TracePrivately.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TracePrivately.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66F8186A2448FD5C0043AC2D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		66F8186E2448FD5C0043AC2D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -63,6 +71,8 @@
 			children = (
 				66F818702448FD5C0043AC2D /* Main.storyboard */,
 				39BD8848244C6D3D00EB8B6C /* ExposedView.storyboard */,
+				66EAEB5F244DA70E0044FF70 /* SubmitInfection.storyboard */,
+				66EAEB63244DC5E40044FF70 /* SubmittedInfection.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -86,6 +96,8 @@
 			children = (
 				66F8186E2448FD5C0043AC2D /* ViewController.swift */,
 				6698C571244936AF00F046E4 /* ExposedViewController.swift */,
+				66EAEB61244DA72E0044FF70 /* SubmitInfectionViewController.swift */,
+				66EAEB65244DC62A0044FF70 /* SubmittedInfectionViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -184,6 +196,8 @@
 				6698C574244BFAB600F046E4 /* KeyServer.plist in Resources */,
 				66F818772448FD5E0043AC2D /* LaunchScreen.storyboard in Resources */,
 				39BD8849244C6D3D00EB8B6C /* ExposedView.storyboard in Resources */,
+				66EAEB60244DA70E0044FF70 /* SubmitInfection.storyboard in Resources */,
+				66EAEB64244DC5E40044FF70 /* SubmittedInfection.storyboard in Resources */,
 				66437F74244A73F0000B8C6C /* Localizable.strings in Resources */,
 				66F818742448FD5E0043AC2D /* Assets.xcassets in Resources */,
 				66F818722448FD5C0043AC2D /* Main.storyboard in Resources */,
@@ -198,12 +212,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				66848C2D244D5F8800497D2A /* AsyncBlockOperation.swift in Sources */,
+				66EAEB62244DA72E0044FF70 /* SubmitInfectionViewController.swift in Sources */,
 				66437F76244A86AE000B8C6C /* Disease.swift in Sources */,
 				66437FA0244A9B2C000B8C6C /* DataManager.swift in Sources */,
 				66F8186F2448FD5C0043AC2D /* ViewController.swift in Sources */,
 				66F8186B2448FD5C0043AC2D /* AppDelegate.swift in Sources */,
 				66437F9E244A9A02000B8C6C /* TracePrivately.xcdatamodeld in Sources */,
 				6698C57024492BC500F046E4 /* KeyServer.swift in Sources */,
+				66EAEB66244DC62A0044FF70 /* SubmittedInfectionViewController.swift in Sources */,
 				6698C572244936AF00F046E4 /* ExposedViewController.swift in Sources */,
 				66F818832448FE020043AC2D /* CTMockFramework.swift in Sources */,
 				668CE843244D01F50065960A /* ContactTraceManager.swift in Sources */,

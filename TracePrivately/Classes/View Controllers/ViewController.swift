@@ -10,16 +10,20 @@ class ViewController: UITableViewController {
     struct Cells {
         static let standard = "Cell"
         static let exposed = "ExposedCell"
+        static let infected = "InfectedCell"
     }
     
     struct Segues {
         static let exposed = "ExposedSegue"
+        static let submitInfection = "SubmitInfectionSegue"
+        static let viewInfection = "ViewInfectionSegue"
     }
     
     enum RowType {
         case startStopTracing
         case startStopExposureChecking
         case markAsInfected
+        case infectionConfirmed
         case exposureConfirmed
     }
     
@@ -58,30 +62,54 @@ class ViewController: UITableViewController {
                 header: nil,
                 footer: NSLocalizedString("exposure.turn_on.message", comment: ""),
                 rows: [ .startStopExposureChecking ]
-            ),
-            Section(
-                header: NSLocalizedString("infection.title", comment: ""),
-                footer: nil,
-                rows: [ .markAsInfected ]
-            ),
-            Section(
-                header: NSLocalizedString("about.title", comment: ""),
-                footer: NSLocalizedString("about.message", comment: ""),
-                rows: []
             )
         ]
         
-        if self.shouldShowExposureCell {
-            sections.insert(self.createExposureSection(), at: 0)
+        let status = self.diseaseStatus
+        
+        if status != .infected {
+            sections.append(self.createSubmitInfectionSection())
+        }
+            
+        sections.append(Section(
+            header: NSLocalizedString("about.title", comment: ""),
+            footer: NSLocalizedString("about.message", comment: ""),
+            rows: []
+        ))
+        
+        let cells: [RowType]
+        
+        switch self.diseaseStatus {
+        case .infected: cells = [ .infectionConfirmed ]
+        case .exposed: cells = [ .exposureConfirmed ]
+        case .nothingDetected: cells = []
+        }
+
+        if cells.count > 0 {
+            sections.insert(Section(header: nil, footer: nil, rows: cells), at: 0)
         }
         
         self.sections = sections
         
         self.refreshTracingState()
         
-        NotificationCenter.default.addObserver(forName: DataManager.exposureContactsUpdateNotification, object: nil, queue: .main) { _ in
-            self.updateExposureCell()
+        let nc = NotificationCenter.default
+        
+        nc.addObserver(forName: DataManager.exposureContactsUpdatedNotification, object: nil, queue: .main) { _ in
+            self.updateDiseaseStatusCell()
         }
+        
+        nc.addObserver(forName: DataManager.infectionsUpdatedNotification, object: nil, queue: .main) { _ in
+            self.updateDiseaseStatusCell()
+        }
+    }
+    
+    func createSubmitInfectionSection() -> Section {
+        return Section(
+            header: NSLocalizedString("infection.title", comment: ""),
+            footer: nil,
+            rows: [ .markAsInfected ]
+        )
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -96,43 +124,130 @@ class ViewController: UITableViewController {
 }
 
 extension ViewController {
-    var shouldShowExposureCell: Bool {
-        let request = ExposureFetchRequest(includeStatuses: [ .detected ], includeNotificationStatuses: [], sortDirection: .timestampAsc)
-        
+    enum DiseaseStatus {
+        case nothingDetected
+        case exposed
+        case infected
+    }
+    
+    var diseaseStatus: DiseaseStatus {
         let context = DataManager.shared.persistentContainer.viewContext
+
+        let exposureRequest = ExposureFetchRequest(includeStatuses: [ .detected ], includeNotificationStatuses: [], sortDirection: .timestampAsc)
+        let numContacts = (try? context.count(for: exposureRequest.fetchRequest)) ?? 0
         
-        let numContacts = (try? context.count(for: request.fetchRequest)) ?? 0
-        
-        return numContacts > 0
+        let infectionRequest = InfectionFetchRequest(minDate: nil, includeStatuses: [ .submitted ])
+        let numInfections = (try? context.count(for: infectionRequest.fetchRequest)) ?? 0
+
+        if numContacts > 0 {
+            return .exposed
+        }
+        else if numInfections > 0 {
+            return .infected
+        }
+        else {
+            return .nothingDetected
+        }
     }
 
-    func updateExposureCell() {
-        if let indexPath = self.indexPath(rowType: .exposureConfirmed) {
-            if self.shouldShowExposureCell {
+    // This would be far simpler using UITableViewDiffableDataSource, but it's not backwards compatible
+    func updateDiseaseStatusCell() {
+        let infectionIndexPath = self.indexPath(rowType: .infectionConfirmed)
+        let exposureIndexPath = self.indexPath(rowType: .exposureConfirmed)
+        
+        var insertSections = IndexSet()
+        var deleteSections = IndexSet()
+        var reloadSections = IndexSet()
+        
+        var showInfectedRow = true
+        
+        switch self.diseaseStatus {
+        case .infected:
+            showInfectedRow = false
+            
+            let section = Section(header: nil, footer: nil, rows: [ .infectionConfirmed ])
+
+            if infectionIndexPath != nil {
+                print(">>>> A")
                 // Nothing to do
             }
+            else if let exposureIndexPath = exposureIndexPath {
+                print(">>>> B")
+                self.sections[exposureIndexPath.section] = section
+                reloadSections.insert(exposureIndexPath.section)
+            }
             else {
+                print(">>>> C")
+                let sectionNumber = 0
+
+                self.sections.insert(section, at: sectionNumber)
+                insertSections.insert(sectionNumber)
+            }
+
+        case .exposed:
+            let section = Section(header: nil, footer: nil, rows: [ .exposureConfirmed ])
+
+            if exposureIndexPath != nil {
+                print(">>>> D")
+                // Nothing to do
+            }
+            else if let infectionIndexPath = infectionIndexPath {
+                print(">>>> E")
+
+                self.sections[infectionIndexPath.section] = section
+                reloadSections.insert(infectionIndexPath.section)
+            }
+            else {
+                print(">>>> F")
+                let sectionNumber = 0
+                self.sections.insert(section, at: sectionNumber)
+                insertSections.insert(sectionNumber)
+            }
+
+        case .nothingDetected:
+            print(">>>> G")
+            let indexPath = infectionIndexPath ?? exposureIndexPath
+            
+            if let indexPath = indexPath {
+                self.sections.remove(at: indexPath.section)
+                deleteSections.insert(indexPath.section)
+            }
+        }
+        
+        if !insertSections.isEmpty || !deleteSections.isEmpty || !reloadSections.isEmpty {
+            self.tableView.beginUpdates()
+            
+            if !insertSections.isEmpty {
+                self.tableView.insertSections(insertSections, with: .automatic)
+            }
+            
+            if !deleteSections.isEmpty {
+                self.tableView.deleteSections(deleteSections, with: .automatic)
+            }
+            
+            if !reloadSections.isEmpty {
+                self.tableView.reloadSections(reloadSections, with: .automatic)
+            }
+            
+            self.tableView.endUpdates()
+        }
+
+        if let indexPath = self.indexPath(rowType: .markAsInfected) {
+            if !showInfectedRow {
+                print(">>>> H")
                 self.sections.remove(at: indexPath.section)
                 self.tableView.deleteSections(IndexSet(integer: indexPath.section), with: .automatic)
+                deleteSections.insert(indexPath.section)
             }
         }
         else {
-            let sectionNumber = 0
-            let indexSet = IndexSet(integer: sectionNumber)
-
-            if self.shouldShowExposureCell {
-                let section = self.createExposureSection()
-                self.sections.insert(section, at: sectionNumber)
-                self.tableView.insertSections(indexSet, with: .automatic)
-            }
-            else {
-                // Nothing to do
+            if showInfectedRow {
+                print(">>>> I")
+                let section = self.sections.count - 1
+                self.sections.insert(self.createSubmitInfectionSection(), at: section)
+                self.tableView.insertSections(IndexSet(integer: section), with: .automatic)
             }
         }
-    }
-    
-    func createExposureSection() -> Section {
-        return Section(header: nil, footer: nil, rows: [ .exposureConfirmed ])
     }
 }
 
@@ -332,6 +447,15 @@ extension ViewController {
             
             return cell
             
+        case .infectionConfirmed:
+            let cell = tableView.dequeueReusableCell(withIdentifier: Cells.infected, for: indexPath)
+
+            cell.textLabel?.text = NSLocalizedString("infection.infected.title", comment: "")
+            cell.detailTextLabel?.text = String(format: NSLocalizedString("infection.infected.message", comment: ""), Disease.current.localizedTitle)
+            cell.accessoryType = .disclosureIndicator
+
+            return cell
+
         case .exposureConfirmed:
             let cell = tableView.dequeueReusableCell(withIdentifier: Cells.exposed, for: indexPath)
 
@@ -455,124 +579,14 @@ extension ViewController {
             tableView.deselectRow(at: indexPath, animated: true)
             self.performSegue(withIdentifier: Segues.exposed, sender: nil)
             
-        case .markAsInfected:
-            
+        case .infectionConfirmed:
             tableView.deselectRow(at: indexPath, animated: true)
+            self.performSegue(withIdentifier: Segues.viewInfection, sender: nil)
 
-            let alert = UIAlertController(title: NSLocalizedString("infection.report.confirm.title", comment: ""), message: NSLocalizedString("infection.report.confirm.message", comment: ""), preferredStyle: .alert)
+        case .markAsInfected:
+            tableView.deselectRow(at: indexPath, animated: true)
+            self.performSegue(withIdentifier: Segues.submitInfection, sender: nil)
             
-            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
-            alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .destructive, handler: { action in
-                self.beginInfectionWorkflow()
-            }))
-            
-            self.present(alert, animated: true, completion: nil)
-        }
-    }
-}
-
-extension ViewController {
-    func beginInfectionWorkflow() {
-        let loadingAlert = UIAlertController(title: NSLocalizedString("infection.report.gathering_data.title", comment: ""), message: nil, preferredStyle: .alert)
-
-        self.present(loadingAlert, animated: true, completion: nil)
-
-        let request = CTSelfTracingInfoRequest()
-        
-        request.completionHandler = { info, error in
-            /// I'm not exactly sure what the difference is between dailyTracingKeys being nil or empty. I would assume it should never be nil, and only be empty if tracing has not been enabled. Hopefully this becomes clearer with more documentation.
-            
-            guard let keys = info?.dailyTracingKeys else {
-                let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: error?.localizedDescription ?? NSLocalizedString("infection.report.gathering_data.error", comment: ""), preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
-                
-                self.dismiss(animated: true) {
-                    self.present(alert, animated: true, completion: nil)
-                }
-                
-                return
-            }
-            
-            guard keys.count > 0 else {
-                let alert = UIAlertController(title: NSLocalizedString("infection.report.gathering.empty.title", comment: ""), message: NSLocalizedString("infection.report.gathering.empty.message", comment: ""), preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
-
-                self.dismiss(animated: true) {
-                    self.present(alert, animated: true, completion: nil)
-                }
-                
-                return
-            }
-            
-            self.dismiss(animated: true) {
-                let alert = UIAlertController(title: NSLocalizedString("infection.report.submit.title", comment: ""), message: NSLocalizedString("infection.report.submit.message", comment: ""), preferredStyle: .alert)
-                
-                alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
-                alert.addAction(UIAlertAction(title: NSLocalizedString("submit", comment: ""), style: .destructive, handler: { action in
-                    
-                    self.submitKeys(keys: keys)
-                    
-                }))
-                
-                self.present(alert, animated: true, completion: nil)
-            }
-        }
-
-        request.perform()
-    }
-    
-    // TODO: Make it super clear to the user if an error occurred, so they have an opportunity to submit again
-    func submitKeys(keys: [CTDailyTracingKey]) {
-        
-        let loadingAlert = UIAlertController(title: NSLocalizedString("infection.report.submitting.title", comment: ""), message: NSLocalizedString("infection.report.submitting.message", comment: ""), preferredStyle: .alert)
-
-        self.present(loadingAlert, animated: true, completion: nil)
-        
-        let context = DataManager.shared.persistentContainer.newBackgroundContext()
-        
-        context.perform {
-            let entity = LocalInfectionEntity(context: context)
-            entity.dateAdded = Date()
-            entity.status = "P"
-            
-            try? context.save()
-        
-            KeyServer.shared.submitInfectedKeys(keys: keys) { success, error in
-                
-                context.perform {
-                    if success {
-                        entity.status = "S" // Submitted
-                        
-                        for key in keys {
-                            let keyEntity = LocalInfectionKeyEntity(context: context)
-                            keyEntity.infectedKey = key.keyData
-                            keyEntity.infection = entity
-                        }
-
-                        try? context.save()
-                    }
-
-                    DispatchQueue.main.async {
-                        self.dismiss(animated: true) {
-                            
-                            if success {
-                                let alert = UIAlertController(title: NSLocalizedString("infection.report.submitted.title", comment: ""), message: NSLocalizedString("infection.report.submitted.message", comment: ""), preferredStyle: .alert)
-                                
-                                alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
-                                
-                                self.present(alert, animated: true, completion: nil)
-                            }
-                            else {
-                                let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: error?.localizedDescription ?? NSLocalizedString("infection.report.submit.error", comment: "" ), preferredStyle: .alert)
-                                
-                                alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
-                                
-                                self.present(alert, animated: true, completion: nil)
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 }

@@ -52,6 +52,15 @@ class ContactTraceManager: NSObject {
     private override init() {}
     
     func applicationDidFinishLaunching() {
+        
+        let request = ExposureFetchRequest(includeStatuses: [ .detected ], includeNotificationStatuses: [], sortDirection: .timestampAsc)
+        
+        let context = DataManager.shared.persistentContainer.viewContext
+        
+        let count = (try? context.count(for: request.fetchRequest)) ?? 0
+
+        UIApplication.shared.applicationIconBadgeNumber = count == 0 ? -1 : count
+        
         UNUserNotificationCenter.current().delegate = self
         self.performBackgroundUpdate { _ in
 

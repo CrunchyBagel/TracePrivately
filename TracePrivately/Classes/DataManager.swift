@@ -13,7 +13,8 @@ class DataManager {
         
     }
     
-    static let exposureContactsUpdateNotification = Notification.Name("exposureContactsUpdateNotification")
+    static let exposureContactsUpdatedNotification = Notification.Name("exposureContactsUpdatedNotification")
+    static let infectionsUpdatedNotification = Notification.Name("infectionsUpdatedNotification")
 
     lazy var persistentContainer: NSPersistentContainer = {
         /*
@@ -154,6 +155,13 @@ extension DataManager {
 }
 
 extension DataManager {
+    enum InfectionStatus: String {
+        case pending = "P"
+        case submitted = "S"
+    }
+}
+
+extension DataManager {
     // Other statuses could be added here to allow the user to flag each
     // exposure with a level of confidence. For example, maybe they know
     // for a fact they were in their car alone, so they could mark an
@@ -234,7 +242,7 @@ extension DataManager {
                 
                 try context.save()
                 
-                NotificationCenter.default.post(name: Self.exposureContactsUpdateNotification, object: nil)
+                NotificationCenter.default.post(name: Self.exposureContactsUpdatedNotification, object: nil)
                 
                 completion(nil)
             }
@@ -297,16 +305,48 @@ struct ExposureFetchRequest {
         
         let fetchRequest: NSFetchRequest<ExposureContactInfoEntity> = ExposureContactInfoEntity.fetchRequest()
         
+        var predicates: [NSPredicate] = []
+
         if includeStatuses.count > 0 {
-            fetchRequest.predicate = NSPredicate(format: "status IN %@", includeStatuses.map { $0.rawValue })
+            predicates.append(NSPredicate(format: "status IN %@", includeStatuses.map { $0.rawValue }))
         }
         
         if includeNotificationStatuses.count > 0 {
-            fetchRequest.predicate = NSPredicate(format: "localNotificationStatus IN %@", includeNotificationStatuses.map { $0.rawValue })
+            predicates.append(NSPredicate(format: "localNotificationStatus IN %@", includeNotificationStatuses.map { $0.rawValue }))
+        }
+        
+        if predicates.count > 0 {
+            fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         }
 
         if let sortDirection = sortDirection {
             fetchRequest.sortDescriptors = sortDirection.sortDescriptors
+        }
+
+        return fetchRequest
+    }
+}
+
+struct InfectionFetchRequest {
+    let minDate: Date?
+    let includeStatuses: Set<DataManager.InfectionStatus>
+
+    var fetchRequest: NSFetchRequest<LocalInfectionEntity> {
+        
+        let fetchRequest: NSFetchRequest<LocalInfectionEntity> = LocalInfectionEntity.fetchRequest()
+        
+        var predicates: [NSPredicate] = []
+        
+        if includeStatuses.count > 0 {
+            predicates.append(NSPredicate(format: "status IN %@", includeStatuses.map { $0.rawValue }))
+        }
+        
+        if let minDate = minDate {
+            predicates.append(NSPredicate(format: "dateAdded >= %@", minDate as CVarArg))
+        }
+        
+        if predicates.count > 0 {
+            fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         }
 
         return fetchRequest

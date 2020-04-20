@@ -166,32 +166,19 @@ class CTExposureDetectionSession: CTBaseRequest {
             return
         }
         
-        let alert = UIAlertController(title: "Permission", message: "Press OK to allow this app to check if you have been exposed to COVID-19.", preferredStyle: .alert)
-        
-        alert.addAction(UIAlertAction(title: "Deny", style: .cancel, handler: { action in
-            let queue: DispatchQueue = self.dispatchQueue ?? .main
+        CTInternalState.requestAuthorization(title: "Permission", message: "Allow this app to check if you have been exposed to a confirmed infection?") { allowed in
             
-            queue.async {
-                completion(CTError.permissionDenied)
-            }
-        }))
+            let queue: DispatchQueue = self.dispatchQueue ?? .main
 
-        alert.addAction(UIAlertAction(title: "Allow", style: .default, handler: { action in
-            let queue: DispatchQueue = self.dispatchQueue ?? .main
-            
             queue.async {
-                self.permissionAllowed = true
-                completion(nil)
+                if allowed {
+                    self.permissionAllowed = true
+                    completion(nil)
+                }
+                else {
+                    completion(CTError.permissionDenied)
+                }
             }
-        }))
-        
-        guard let vc = UIApplication.shared.windows.first?.rootViewController else {
-            completion(CTError.unknownError)
-            return
-        }
-        
-        DispatchQueue.main.async {
-            vc.present(alert, animated: true, completion: nil)
         }
     }
     
@@ -355,28 +342,40 @@ class CTSelfTracingInfoRequest: CTBaseRequest {
             // Silently fail?
             return
         }
-        
+
         self.isRunning = true
-        
-        let queue: DispatchQueue = dispatchQueue ?? .main
-        
-        let delay: TimeInterval = 0.5
-        
-        queue.asyncAfter(deadline: .now() + delay) {
-            guard !self.isInvalidated else {
-                // I guess don't call handler here
-                self.completionHandler = nil
-                return
+
+        CTInternalState.requestAuthorization(title: "Permission", message: "Allow this app to retrieve your anonymous tracing keys?") { allow in
+            
+            let queue: DispatchQueue = self.dispatchQueue ?? .main
+            
+            queue.async {
+                guard allow else {
+                    self.isRunning = false
+                    self.completionHandler?(nil, CTError.permissionDenied)
+                    self.completionHandler = nil
+                    return
+                }
+                
+                guard !self.isInvalidated else {
+                    // I guess don't call handler here
+                    self.completionHandler = nil
+                    return
+                }
+
+                let delay: TimeInterval = 0.5
+                
+                queue.asyncAfter(deadline: .now() + delay) {
+                    let keys: [CTDailyTracingKey] = CTInternalState.shared.dailyKeys.map { CTDailyTracingKey(keyData: $0) }
+                    
+                    let summary = CTSelfTracingInfo(dailyTracingKeys: keys)
+                    
+                    self.completionHandler?(summary, nil)
+                    self.completionHandler = nil
+                    
+                    self.isRunning = false
+                }
             }
-            
-            let keys: [CTDailyTracingKey] = CTInternalState.shared.dailyKeys.map { CTDailyTracingKey(keyData: $0) }
-            
-            let summary = CTSelfTracingInfo(dailyTracingKeys: keys)
-            
-            self.completionHandler?(summary, nil)
-            self.completionHandler = nil
-            
-            self.isRunning = false
         }
     }
 }
@@ -539,6 +538,33 @@ private class CTInternalState {
             print("Generated keys: \(keys)")
             
             return keys.compactMap { $0.data(using: .utf8) }
+        }
+    }
+    
+    class func requestAuthorization(title: String, message: String, completion: @escaping (Bool) -> Void) {
+        
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "Deny", style: .cancel, handler: { action in
+                completion(false)
+            }))
+
+            alert.addAction(UIAlertAction(title: "Allow", style: .default, handler: { action in
+                completion(true)
+            }))
+            
+            guard let vc = UIApplication.shared.windows.first?.rootViewController else {
+                completion(false)
+                return
+            }
+            
+            if let presented = vc.presentedViewController {
+                presented.present(alert, animated: true, completion: nil)
+            }
+            else {
+                vc.present(alert, animated: true, completion: nil)
+            }
         }
     }
 }

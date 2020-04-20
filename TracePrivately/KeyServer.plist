@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>BaseUrl</key>
-	<string>https://example.com/api/</string>
+	<string>https://trace.crunchybagel.dev/api/</string>
 	<key>EndPoints</key>
 	<dict>
 		<key>GetInfectedKeys</key>

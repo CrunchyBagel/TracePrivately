@@ -26,6 +26,7 @@
 
 /* parameter is localized disease name */
 "infection.report.title" = "I Have %@";
+"infection.report.message" = "If you have been diagnosed as having %@, submit your diagnosis here.\n\nYou will be prompted for confirmation.";
 "infection.report.confirm.title" = "Are You Sure?";
 "infection.report.confirm.message" = "Click OK to create your anonymous profile.\n\nYou will be prompted again before it is submitted to your jurisdiction's anonymous tracing database.";
 "infection.report.gathering_data.title" = "Creating Your Profile…";
@@ -39,6 +40,9 @@
 "infection.report.submitting.message" = "Submitting your anonymous information.";
 "infection.report.submitted.title" = "Thank You";
 "infection.report.submitted.message" = "Your information has been submitted.";
+
+"infection.infected.title" = "Infected";
+"infection.infected.message" = "You have submitted your infection. Get well quickly.";
 
 "exposure.title" = "Exposure";
 "exposure.turn_on.message" = "Automatically check if you've been exposed and notify you if exposure is detected.";
