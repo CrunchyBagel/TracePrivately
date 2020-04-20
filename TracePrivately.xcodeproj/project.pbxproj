@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		39BD8849244C6D3D00EB8B6C /* ExposedView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 39BD8848244C6D3D00EB8B6C /* ExposedView.storyboard */; };
 		66437F74244A73F0000B8C6C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 66437F73244A73F0000B8C6C /* Localizable.strings */; };
 		66437F76244A86AE000B8C6C /* Disease.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F75244A86AE000B8C6C /* Disease.swift */; };
 		66437F9E244A9A02000B8C6C /* TracePrivately.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		39BD8848244C6D3D00EB8B6C /* ExposedView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ExposedView.storyboard; sourceTree = "<group>"; };
 		66437F73244A73F0000B8C6C /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		66437F75244A86AE000B8C6C /* Disease.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disease.swift; sourceTree = "<group>"; };
 		66437F9D244A9A02000B8C6C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -55,6 +57,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		39BD8847244C6CF000EB8B6C /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				66F818702448FD5C0043AC2D /* Main.storyboard */,
+				39BD8848244C6D3D00EB8B6C /* ExposedView.storyboard */,
+			);
+			path = Storyboards;
+			sourceTree = "<group>";
+		};
 		66437F77244A8A4C000B8C6C /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -98,8 +109,8 @@
 		66F818692448FD5C0043AC2D /* TracePrivately */ = {
 			isa = PBXGroup;
 			children = (
+				39BD8847244C6CF000EB8B6C /* Storyboards */,
 				66437F77244A8A4C000B8C6C /* Classes */,
-				66F818702448FD5C0043AC2D /* Main.storyboard */,
 				66F818732448FD5E0043AC2D /* Assets.xcassets */,
 				66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */,
 				66F818752448FD5E0043AC2D /* LaunchScreen.storyboard */,
@@ -171,6 +182,7 @@
 			files = (
 				6698C574244BFAB600F046E4 /* KeyServer.plist in Resources */,
 				66F818772448FD5E0043AC2D /* LaunchScreen.storyboard in Resources */,
+				39BD8849244C6D3D00EB8B6C /* ExposedView.storyboard in Resources */,
 				66437F74244A73F0000B8C6C /* Localizable.strings in Resources */,
 				66F818742448FD5E0043AC2D /* Assets.xcassets in Resources */,
 				66F818722448FD5C0043AC2D /* Main.storyboard in Resources */,
