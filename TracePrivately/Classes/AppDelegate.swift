@@ -9,18 +9,21 @@ import BackgroundTasks
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    static let backgroundProcessingInterval: TimeInterval = 10 // TODO: Low number just for testing
-//    static let backgroundProcessingInterval: TimeInterval = 3600
+//    static let backgroundProcessingInterval: TimeInterval = 10
+    static let backgroundProcessingInterval: TimeInterval = 3600
+    static let useModernBackgroundProcessing = true
 
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         ContactTraceManager.shared.applicationDidFinishLaunching()
-        
-        if #available(iOS 13, *) {
-            BGTaskScheduler.shared.register(forTaskWithIdentifier: ContactTraceManager.backgroundProcessingTaskIdentifier, using: .main) { task in
-                self.handleBackgroundTask(task: task)
+
+        if Self.useModernBackgroundProcessing {
+            if #available(iOS 13, *) {
+                BGTaskScheduler.shared.register(forTaskWithIdentifier: ContactTraceManager.backgroundProcessingTaskIdentifier, using: .main) { task in
+                    self.handleBackgroundTask(task: task)
+                }
             }
         }
 
@@ -59,40 +62,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension AppDelegate {
     func scheduleNextBackgroundProcess(minimumDate: Date) {
-        if #available(iOS 13, *) {
-            let request = BGAppRefreshTaskRequest(identifier: ContactTraceManager.backgroundProcessingTaskIdentifier)
-            request.earliestBeginDate = minimumDate
-            do {
-                try BGTaskScheduler.shared.submit(request)
-                print("Scheduling background request for \(minimumDate)")
-            }
-            catch {
+        if Self.useModernBackgroundProcessing {
+            if #available(iOS 13, *) {
+                let request = BGAppRefreshTaskRequest(identifier: ContactTraceManager.backgroundProcessingTaskIdentifier)
+                request.earliestBeginDate = minimumDate
+                do {
+                    try BGTaskScheduler.shared.submit(request)
+                    print("Scheduling background request for \(minimumDate)")
+                }
+                catch {
 
-                if let error = error as? BGTaskScheduler.Error {
-                    switch error.code {
-                    case .notPermitted:
-                        print("Error: Not permitted")
-                    case .tooManyPendingTaskRequests:
-                        print("Error: Too many requests")
-                    case .unavailable:
-                        print("Error: Unavailable")
+                    if let error = error as? BGTaskScheduler.Error {
+                        switch error.code {
+                        case .notPermitted:
+                            print("Error: Not permitted")
+                        case .tooManyPendingTaskRequests:
+                            print("Error: Too many requests")
+                        case .unavailable:
+                            print("Error: Unavailable")
 
-                    @unknown default:
-                        print("Error: Unknown")
+                        @unknown default:
+                            print("Error: Unknown")
+                        }
+                    }
+                    else {
+                        print("Error scheduling background request: \(error)")
                     }
                 }
-                else {
-                    print("Error scheduling background request: \(error)")
-                }
+
+                return
             }
         }
-        else {
-            print("Scheduling legacy background request for \(minimumDate)")
-            let interval = minimumDate.timeIntervalSinceNow
-        
-            DispatchQueue.main.async {
-                UIApplication.shared.setMinimumBackgroundFetchInterval(interval)
-            }
+
+        print("Scheduling legacy background request for \(minimumDate)")
+        let interval = minimumDate.timeIntervalSinceNow
+    
+        DispatchQueue.main.async {
+            UIApplication.shared.setMinimumBackgroundFetchInterval(interval)
         }
     }
     
