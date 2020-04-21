@@ -26,11 +26,14 @@ This app will be evolving quickly as I'm trying to publish new functionality as 
 
 ## Screenshots
 
-Demo Video: https://youtu.be/rVaz8VQLoaE
+Updated Demo Video (21-Apr-20): https://youtu.be/EAT3p-v2y9k
+Original Demo Video (17-Apr-20): https://youtu.be/rVaz8VQLoaE
 
-![Main Window](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/trace-main.png?raw=true)
+![Infected Window](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/trace-main.png?raw=true)
 
 ![Exposed Window](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/trace-exposed.png?raw=true)
+
+![Exposed Details Window](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/trace-exposed-details.png?raw=true)
 
 ## Other
 
