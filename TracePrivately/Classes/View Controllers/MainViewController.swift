@@ -2,9 +2,6 @@
 //  MainViewController.swift
 //  TracePrivately
 //
-//  Created by Quentin Zervaas on 22/4/20.
-//  Copyright © 2020 Quentin Zervaas. All rights reserved.
-//
 
 import UIKit
 

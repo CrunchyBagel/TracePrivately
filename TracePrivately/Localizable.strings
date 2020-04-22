@@ -34,7 +34,7 @@
 "infection.report.gathering_data.error" = "Unable to create your anonymous profile.";
 "infection.report.gathering.empty.title" = "No Information";
 "infection.report.gathering.empty.message" = "Unable to find your tracing information. Perhaps you haven't had tracing enabled?";
-"infection.report.submit.title" = "Confirm";
+"infection.report.submit.title" = "Submit Diagnosis";
 "infection.report.submit.message" = "Please confirm you want to submit.\n\nThis will allow people who have been near you to know they may have been exposed.";
 "infection.report.submit.error" = "Unable to submit your information.";
 "infection.report.submitting.title" = "One Moment…";
