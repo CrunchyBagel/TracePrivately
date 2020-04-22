@@ -29,7 +29,7 @@ This app will be evolving quickly as I'm trying to publish new functionality as 
 Updated Demo Video (21-Apr-20): https://youtu.be/EAT3p-v2y9k
 Original Demo Video (17-Apr-20): https://youtu.be/rVaz8VQLoaE
 
-![Infected Window](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/main-infected.png?raw=true)
+![Main Window](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/main.png?raw=true)
 
 ![Exposed Window](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/main-exposed.png?raw=true)
 
