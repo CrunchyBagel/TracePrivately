@@ -37,7 +37,7 @@ class ExposedViewController: UICollectionViewController {
     lazy var durationFormatter: DateComponentsFormatter = {
         let ret = DateComponentsFormatter()
         ret.allowedUnits = [ .day, .hour, .minute ]
-        ret.unitsStyle = .abbreviated
+        ret.unitsStyle = .short
         ret.zeroFormattingBehavior = .dropLeading
         ret.maximumUnitCount = 2
         
@@ -51,7 +51,7 @@ class ExposedViewController: UICollectionViewController {
         
         // Swipe down to dismiss also available on iOS 13+
         let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(Self.doneTapped(_:)))
-        self.navigationItem.leftBarButtonItem = button
+        self.navigationItem.rightBarButtonItem = button
 
         let request = ExposureFetchRequest(includeStatuses: [ .detected ], includeNotificationStatuses: [], sortDirection: .timestampAsc)
         

@@ -56,7 +56,7 @@
 "exposure.exposed.banner.title" = "You May Have Been Exposed";
 "exposure.exposed.title" = "Exposures";
 /* parameter is localized disease name */
-"exposure.exposed.message" = "We believe you have come in contact with %@.";
+"exposure.exposed.message" = "We believe you may have come in contact with %@.";
 "exposure.times.title" = "Exposure Times";
 /* parameter is a localized duration */
 "exposure.times.duration" = "Duration: %@";

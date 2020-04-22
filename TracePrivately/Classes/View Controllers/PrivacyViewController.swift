@@ -14,7 +14,7 @@ class PrivacyViewController: UIViewController {
         
         // Swipe down to dismiss also available on iOS 13+
         let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(Self.doneTapped(_:)))
-        self.navigationItem.leftBarButtonItem = button
+        self.navigationItem.rightBarButtonItem = button
     }
     
     @objc func doneTapped(_ sender: UIBarButtonItem) {
