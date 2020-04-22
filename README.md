@@ -31,8 +31,6 @@ Original Demo Video (17-Apr-20): https://youtu.be/rVaz8VQLoaE
 
 ![Main Window](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/main.png?raw=true)
 
-![Exposed Window](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/main-exposed.png?raw=true)
-
 ![Exposed Details Window](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/exposed-details.png?raw=true)
 
 ## Other
