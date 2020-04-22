@@ -154,7 +154,7 @@ extension SubmitInfectionViewController {
             
             let entity = LocalInfectionEntity(context: context)
             entity.dateAdded = Date()
-            entity.status = DataManager.InfectionStatus.pending.rawValue
+            entity.status = DataManager.InfectionStatus.pendingSubmission.rawValue
             
             try? context.save()
         
@@ -164,7 +164,8 @@ extension SubmitInfectionViewController {
                 
                 context.perform {
                     if success {
-                        entity.status = DataManager.InfectionStatus.submitted.rawValue
+                        // TODO: Check against the local database to see if it should be submittedApproved or submittedUnapproved.
+                        entity.status = DataManager.InfectionStatus.submittedUnapproved.rawValue
                         
                         for key in keys {
                             let keyEntity = LocalInfectionKeyEntity(context: context)

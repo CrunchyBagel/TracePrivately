@@ -92,6 +92,49 @@ extension DataManager {
         let context = self.persistentContainer.newBackgroundContext()
         
         context.perform {
+            
+            // Check incoming keys against submitted keys to see if the
+            // submitted infection has been approved
+            
+            var localInfectionsUpdated = false
+            
+            do {
+                let fetchRequest: NSFetchRequest<LocalInfectionEntity> = LocalInfectionEntity.fetchRequest()
+                fetchRequest.predicate = NSPredicate(format: "status != %@", InfectionStatus.submittedApproved.rawValue)
+                
+                let entities = try context.fetch(fetchRequest)
+                
+                let keyData: Set<Data> = Set(keys.map { $0.keyData })
+                
+                var approvedEntities: [LocalInfectionEntity] = []
+                
+                for entity in entities {
+                    guard let keySet = entity.infectedKey else {
+                        continue
+                    }
+                    
+                    let keyEntities = keySet.compactMap { $0 as? LocalInfectionKeyEntity }
+                    
+                    let localData: Set<Data> = Set(keyEntities.compactMap { $0.infectedKey })
+                    
+                    if keyData.intersection(localData).count > 0 {
+                        approvedEntities.append(entity)
+                    }
+                }
+                
+                if approvedEntities.count > 0 {
+                    approvedEntities.forEach { entity in
+                        entity.status = InfectionStatus.submittedApproved.rawValue
+                    }
+                    
+                    localInfectionsUpdated = true
+                }
+            }
+            catch {
+                
+            }
+            
+            
             let request: NSFetchRequest<RemoteInfectedKeyEntity> = RemoteInfectedKeyEntity.fetchRequest()
             
             let date = Date()
@@ -127,6 +170,10 @@ extension DataManager {
                     try context.save()
                 }
                 
+                if localInfectionsUpdated {
+                    NotificationCenter.default.post(name: DataManager.infectionsUpdatedNotification, object: nil)
+                }
+                
                 completion(numNewKeys, nil)
             }
             catch {
@@ -156,8 +203,9 @@ extension DataManager {
 
 extension DataManager {
     enum InfectionStatus: String {
-        case pending = "P"
-        case submitted = "S"
+        case pendingSubmission = "P"
+        case submittedUnapproved = "U" // Submitted but hasn't been received back as an infected key
+        case submittedApproved = "S" // Submitted and seen in the remote infection list
     }
 }
 
@@ -251,6 +299,63 @@ extension DataManager {
             }
         }
         
+    }
+}
+
+extension DataManager {
+    enum DiseaseStatus {
+        case nothingDetected
+        case exposed
+        case infection
+        case infectionPending
+        case infectionPendingAndExposed
+    }
+    
+    func diseaseStatus(context: NSManagedObjectContext) -> DiseaseStatus {
+        let exposureRequest = ExposureFetchRequest(includeStatuses: [ .detected ], includeNotificationStatuses: [], sortDirection: .timestampAsc)
+        let numContacts = (try? context.count(for: exposureRequest.fetchRequest)) ?? 0
+        
+        let infectionRequest = InfectionFetchRequest(minDate: nil, includeStatuses: [ .submittedApproved, .submittedUnapproved ])
+        
+        var hasPending = false
+        var hasApproved = false
+        
+        do {
+            let infections = try context.fetch(infectionRequest.fetchRequest)
+
+            infections.forEach { infection in
+                switch infection.status {
+                case InfectionStatus.submittedUnapproved.rawValue:
+                    hasPending = true
+                case InfectionStatus.submittedApproved.rawValue:
+                    hasApproved = true
+                default:
+                    break
+                }
+            }
+            
+        }
+        catch {
+
+        }
+        
+        if hasPending {
+            if numContacts > 0 {
+                return .infectionPendingAndExposed
+            }
+            else {
+                return .infectionPending
+            }
+        }
+        else if hasApproved {
+            return .infection
+        }
+        else if numContacts > 0 {
+            return .exposed
+        }
+        else {
+            return .nothingDetected
+        }
     }
 }
 

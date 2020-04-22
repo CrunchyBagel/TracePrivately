@@ -1,130 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Csl-PD-oRR">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="FnE-Qt-Q1V">
+    <device id="retina6_1" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Navigation Controller-->
-        <scene sceneID="HW9-59-GSa">
-            <objects>
-                <navigationController id="Csl-PD-oRR" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="7lu-uH-wgF">
-                        <rect key="frame" x="0.0" y="44" width="414" height="96"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="pWf-tQ-H2X" kind="relationship" relationship="rootViewController" id="quD-V8-KBs"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="2tz-BA-Aeo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-780" y="138"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="lp5-ra-9Nc">
-            <objects>
-                <tableViewController id="pWf-tQ-H2X" customClass="ViewController" customModule="TracePrivately" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="9Lh-bG-43d">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" textLabel="Wk1-m3-arx" detailTextLabel="TKn-Gw-WX5" style="IBUITableViewCellStyleValue1" id="xAW-82-aoG">
-                                <rect key="frame" x="0.0" y="55.5" width="414" height="43.5"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="xAW-82-aoG" id="u4L-mr-gbU">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Wk1-m3-arx">
-                                            <rect key="frame" x="20" y="12" width="33.5" height="20.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="TKn-Gw-WX5">
-                                            <rect key="frame" x="335" y="12" width="59" height="20.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ExposedCell" textLabel="G0k-aT-AUT" detailTextLabel="HPp-iz-69R" style="IBUITableViewCellStyleSubtitle" id="gPy-42-xsu">
-                                <rect key="frame" x="0.0" y="99" width="414" height="55.5"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gPy-42-xsu" id="sZ6-E6-FW5">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="55.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="G0k-aT-AUT">
-                                            <rect key="frame" x="20" y="10" width="33.5" height="20.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="HPp-iz-69R">
-                                            <rect key="frame" x="20" y="31.5" width="44" height="14.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </tableViewCellContentView>
-                                <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="InfectedCell" textLabel="K6T-28-rEN" detailTextLabel="t1d-jV-2N5" style="IBUITableViewCellStyleSubtitle" id="Nuj-B6-4di">
-                                <rect key="frame" x="0.0" y="154.5" width="414" height="55.5"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Nuj-B6-4di" id="d1t-7L-Dh0">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="55.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="K6T-28-rEN">
-                                            <rect key="frame" x="20" y="10" width="33.5" height="20.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="t1d-jV-2N5">
-                                            <rect key="frame" x="20" y="31.5" width="44" height="14.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </tableViewCellContentView>
-                                <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="pWf-tQ-H2X" id="TXh-Ty-urX"/>
-                            <outlet property="delegate" destination="pWf-tQ-H2X" id="rvz-17-I0X"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" id="yK1-AX-mzi"/>
-                    <connections>
-                        <segue destination="vN2-Cb-gOp" kind="presentation" identifier="ExposedSegue" id="yKF-ac-WeA"/>
-                        <segue destination="WVI-2U-Ved" kind="presentation" identifier="SubmitInfectionSegue" id="lct-kl-Dpo"/>
-                        <segue destination="JKf-Kk-Eda" kind="presentation" identifier="ViewInfectionSegue" id="NWU-FJ-AFe"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="x4y-L6-mrS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="148" y="138"/>
-        </scene>
         <!--ExposedView-->
         <scene sceneID="1o1-R7-cA2">
             <objects>
@@ -133,7 +16,7 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hxm-td-btO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="854" y="64"/>
+            <point key="canvasLocation" x="1031" y="767"/>
         </scene>
         <!--SubmitInfection-->
         <scene sceneID="nge-aI-V3v">
@@ -141,7 +24,7 @@
                 <viewControllerPlaceholder storyboardName="SubmitInfection" id="WVI-2U-Ved" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xpy-C0-y2T" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="864" y="138"/>
+            <point key="canvasLocation" x="1043" y="843"/>
         </scene>
         <!--SubmittedInfection-->
         <scene sceneID="Y3S-v7-0fq">
@@ -149,7 +32,233 @@
                 <viewControllerPlaceholder storyboardName="SubmittedInfection" id="JKf-Kk-Eda" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XuF-rY-txe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="891" y="206"/>
+            <point key="canvasLocation" x="1057" y="922"/>
+        </scene>
+        <!--Main View Controller-->
+        <scene sceneID="bZe-ze-Cr0">
+            <objects>
+                <viewController id="cgw-lb-INg" customClass="MainViewController" customModule="TracePrivately" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="F4C-Tr-2O0">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="qDp-7Q-TUt">
+                                <rect key="frame" x="20" y="160" width="374" height="702"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sBE-i1-EpT" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="52"/>
+                                        <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="52" id="nNQ-Kr-e6x"/>
+                                        </constraints>
+                                        <state key="normal" title="Button"/>
+                                        <connections>
+                                            <action selector="infectedButtonTapped:" destination="cgw-lb-INg" eventType="touchUpInside" id="VBM-Dl-jSk"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="im4-bJ-sBK" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="72" width="374" height="52"/>
+                                        <color key="backgroundColor" systemColor="systemPurpleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" title="Button"/>
+                                        <connections>
+                                            <action selector="pendingButtonTapped:" destination="cgw-lb-INg" eventType="touchUpInside" id="f0T-CL-sRR"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nmB-3u-FTt" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="144" width="374" height="52"/>
+                                        <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" title="Button"/>
+                                        <connections>
+                                            <action selector="exposedButtonTapped:" destination="cgw-lb-INg" eventType="touchUpInside" id="HBo-FK-VDl"/>
+                                        </connections>
+                                    </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7hr-cg-uXa">
+                                        <rect key="frame" x="0.0" y="216" width="374" height="233"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="rIa-r2-7I4">
+                                                <rect key="frame" x="10" y="10" width="354" height="213"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contact Tracing" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gU9-Lr-mWA">
+                                                        <rect key="frame" x="0.0" y="0.0" width="354" height="19"/>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description about tracing." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v0h-tF-FM9">
+                                                        <rect key="frame" x="0.0" y="29" width="354" height="6"/>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="xXS-a0-4QH">
+                                                        <rect key="frame" x="0.0" y="45" width="354" height="168"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ic8-uE-wq7" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="354" height="52"/>
+                                                                <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="52" id="SQF-ba-nbD"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <connections>
+                                                                    <action selector="tracingOnButtonTapped:" destination="cgw-lb-INg" eventType="touchUpInside" id="nym-mc-mg5"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2CE-X1-VYa" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="62" width="354" height="52"/>
+                                                                <color key="backgroundColor" systemColor="systemPurpleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="52" id="C6G-Ud-Cuy"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <connections>
+                                                                    <action selector="tracingOffButtonTapped:" destination="cgw-lb-INg" eventType="touchUpInside" id="7h4-ZK-B0D"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a4j-xX-lLB" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="124" width="354" height="44"/>
+                                                                <color key="backgroundColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="44" id="uPU-Kk-8AH"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Privacy"/>
+                                                                <connections>
+                                                                    <action selector="privacyButtonTapped:" destination="cgw-lb-INg" eventType="touchUpInside" id="olE-Iz-wcB"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                    </stackView>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="rIa-r2-7I4" firstAttribute="leading" secondItem="7hr-cg-uXa" secondAttribute="leading" constant="10" id="0h6-St-nB2"/>
+                                            <constraint firstAttribute="trailing" secondItem="rIa-r2-7I4" secondAttribute="trailing" constant="10" id="1DC-Bp-LPY"/>
+                                            <constraint firstAttribute="bottom" secondItem="rIa-r2-7I4" secondAttribute="bottom" constant="10" id="Dja-Hf-m57"/>
+                                            <constraint firstItem="rIa-r2-7I4" firstAttribute="top" secondItem="7hr-cg-uXa" secondAttribute="top" constant="10" id="NhZ-uU-mcY"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YSN-Jg-zw2">
+                                        <rect key="frame" x="0.0" y="469" width="374" height="233"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="xsG-g8-bmI">
+                                                <rect key="frame" x="10" y="10" width="354" height="213"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Submit Infection" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V0k-qx-Pjy">
+                                                        <rect key="frame" x="0.0" y="0.0" width="354" height="21.5"/>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cmm-Ia-Gio">
+                                                        <rect key="frame" x="0.0" y="31.5" width="354" height="57.5"/>
+                                                        <string key="text">If you have ben diagnosed as having COVID-19, submit your diasnosis here.
+
+You will be prompted for confirmation.</string>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yfi-2O-JFT" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="99" width="354" height="52"/>
+                                                        <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="52" id="D8g-6r-7Ur"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <connections>
+                                                            <action selector="submitInfectionButtonTapped:" destination="cgw-lb-INg" eventType="touchUpInside" id="x5k-D9-U5j"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tko-23-weP" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="161" width="354" height="52"/>
+                                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="52" id="MQE-vf-Bso"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button">
+                                                            <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
+                                                        <connections>
+                                                            <action selector="submitInfectionButtonTapped:" destination="cgw-lb-INg" eventType="touchUpInside" id="ouv-tQ-hHQ"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="xsG-g8-bmI" secondAttribute="trailing" constant="10" id="4yj-qZ-Le2"/>
+                                            <constraint firstAttribute="bottom" secondItem="xsG-g8-bmI" secondAttribute="bottom" constant="10" id="Knv-lc-ZMc"/>
+                                            <constraint firstItem="xsG-g8-bmI" firstAttribute="leading" secondItem="YSN-Jg-zw2" secondAttribute="leading" constant="10" id="Sds-o3-z61"/>
+                                            <constraint firstItem="xsG-g8-bmI" firstAttribute="top" secondItem="YSN-Jg-zw2" secondAttribute="top" constant="10" id="ihs-BW-LMk"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="sBE-i1-EpT" firstAttribute="height" secondItem="nmB-3u-FTt" secondAttribute="height" id="XvV-kH-gIQ"/>
+                                    <constraint firstItem="sBE-i1-EpT" firstAttribute="height" secondItem="im4-bJ-sBK" secondAttribute="height" id="lpd-TN-oJX"/>
+                                    <constraint firstItem="7hr-cg-uXa" firstAttribute="height" secondItem="YSN-Jg-zw2" secondAttribute="height" id="vmH-BP-j4d"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="qDp-7Q-TUt" firstAttribute="top" secondItem="ulL-nJ-qh2" secondAttribute="top" constant="20" id="FdC-LO-Mpj"/>
+                            <constraint firstItem="ulL-nJ-qh2" firstAttribute="bottom" secondItem="qDp-7Q-TUt" secondAttribute="bottom" id="MOz-Ma-cXH"/>
+                            <constraint firstItem="qDp-7Q-TUt" firstAttribute="leading" secondItem="ulL-nJ-qh2" secondAttribute="leading" constant="20" id="Ry4-HP-xJH"/>
+                            <constraint firstItem="ulL-nJ-qh2" firstAttribute="trailing" secondItem="qDp-7Q-TUt" secondAttribute="trailing" constant="20" id="Xfj-H6-v9I"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="ulL-nJ-qh2"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="vWV-mt-MfV"/>
+                    <connections>
+                        <outlet property="exposedButton" destination="nmB-3u-FTt" id="0oa-fC-Wxp"/>
+                        <outlet property="infectedButton" destination="sBE-i1-EpT" id="xfW-LL-vTH"/>
+                        <outlet property="pendingButton" destination="im4-bJ-sBK" id="92O-Mc-0ZY"/>
+                        <outlet property="submitInfectionButton" destination="yfi-2O-JFT" id="5HN-KK-Qdh"/>
+                        <outlet property="submitInfectionButtonDisabled" destination="Tko-23-weP" id="7sL-jx-gvm"/>
+                        <outlet property="submitInfectionContainer" destination="YSN-Jg-zw2" id="1Ke-kX-EQN"/>
+                        <outlet property="submitInfectionDescriptionLabel" destination="Cmm-Ia-Gio" id="7XE-Hd-XaA"/>
+                        <outlet property="submitInfectionTitleLabel" destination="V0k-qx-Pjy" id="TBb-Yr-ySg"/>
+                        <outlet property="tracingContainer" destination="7hr-cg-uXa" id="qq3-yS-SM9"/>
+                        <outlet property="tracingDescriptionLabel" destination="v0h-tF-FM9" id="ke1-u8-PFN"/>
+                        <outlet property="tracingOffButton" destination="2CE-X1-VYa" id="nDu-8x-Zem"/>
+                        <outlet property="tracingOnButton" destination="ic8-uE-wq7" id="ZLq-gX-qjP"/>
+                        <outlet property="tracingPrivacyButton" destination="a4j-xX-lLB" id="WJh-Om-DC9"/>
+                        <outlet property="tracingTitleLabel" destination="gU9-Lr-mWA" id="3L3-Tv-hUC"/>
+                        <segue destination="WVI-2U-Ved" kind="presentation" identifier="SubmitInfectionSegue" id="1Q3-ID-utE"/>
+                        <segue destination="vN2-Cb-gOp" kind="presentation" identifier="ExposuresSegue" id="446-k3-Kkz"/>
+                        <segue destination="JKf-Kk-Eda" kind="presentation" identifier="ViewInfectionSegue" id="W1v-L3-1eu"/>
+                        <segue destination="pq8-YU-2gj" kind="presentation" identifier="PrivacySegue" id="olr-l8-am9"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rxr-lo-sic" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="252" y="840"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="rpR-cy-VBC">
+            <objects>
+                <navigationController id="FnE-Qt-Q1V" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="Pw7-9K-cZG">
+                        <rect key="frame" x="0.0" y="44" width="414" height="96"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="cgw-lb-INg" kind="relationship" relationship="rootViewController" id="gpS-nz-ggj"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cui-Tj-APh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-781" y="840"/>
+        </scene>
+        <!--Privacy-->
+        <scene sceneID="wkI-LI-cMP">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Privacy" id="pq8-YU-2gj" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nSB-bj-625" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1004" y="1014"/>
         </scene>
     </scenes>
 </document>

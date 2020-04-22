@@ -306,8 +306,24 @@ extension ContactTraceManager {
             }
             
             self.startExposureChecking { error in
-                self.isContactTracingEnabled = error == nil
+                
+                if error != nil {
+                    let request = CTStateSetRequest()
+                    request.state = .off
+                    
+                    request.completionHandler = { _ in
+                        self.isUpdatingEnabledState = false
+                        self.isContactTracingEnabled = false
+                        completion(error)
+                    }
+                    
+                    request.perform()
+                    return
+                }
+                
+                self.isContactTracingEnabled = true
                 self.isUpdatingEnabledState = false
+                
                 completion(error)
             }
         }
@@ -338,22 +354,27 @@ extension ContactTraceManager {
     fileprivate func startExposureChecking(completion: @escaping (Swift.Error?) -> Void) {
         let dispatchGroup = DispatchGroup()
         
-        let unc = UNUserNotificationCenter.current()
-        
-        dispatchGroup.enter()
-        unc.requestAuthorization(options: [ .alert, .sound, .badge ]) { success, error in
-
-            dispatchGroup.leave()
-        }
-        
         let session = CTExposureDetectionSession()
         
         var sessionError: Swift.Error?
         
         dispatchGroup.enter()
         session.activateWithCompletion { error in
-            sessionError = error
             
+            if let error = error {
+                sessionError = error
+                dispatchGroup.leave()
+                return
+            }
+
+            let unc = UNUserNotificationCenter.current()
+            
+            dispatchGroup.enter()
+            unc.requestAuthorization(options: [ .alert, .sound, .badge ]) { success, error in
+
+                dispatchGroup.leave()
+            }
+
             DataManager.shared.allInfectedKeys { keys, error in
                 guard let keys = keys else {
                     sessionError = error

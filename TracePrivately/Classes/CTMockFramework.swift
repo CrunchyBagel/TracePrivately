@@ -113,7 +113,7 @@ class CTStateSetRequest: CTBaseRequest {
         self.isRunning = true
         
         
-        let delay: TimeInterval = 0.5
+        let delay: TimeInterval = state == .off ? 0.1 : 0.5
         
         queue.asyncAfter(deadline: .now() + delay) {
             guard !self.isInvalidated else {
