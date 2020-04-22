@@ -3,70 +3,144 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
         <scene sceneID="Kgl-tS-dDe">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="mAi-H2-Yyz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <navigationController id="zKv-u5-Yve" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="Gkm-gs-Vlz">
                         <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="5qI-Zo-6Qu" kind="relationship" relationship="rootViewController" id="ezW-v7-J2K"/>
+                        <segue destination="qNU-Li-ITb" kind="relationship" relationship="rootViewController" id="g0D-1F-eXS"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mAi-H2-Yyz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1670" y="-223"/>
         </scene>
         <!--Exposed View Controller-->
-        <scene sceneID="riz-jZ-xmG">
+        <scene sceneID="ec9-93-nQq">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="jVA-M9-S26" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <tableViewController id="5qI-Zo-6Qu" customClass="ExposedViewController" customModule="TracePrivately" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="lhU-x8-M0b">
+                <collectionViewController id="qNU-Li-ITb" customClass="ExposedViewController" customModule="TracePrivately" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="brD-pG-kEM">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" textLabel="bNd-ow-kEo" detailTextLabel="7NQ-Vy-R1E" style="IBUITableViewCellStyleSubtitle" id="zXX-Ro-zhd">
-                                <rect key="frame" x="0.0" y="55.5" width="414" height="55.5"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="zXX-Ro-zhd" id="HhG-7b-zk7">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="55.5"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="dJH-R1-LMM">
+                            <size key="itemSize" width="300" height="80"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="20" minY="20" maxX="20" maxY="20"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="NextStepsCell" id="E5K-cx-LTp" customClass="ExposedNextStepsCell" customModule="TracePrivately" customModuleProvider="target">
+                                <rect key="frame" x="57" y="20" width="300" height="80"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="aup-uY-d4e">
+                                    <rect key="frame" x="0.0" y="0.0" width="300" height="80"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bNd-ow-kEo">
-                                            <rect key="frame" x="20" y="10" width="33.5" height="20.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vqo-rj-rfx">
+                                            <rect key="frame" x="10" y="0.0" width="280" height="80"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="7NQ-Vy-R1E">
-                                            <rect key="frame" x="20" y="31.5" width="44" height="14.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                    </subviews>
+                                    <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="vqo-rj-rfx" secondAttribute="trailing" constant="10" id="6sV-FC-0B1"/>
+                                        <constraint firstItem="vqo-rj-rfx" firstAttribute="top" secondItem="aup-uY-d4e" secondAttribute="top" id="K2x-6f-BTa"/>
+                                        <constraint firstItem="vqo-rj-rfx" firstAttribute="leading" secondItem="aup-uY-d4e" secondAttribute="leading" constant="10" id="NA3-pZ-pMG"/>
+                                        <constraint firstAttribute="bottom" secondItem="vqo-rj-rfx" secondAttribute="bottom" id="rax-Cg-3ez"/>
+                                    </constraints>
+                                </collectionViewCellContentView>
+                                <size key="customSize" width="300" height="80"/>
+                                <connections>
+                                    <outlet property="label" destination="vqo-rj-rfx" id="b1F-kD-bXJ"/>
+                                </connections>
+                            </collectionViewCell>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="IntroCell" id="ZNj-DG-0bi" customClass="ExposedIntroCell" customModule="TracePrivately" customModuleProvider="target">
+                                <rect key="frame" x="57" y="110" width="300" height="80"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="9oP-yQ-BV3">
+                                    <rect key="frame" x="0.0" y="0.0" width="300" height="80"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You may be exposed." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z4d-6i-g3A">
+                                            <rect key="frame" x="0.0" y="0.0" width="300" height="80"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
+                                    <constraints>
+                                        <constraint firstItem="z4d-6i-g3A" firstAttribute="leading" secondItem="9oP-yQ-BV3" secondAttribute="leading" id="04W-9c-iau"/>
+                                        <constraint firstItem="z4d-6i-g3A" firstAttribute="top" secondItem="9oP-yQ-BV3" secondAttribute="top" id="TRF-vf-JCc"/>
+                                        <constraint firstAttribute="bottom" secondItem="z4d-6i-g3A" secondAttribute="bottom" id="VlW-7D-txY"/>
+                                        <constraint firstAttribute="trailing" secondItem="z4d-6i-g3A" secondAttribute="trailing" id="oPp-ta-RVF"/>
+                                    </constraints>
+                                </collectionViewCellContentView>
+                                <size key="customSize" width="300" height="80"/>
+                                <connections>
+                                    <outlet property="label" destination="z4d-6i-g3A" id="RHK-HI-TPe"/>
+                                </connections>
+                            </collectionViewCell>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ExposureCell" id="LPV-aj-Vye" customClass="ExposedContactCell" customModule="TracePrivately" customModuleProvider="target">
+                                <rect key="frame" x="57" y="200" width="300" height="72"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Wfs-mi-Zv6">
+                                    <rect key="frame" x="0.0" y="0.0" width="300" height="72"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="tDm-gx-eiN">
+                                            <rect key="frame" x="10" y="12.5" width="280" height="47"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You may be exposed." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xmE-hx-kk3">
+                                                    <rect key="frame" x="0.0" y="0.0" width="280" height="20.5"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You may be exposed." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a6D-g2-CtN">
+                                                    <rect key="frame" x="0.0" y="26.5" width="280" height="20.5"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </stackView>
+                                    </subviews>
+                                    <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <constraints>
+                                        <constraint firstItem="tDm-gx-eiN" firstAttribute="leading" secondItem="Wfs-mi-Zv6" secondAttribute="leading" constant="10" id="8AD-Yw-xeM"/>
+                                        <constraint firstAttribute="trailing" secondItem="tDm-gx-eiN" secondAttribute="trailing" constant="10" id="H4O-Uo-nLY"/>
+                                        <constraint firstItem="tDm-gx-eiN" firstAttribute="centerY" secondItem="Wfs-mi-Zv6" secondAttribute="centerY" id="yZs-P2-fyW"/>
+                                    </constraints>
+                                </collectionViewCellContentView>
+                                <size key="customSize" width="300" height="72"/>
+                                <connections>
+                                    <outlet property="durationLabel" destination="a6D-g2-CtN" id="LqQ-WJ-OcJ"/>
+                                    <outlet property="timeLabel" destination="xmE-hx-kk3" id="4YA-jq-Lel"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
                         <connections>
-                            <outlet property="dataSource" destination="5qI-Zo-6Qu" id="RqT-Cz-Jd7"/>
-                            <outlet property="delegate" destination="5qI-Zo-6Qu" id="tPi-R4-ycz"/>
+                            <outlet property="dataSource" destination="qNU-Li-ITb" id="8rJ-IJ-gGA"/>
+                            <outlet property="delegate" destination="qNU-Li-ITb" id="1bI-ch-sl5"/>
                         </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" id="WTF-II-7pE"/>
-                </tableViewController>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="D3K-Vd-dTj"/>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uOG-9Z-AAg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2477" y="-223"/>
+            <point key="canvasLocation" x="2596" y="-224"/>
         </scene>
     </scenes>
 </document>

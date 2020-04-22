@@ -6,30 +6,30 @@
 import UIKit
 import CoreData
 
-class ExposedViewController: UITableViewController {
+class ExposedViewController: UICollectionViewController {
 
     struct Cells {
-        static let standard = "Cell"
+        static let nextSteps = "NextStepsCell"
+        static let contact = "ExposureCell"
+        static let intro = "IntroCell"
     }
 
-    enum RowType {
+    enum CellType {
         case contact(CTContactInfo)
+        case intro(String)
         case nextSteps
     }
     
     struct Section {
-        let header: String?
-        let footer: String?
-        
-        let rows: [RowType]
+        let cells: [CellType]
     }
     
     var sections: [Section] = []
 
     lazy var timeFormatter: DateFormatter = {
         let ret = DateFormatter()
-        ret.dateStyle = .medium
-        ret.timeStyle = .medium
+        ret.dateStyle = .long
+        ret.timeStyle = .short
         
         return ret
     }()
@@ -44,22 +44,6 @@ class ExposedViewController: UITableViewController {
         return ret
     }()
     
-    lazy var fetchResultsController: NSFetchedResultsController<ExposureContactInfoEntity> = {
-
-        let request = ExposureFetchRequest(includeStatuses: [ .detected ], includeNotificationStatuses: [], sortDirection: .timestampAsc)
-        
-        let controller = NSFetchedResultsController(
-            fetchRequest: request.fetchRequest,
-            managedObjectContext: DataManager.shared.persistentContainer.viewContext,
-            sectionNameKeyPath: nil,
-            cacheName: nil
-        )
-        
-        controller.delegate = self
-        
-        return controller
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -69,14 +53,6 @@ class ExposedViewController: UITableViewController {
         let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(Self.doneTapped(_:)))
         self.navigationItem.leftBarButtonItem = button
 
-        
-        do {
-            try self.fetchResultsController.performFetch()
-        }
-        catch {
-            
-        }
-        
         let request = ExposureFetchRequest(includeStatuses: [ .detected ], includeNotificationStatuses: [], sortDirection: .timestampAsc)
         
         let context = DataManager.shared.persistentContainer.viewContext
@@ -95,7 +71,9 @@ class ExposedViewController: UITableViewController {
         if contacts.count == 0 {
             let title = String(format: NSLocalizedString("exposure.none.message", comment: ""), Disease.current.localizedTitle)
             self.sections = [
-                Section(header: nil, footer: title, rows: [])
+                Section(cells: [
+                    .intro(title)
+                ])
             ]
         }
         else {
@@ -103,9 +81,9 @@ class ExposedViewController: UITableViewController {
             let title = String(format: NSLocalizedString("exposure.exposed.message", comment: "") , Disease.current.localizedTitle)
 
             self.sections = [
-                Section(header: nil, footer: title, rows: []),
-                Section(header: NSLocalizedString("exposure.times.title", comment: ""), footer: nil, rows: contacts.map { .contact($0)} ),
-                Section(header: nil, footer: nil, rows: [ .nextSteps ])
+                Section(cells: [ .intro(title) ]),
+                Section(cells: contacts.map { .contact($0)}),
+                Section(cells: [ .nextSteps ])
             ]
         }
     }
@@ -116,61 +94,80 @@ class ExposedViewController: UITableViewController {
 }
 
 extension ExposedViewController {
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return self.sections.count
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.sections[section].rows.count
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.sections[section].cells.count
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return self.sections[section].header
-    }
-    
-    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        return self.sections[section].footer
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Cells.standard, for: indexPath)
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        let rowType = self.sections[indexPath.section].rows[indexPath.row]
+        let rowType = self.sections[indexPath.section].cells[indexPath.row]
         
         switch rowType {
+        case .intro(let str):
+            
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Cells.intro, for: indexPath)
+            
+            if let cell = cell as? ExposedIntroCell {
+                cell.label.text = str
+            }
+            
+            return cell
+            
         case .contact(let contact):
-            cell.textLabel?.text = self.timeFormatter.string(from: contact.date)
-            
-            
-            if let str = self.durationFormatter.string(from: contact.duration) {
-                cell.detailTextLabel?.text = String(format: NSLocalizedString("exposure.times.duration", comment: ""), str)
+
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Cells.contact, for: indexPath)
+                
+            if let cell = cell as? ExposedContactCell {
+
+                cell.timeLabel.text = self.timeFormatter.string(from: contact.date)
+
+                if let str = self.durationFormatter.string(from: contact.duration) {
+                    cell.durationLabel?.text = String(format: NSLocalizedString("exposure.times.duration", comment: ""), str)
+                }
+                else {
+                    cell.durationLabel?.text = nil
+                }
+                
+                if contact.duration < 600 {
+                    cell.contentView.backgroundColor = UIColor.systemOrange
+                }
+                else {
+                    cell.contentView.backgroundColor = UIColor.systemRed
+                }
             }
-            else {
-                cell.detailTextLabel?.text = nil
-            }
             
-            cell.selectionStyle = .none
-            cell.accessoryType = .none
-            
+            return cell
+
         case .nextSteps:
-            cell.textLabel?.text = NSLocalizedString("exposure.next_steps.title", comment: "")
-            cell.detailTextLabel?.text = nil
-            cell.accessoryType = .disclosureIndicator
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Cells.nextSteps, for: indexPath)
+            
+            if let cell = cell as? ExposedNextStepsCell {
+                cell.label.text = NSLocalizedString("exposure.next_steps.title", comment: "")
+            }
+            
+            return cell
         }
-        
-        return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let rowType = self.sections[indexPath.section].rows[indexPath.row]
+        let rowType = self.sections[indexPath.section].cells[indexPath.row]
         
-        tableView.deselectRow(at: indexPath, animated: true)
-
         switch rowType {
-        case .contact:
+        case .intro:
             break
             
+        case .contact:
+            let alert = UIAlertController(title: "Exposure Info", message: "TODO", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
+            
+            self.present(alert, animated: true, completion: nil)
+
         case .nextSteps:
             let alert = UIAlertController(title: NSLocalizedString("exposure.next_steps.title", comment: ""), message: NSLocalizedString("exposure.next_steps.message", comment: ""), preferredStyle: .alert)
             
@@ -182,6 +179,80 @@ extension ExposedViewController {
     }
 }
 
-extension ExposedViewController: NSFetchedResultsControllerDelegate {
+extension ExposedViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        
+        if section == 0 {
+            return UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        }
+        else {
+            return UIEdgeInsets(top: 0, left: 20, bottom: 20, right: 20)
+        }
+    }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let insets = self.collectionView(collectionView, layout: collectionViewLayout, insetForSectionAt: indexPath.section)
+        
+        let width = collectionView.frame.size.width - insets.left - insets.right
+        
+        let rowType = self.sections[indexPath.section].cells[indexPath.row]
+        
+        switch rowType {
+        case .contact:
+            return CGSize(width: width, height: 72)
+
+        case .intro(let str):
+            let font = UIFont.preferredFont(forTextStyle: .body)
+            let size = font.sizeOfString(string: str, constrainedToWidth: width)
+
+            return CGSize(width: width, height: size.height)
+            
+        case .nextSteps:
+            return CGSize(width: width, height: 52)
+        }
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 20
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 20
+    }
 }
+
+class ExposedIntroCell: UICollectionViewCell {
+    @IBOutlet var label: UILabel!
+}
+
+class ExposedNextStepsCell: UICollectionViewCell {
+    @IBOutlet var label: UILabel!
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        if #available(iOS 13.0, *) {
+            self.layer.cornerCurve = .continuous
+        }
+        
+        self.layer.cornerRadius = 8
+    }
+}
+
+class ExposedContactCell: UICollectionViewCell {
+    @IBOutlet var timeLabel: UILabel!
+    @IBOutlet var durationLabel: UILabel!
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        if #available(iOS 13.0, *) {
+            self.layer.cornerCurve = .continuous
+        }
+        
+        self.layer.cornerRadius = 8
+    }
+}
+

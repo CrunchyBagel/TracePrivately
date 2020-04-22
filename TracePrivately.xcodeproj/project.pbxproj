@@ -17,6 +17,7 @@
 		6698C57024492BC500F046E4 /* KeyServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6698C56F24492BC500F046E4 /* KeyServer.swift */; };
 		6698C572244936AF00F046E4 /* ExposedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6698C571244936AF00F046E4 /* ExposedViewController.swift */; };
 		6698C574244BFAB600F046E4 /* KeyServer.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6698C573244BFAB600F046E4 /* KeyServer.plist */; };
+		66A039D7245005B700A569BE /* FontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A039D6245005B700A569BE /* FontExtension.swift */; };
 		66CB95BD244FB51000D775B6 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CB95BC244FB51000D775B6 /* ActionButton.swift */; };
 		66CB95BF244FB5CD00D775B6 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CB95BE244FB5CD00D775B6 /* MainViewController.swift */; };
 		66CB95C1244FBBC800D775B6 /* Privacy.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66CB95C0244FBBC800D775B6 /* Privacy.storyboard */; };
@@ -44,6 +45,7 @@
 		6698C56F24492BC500F046E4 /* KeyServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyServer.swift; sourceTree = "<group>"; };
 		6698C571244936AF00F046E4 /* ExposedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposedViewController.swift; sourceTree = "<group>"; };
 		6698C573244BFAB600F046E4 /* KeyServer.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = KeyServer.plist; sourceTree = "<group>"; };
+		66A039D6245005B700A569BE /* FontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
 		66CB95BC244FB51000D775B6 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		66CB95BE244FB5CD00D775B6 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		66CB95C0244FBBC800D775B6 /* Privacy.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Privacy.storyboard; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 				668CE842244D01F50065960A /* ContactTraceManager.swift */,
 				66CB95BC244FB51000D775B6 /* ActionButton.swift */,
 				66848C2C244D5F8800497D2A /* AsyncBlockOperation.swift */,
+				66A039D6245005B700A569BE /* FontExtension.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -224,6 +227,7 @@
 			files = (
 				66848C2D244D5F8800497D2A /* AsyncBlockOperation.swift in Sources */,
 				66EAEB62244DA72E0044FF70 /* SubmitInfectionViewController.swift in Sources */,
+				66A039D7245005B700A569BE /* FontExtension.swift in Sources */,
 				66CB95C3244FBBF300D775B6 /* PrivacyViewController.swift in Sources */,
 				66CB95BD244FB51000D775B6 /* ActionButton.swift in Sources */,
 				66437F76244A86AE000B8C6C /* Disease.swift in Sources */,

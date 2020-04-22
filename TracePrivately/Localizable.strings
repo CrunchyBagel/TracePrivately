@@ -53,7 +53,8 @@
 "exposure.none.title" = "Great News";
 /* parameter is localized disease name */
 "exposure.none.message" = "No contact detected with a %@ infection!\n\nStay safe and wash your hands.";
-"exposure.exposed.title" = "You Have Been Exposed";
+"exposure.exposed.banner.title" = "You May Have Been Exposed";
+"exposure.exposed.title" = "Exposures";
 /* parameter is localized disease name */
 "exposure.exposed.message" = "We believe you have come in contact with %@.";
 "exposure.times.title" = "Exposure Times";
