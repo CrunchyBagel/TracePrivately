@@ -63,7 +63,7 @@ class MainViewController: UIViewController {
         self.submitInfectionButtonDisabled.setTitle(submitTitle, for: .normal)
 
         self.tracingTitleLabel.text = NSLocalizedString("tracing.title", comment: "")
-        self.tracingDescriptionLabel.text = NSLocalizedString("tracing.message", comment: "")
+        self.tracingDescriptionLabel.text = String(format: NSLocalizedString("tracing.message", comment: ""), Disease.current.localizedTitle)
         
         self.submitInfectionTitleLabel.text = NSLocalizedString("infection.title", comment: "")
         self.submitInfectionDescriptionLabel.text = String(format: NSLocalizedString("infection.report.message", comment: ""), Disease.current.localizedTitle)

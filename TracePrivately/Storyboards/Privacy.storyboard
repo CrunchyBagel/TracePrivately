@@ -31,7 +31,20 @@
                     <view key="view" contentMode="scaleToFill" id="XyM-xP-Dze">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A privacy statement that shows how contact tracing works and how data is used should appear here." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Aud-nH-umP">
+                                <rect key="frame" x="20" y="160" width="374" height="64.5"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="Aud-nH-umP" firstAttribute="leading" secondItem="TiS-ZR-E8Q" secondAttribute="leading" constant="20" id="DY5-eE-5jf"/>
+                            <constraint firstItem="Aud-nH-umP" firstAttribute="top" secondItem="TiS-ZR-E8Q" secondAttribute="top" constant="20" id="OSv-w2-mmZ"/>
+                            <constraint firstItem="TiS-ZR-E8Q" firstAttribute="trailing" secondItem="Aud-nH-umP" secondAttribute="trailing" constant="20" id="rtO-Jq-3lZ"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="TiS-ZR-E8Q"/>
                     </view>
                     <navigationItem key="navigationItem" id="lm2-qh-wt7"/>

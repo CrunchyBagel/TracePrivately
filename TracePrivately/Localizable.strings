@@ -8,7 +8,8 @@
 "about.message" = "This is an example implementation of contact tracing using Apple's newly-announced framework.\n\nIt is not fully functional and therefore should not yet be used for∂real-world applications.";
 
 "tracing.title" = "Contact Tracing";
-"tracing.message" = "Used for securely exchanging anonymous information when you encounter other people.";
+/* parameter is localized disease name */
+"tracing.message" = "Securely exchange anonymous information when you encounter other people, and automatically check for exposure to %@.";
 "tracing.start.title" = "Start Tracing";
 "tracing.start.message" = "Click Start to enable tracing on your device.\n\nIt is achieved in a private and secure way, with minimal impact on your battery life.";
 "tracing.start.button.title" = "Start";
@@ -41,7 +42,7 @@
 "infection.report.submitted.title" = "Thank You";
 "infection.report.submitted.message" = "Your information has been submitted.";
 
-"infection.infected.title" = "Infected";
+"infection.infected.title" = "Infection Recorded";
 "infection.pending.title" = "Pending Confirmation";
 "infection.infected.message" = "You have submitted your infection. Get well quickly.";
 
@@ -52,7 +53,7 @@
 "exposure.none.title" = "Great News";
 /* parameter is localized disease name */
 "exposure.none.message" = "No contact detected with a %@ infection!\n\nStay safe and wash your hands.";
-"exposure.exposed.title" = "Exposed";
+"exposure.exposed.title" = "You Have Been Exposed";
 /* parameter is localized disease name */
 "exposure.exposed.message" = "We believe you have come in contact with %@.";
 "exposure.times.title" = "Exposure Times";
