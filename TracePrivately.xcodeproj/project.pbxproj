@@ -78,6 +78,7 @@
 		39BD8847244C6CF000EB8B6C /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
+				66F818752448FD5E0043AC2D /* LaunchScreen.storyboard */,
 				66CB95C0244FBBC800D775B6 /* Privacy.storyboard */,
 				66F818702448FD5C0043AC2D /* Main.storyboard */,
 				39BD8848244C6D3D00EB8B6C /* ExposedView.storyboard */,
@@ -139,7 +140,6 @@
 				66437F77244A8A4C000B8C6C /* Classes */,
 				66F818732448FD5E0043AC2D /* Assets.xcassets */,
 				66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */,
-				66F818752448FD5E0043AC2D /* LaunchScreen.storyboard */,
 				66F818782448FD5E0043AC2D /* Info.plist */,
 				66437F73244A73F0000B8C6C /* Localizable.strings */,
 				6698C573244BFAB600F046E4 /* KeyServer.plist */,
