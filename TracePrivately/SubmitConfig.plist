@@ -41,6 +41,11 @@
 					<key>Base</key>
 					<string>Enter the number on your pathology result.</string>
 				</dict>
+				<key>LocalizedPlaceholder</key>
+				<dict>
+					<key>Base</key>
+					<string>e.g. 12345678</string>
+				</dict>
 			</dict>
 		</array>
 	</dict>

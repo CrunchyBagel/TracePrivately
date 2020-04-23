@@ -12,7 +12,10 @@ class SubmitInfectionViewController: UIViewController {
     
     @IBOutlet var infoLabel: UILabel!
     
-    let config: SubmitInfectionConfig = .empty
+    var config: SubmitInfectionConfig = .empty
+    
+    // Holds the form elements
+    @IBOutlet var stackView: UIStackView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,10 +37,88 @@ class SubmitInfectionViewController: UIViewController {
         // Swipe down to dismiss also available on iOS 13+
         let button = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(Self.cancelTapped(_:)))
         self.navigationItem.leftBarButtonItem = button
+        
+        
+        let elements = self.config.sortedFields.compactMap { self.createFormElement(field: $0) }
+        
+        elements.forEach { self.stackView.addArrangedSubview($0) }
     }
     
     @objc func cancelTapped(_ sender: UIBarButtonItem) {
         self.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension SubmitInfectionViewController {
+    func createFormElement(field: SubmitInfectionConfig.Field) -> UIView? {
+        let isDarkMode: Bool
+        
+        if #available(iOS 12, *) {
+            isDarkMode = self.traitCollection.userInterfaceStyle == .dark
+        }
+        else {
+            isDarkMode = false
+        }
+
+        var subViews: [UIView] = []
+        
+        if let str = field.localizedTitle {
+            let label = UILabel()
+            label.text = str
+            label.font = UIFont.preferredFont(forTextStyle: .headline)
+            if #available(iOS 13.0, *) {
+                label.textColor = .label
+            } else {
+                label.textColor = isDarkMode ? .white : .black
+            }
+            
+            subViews.append(label)
+        }
+        
+        if let str = field.localizedDescription {
+            let label = UILabel()
+            label.text = str
+            label.font = UIFont.preferredFont(forTextStyle: .body)
+            if #available(iOS 13.0, *) {
+                label.textColor = .label
+            } else {
+                label.textColor = isDarkMode ? .white : .black
+            }
+
+            subViews.append(label)
+        }
+
+        switch field.type {
+        case .shortText:
+            
+            let textField = UITextField()
+            textField.placeholder = field.placeholder
+            
+            subViews.append(textField)
+
+        case .photo:
+            // A container with a button to open the photo picker and an image view for preview
+            
+            let button = UIButton(type: .custom)
+            
+            let previewImageView = UIImageView()
+            
+            
+            let stackView = UIStackView(arrangedSubviews: [ button, previewImageView ])
+            stackView.axis = .horizontal
+            
+            subViews.append(stackView)
+
+        case .longText:
+            let textView = UITextView()
+            subViews.append(textView)
+        }
+        
+        
+        let container = UIStackView(arrangedSubviews: subViews)
+        container.axis = .vertical
+        
+        return container
     }
 }
 

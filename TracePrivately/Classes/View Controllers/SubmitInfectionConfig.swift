@@ -17,6 +17,7 @@ struct SubmitInfectionConfig {
         let type: FieldType
         let required: Bool
         let formName: String
+        let placeholder: String?
         
         let localizedTitle: String?
         let localizedDescription: String?
@@ -83,11 +84,21 @@ extension SubmitInfectionConfig.Field {
         else {
             localizedDescription = nil
         }
+        
+        let localizedPlaceholder: String?
+
+        if let translations = config["LocalizedPlaceholder"] as? [String: String] {
+            localizedPlaceholder = Self.currentTranslation(translations: translations)
+        }
+        else {
+            localizedPlaceholder = nil
+        }
 
         self.init(
             type: type,
             required: required,
             formName: formName,
+            placeholder: localizedPlaceholder,
             localizedTitle: localizedTitle,
             localizedDescription: localizedDescription
         )
