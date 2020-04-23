@@ -2,6 +2,10 @@
 $path = realpath(dirname(__FILE__) . '/../data/trace.sqlite');
 $db = new SQLite3($path, SQLITE3_OPEN_READWRITE);
 
+// TODO: Validate bearer token and throw 401 if not valid
+// TODO: Implement proper error responses
+
+
 $minTime = time() - (86400 * 14);
 $time = $minTime;
 

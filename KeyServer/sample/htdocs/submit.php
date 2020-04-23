@@ -2,8 +2,12 @@
 $path = realpath(dirname(__FILE__) . '/../data/trace.sqlite');
 $db = new SQLite3($path, SQLITE3_OPEN_READWRITE);
 
+// TODO: Validate bearer token and throw 401 if not valid
+
 $data = file_get_contents('php://input');
 $json = json_decode($data, true);
+
+// TODO: Implement proper error responses
 
 if (!is_array($json)) {
     echo "Invalid request data";

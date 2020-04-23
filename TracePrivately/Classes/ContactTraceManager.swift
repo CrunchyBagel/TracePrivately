@@ -80,9 +80,11 @@ class ContactTraceManager: NSObject {
         UIApplication.shared.applicationIconBadgeNumber = count == 0 ? -1 : count
         
         UNUserNotificationCenter.current().delegate = self
-        self.performBackgroundUpdate { _ in
-
-        }
+        
+        // Not called here since it's called in applicationDidBecomeActive
+//        self.performBackgroundUpdate { _ in
+//
+//        }
     }
 }
 
