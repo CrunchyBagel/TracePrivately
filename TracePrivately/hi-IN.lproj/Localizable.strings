@@ -1,0 +1,14 @@
+/* 
+  Localizable.strings
+  TracePrivately
+*/
+
+"app.title" = "निजी तौर पर पता लगाएं";
+
+"tracing.start.title" = "पता लगाना शुरू करे";
+"tracing.stop.title" = "पता लगाना निरस्त करे";
+
+"disease.covid19.title" = "कोरोना वायरस";
+
+/* parameter is localized disease name */
+"infection.report.title" = "मुझे कोरोनावाइरस%@ है";
