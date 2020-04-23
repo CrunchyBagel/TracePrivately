@@ -24,6 +24,12 @@ This app will be evolving quickly as I'm trying to publish new functionality as 
 4. The sample key server requires manual approval of infection submissions, using the `./tools/pending.php` and `./tools/approve.php` scripts.
 5. In this proof of concept, every client will detect an exposure for any infection submitted
 
+## Localizations
+
+If you can help translate the app, please help our crowd-sourced effort here:
+
+https://traceprivately.oneskyapp.com/collaboration/project?id=170066
+
 ## Screenshots
 
 * Updated Demo Video (21-Apr-20): https://youtu.be/EAT3p-v2y9k
