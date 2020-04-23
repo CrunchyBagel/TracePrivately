@@ -22,6 +22,21 @@ class ActionButton: UIButton {
         }
     }
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.setup()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        
+        self.setup()
+    }
+    
+    private func setup() {
+        self.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
+    }
+    
     var accessory: Accessory? {
         didSet {
             self.updateAccessory()
