@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		39BD8849244C6D3D00EB8B6C /* ExposedView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 39BD8848244C6D3D00EB8B6C /* ExposedView.storyboard */; };
+		66210553245127340011EB42 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 66210552245127340011EB42 /* Intents.intentdefinition */; };
+		6621055B245129690011EB42 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6621055A245129690011EB42 /* IntentHandler.swift */; };
+		6621055F245129690011EB42 /* TracePrivately-Siri.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 66210558245129690011EB42 /* TracePrivately-Siri.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		662105642451299B0011EB42 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 66210552245127340011EB42 /* Intents.intentdefinition */; };
 		66437F74244A73F0000B8C6C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 66437F73244A73F0000B8C6C /* Localizable.strings */; };
 		66437F76244A86AE000B8C6C /* Disease.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F75244A86AE000B8C6C /* Disease.swift */; };
 		66437F9E244A9A02000B8C6C /* TracePrivately.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */; };
@@ -33,8 +37,37 @@
 		66F818832448FE020043AC2D /* CTMockFramework.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F818822448FE020043AC2D /* CTMockFramework.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		6621055D245129690011EB42 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 66F8185F2448FD5C0043AC2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 66210557245129690011EB42;
+			remoteInfo = "TracePrivately-Siri";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		66210563245129690011EB42 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				6621055F245129690011EB42 /* TracePrivately-Siri.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		39BD8848244C6D3D00EB8B6C /* ExposedView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ExposedView.storyboard; sourceTree = "<group>"; };
+		66210552245127340011EB42 /* Intents.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Intents.intentdefinition; sourceTree = "<group>"; };
+		66210558245129690011EB42 /* TracePrivately-Siri.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "TracePrivately-Siri.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6621055A245129690011EB42 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
+		6621055C245129690011EB42 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6621056524512D3B0011EB42 /* TracePrivately.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TracePrivately.entitlements; sourceTree = "<group>"; };
 		66437F73244A73F0000B8C6C /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		66437F75244A86AE000B8C6C /* Disease.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disease.swift; sourceTree = "<group>"; };
 		66437F9D244A9A02000B8C6C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -65,6 +98,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		66210555245129690011EB42 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		66F818642448FD5C0043AC2D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -85,6 +125,15 @@
 				66EAEB63244DC5E40044FF70 /* SubmittedInfection.storyboard */,
 			);
 			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		66210559245129690011EB42 /* TracePrivately-Siri */ = {
+			isa = PBXGroup;
+			children = (
+				6621055A245129690011EB42 /* IntentHandler.swift */,
+				6621055C245129690011EB42 /* Info.plist */,
+			);
+			path = "TracePrivately-Siri";
 			sourceTree = "<group>";
 		};
 		66437F77244A8A4C000B8C6C /* Classes */ = {
@@ -120,6 +169,7 @@
 			isa = PBXGroup;
 			children = (
 				66F818692448FD5C0043AC2D /* TracePrivately */,
+				66210559245129690011EB42 /* TracePrivately-Siri */,
 				66F818682448FD5C0043AC2D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -128,6 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				66F818672448FD5C0043AC2D /* TracePrivately.app */,
+				66210558245129690011EB42 /* TracePrivately-Siri.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -135,6 +186,7 @@
 		66F818692448FD5C0043AC2D /* TracePrivately */ = {
 			isa = PBXGroup;
 			children = (
+				6621056524512D3B0011EB42 /* TracePrivately.entitlements */,
 				39BD8847244C6CF000EB8B6C /* Storyboards */,
 				66437F77244A8A4C000B8C6C /* Classes */,
 				66F818732448FD5E0043AC2D /* Assets.xcassets */,
@@ -142,6 +194,7 @@
 				66F818752448FD5E0043AC2D /* LaunchScreen.storyboard */,
 				66F818782448FD5E0043AC2D /* Info.plist */,
 				66437F73244A73F0000B8C6C /* Localizable.strings */,
+				66210552245127340011EB42 /* Intents.intentdefinition */,
 				6698C573244BFAB600F046E4 /* KeyServer.plist */,
 			);
 			path = TracePrivately;
@@ -150,6 +203,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		66210557245129690011EB42 /* TracePrivately-Siri */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 66210560245129690011EB42 /* Build configuration list for PBXNativeTarget "TracePrivately-Siri" */;
+			buildPhases = (
+				66210554245129690011EB42 /* Sources */,
+				66210555245129690011EB42 /* Frameworks */,
+				66210556245129690011EB42 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "TracePrivately-Siri";
+			productName = "TracePrivately-Siri";
+			productReference = 66210558245129690011EB42 /* TracePrivately-Siri.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		66F818662448FD5C0043AC2D /* TracePrivately */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 66F8187B2448FD5E0043AC2D /* Build configuration list for PBXNativeTarget "TracePrivately" */;
@@ -157,10 +227,12 @@
 				66F818632448FD5C0043AC2D /* Sources */,
 				66F818642448FD5C0043AC2D /* Frameworks */,
 				66F818652448FD5C0043AC2D /* Resources */,
+				66210563245129690011EB42 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				6621055E245129690011EB42 /* PBXTargetDependency */,
 			);
 			name = TracePrivately;
 			productName = TracePrivately;
@@ -177,6 +249,9 @@
 				LastUpgradeCheck = 1140;
 				ORGANIZATIONNAME = "Quentin Zervaas";
 				TargetAttributes = {
+					66210557245129690011EB42 = {
+						CreatedOnToolsVersion = 11.4.1;
+					};
 					66F818662448FD5C0043AC2D = {
 						CreatedOnToolsVersion = 11.4.1;
 						LastSwiftMigration = 1140;
@@ -197,11 +272,19 @@
 			projectRoot = "";
 			targets = (
 				66F818662448FD5C0043AC2D /* TracePrivately */,
+				66210557245129690011EB42 /* TracePrivately-Siri */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		66210556245129690011EB42 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		66F818652448FD5C0043AC2D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -221,6 +304,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		66210554245129690011EB42 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				662105642451299B0011EB42 /* Intents.intentdefinition in Sources */,
+				6621055B245129690011EB42 /* IntentHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		66F818632448FD5C0043AC2D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -231,6 +323,7 @@
 				66CB95C3244FBBF300D775B6 /* PrivacyViewController.swift in Sources */,
 				66CB95BD244FB51000D775B6 /* ActionButton.swift in Sources */,
 				66437F76244A86AE000B8C6C /* Disease.swift in Sources */,
+				66210553245127340011EB42 /* Intents.intentdefinition in Sources */,
 				66437FA0244A9B2C000B8C6C /* DataManager.swift in Sources */,
 				66F8186B2448FD5C0043AC2D /* AppDelegate.swift in Sources */,
 				66CB95BF244FB5CD00D775B6 /* MainViewController.swift in Sources */,
@@ -244,6 +337,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6621055E245129690011EB42 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 66210557245129690011EB42 /* TracePrivately-Siri */;
+			targetProxy = 6621055D245129690011EB42 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		66F818702448FD5C0043AC2D /* Main.storyboard */ = {
@@ -265,6 +366,44 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		66210561245129690011EB42 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CHZS3BHM57;
+				INFOPLIST_FILE = "TracePrivately-Siri/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.TracePrivately.TracePrivately-Siri";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		66210562245129690011EB42 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CHZS3BHM57;
+				INFOPLIST_FILE = "TracePrivately-Siri/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.TracePrivately.TracePrivately-Siri";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		66F818792448FD5E0043AC2D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -382,8 +521,10 @@
 		66F8187C2448FD5E0043AC2D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = TracePrivately/TracePrivately.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CHZS3BHM57;
 				INFOPLIST_FILE = TracePrivately/Info.plist;
@@ -403,8 +544,10 @@
 		66F8187D2448FD5E0043AC2D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = TracePrivately/TracePrivately.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CHZS3BHM57;
 				INFOPLIST_FILE = TracePrivately/Info.plist;
@@ -423,6 +566,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		66210560245129690011EB42 /* Build configuration list for PBXNativeTarget "TracePrivately-Siri" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66210561245129690011EB42 /* Debug */,
+				66210562245129690011EB42 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		66F818622448FD5C0043AC2D /* Build configuration list for PBXProject "TracePrivately" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

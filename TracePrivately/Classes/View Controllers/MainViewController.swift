@@ -4,6 +4,7 @@
 //
 
 import UIKit
+import Intents
 
 class MainViewController: UIViewController {
 
@@ -248,6 +249,22 @@ extension MainViewController {
                     
                     self.present(alert, animated: true, completion: nil)
                 }
+                
+                return
+            }
+            
+            if #available(iOS 12, *) {
+                let intent = StartTracingIntent()
+                
+                let interaction = INInteraction(intent: intent, response: nil)
+                interaction.donate { error in
+                    if let error = error {
+                        print("Error: \(error)")
+                    }
+                    else {
+                        print("Successfully donated \(intent)")
+                    }
+                }
             }
         }
     }
@@ -255,6 +272,20 @@ extension MainViewController {
     @IBAction func tracingOffButtonTapped(_ sender: ActionButton) {
         let haptics = UINotificationFeedbackGenerator()
         haptics.notificationOccurred(.success)
+
+        if #available(iOS 12, *) {
+            let intent = StopTracingIntent()
+            
+            let interaction = INInteraction(intent: intent, response: nil)
+            interaction.donate { error in
+                if let error = error {
+                    print("Error: \(error)")
+                }
+                else {
+                    print("Successfully donated \(intent)")
+                }
+            }
+        }
 
         ContactTraceManager.shared.stopTracing()
     }
