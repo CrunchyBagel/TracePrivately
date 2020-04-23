@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		39BD8849244C6D3D00EB8B6C /* ExposedView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 39BD8848244C6D3D00EB8B6C /* ExposedView.storyboard */; };
+		6621056D245251B10011EB42 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6621056C245251B10011EB42 /* main.swift */; };
 		66437F74244A73F0000B8C6C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 66437F73244A73F0000B8C6C /* Localizable.strings */; };
 		66437F76244A86AE000B8C6C /* Disease.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F75244A86AE000B8C6C /* Disease.swift */; };
 		66437F9E244A9A02000B8C6C /* TracePrivately.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */; };
@@ -33,8 +34,22 @@
 		66F818832448FE020043AC2D /* CTMockFramework.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F818822448FE020043AC2D /* CTMockFramework.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		66210568245251B10011EB42 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		39BD8848244C6D3D00EB8B6C /* ExposedView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ExposedView.storyboard; sourceTree = "<group>"; };
+		6621056A245251B10011EB42 /* OneSkyDownload */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OneSkyDownload; sourceTree = BUILT_PRODUCTS_DIR; };
+		6621056C245251B10011EB42 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		66437F73244A73F0000B8C6C /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		66437F75244A86AE000B8C6C /* Disease.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disease.swift; sourceTree = "<group>"; };
 		66437F9D244A9A02000B8C6C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -65,6 +80,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		66210567245251B10011EB42 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		66F818642448FD5C0043AC2D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -86,6 +108,14 @@
 				66EAEB63244DC5E40044FF70 /* SubmittedInfection.storyboard */,
 			);
 			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		6621056B245251B10011EB42 /* OneSkyDownload */ = {
+			isa = PBXGroup;
+			children = (
+				6621056C245251B10011EB42 /* main.swift */,
+			);
+			path = OneSkyDownload;
 			sourceTree = "<group>";
 		};
 		66437F77244A8A4C000B8C6C /* Classes */ = {
@@ -121,6 +151,7 @@
 			isa = PBXGroup;
 			children = (
 				66F818692448FD5C0043AC2D /* TracePrivately */,
+				6621056B245251B10011EB42 /* OneSkyDownload */,
 				66F818682448FD5C0043AC2D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -129,6 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				66F818672448FD5C0043AC2D /* TracePrivately.app */,
+				6621056A245251B10011EB42 /* OneSkyDownload */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -150,6 +182,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		66210569245251B10011EB42 /* OneSkyDownload */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 66210570245251B10011EB42 /* Build configuration list for PBXNativeTarget "OneSkyDownload" */;
+			buildPhases = (
+				66210566245251B10011EB42 /* Sources */,
+				66210567245251B10011EB42 /* Frameworks */,
+				66210568245251B10011EB42 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OneSkyDownload;
+			productName = OneSkyDownload;
+			productReference = 6621056A245251B10011EB42 /* OneSkyDownload */;
+			productType = "com.apple.product-type.tool";
+		};
 		66F818662448FD5C0043AC2D /* TracePrivately */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 66F8187B2448FD5E0043AC2D /* Build configuration list for PBXNativeTarget "TracePrivately" */;
@@ -177,6 +226,9 @@
 				LastUpgradeCheck = 1140;
 				ORGANIZATIONNAME = "Quentin Zervaas";
 				TargetAttributes = {
+					66210569245251B10011EB42 = {
+						CreatedOnToolsVersion = 11.4.1;
+					};
 					66F818662448FD5C0043AC2D = {
 						CreatedOnToolsVersion = 11.4.1;
 						LastSwiftMigration = 1140;
@@ -197,6 +249,7 @@
 			projectRoot = "";
 			targets = (
 				66F818662448FD5C0043AC2D /* TracePrivately */,
+				66210569245251B10011EB42 /* OneSkyDownload */,
 			);
 		};
 /* End PBXProject section */
@@ -221,6 +274,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		66210566245251B10011EB42 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6621056D245251B10011EB42 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		66F818632448FD5C0043AC2D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -265,6 +326,32 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		6621056E245251B10011EB42 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CHZS3BHM57;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		6621056F245251B10011EB42 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CHZS3BHM57;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		66F818792448FD5E0043AC2D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -423,6 +510,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		66210570245251B10011EB42 /* Build configuration list for PBXNativeTarget "OneSkyDownload" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6621056E245251B10011EB42 /* Debug */,
+				6621056F245251B10011EB42 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		66F818622448FD5C0043AC2D /* Build configuration list for PBXProject "TracePrivately" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
