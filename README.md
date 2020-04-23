@@ -50,6 +50,10 @@ https://traceprivately.oneskyapp.com/collaboration/project?id=170066
 
 ![Exposed Details Window](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/exposed.png?raw=true)
 
+This screenshot shows how you can use the start/stop tracing shortcuts with automations. User is still manually prompted to start tracing, but this will initiate it automatically when you leave home:
+
+![Siri Shortcuts](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/shortcuts.png?raw=true)
+
 ## Other
 
 * Please submit suggestions and pull requests so this can function as best as possible.
