@@ -4,22 +4,12 @@
 */
 
 "app.title" = "Trace Privately";
-"about.title" = "About";
-"about.message" = "This is an example implementation of contact tracing using Apple's newly-announced framework.\n\nIt is not fully functional and therefore should not yet be used for∂real-world applications.";
 
 "tracing.title" = "Contact Tracing";
 /* parameter is localized disease name */
 "tracing.message" = "Securely exchange anonymous information when you encounter other people, and automatically check for exposure to %@.";
 "tracing.start.title" = "Start Tracing";
-"tracing.start.message" = "Click Start to enable tracing on your device.\n\nIt is achieved in a private and secure way, with minimal impact on your battery life.";
-"tracing.start.button.title" = "Start";
-"tracing.start.error" = "Unable to start tracing at this time";
-"tracing.stop.message" = "Are you sure? It is extremely helpful to society if tracing is enabled whenever you're around other people.";
-"tracing.stop.button.title" = "Stop";
 "tracing.stop.title" = "Stop Tracing";
-"tracing.available" = "Available";
-"tracing.not_available" = "Not available";
-"tracing.state.title" = "Tracing State";
 
 "disease.covid19.title" = "COVID-19";
 
@@ -28,9 +18,6 @@
 /* parameter is localized disease name */
 "infection.report.title" = "I Have %@";
 "infection.report.message" = "If you have been diagnosed as having %@, submit your diagnosis here.\n\nYou will be prompted for confirmation.";
-"infection.report.confirm.title" = "Are You Sure?";
-"infection.report.confirm.message" = "Click OK to create your anonymous profile.\n\nYou will be prompted again before it is submitted to your jurisdiction's anonymous tracing database.";
-"infection.report.gathering_data.title" = "Creating Your Profile…";
 "infection.report.gathering_data.error" = "Unable to create your anonymous profile.";
 "infection.report.gathering.empty.title" = "No Information";
 "infection.report.gathering.empty.message" = "Unable to find your tracing information. Perhaps you haven't had tracing enabled?";
@@ -39,25 +26,15 @@
 "infection.report.submit.error" = "Unable to submit your information.";
 "infection.report.submitting.title" = "One Moment…";
 "infection.report.submitting.message" = "Submitting your anonymous information.";
-"infection.report.submitted.title" = "Thank You";
-"infection.report.submitted.message" = "Your information has been submitted.";
 
-"infection.infected.title" = "Infection Recorded";
 "infection.pending.title" = "Pending Confirmation";
-"infection.infected.message" = "You have submitted your infection. Get well quickly.";
 
-"exposure.title" = "Exposure";
-"exposure.turn_on.message" = "Automatically check if you've been exposed and notify you if exposure is detected.";
-"exposure.turn_on.title" = "Turn On Exposure Checking";
-"exposure.turn_off.title" = "Turn Off Exposure Checking";
-"exposure.none.title" = "Great News";
 /* parameter is localized disease name */
 "exposure.none.message" = "No contact detected with a %@ infection!\n\nStay safe and wash your hands.";
 "exposure.exposed.banner.title" = "You May Have Been Exposed";
 "exposure.exposed.title" = "Exposures";
 /* parameter is localized disease name */
 "exposure.exposed.message" = "We believe you may have come in contact with %@.";
-"exposure.times.title" = "Exposure Times";
 /* parameter is a localized duration */
 "exposure.times.duration" = "Duration: %@";
 
@@ -65,8 +42,6 @@
 "exposure.next_steps.message" = "Follow the steps as outlined by your authorities.";
 
 "unknown" = "Unknown";
-"on" = "On";
-"off" = "Off";
 "submit" = "Submit";
 "error" = "Error";
 
