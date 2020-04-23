@@ -12,6 +12,7 @@
 		66437F76244A86AE000B8C6C /* Disease.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F75244A86AE000B8C6C /* Disease.swift */; };
 		66437F9E244A9A02000B8C6C /* TracePrivately.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */; };
 		66437FA0244A9B2C000B8C6C /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9F244A9B2C000B8C6C /* DataManager.swift */; };
+		6673EED42451785300244287 /* SubmitConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6673EED32451785300244287 /* SubmitConfig.plist */; };
 		66848C2D244D5F8800497D2A /* AsyncBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66848C2C244D5F8800497D2A /* AsyncBlockOperation.swift */; };
 		668CE843244D01F50065960A /* ContactTraceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668CE842244D01F50065960A /* ContactTraceManager.swift */; };
 		6698C57024492BC500F046E4 /* KeyServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6698C56F24492BC500F046E4 /* KeyServer.swift */; };
@@ -39,6 +40,7 @@
 		66437F75244A86AE000B8C6C /* Disease.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disease.swift; sourceTree = "<group>"; };
 		66437F9D244A9A02000B8C6C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		66437F9F244A9B2C000B8C6C /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		6673EED32451785300244287 /* SubmitConfig.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SubmitConfig.plist; sourceTree = "<group>"; };
 		66848C2C244D5F8800497D2A /* AsyncBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncBlockOperation.swift; sourceTree = "<group>"; };
 		668CE842244D01F50065960A /* ContactTraceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactTraceManager.swift; sourceTree = "<group>"; };
 		668D4B22244D705100D90C26 /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 				66F818782448FD5E0043AC2D /* Info.plist */,
 				66437F73244A73F0000B8C6C /* Localizable.strings */,
 				6698C573244BFAB600F046E4 /* KeyServer.plist */,
+				6673EED32451785300244287 /* SubmitConfig.plist */,
 			);
 			path = TracePrivately;
 			sourceTree = "<group>";
@@ -214,6 +217,7 @@
 				66437F74244A73F0000B8C6C /* Localizable.strings in Resources */,
 				66F818742448FD5E0043AC2D /* Assets.xcassets in Resources */,
 				66F818722448FD5C0043AC2D /* Main.storyboard in Resources */,
+				6673EED42451785300244287 /* SubmitConfig.plist in Resources */,
 				66CB95C1244FBBC800D775B6 /* Privacy.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
