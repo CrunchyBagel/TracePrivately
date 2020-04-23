@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Trace Privately</string>
+    <string name="start_tracing">Start Tracing</string>
+    <string name="stop_tracing">Stop Tracing</string>
+</resources>
