@@ -61,5 +61,5 @@
 "notification.exposure_detected.single.body" = "You were potentially exposed: %1$@ for %2$@";
 "notification.exposure_detected.multiple.body" = "We have detected that you may have been exposed multiple times.";
 
-"privacy.title" = "Privacy";
+"privacy.title" = "Privacy Information";
 

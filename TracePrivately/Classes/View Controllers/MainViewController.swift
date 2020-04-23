@@ -52,7 +52,10 @@ class MainViewController: UIViewController {
         self.tracingOnButton.setTitle(NSLocalizedString("tracing.start.title", comment: ""), for: .normal)
         self.tracingOffButton.setTitle(NSLocalizedString("tracing.stop.title", comment: ""), for: .normal)
         self.tracingPrivacyButton.setTitle(NSLocalizedString("privacy.title", comment: ""), for: .normal)
-        
+
+        self.exposedButton.accessory = .disclosure
+        self.infectedButton.accessory = .disclosure
+        self.pendingButton.accessory = .disclosure
         
         let submitTitle = String(format: NSLocalizedString("infection.report.title", comment: ""), Disease.current.localizedTitle)
         

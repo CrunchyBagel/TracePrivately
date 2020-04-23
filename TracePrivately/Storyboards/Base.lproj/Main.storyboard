@@ -79,19 +79,19 @@
                                                 <rect key="frame" x="10" y="10" width="354" height="213"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contact Tracing" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gU9-Lr-mWA">
-                                                        <rect key="frame" x="0.0" y="0.0" width="354" height="19"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="354" height="17"/>
                                                         <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description about tracing." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v0h-tF-FM9">
-                                                        <rect key="frame" x="0.0" y="29" width="354" height="6"/>
+                                                        <rect key="frame" x="0.0" y="27" width="354" height="0.0"/>
                                                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="xXS-a0-4QH">
-                                                        <rect key="frame" x="0.0" y="45" width="354" height="168"/>
+                                                        <rect key="frame" x="0.0" y="37" width="354" height="176"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ic8-uE-wq7" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
                                                                 <rect key="frame" x="0.0" y="0.0" width="354" height="52"/>
@@ -116,10 +116,10 @@
                                                                 </connections>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a4j-xX-lLB" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="124" width="354" height="44"/>
+                                                                <rect key="frame" x="0.0" y="124" width="354" height="52"/>
                                                                 <color key="backgroundColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="height" constant="44" id="uPU-Kk-8AH"/>
+                                                                    <constraint firstAttribute="height" constant="52" id="uPU-Kk-8AH"/>
                                                                 </constraints>
                                                                 <state key="normal" title="Privacy"/>
                                                                 <connections>
