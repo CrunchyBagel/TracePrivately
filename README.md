@@ -16,6 +16,15 @@ This app will be evolving quickly as I'm trying to publish new functionality as 
 * Work in a localized manner so it can be used in any language or jurisdiction
 * Create a functioning server prototype that can be used as a basis for more robust solutions that fit into governments' existing architecture.
 
+## How Can You Help?
+
+There are a number of ways you can help. You can:
+
+* We need non-English translations: https://github.com/CrunchyBagel/TracePrivately/issues/30
+* We need an Android implementation
+* We need testing (download, install, try the app - submit any issues you find)
+* Suggestions, ideas, thoughts about any aspect of the app.
+
 ## Instructions
 
 1. Set up a key server using the sample code in `KeyServer`
