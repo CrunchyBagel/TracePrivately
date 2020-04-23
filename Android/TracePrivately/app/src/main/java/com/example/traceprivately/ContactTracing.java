@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.traceprivately;
 
 import android.app.PendingIntent;
 import android.content.Intent;
