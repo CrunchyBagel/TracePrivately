@@ -12,8 +12,18 @@ class SubmitInfectionViewController: UIViewController {
     
     @IBOutlet var infoLabel: UILabel!
     
+    let config: SubmitInfectionConfig = .empty
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let url = Bundle.main.url(forResource: "SubmitConfig", withExtension: "plist") {
+            if let config = SubmitInfectionConfig(plistUrl: url) {
+                self.config = config
+            }
+        }
+        
+        // TODO: Make use of config in this form
         
         self.title = String(format: NSLocalizedString("infection.report.submit.title", comment: ""), Disease.current.localizedTitle)
         
