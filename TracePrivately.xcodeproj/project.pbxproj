@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		39BD8849244C6D3D00EB8B6C /* ExposedView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 39BD8848244C6D3D00EB8B6C /* ExposedView.storyboard */; };
-		66437F74244A73F0000B8C6C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 66437F73244A73F0000B8C6C /* Localizable.strings */; };
 		66437F76244A86AE000B8C6C /* Disease.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F75244A86AE000B8C6C /* Disease.swift */; };
 		66437F9E244A9A02000B8C6C /* TracePrivately.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */; };
 		66437FA0244A9B2C000B8C6C /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9F244A9B2C000B8C6C /* DataManager.swift */; };
@@ -31,11 +30,11 @@
 		66F818742448FD5E0043AC2D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66F818732448FD5E0043AC2D /* Assets.xcassets */; };
 		66F818772448FD5E0043AC2D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66F818752448FD5E0043AC2D /* LaunchScreen.storyboard */; };
 		66F818832448FE020043AC2D /* CTMockFramework.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F818822448FE020043AC2D /* CTMockFramework.swift */; };
+		FC16DE2224510BC500C0BD8D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FC16DE2424510BC500C0BD8D /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		39BD8848244C6D3D00EB8B6C /* ExposedView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ExposedView.storyboard; sourceTree = "<group>"; };
-		66437F73244A73F0000B8C6C /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		66437F75244A86AE000B8C6C /* Disease.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disease.swift; sourceTree = "<group>"; };
 		66437F9D244A9A02000B8C6C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		66437F9F244A9B2C000B8C6C /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
@@ -62,6 +61,8 @@
 		66F818762448FD5E0043AC2D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		66F818782448FD5E0043AC2D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		66F818822448FE020043AC2D /* CTMockFramework.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTMockFramework.swift; sourceTree = "<group>"; };
+		FC16DE2324510BC500C0BD8D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		FC16DE2524510C1E00C0BD8D /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,7 +142,7 @@
 				66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */,
 				66F818752448FD5E0043AC2D /* LaunchScreen.storyboard */,
 				66F818782448FD5E0043AC2D /* Info.plist */,
-				66437F73244A73F0000B8C6C /* Localizable.strings */,
+				FC16DE2424510BC500C0BD8D /* Localizable.strings */,
 				6698C573244BFAB600F046E4 /* KeyServer.plist */,
 			);
 			path = TracePrivately;
@@ -190,6 +191,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"pt-BR",
 			);
 			mainGroup = 66F8185E2448FD5C0043AC2D;
 			productRefGroup = 66F818682448FD5C0043AC2D /* Products */;
@@ -211,7 +213,7 @@
 				39BD8849244C6D3D00EB8B6C /* ExposedView.storyboard in Resources */,
 				66EAEB60244DA70E0044FF70 /* SubmitInfection.storyboard in Resources */,
 				66EAEB64244DC5E40044FF70 /* SubmittedInfection.storyboard in Resources */,
-				66437F74244A73F0000B8C6C /* Localizable.strings in Resources */,
+				FC16DE2224510BC500C0BD8D /* Localizable.strings in Resources */,
 				66F818742448FD5E0043AC2D /* Assets.xcassets in Resources */,
 				66F818722448FD5C0043AC2D /* Main.storyboard in Resources */,
 				66CB95C1244FBBC800D775B6 /* Privacy.storyboard in Resources */,
@@ -262,6 +264,15 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
+		FC16DE2424510BC500C0BD8D /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FC16DE2324510BC500C0BD8D /* en */,
+				FC16DE2524510C1E00C0BD8D /* pt-BR */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -269,6 +280,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -329,6 +341,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -385,7 +398,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CHZS3BHM57;
+				DEVELOPMENT_TEAM = 29YKME3999;
 				INFOPLIST_FILE = TracePrivately/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -406,7 +419,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CHZS3BHM57;
+				DEVELOPMENT_TEAM = 29YKME3999;
 				INFOPLIST_FILE = TracePrivately/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
