@@ -21,8 +21,8 @@ This app will be evolving quickly as I'm trying to publish new functionality as 
 There are a number of ways you can help. You can:
 
 * We need non-English translations: https://github.com/CrunchyBagel/TracePrivately/issues/30
-* We need an Android implementation
-* We need testing (download, install, try the app - submit any issues you find)
+* We need an Android implementation: https://github.com/CrunchyBagel/TracePrivately/issues/32
+* We need testing (download, install, try the app - submit any issues you find). Pull requests with unit tests also welcome.
 * Suggestions, ideas, thoughts about any aspect of the app.
 
 ## Instructions
