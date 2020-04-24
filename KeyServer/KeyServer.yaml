@@ -58,7 +58,9 @@ paths:
                                     description: Base 64 encoded binary data representing a single key
                             deleted_keys:
                                 type: array
-                                description: A list of keys that have subsequently been marked as not infected. Client should remove them from their cache.
+                                description: |
+                                    A list of keys that have subsequently been marked as not infected. Client should remove them from their cache.
+                                    These keys should also honor the "since" parameter and return deleted keys based on when their status was changed to deleted.
                                 items:
                                     type: string
                                     example: "Base 64 Encoded String"
