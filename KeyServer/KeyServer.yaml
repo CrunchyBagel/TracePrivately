@@ -84,10 +84,14 @@ paths:
                           keys:
                               type: array
                               description: List of infected keys
+                              minimum: 1
                               items:
                                   type: string
                                   example: "Base 64 Encoded String"
                                   description: Base 64 encoded binary data representing a single key
+                          identifier:
+                              type: string
+                              description: An optional unique identifier from a previous submission so newly-submitted keys can be appended to an existing submission.
             responses:
                 200:
                     description: A list of infected keys since the specified date.
@@ -101,4 +105,5 @@ paths:
                             identifier:
                                 type: string
                                 example: "SOME_UNIQUE_IDENTIFIER"
-                                description: An identifier specific to this report, so the client can append new keys to the report
+                                description: An identifier specific to this report, so the client can append new keys to the newly-created submission.
+
