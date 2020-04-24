@@ -58,6 +58,8 @@ extension SubmitInfectionViewController {
                 
                 return
             }
+            
+            // TODO: This isn't a great strategy. We still want the report submitted so the user can continue to submit their daily keys
 
             guard keys.count > 0 else {
                 let alert = UIAlertController(title: NSLocalizedString("infection.report.gathering.empty.title", comment: ""), message: NSLocalizedString("infection.report.gathering.empty.message", comment: ""), preferredStyle: .alert)
