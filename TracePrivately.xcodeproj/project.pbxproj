@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		39BD8849244C6D3D00EB8B6C /* ExposedView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 39BD8848244C6D3D00EB8B6C /* ExposedView.storyboard */; };
+		6614BB052452B9D900885F23 /* ExposureDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6614BB042452B9D900885F23 /* ExposureDetailsViewController.swift */; };
 		6621056D245251B10011EB42 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6621056C245251B10011EB42 /* main.swift */; };
 		6621057124525FC90011EB42 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6621057324525FC90011EB42 /* Localizable.strings */; };
 		66437F76244A86AE000B8C6C /* Disease.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F75244A86AE000B8C6C /* Disease.swift */; };
@@ -48,6 +49,7 @@
 
 /* Begin PBXFileReference section */
 		39BD8848244C6D3D00EB8B6C /* ExposedView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ExposedView.storyboard; sourceTree = "<group>"; };
+		6614BB042452B9D900885F23 /* ExposureDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureDetailsViewController.swift; sourceTree = "<group>"; };
 		6621056A245251B10011EB42 /* OneSkyDownload */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OneSkyDownload; sourceTree = BUILT_PRODUCTS_DIR; };
 		6621056C245251B10011EB42 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		6621057224525FC90011EB42 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 			children = (
 				66CB95BE244FB5CD00D775B6 /* MainViewController.swift */,
 				6698C571244936AF00F046E4 /* ExposedViewController.swift */,
+				6614BB042452B9D900885F23 /* ExposureDetailsViewController.swift */,
 				66EAEB61244DA72E0044FF70 /* SubmitInfectionViewController.swift */,
 				66EAEB65244DC62A0044FF70 /* SubmittedInfectionViewController.swift */,
 				66CB95C2244FBBF300D775B6 /* PrivacyViewController.swift */,
@@ -310,6 +313,7 @@
 				66EAEB66244DC62A0044FF70 /* SubmittedInfectionViewController.swift in Sources */,
 				6698C572244936AF00F046E4 /* ExposedViewController.swift in Sources */,
 				66F818832448FE020043AC2D /* CTMockFramework.swift in Sources */,
+				6614BB052452B9D900885F23 /* ExposureDetailsViewController.swift in Sources */,
 				668CE843244D01F50065960A /* ContactTraceManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="FnE-Qt-Q1V">
-    <device id="retina6_1" orientation="portrait" appearance="dark"/>
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
@@ -42,11 +42,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="qDp-7Q-TUt">
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="qDp-7Q-TUt">
                                 <rect key="frame" x="20" y="160" width="374" height="702"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sBE-i1-EpT" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="374" height="52"/>
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sBE-i1-EpT" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="-52" width="374" height="52"/>
                                         <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="52" id="nNQ-Kr-e6x"/>
@@ -56,16 +56,16 @@
                                             <action selector="infectedButtonTapped:" destination="cgw-lb-INg" eventType="touchUpInside" id="VBM-Dl-jSk"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="im4-bJ-sBK" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="72" width="374" height="52"/>
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="im4-bJ-sBK" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="-52" width="374" height="52"/>
                                         <color key="backgroundColor" systemColor="systemPurpleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="Button"/>
                                         <connections>
                                             <action selector="pendingButtonTapped:" destination="cgw-lb-INg" eventType="touchUpInside" id="f0T-CL-sRR"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nmB-3u-FTt" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="144" width="374" height="52"/>
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nmB-3u-FTt" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="-52" width="374" height="52"/>
                                         <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="Button"/>
                                         <connections>
@@ -73,25 +73,30 @@
                                         </connections>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7hr-cg-uXa">
-                                        <rect key="frame" x="0.0" y="216" width="374" height="233"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="271"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="rIa-r2-7I4">
-                                                <rect key="frame" x="10" y="10" width="354" height="213"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="rIa-r2-7I4">
+                                                <rect key="frame" x="10" y="10" width="354" height="251"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contact Tracing" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gU9-Lr-mWA">
-                                                        <rect key="frame" x="0.0" y="0.0" width="354" height="17"/>
-                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description about tracing." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v0h-tF-FM9">
-                                                        <rect key="frame" x="0.0" y="27" width="354" height="0.0"/>
-                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="4ho-ke-kTc">
+                                                        <rect key="frame" x="0.0" y="0.0" width="354" height="51"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contact Tracing" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gU9-Lr-mWA">
+                                                                <rect key="frame" x="0.0" y="0.0" width="354" height="20.5"/>
+                                                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description about tracing." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v0h-tF-FM9">
+                                                                <rect key="frame" x="0.0" y="30.5" width="354" height="20.5"/>
+                                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="xXS-a0-4QH">
-                                                        <rect key="frame" x="0.0" y="37" width="354" height="176"/>
+                                                        <rect key="frame" x="0.0" y="75" width="354" height="176"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ic8-uE-wq7" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
                                                                 <rect key="frame" x="0.0" y="0.0" width="354" height="52"/>
@@ -139,50 +144,60 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YSN-Jg-zw2">
-                                        <rect key="frame" x="0.0" y="469" width="374" height="233"/>
+                                        <rect key="frame" x="0.0" y="291" width="374" height="411"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="xsG-g8-bmI">
-                                                <rect key="frame" x="10" y="10" width="354" height="213"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="xsG-g8-bmI">
+                                                <rect key="frame" x="10" y="10" width="354" height="391"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Submit Infection" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V0k-qx-Pjy">
-                                                        <rect key="frame" x="0.0" y="0.0" width="354" height="21.5"/>
-                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cmm-Ia-Gio">
-                                                        <rect key="frame" x="0.0" y="31.5" width="354" height="57.5"/>
-                                                        <string key="text">If you have ben diagnosed as having COVID-19, submit your diasnosis here.
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="9rW-Yb-gTr">
+                                                        <rect key="frame" x="0.0" y="0.0" width="354" height="117"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Submit Infection" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V0k-qx-Pjy">
+                                                                <rect key="frame" x="0.0" y="0.0" width="354" height="20.5"/>
+                                                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cmm-Ia-Gio">
+                                                                <rect key="frame" x="0.0" y="30.5" width="354" height="86.5"/>
+                                                                <string key="text">If you have ben diagnosed as having COVID-19, submit your diasnosis here.
 
 You will be prompted for confirmation.</string>
-                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yfi-2O-JFT" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="99" width="354" height="52"/>
-                                                        <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="52" id="D8g-6r-7Ur"/>
-                                                        </constraints>
-                                                        <state key="normal" title="Button"/>
-                                                        <connections>
-                                                            <action selector="submitInfectionButtonTapped:" destination="cgw-lb-INg" eventType="touchUpInside" id="x5k-D9-U5j"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tko-23-weP" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="161" width="354" height="52"/>
-                                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="52" id="MQE-vf-Bso"/>
-                                                        </constraints>
-                                                        <state key="normal" title="Button">
-                                                            <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="submitInfectionButtonTapped:" destination="cgw-lb-INg" eventType="touchUpInside" id="ouv-tQ-hHQ"/>
-                                                        </connections>
-                                                    </button>
+                                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="QNQ-zR-Cds">
+                                                        <rect key="frame" x="0.0" y="277" width="354" height="114"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yfi-2O-JFT" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="354" height="52"/>
+                                                                <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="52" id="D8g-6r-7Ur"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <connections>
+                                                                    <action selector="submitInfectionButtonTapped:" destination="cgw-lb-INg" eventType="touchUpInside" id="x5k-D9-U5j"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tko-23-weP" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="62" width="354" height="52"/>
+                                                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="52" id="MQE-vf-Bso"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button">
+                                                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                </state>
+                                                                <connections>
+                                                                    <action selector="submitInfectionButtonTapped:" destination="cgw-lb-INg" eventType="touchUpInside" id="ouv-tQ-hHQ"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                    </stackView>
                                                 </subviews>
                                             </stackView>
                                         </subviews>
@@ -197,7 +212,6 @@ You will be prompted for confirmation.</string>
                                 <constraints>
                                     <constraint firstItem="sBE-i1-EpT" firstAttribute="height" secondItem="nmB-3u-FTt" secondAttribute="height" id="XvV-kH-gIQ"/>
                                     <constraint firstItem="sBE-i1-EpT" firstAttribute="height" secondItem="im4-bJ-sBK" secondAttribute="height" id="lpd-TN-oJX"/>
-                                    <constraint firstItem="7hr-cg-uXa" firstAttribute="height" secondItem="YSN-Jg-zw2" secondAttribute="height" id="vmH-BP-j4d"/>
                                 </constraints>
                             </stackView>
                         </subviews>
