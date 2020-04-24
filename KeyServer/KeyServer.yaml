@@ -27,7 +27,11 @@ paths:
         post:
             operationId: "keyserver_auth"
             summary: Generate an authentication token for subsequent API requests
-            description: Included the old token as authorization in this request to invalidate it
+            description: |
+                Server should create a token that expires periodically (e.g. after X number. of days).
+                If one of the other API keys doesn't have a valid key, a 401 is returned and the client
+                should reauthenticate using this endpoint. Client may include the old token as authorization
+                in this request to invalidate it.
             security:
                 -  BearerAuth: []
             produces:
