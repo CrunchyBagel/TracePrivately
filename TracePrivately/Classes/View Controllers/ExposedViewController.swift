@@ -158,6 +158,8 @@ extension ExposedViewController {
                 else {
                     cell.setBackgroundColor(color: .systemRed)
                 }
+                
+                cell.accessoryImageView.image = ActionButton.Accessory.disclosure.image
             }
             
             return cell
@@ -297,6 +299,7 @@ class ExposedNextStepsCell: ButtonStyleCell {
 class ExposedContactCell: ButtonStyleCell {
     @IBOutlet var timeLabel: UILabel!
     @IBOutlet var durationLabel: UILabel!
+    @IBOutlet var accessoryImageView: UIImageView!
     
     override func layoutSubviews() {
         super.layoutSubviews()

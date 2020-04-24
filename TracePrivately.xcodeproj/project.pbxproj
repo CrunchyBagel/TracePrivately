@@ -50,6 +50,7 @@
 /* Begin PBXFileReference section */
 		39BD8848244C6D3D00EB8B6C /* ExposedView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ExposedView.storyboard; sourceTree = "<group>"; };
 		6614BB042452B9D900885F23 /* ExposureDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureDetailsViewController.swift; sourceTree = "<group>"; };
+		661B6C6A2452CE2500CC1DC6 /* Model 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 4.xcdatamodel"; sourceTree = "<group>"; };
 		6621056A245251B10011EB42 /* OneSkyDownload */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OneSkyDownload; sourceTree = BUILT_PRODUCTS_DIR; };
 		6621056C245251B10011EB42 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		6621057224525FC90011EB42 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -572,11 +573,12 @@
 		66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				661B6C6A2452CE2500CC1DC6 /* Model 4.xcdatamodel */,
 				66CB95C6244FCC9A00D775B6 /* Model 3.xcdatamodel */,
 				668D4B22244D705100D90C26 /* Model 2.xcdatamodel */,
 				66437F9D244A9A02000B8C6C /* Model.xcdatamodel */,
 			);
-			currentVersion = 66CB95C6244FCC9A00D775B6 /* Model 3.xcdatamodel */;
+			currentVersion = 661B6C6A2452CE2500CC1DC6 /* Model 4.xcdatamodel */;
 			path = TracePrivately.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
