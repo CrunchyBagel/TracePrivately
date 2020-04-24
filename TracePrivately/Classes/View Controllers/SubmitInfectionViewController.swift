@@ -106,12 +106,13 @@ extension SubmitInfectionViewController {
         
             NotificationCenter.default.post(name: DataManager.infectionsUpdatedNotification, object: nil)
 
-            KeyServer.shared.submitInfectedKeys(keys: keys) { success, error in
+            KeyServer.shared.submitInfectedKeys(keys: keys, previousSubmissionId: nil) { success, submissionId, error in
                 
                 context.perform {
                     if success {
                         // TODO: Check against the local database to see if it should be submittedApproved or submittedUnapproved.
                         entity.status = DataManager.InfectionStatus.submittedUnapproved.rawValue
+                        entity.remoteIdentifier = submissionId
                         
                         for key in keys {
                             let keyEntity = LocalInfectionKeyEntity(context: context)

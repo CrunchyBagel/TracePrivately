@@ -137,6 +137,7 @@
                                 </collectionViewCellContentView>
                                 <size key="customSize" width="300" height="72"/>
                                 <connections>
+                                    <outlet property="accessoryImageView" destination="ZrG-Id-Me9" id="tKZ-UE-Bh4"/>
                                     <outlet property="durationLabel" destination="a6D-g2-CtN" id="LqQ-WJ-OcJ"/>
                                     <outlet property="timeLabel" destination="xmE-hx-kk3" id="4YA-jq-Lel"/>
                                 </connections>

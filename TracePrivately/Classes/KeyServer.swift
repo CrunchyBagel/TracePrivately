@@ -95,12 +95,12 @@ class KeyServer {
      
         Refer to `KeyServer.yaml` for expected request and response format.
      */
-    func submitInfectedKeys(keys: [CTDailyTracingKey], completion: @escaping (Bool, Swift.Error?) -> Void) {
+    func submitInfectedKeys(keys: [CTDailyTracingKey], previousSubmissionId: String?, completion: @escaping (Bool, String?, Swift.Error?) -> Void) {
         
         let endPoint: RequestEndpoint = .submitInfectedKeys
 
         guard let config = self.configDictionary, let url = endPoint.url(config: config) else {
-            completion(false, Error.invalidConfig)
+            completion(false, nil, Error.invalidConfig)
             return
         }
         
@@ -114,9 +114,14 @@ class KeyServer {
 
         let encodedKeys: [String] = keys.map { $0.keyData.base64EncodedString() }
         
-        let requestData: [String: Any] = [
+        var requestData: [String: Any] = [
             "keys": encodedKeys
         ]
+        
+        // TODO: Ensure this is secure and that identifiers can't be hijacked into false submissions
+        if let identifier = previousSubmissionId {
+            requestData["identifier"] = identifier
+        }
 
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: requestData, options: [])
@@ -128,12 +133,12 @@ class KeyServer {
             
             let task = self.urlSession.dataTask(with: request) { data, response, error in
                 if let error = error {
-                    completion(false, error)
+                    completion(false, nil, error)
                     return
                 }
                 
                 guard let data = data else {
-                    completion(false, Error.responseDataNotReceived)
+                    completion(false, nil, Error.responseDataNotReceived)
                     return
                 }
 
@@ -142,26 +147,26 @@ class KeyServer {
                         print("Response: \(str)")
                     }
                     
-                    completion(false, Error.jsonDecodingError)
+                    completion(false, nil, Error.jsonDecodingError)
                     return
                 }
                 
                 guard let status = json["status"] as? String, status == "OK" else {
-                    completion(false, Error.okStatusNotReceived)
+                    completion(false, nil, Error.okStatusNotReceived)
                     return
                 }
                 
                 // TODO: Make use of this value so new keys can be appended to this original submission
                 let submissionIdentifier = json["identifier"] as? String
 
-                completion(true, nil)
+                completion(true, submissionIdentifier, nil)
             }
             
             task.priority = URLSessionTask.highPriority
             task.resume()
         }
         catch {
-            completion(false, error)
+            completion(false, nil, error)
         }
     }
     
