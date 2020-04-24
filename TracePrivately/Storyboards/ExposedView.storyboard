@@ -120,8 +120,8 @@
                                                         </label>
                                                     </subviews>
                                                 </stackView>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="ZrG-Id-Me9">
-                                                    <rect key="frame" x="247.5" y="28" width="12.5" height="16.5"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZrG-Id-Me9">
+                                                    <rect key="frame" x="210" y="11" width="50" height="50"/>
                                                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </imageView>
                                             </subviews>
@@ -189,7 +189,4 @@
             <point key="canvasLocation" x="3778" y="-224"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="chevron.right" catalog="system" width="96" height="128"/>
-    </resources>
 </document>

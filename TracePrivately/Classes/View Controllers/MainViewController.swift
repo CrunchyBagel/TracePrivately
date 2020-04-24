@@ -46,7 +46,7 @@ class MainViewController: UIViewController {
 
         self.title = NSLocalizedString("app.title", comment: "")
         
-        self.exposedButton.setTitle(NSLocalizedString("exposure.exposed.banner.title", comment: ""), for: .normal)
+        self.exposedButton.setTitle(String(format: NSLocalizedString("exposure.exposed.banner.title", comment: ""), Disease.current.localizedTitle), for: .normal)
         self.pendingButton.setTitle(NSLocalizedString("infection.pending.title", comment: ""), for: .normal)
         self.infectedButton.setTitle(String(format: NSLocalizedString("infection.infected.title", comment: ""), Disease.current.localizedTitle), for: .normal)
         self.tracingOnButton.setTitle(NSLocalizedString("tracing.start.title", comment: ""), for: .normal)

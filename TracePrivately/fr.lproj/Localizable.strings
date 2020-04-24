@@ -26,7 +26,6 @@
 "infection.report.submit.error" = "Impossible de soumettre vos informations.";
 "infection.report.submitting.title" = "Un moment s'il vous plait...";
 "infection.report.submitting.message" = "Soumission anonyme de vos informations.";
-
 "infection.pending.title" = "En attente de confirmation";
 
 /* parameter is localized disease name */

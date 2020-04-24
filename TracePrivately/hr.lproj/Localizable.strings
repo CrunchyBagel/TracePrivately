@@ -26,7 +26,6 @@
 "infection.report.submit.error" = "Slanje vaših informacija nije uspjelo";
 "infection.report.submitting.title" = "Trenutak...";
 "infection.report.submitting.message" = "Vaše anonimne informacije se šalju";
-
 "infection.pending.title" = "Čekanje potvrde";
 
 /* parameter is localized disease name */

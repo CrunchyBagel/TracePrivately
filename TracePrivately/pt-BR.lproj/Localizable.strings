@@ -1,3 +1,6 @@
+/* parameter is localized disease name */
+"infection.infected.title" = "Você tem %@";
+"exposure.exposed.details.title" = "Exposição";
 /* 
   Localizable.strings
   TracePrivately
@@ -26,7 +29,6 @@
 "infection.report.submit.error" = "Não foi possível submeter sua informação.";
 "infection.report.submitting.title" = "Aguarde...";
 "infection.report.submitting.message" = "Enviando sua informação anônima.";
-
 "infection.pending.title" = "Confirmação pendente";
 
 /* parameter is localized disease name */
@@ -38,6 +40,7 @@
 /* parameter is a localized duration */
 "exposure.times.duration" = "Duração: %@";
 
+"exposure.next_steps.title" = "Próximos passos";
 "exposure.next_steps.message" = "Siga as instruções definidas pelas autoridades.";
 
 "unknown" = "Desconhecido";
@@ -60,5 +63,5 @@
 "notification.exposure_detected.single.body" = "Você foi possivelmente exposto: %1$@ por %2$@";
 "notification.exposure_detected.multiple.body" = "Detectamos que você foi exposto várias vezes.";
 
-"privacy.title" = "Privacidade";
+"privacy.title" = "Informação sobre privacidade";
 

@@ -25,7 +25,6 @@
 "infection.report.submit.error" = "No fue posible enviar tu información.";
 "infection.report.submitting.title" = "Un momento…";
 "infection.report.submitting.message" = "Enviando tu información anónima.";
-
 "infection.pending.title" = "Confirmación pendiente";
 
 /* parameter is localized disease name */
