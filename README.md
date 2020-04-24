@@ -39,6 +39,8 @@ If you can help translate the app, please help our crowd-sourced effort here:
 
 https://traceprivately.oneskyapp.com/collaboration/project?id=170066
 
+Currently available in: French, Spanish, Portuguese, Croatian and Hindi.
+
 ## Screenshots
 
 * Updated Demo Video (21-Apr-20): https://youtu.be/EAT3p-v2y9k
