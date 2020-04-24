@@ -38,16 +38,34 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zRg-ky-7Uc" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
+                                <rect key="frame" x="20" y="790" width="374" height="52"/>
+                                <color key="backgroundColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="52" id="4Tr-z2-Bno"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="52" id="cwL-lY-cEy"/>
+                                </constraints>
+                                <state key="normal" title="Privacy"/>
+                                <connections>
+                                    <action selector="doneTapped:" destination="4aS-1a-1Ml" eventType="touchUpInside" id="nJ5-Ah-aKR"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="zRg-ky-7Uc" firstAttribute="leading" secondItem="TiS-ZR-E8Q" secondAttribute="leading" constant="20" id="CM6-Mq-mnV"/>
                             <constraint firstItem="Aud-nH-umP" firstAttribute="leading" secondItem="TiS-ZR-E8Q" secondAttribute="leading" constant="20" id="DY5-eE-5jf"/>
+                            <constraint firstItem="TiS-ZR-E8Q" firstAttribute="bottom" secondItem="zRg-ky-7Uc" secondAttribute="bottom" constant="20" id="EGz-gc-glH"/>
+                            <constraint firstItem="TiS-ZR-E8Q" firstAttribute="trailing" secondItem="zRg-ky-7Uc" secondAttribute="trailing" constant="20" id="MuL-Vq-otZ"/>
                             <constraint firstItem="Aud-nH-umP" firstAttribute="top" secondItem="TiS-ZR-E8Q" secondAttribute="top" constant="20" id="OSv-w2-mmZ"/>
                             <constraint firstItem="TiS-ZR-E8Q" firstAttribute="trailing" secondItem="Aud-nH-umP" secondAttribute="trailing" constant="20" id="rtO-Jq-3lZ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="TiS-ZR-E8Q"/>
                     </view>
                     <navigationItem key="navigationItem" id="lm2-qh-wt7"/>
+                    <connections>
+                        <outlet property="okButton" destination="zRg-ky-7Uc" id="qWt-Bw-lM5"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tLP-Es-lgW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

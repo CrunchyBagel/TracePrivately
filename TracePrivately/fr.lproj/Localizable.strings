@@ -1,0 +1,65 @@
+/* 
+  Localizable.strings
+  TracePrivately
+*/
+
+"app.title" = "Tracer en privé";
+
+"tracing.title" = "Traçage par contact";
+/* parameter is localized disease name */
+"tracing.message" = "Échangez en toute sécurité des informations anonymes lorsque vous rencontrez d'autres personnes et vérifiez automatiquement l'exposition au %@.";
+"tracing.start.title" = "Démarrer le suivi";
+"tracing.stop.title" = "Arrêter le suivi";
+
+"disease.covid19.title" = "COVID-19";
+
+"infection.title" = "Je suis infecté";
+
+/* parameter is localized disease name */
+"infection.report.title" = "J'ai le %@";
+"infection.report.message" = "Si vous avez été diagnostiqué comme ayant le %@, soumettez votre diagnostic ici.\nVous serez invité à confirmer.";
+"infection.report.gathering_data.error" = "Impossible de créer votre profil anonyme";
+"infection.report.gathering.empty.title" = "Pas d'informations";
+"infection.report.gathering.empty.message" = "Impossible de trouver vos informations de suivi. Peut-être n'avez-vous pas activé le suivi?";
+"infection.report.submit.title" = "Soumettre le diagnostique";
+"infection.report.submit.message" = "Veuillez confirmer que votre soumission.\n\nCela permettra aux personnes qui ont été près de chez vous de savoir qu'elles peuvent avoir été exposées.";
+"infection.report.submit.error" = "Impossible de soumettre vos informations.";
+"infection.report.submitting.title" = "Un moment s'il vous plait...";
+"infection.report.submitting.message" = "Soumission anonyme de vos informations.";
+
+"infection.pending.title" = "En attente de confirmation";
+
+/* parameter is localized disease name */
+"exposure.none.message" = "Aucun contact détecté avec une personne infectée par le %@!\n\nRestez en sécurité et lavez-vous les mains.";
+"exposure.exposed.banner.title" = "Vous avez peut-être été exposé";
+"exposure.exposed.title" = "Expositions";
+/* parameter is localized disease name */
+"exposure.exposed.message" = "Nous pensons que vous avez peut-être été en contact avec %@.";
+/* parameter is a localized duration */
+"exposure.times.duration" = "Durée: %@";
+
+"exposure.next_steps.title" = "Étape suivante";
+"exposure.next_steps.message" = "Suivez les étapes décrites par les autorités.";
+
+"unknown" = "Inconnu";
+"submit" = "Soumettre";
+"error" = "Erreur";
+
+"ok" = "OK";
+"cancel" = "Annuler";
+
+"keyserver.error.no_response_data" = "Données non reçu";
+"keyserver.error.response_decoding_error" = "Erreur en décodant le réponse";
+"keyserver.error.key_data_missing" = "Key Data manquante";
+"keyserver.error.date_missing" = "Date manquante";
+"keyserver.error.not_ok" = "Ok Status Non Reçu";
+"keyserver.error.invalid_config" = "KeyServer configuration invalide";
+
+/* parameter is localized disease name */
+"notification.exposure_detected.title" = "Alerte: %@ Exposure Detected";
+/* 1st parameter is formatted localized time, 2nd parameter is formatted localized duration */
+"notification.exposure_detected.single.body" = "Vous avez été potentiellement exposé: le %1$@ pendant %2$@";
+"notification.exposure_detected.multiple.body" = "Nous avons détecté que vous avez peut-être été exposé plusieurs fois.";
+
+"privacy.title" = "Vie privée";
+

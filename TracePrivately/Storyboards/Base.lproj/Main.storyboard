@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="FnE-Qt-Q1V">
-    <device id="retina6_1" orientation="portrait" appearance="dark"/>
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
@@ -42,14 +42,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jrI-7I-xfu">
-                                <rect key="frame" x="10" y="0.0" width="394" height="896"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bJE-2K-Ma6">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="qDp-7Q-TUt">
-                                        <rect key="frame" x="0.0" y="0.0" width="394" height="750"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="qDp-7Q-TUt">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="702"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sBE-i1-EpT" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="394" height="52"/>
+                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sBE-i1-EpT" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="-52" width="414" height="52"/>
                                                 <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="52" id="nNQ-Kr-e6x"/>
@@ -59,16 +59,16 @@
                                                     <action selector="infectedButtonTapped:" destination="cgw-lb-INg" eventType="touchUpInside" id="VBM-Dl-jSk"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="im4-bJ-sBK" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="72" width="394" height="52"/>
+                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="im4-bJ-sBK" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="-52" width="414" height="52"/>
                                                 <color key="backgroundColor" systemColor="systemPurpleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal" title="Button"/>
                                                 <connections>
                                                     <action selector="pendingButtonTapped:" destination="cgw-lb-INg" eventType="touchUpInside" id="f0T-CL-sRR"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nmB-3u-FTt" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="144" width="394" height="52"/>
+                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nmB-3u-FTt" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="-52" width="414" height="52"/>
                                                 <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal" title="Button"/>
                                                 <connections>
@@ -76,28 +76,33 @@
                                                 </connections>
                                             </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7hr-cg-uXa">
-                                                <rect key="frame" x="0.0" y="216" width="394" height="257"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="271"/>
                                                 <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="rIa-r2-7I4">
-                                                        <rect key="frame" x="10" y="10" width="374" height="237"/>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="rIa-r2-7I4">
+                                                        <rect key="frame" x="10" y="10" width="394" height="251"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contact Tracing" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gU9-Lr-mWA">
-                                                                <rect key="frame" x="0.0" y="0.0" width="374" height="20.5"/>
-                                                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description about tracing." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v0h-tF-FM9">
-                                                                <rect key="frame" x="0.0" y="30.5" width="374" height="20.5"/>
-                                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="4ho-ke-kTc">
+                                                                <rect key="frame" x="0.0" y="0.0" width="394" height="51"/>
+                                                                <subviews>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Contact Tracing" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gU9-Lr-mWA">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="394" height="20.5"/>
+                                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                                        <nil key="textColor"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description about tracing." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v0h-tF-FM9">
+                                                                        <rect key="frame" x="0.0" y="30.5" width="394" height="20.5"/>
+                                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                                        <nil key="textColor"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                </subviews>
+                                                            </stackView>
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="xXS-a0-4QH">
-                                                                <rect key="frame" x="0.0" y="61" width="374" height="176"/>
+                                                                <rect key="frame" x="0.0" y="75" width="394" height="176"/>
                                                                 <subviews>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ic8-uE-wq7" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="374" height="52"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="394" height="52"/>
                                                                         <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="52" id="SQF-ba-nbD"/>
@@ -108,7 +113,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2CE-X1-VYa" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="62" width="374" height="52"/>
+                                                                        <rect key="frame" x="0.0" y="62" width="394" height="52"/>
                                                                         <color key="backgroundColor" systemColor="systemPurpleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="52" id="C6G-Ud-Cuy"/>
@@ -119,7 +124,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a4j-xX-lLB" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="124" width="374" height="52"/>
+                                                                        <rect key="frame" x="0.0" y="124" width="394" height="52"/>
                                                                         <color key="backgroundColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="52" id="uPU-Kk-8AH"/>
@@ -142,50 +147,60 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YSN-Jg-zw2">
-                                                <rect key="frame" x="0.0" y="493" width="394" height="257"/>
+                                                <rect key="frame" x="0.0" y="291" width="414" height="411"/>
                                                 <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="xsG-g8-bmI">
-                                                        <rect key="frame" x="10" y="10" width="374" height="237"/>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="xsG-g8-bmI">
+                                                        <rect key="frame" x="10" y="10" width="394" height="391"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Submit Infection" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V0k-qx-Pjy">
-                                                                <rect key="frame" x="0.0" y="0.0" width="374" height="23.5"/>
-                                                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cmm-Ia-Gio">
-                                                                <rect key="frame" x="0.0" y="33.5" width="374" height="79.5"/>
-                                                                <string key="text">If you have ben diagnosed as having COVID-19, submit your diasnosis here.
+                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="9rW-Yb-gTr">
+                                                                <rect key="frame" x="0.0" y="0.0" width="394" height="117"/>
+                                                                <subviews>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Submit Infection" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V0k-qx-Pjy">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="394" height="20.5"/>
+                                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                                        <nil key="textColor"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cmm-Ia-Gio">
+                                                                        <rect key="frame" x="0.0" y="30.5" width="394" height="86.5"/>
+                                                                        <string key="text">If you have ben diagnosed as having COVID-19, submit your diasnosis here.
 
 You will be prompted for confirmation.</string>
-                                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yfi-2O-JFT" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="123" width="374" height="52"/>
-                                                                <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="52" id="D8g-6r-7Ur"/>
-                                                                </constraints>
-                                                                <state key="normal" title="Button"/>
-                                                                <connections>
-                                                                    <action selector="submitInfectionButtonTapped:" destination="cgw-lb-INg" eventType="touchUpInside" id="x5k-D9-U5j"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tko-23-weP" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="185" width="374" height="52"/>
-                                                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="52" id="MQE-vf-Bso"/>
-                                                                </constraints>
-                                                                <state key="normal" title="Button">
-                                                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                </state>
-                                                                <connections>
-                                                                    <action selector="submitInfectionButtonTapped:" destination="cgw-lb-INg" eventType="touchUpInside" id="ouv-tQ-hHQ"/>
-                                                                </connections>
-                                                            </button>
+                                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                                        <nil key="textColor"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                </subviews>
+                                                            </stackView>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="QNQ-zR-Cds">
+                                                                <rect key="frame" x="0.0" y="277" width="394" height="114"/>
+                                                                <subviews>
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yfi-2O-JFT" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="394" height="52"/>
+                                                                        <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="52" id="D8g-6r-7Ur"/>
+                                                                        </constraints>
+                                                                        <state key="normal" title="Button"/>
+                                                                        <connections>
+                                                                            <action selector="submitInfectionButtonTapped:" destination="cgw-lb-INg" eventType="touchUpInside" id="x5k-D9-U5j"/>
+                                                                        </connections>
+                                                                    </button>
+                                                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tko-23-weP" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
+                                                                        <rect key="frame" x="0.0" y="62" width="394" height="52"/>
+                                                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="52" id="MQE-vf-Bso"/>
+                                                                        </constraints>
+                                                                        <state key="normal" title="Button">
+                                                                            <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        </state>
+                                                                        <connections>
+                                                                            <action selector="submitInfectionButtonTapped:" destination="cgw-lb-INg" eventType="touchUpInside" id="ouv-tQ-hHQ"/>
+                                                                        </connections>
+                                                                    </button>
+                                                                </subviews>
+                                                            </stackView>
                                                         </subviews>
                                                     </stackView>
                                                 </subviews>
@@ -200,25 +215,24 @@ You will be prompted for confirmation.</string>
                                         <constraints>
                                             <constraint firstItem="sBE-i1-EpT" firstAttribute="height" secondItem="nmB-3u-FTt" secondAttribute="height" id="XvV-kH-gIQ"/>
                                             <constraint firstItem="sBE-i1-EpT" firstAttribute="height" secondItem="im4-bJ-sBK" secondAttribute="height" id="lpd-TN-oJX"/>
-                                            <constraint firstItem="7hr-cg-uXa" firstAttribute="height" secondItem="YSN-Jg-zw2" secondAttribute="height" id="vmH-BP-j4d"/>
                                         </constraints>
                                     </stackView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="qDp-7Q-TUt" firstAttribute="bottom" secondItem="jrI-7I-xfu" secondAttribute="bottom" id="paR-lU-zWb"/>
-                                    <constraint firstItem="qDp-7Q-TUt" firstAttribute="width" secondItem="jrI-7I-xfu" secondAttribute="width" id="qWk-fc-k9V"/>
-                                    <constraint firstAttribute="leading" secondItem="qDp-7Q-TUt" secondAttribute="leading" id="rQD-bl-iQu"/>
-                                    <constraint firstAttribute="top" secondItem="qDp-7Q-TUt" secondAttribute="top" id="uKC-Yz-Lb8"/>
-                                    <constraint firstItem="qDp-7Q-TUt" firstAttribute="trailing" secondItem="jrI-7I-xfu" secondAttribute="trailing" id="vjc-Sq-xox"/>
+                                    <constraint firstItem="qDp-7Q-TUt" firstAttribute="width" secondItem="bJE-2K-Ma6" secondAttribute="width" id="GoF-Cr-ZcW"/>
+                                    <constraint firstAttribute="bottom" secondItem="qDp-7Q-TUt" secondAttribute="bottom" id="IXq-76-oIC"/>
+                                    <constraint firstItem="qDp-7Q-TUt" firstAttribute="top" secondItem="bJE-2K-Ma6" secondAttribute="top" id="Ik1-Z2-0TO"/>
+                                    <constraint firstAttribute="trailing" secondItem="qDp-7Q-TUt" secondAttribute="trailing" id="SqV-y5-QFd"/>
+                                    <constraint firstItem="qDp-7Q-TUt" firstAttribute="leading" secondItem="bJE-2K-Ma6" secondAttribute="leading" id="ang-9W-jkf"/>
                                 </constraints>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="jrI-7I-xfu" secondAttribute="bottom" id="itp-q5-RgY"/>
-                            <constraint firstItem="jrI-7I-xfu" firstAttribute="top" secondItem="F4C-Tr-2O0" secondAttribute="top" id="kLF-mb-kIi"/>
-                            <constraint firstItem="jrI-7I-xfu" firstAttribute="leading" secondItem="F4C-Tr-2O0" secondAttribute="leading" constant="10" id="pjs-nY-0NI"/>
-                            <constraint firstAttribute="trailing" secondItem="jrI-7I-xfu" secondAttribute="trailing" constant="10" id="rdo-h0-q9X"/>
+                            <constraint firstItem="ulL-nJ-qh2" firstAttribute="trailing" secondItem="bJE-2K-Ma6" secondAttribute="trailing" id="7uZ-LB-Nwm"/>
+                            <constraint firstItem="bJE-2K-Ma6" firstAttribute="top" secondItem="F4C-Tr-2O0" secondAttribute="top" id="JGH-zo-lBY"/>
+                            <constraint firstAttribute="bottom" secondItem="bJE-2K-Ma6" secondAttribute="bottom" id="fCN-Bj-fSP"/>
+                            <constraint firstItem="bJE-2K-Ma6" firstAttribute="leading" secondItem="ulL-nJ-qh2" secondAttribute="leading" id="loL-us-Yao"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ulL-nJ-qh2"/>
                     </view>
