@@ -6,6 +6,8 @@
 import UIKit
 
 // TODO: Assuming there will be more fields in future (e.g. pathology lab test ID or photo), prepopulate with any pending submission requests
+// TODO: Prevent swipe to dismiss on this screen
+
 class SubmitInfectionViewController: UIViewController {
 
     @IBOutlet var submitButton: ActionButton!
