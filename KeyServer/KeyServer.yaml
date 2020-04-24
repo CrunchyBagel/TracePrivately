@@ -98,3 +98,7 @@ paths:
                                 type: string
                                 example: "OK"
                                 description: OK
+                            identifier:
+                                type: string
+                                example: "SOME_UNIQUE_IDENTIFIER"
+                                description: An identifier specific to this report, so the client can append new keys to the report

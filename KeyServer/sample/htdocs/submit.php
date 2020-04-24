@@ -2,8 +2,12 @@
 $path = realpath(dirname(__FILE__) . '/../data/trace.sqlite');
 $db = new SQLite3($path, SQLITE3_OPEN_READWRITE);
 
+// TODO: Validate bearer token and throw 401 if not valid
+
 $data = file_get_contents('php://input');
 $json = json_decode($data, true);
+
+// TODO: Implement proper error responses
 
 if (!is_array($json)) {
     echo "Invalid request data";
@@ -21,6 +25,11 @@ if (!is_array($json['keys'])) {
 }
 
 $keys = $json['keys'];
+
+// TODO: This may not work on all systems
+// TODO: Record this with the submission so it can be found again later
+// TODO: Only use this if a valid identifier isn't specified in the request
+$uniqueId = trim(`/usr/bin/uuidgen`);
 
 if (count($keys) > 0) {
     $time = time();
@@ -51,7 +60,8 @@ if (count($keys) > 0) {
 }
 
 $json = array(
-    'status' => 'OK'
+    'status' => 'OK',
+    'identifier' => $uniqueId
 );
 
 $data = json_encode($json);

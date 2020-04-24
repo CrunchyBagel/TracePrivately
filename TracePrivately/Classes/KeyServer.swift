@@ -150,6 +150,9 @@ class KeyServer {
                     completion(false, Error.okStatusNotReceived)
                     return
                 }
+                
+                // TODO: Make use of this value so new keys can be appended to this original submission
+                let submissionIdentifier = json["identifier"] as? String
 
                 completion(true, nil)
             }
