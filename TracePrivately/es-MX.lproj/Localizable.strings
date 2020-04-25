@@ -1,0 +1,58 @@
+/* 
+  Localizable.strings
+  TracePrivately
+*/
+
+"app.title" = "Trace Privately";
+
+/* parameter is localized disease name */
+"tracing.message" = "Intercambia información de manera anónima al encontrarte con otras personas y comprueba si te expusiste al %@.";
+"tracing.start.title" = "Empezar rastreo";
+"tracing.stop.title" = "Detener rastreo";
+
+"disease.covid19.title" = "COVID-19";
+
+"infection.title" = "Enviar infección";
+
+/* parameter is localized disease name */
+"infection.report.title" = "Tengo %@";
+"infection.report.message" = "Si fuiste diagnosticado con %@, envía tu diagnóstico aquí.\n\nSe te pedirá confirmación.";
+"infection.report.gathering_data.error" = "No fue posible crear tu perfil anónimo.";
+"infection.report.gathering.empty.title" = "No hay información";
+"infection.report.gathering.empty.message" = "No se pudo encontrar la información de tu rastreo. Quizá no habilitaste la opción de rastrear.";
+"infection.report.submit.title" = "Enviar diagnóstico";
+"infection.report.submit.message" = "Por favor confirma el envío.\n\nEsto le permitirá a aquéllos que estuvieron cerca de ti saber que te expusiste.";
+"infection.report.submit.error" = "No fue posible enviar tu información.";
+"infection.report.submitting.title" = "Un momento…";
+"infection.report.submitting.message" = "Enviando tu información anónima.";
+"infection.pending.title" = "Confirmación pendiente";
+
+/* parameter is localized disease name */
+"exposure.none.message" = "¡No se detectó a ningún contacto con %@!\n\nCuídate y lávate las manos.";
+"exposure.exposed.banner.title" = "Es posible que te hayas expuesto";
+"exposure.exposed.title" = "Exposiciones";
+/* parameter is localized disease name */
+"exposure.exposed.message" = "Creemos que pudiste estar en contacto con %@";
+/* parameter is a localized duration */
+"exposure.times.duration" = "Duración: %@";
+
+"exposure.next_steps.title" = "Pasos a seguir";
+"exposure.next_steps.message" = "Sigue los pasos señalados por las autoridades";
+
+"unknown" = "Desconocido";
+"submit" = "Enviar";
+"error" = "Error";
+
+"ok" = "OK";
+"cancel" = "Cancelar";
+
+"keyserver.error.no_response_data" = "Información de respuesta no recibida";
+"keyserver.error.response_decoding_error" = "Error al descodificar respuesta";
+/* parameter is localized disease name */
+"notification.exposure_detected.title" = "Alerta: Exposición a %@ detectada";
+/* 1st parameter is formatted localized time, 2nd parameter is formatted localized duration */
+"notification.exposure_detected.single.body" = "Pudo estar expuesto el: %1$@ por %2$@";
+"notification.exposure_detected.multiple.body" = "Detectamos que pudiste estar expuesto varias veces.";
+
+"privacy.title" = "Privacidad";
+

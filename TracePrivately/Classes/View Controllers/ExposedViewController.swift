@@ -8,6 +8,10 @@ import CoreData
 
 class ExposedViewController: UICollectionViewController {
 
+    struct Segue {
+        static let exposureDetails = "ExposureDetailsSegue"
+    }
+    
     struct Cells {
         static let nextSteps = "NextStepsCell"
         static let contact = "ExposureCell"
@@ -15,7 +19,7 @@ class ExposedViewController: UICollectionViewController {
     }
 
     enum CellType {
-        case contact(CTContactInfo)
+        case contact(ENExposureInfo)
         case intro(String)
         case nextSteps
     }
@@ -66,7 +70,7 @@ class ExposedViewController: UICollectionViewController {
             entities = []
         }
         
-        let contacts: [CTContactInfo] = entities.compactMap { $0.contactInfo }
+        let contacts: [ENExposureInfo] = entities.compactMap { $0.contactInfo }
 
         if contacts.count == 0 {
             let title = String(format: NSLocalizedString("exposure.none.message", comment: ""), Disease.current.localizedTitle)
@@ -85,6 +89,22 @@ class ExposedViewController: UICollectionViewController {
                 Section(cells: contacts.map { .contact($0)}),
                 Section(cells: [ .nextSteps ])
             ]
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case Segue.exposureDetails:
+            guard let contact = sender as? ExposureContactInfoEntity else {
+                return
+            }
+            
+            if let vc = segue.destination as? ExposureDetailsViewController {
+                vc.contact = contact
+            }
+            
+        default:
+            super.prepare(for: segue, sender: sender)
         }
     }
     
@@ -133,11 +153,13 @@ extension ExposedViewController {
                 }
                 
                 if contact.duration < 600 {
-                    cell.contentView.backgroundColor = UIColor.systemOrange
+                    cell.setBackgroundColor(color: .systemOrange)
                 }
                 else {
-                    cell.contentView.backgroundColor = UIColor.systemRed
+                    cell.setBackgroundColor(color: .systemRed)
                 }
+                
+                cell.accessoryImageView.image = ActionButton.Accessory.disclosure.image
             }
             
             return cell
@@ -147,12 +169,28 @@ extension ExposedViewController {
             
             if let cell = cell as? ExposedNextStepsCell {
                 cell.label.text = NSLocalizedString("exposure.next_steps.title", comment: "")
+                
+                cell.setBackgroundColor(color: .systemBlue)
             }
             
             return cell
         }
     }
     
+    override func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
+        
+        if let cell = collectionView.cellForItem(at: indexPath) as? ButtonStyleCell {
+            cell.updateBackgroundColor()
+        }
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
+
+        if let cell = collectionView.cellForItem(at: indexPath) as? ButtonStyleCell {
+            cell.updateBackgroundColor()
+        }
+    }
+
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let rowType = self.sections[indexPath.section].cells[indexPath.row]
@@ -161,12 +199,8 @@ extension ExposedViewController {
         case .intro:
             break
             
-        case .contact:
-            let alert = UIAlertController(title: "Exposure Info", message: "TODO", preferredStyle: .alert)
-            
-            alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
-            
-            self.present(alert, animated: true, completion: nil)
+        case .contact(let contact):
+            self.performSegue(withIdentifier: Segue.exposureDetails, sender: contact)
 
         case .nextSteps:
             let alert = UIAlertController(title: NSLocalizedString("exposure.next_steps.title", comment: ""), message: NSLocalizedString("exposure.next_steps.message", comment: ""), preferredStyle: .alert)
@@ -227,8 +261,29 @@ class ExposedIntroCell: UICollectionViewCell {
     @IBOutlet var label: UILabel!
 }
 
-class ExposedNextStepsCell: UICollectionViewCell {
-    @IBOutlet var label: UILabel!
+class ButtonStyleCell: UICollectionViewCell {
+    private var _backgroundColor: UIColor?
+    private var _highlightBackgroundColor: UIColor?
+    
+    func setBackgroundColor(color: UIColor) {
+        _backgroundColor = color
+        _highlightBackgroundColor = color.darken(0.1)
+        
+        self.updateBackgroundColor()
+    }
+    
+    func updateBackgroundColor() {
+        let color = self.isHighlighted ? self._highlightBackgroundColor : self._backgroundColor
+        self.contentView.backgroundColor = color
+    }
+}
+
+class ExposedNextStepsCell: ButtonStyleCell {
+    @IBOutlet var label: UILabel! {
+        didSet {
+            label.font = UIFont.preferredFont(forTextStyle: .headline)
+        }
+    }
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -241,9 +296,10 @@ class ExposedNextStepsCell: UICollectionViewCell {
     }
 }
 
-class ExposedContactCell: UICollectionViewCell {
+class ExposedContactCell: ButtonStyleCell {
     @IBOutlet var timeLabel: UILabel!
     @IBOutlet var durationLabel: UILabel!
+    @IBOutlet var accessoryImageView: UIImageView!
     
     override func layoutSubviews() {
         super.layoutSubviews()

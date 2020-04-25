@@ -101,7 +101,9 @@ paths:
                                     description: Base 64 encoded binary data representing a single key
                             deleted_keys:
                                 type: array
-                                description: A list of keys that have subsequently been marked as not infected. Client should remove them from their cache.
+                                description: |
+                                    A list of keys that have subsequently been marked as not infected. Client should remove them from their cache.
+                                    These keys should also honor the "since" parameter and return deleted keys based on when their status was changed to deleted.
                                 items:
                                     type: string
                                     example: "Base 64 Encoded String"
@@ -131,10 +133,14 @@ paths:
                           keys:
                               type: array
                               description: List of infected keys
+                              minimum: 1
                               items:
                                   type: string
                                   example: "Base 64 Encoded String"
                                   description: Base 64 encoded binary data representing a single key
+                          identifier:
+                              type: string
+                              description: An optional unique identifier from a previous submission so newly-submitted keys can be appended to an existing submission.
             responses:
                 200:
                     description: A list of infected keys since the specified date.
@@ -145,5 +151,10 @@ paths:
                                 type: string
                                 example: "OK"
                                 description: OK
+                            identifier:
+                                type: string
+                                example: "SOME_UNIQUE_IDENTIFIER"
+                                description: An identifier specific to this report, so the client can append new keys to the newly-created submission.
+
                 401:
                     description: Unable to authorize user. Need to request a token before calling this endpoint again.

@@ -101,17 +101,18 @@ extension KeyServer {
                     if let error = error {
                         throw error
                     }
+                    
+                    let requestJson = requestJson ?? [:]
 
+                    print("REQUEST: \(requestJson)")
                     var request = try self.createRequest(endPoint: authentication.endpoint, authentication: auth, throwIfMissing: false)
 
-                    if let requestJson = requestJson {
-                        let jsonData = try JSONSerialization.data(withJSONObject: requestJson, options: [])
-                        
-                        request.httpBody = jsonData
-                        request.setValue(String(jsonData.count), forHTTPHeaderField: "Content-Length")
-                        request.setValue("application/json", forHTTPHeaderField: "Accept")
-                        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                    }
+                    let jsonData = try JSONSerialization.data(withJSONObject: requestJson, options: [])
+                    
+                    request.httpBody = jsonData
+                    request.setValue(String(jsonData.count), forHTTPHeaderField: "Content-Length")
+                    request.setValue("application/json", forHTTPHeaderField: "Accept")
+                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
                     let task = self.urlSession.dataTask(with: request) { data, response, error in
                         
@@ -181,31 +182,31 @@ extension KeyServer {
         Refer to `KeyServer.yaml` for expected request and response format.
      */
     
-    func submitInfectedKeys(keys: [CTDailyTracingKey], completion: @escaping (Bool, Swift.Error?) -> Void) {
+    func submitInfectedKeys(keys: [ENTemporaryExposureKey], previousSubmissionId: String?, completion: @escaping (Bool, String?, Swift.Error?) -> Void) {
         
-        self._submitInfectedKeys(keys: keys) { success, error in
+        self._submitInfectedKeys(keys: keys, previousSubmissionId: previousSubmissionId) { success, submissionId, error in
             if let error = error as? KeyServer.Error, error.shouldRetryWithAuthRequest {
                 
                 self.requestAuthorizationToken { success, authError in
                     guard success else {
-                        completion(false, authError)
+                        completion(false, nil, authError)
                         return
                     }
                     
-                    self._submitInfectedKeys(keys: keys, completion: completion)
+                    self._submitInfectedKeys(keys: keys, previousSubmissionId: previousSubmissionId, completion: completion)
                 }
                 
                 return
             }
             
-            completion(success, error)
+            completion(success, submissionId, error)
         }
     }
 
-    private func _submitInfectedKeys(keys: [CTDailyTracingKey], completion: @escaping (Bool, Swift.Error?) -> Void) {
+    private func _submitInfectedKeys(keys: [ENTemporaryExposureKey], previousSubmissionId: String?, completion: @escaping (Bool, String?, Swift.Error?) -> Void) {
         
         guard let endPoint = self.config.submitInfected else {
-            completion(false, Error.invalidConfig)
+            completion(false, nil, Error.invalidConfig)
             return
         }
         
@@ -214,9 +215,14 @@ extension KeyServer {
             
             let encodedKeys: [String] = keys.map { $0.keyData.base64EncodedString() }
             
-            let requestData: [String: Any] = [
+            var requestData: [String: Any] = [
                 "keys": encodedKeys
             ]
+
+            // TODO: Ensure this is secure and that identifiers can't be hijacked into false submissions
+            if let identifier = previousSubmissionId {
+                requestData["identifier"] = identifier
+            }
 
             let jsonData = try JSONSerialization.data(withJSONObject: requestData, options: [])
 
@@ -228,25 +234,25 @@ extension KeyServer {
             let task = self.urlSession.dataTask(with: request) { data, response, error in
                 
                 if let error = error {
-                    completion(false, error)
+                    completion(false, nil, error)
                     return
                 }
                 
                 guard let response = response as? HTTPURLResponse else {
-                    completion(false, Error.responseDataNotReceived)
+                    completion(false, nil, Error.responseDataNotReceived)
                     return
                 }
                 
                 switch response.statusCode {
                 case 401:
-                    completion(false, Error.notAuthorized)
+                    completion(false, nil, Error.notAuthorized)
                     return
                 default:
                     break
                 }
                 
                 guard let data = data else {
-                    completion(false, Error.responseDataNotReceived)
+                    completion(false, nil, Error.responseDataNotReceived)
                     return
                 }
 
@@ -255,23 +261,26 @@ extension KeyServer {
                         print("Response: \(str)")
                     }
                     
-                    completion(false, Error.jsonDecodingError)
+                    completion(false, nil, Error.jsonDecodingError)
                     return
                 }
                 
                 guard let status = json["status"] as? String, status == "OK" else {
-                    completion(false, Error.okStatusNotReceived)
+                    completion(false, nil, Error.okStatusNotReceived)
                     return
                 }
 
-                completion(true, nil)
+                // TODO: Make use of this value so new keys can be appended to this original submission
+                let submissionIdentifier = json["identifier"] as? String
+                
+                completion(true, submissionIdentifier, nil)
             }
             
             task.priority = URLSessionTask.highPriority
             task.resume()
         }
         catch {
-            completion(false, error)
+            completion(false, nil, error)
         }
     }
 }
@@ -285,7 +294,7 @@ extension KeyServer {
     
     struct InfectedKeysResponse {
         let date: Date
-        let keys: [CTDailyTracingKey]
+        let keys: [ENTemporaryExposureKey]
     }
     
     func retrieveInfectedKeys(since date: Date?, completion: @escaping (InfectedKeysResponse?, Swift.Error?) -> Void) {
@@ -376,8 +385,9 @@ extension KeyServer {
                 
                 let keysData = keyData.compactMap { Data(base64Encoded: $0) }
                 
-                let tracingKeys = keysData.map { CTDailyTracingKey(keyData: $0) }
-                
+                // TODO: Handle the rolling start number
+                let tracingKeys = keysData.map { ENTemporaryExposureKey(keyData: $0, rollingStartNumber: 0) }
+
                 let infectedKeys = InfectedKeysResponse(date: date, keys: tracingKeys)
                 
                 completion(infectedKeys, nil)

@@ -15,7 +15,7 @@ class SubmittedInfectionViewController: UITableViewController {
 
         switch status {
         case .infection:
-            self.title = NSLocalizedString("infection.infected.title", comment: "")
+            self.title = String(format: NSLocalizedString("infection.infected.title", comment: ""), Disease.current.localizedTitle)
         case .infectionPending, .infectionPendingAndExposed:
             self.title = NSLocalizedString("infection.pending.title", comment: "")
         default:
