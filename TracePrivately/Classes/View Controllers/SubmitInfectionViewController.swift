@@ -35,16 +35,20 @@ class SubmitInfectionViewController: UIViewController {
 
 extension SubmitInfectionViewController {
     @IBAction func submitTapped(_ sender: ActionButton) {
-        let request = CTSelfTracingInfoRequest()
         
-        request.completionHandler = { info, error in
-            guard let keys = info?.dailyTracingKeys else {
-                
+        let request = ENSelfExposureInfoRequest()
+        
+        request.activateWithCompletion { error in
+            defer {
+                request.invalidate()
+            }
+             
+            guard let exposureInfo = request.selfExposureInfo else {
                 var showError = true
-                
-                if let error = error as? CTError {
-                    switch error {
-                    case .permissionDenied:
+
+                if let error = error as? ENError {
+                    switch error.errorCode {
+                    case .notAuthorized:
                         showError = false
                     default:
                         break
@@ -62,6 +66,8 @@ extension SubmitInfectionViewController {
             }
             
             // TODO: This isn't a great strategy. We still want the report submitted so the user can continue to submit their daily keys
+            
+            let keys = exposureInfo.keys
 
             guard keys.count > 0 else {
                 let alert = UIAlertController(title: NSLocalizedString("infection.report.gathering.empty.title", comment: ""), message: NSLocalizedString("infection.report.gathering.empty.message", comment: ""), preferredStyle: .alert)
@@ -83,14 +89,12 @@ extension SubmitInfectionViewController {
             
             self.present(alert, animated: true, completion: nil)
         }
-        
-        request.perform()
     }
 }
 
 extension SubmitInfectionViewController {
     // TODO: Make it super clear to the user if an error occurred, so they have an opportunity to submit again
-    func submitReport(keys: [CTDailyTracingKey]) {
+    func submitReport(keys: [ENTemporaryExposureKey]) {
         
         let loadingAlert = UIAlertController(title: NSLocalizedString("infection.report.submitting.title", comment: ""), message: NSLocalizedString("infection.report.submitting.message", comment: ""), preferredStyle: .alert)
 

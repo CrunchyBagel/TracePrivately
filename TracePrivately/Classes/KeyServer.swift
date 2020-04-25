@@ -95,7 +95,7 @@ class KeyServer {
      
         Refer to `KeyServer.yaml` for expected request and response format.
      */
-    func submitInfectedKeys(keys: [CTDailyTracingKey], previousSubmissionId: String?, completion: @escaping (Bool, String?, Swift.Error?) -> Void) {
+    func submitInfectedKeys(keys: [ENTemporaryExposureKey], previousSubmissionId: String?, completion: @escaping (Bool, String?, Swift.Error?) -> Void) {
         
         let endPoint: RequestEndpoint = .submitInfectedKeys
 
@@ -178,7 +178,7 @@ class KeyServer {
     
     struct InfectedKeysResponse {
         let date: Date
-        let keys: [CTDailyTracingKey]
+        let keys: [ENTemporaryExposureKey]
     }
     
     func retrieveInfectedKeys(since date: Date?, completion: @escaping (InfectedKeysResponse?, Swift.Error?) -> Void) {
@@ -250,7 +250,9 @@ class KeyServer {
             
             let keysData = keyData.compactMap { Data(base64Encoded: $0) }
             
-            let tracingKeys = keysData.map { CTDailyTracingKey(keyData: $0) }
+            
+            // TODO: Handle the rolling start number
+            let tracingKeys = keysData.map { ENTemporaryExposureKey(keyData: $0, rollingStartNumber: 0) }
             
             let response = InfectedKeysResponse(date: date, keys: tracingKeys)
             
