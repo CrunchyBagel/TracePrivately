@@ -83,11 +83,11 @@ class KeyServerReceiptAuthentication: KeyServerBaseAuthentication {
             completion(["receipt": UUID().uuidString], nil)
         }
         else {
-            guard let url = Bundle.main.appStoreReceiptURL, FileManager.default.fileExists(atPath: url.path) else {
-                completion(nil, AuthError.receiptNotFound)
-            }
-            
             do {
+                guard let url = Bundle.main.appStoreReceiptURL, FileManager.default.fileExists(atPath: url.path) else {
+                    throw AuthError.receiptNotFound
+                }
+
                 let receiptData = try Data(contentsOf: url, options: .alwaysMapped)
                 
                 let receiptString = receiptData.base64EncodedString(options: [])
