@@ -6,7 +6,6 @@
 import UIKit
 
 // TODO: Assuming there will be more fields in future (e.g. pathology lab test ID or photo), prepopulate with any pending submission requests
-// TODO: Prevent swipe to dismiss on this screen
 
 class SubmitInfectionViewController: UIViewController {
 
@@ -26,6 +25,11 @@ class SubmitInfectionViewController: UIViewController {
         // Swipe down to dismiss also available on iOS 13+
         let button = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(Self.cancelTapped(_:)))
         self.navigationItem.leftBarButtonItem = button
+        
+        if #available(iOS 13, *) {
+            self.isModalInPresentation = true
+        }
+
     }
     
     @objc func cancelTapped(_ sender: UIBarButtonItem) {
