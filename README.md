@@ -35,6 +35,8 @@ There are a number of ways you can help. You can:
 4. The sample key server requires manual approval of infection submissions, using the `./tools/pending.php` and `./tools/approve.php` scripts.
 5. In this proof of concept, every client will detect an exposure for any infection submitted
 
+Demo server information: https://github.com/CrunchyBagel/TracePrivately/issues/36
+
 ## Localizations
 
 If you can help translate the app, please help our crowd-sourced effort here:
