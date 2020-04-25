@@ -64,6 +64,7 @@
 		66437F75244A86AE000B8C6C /* Disease.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disease.swift; sourceTree = "<group>"; };
 		66437F9D244A9A02000B8C6C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		66437F9F244A9B2C000B8C6C /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		667938932454665E00868B84 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		66848C2C244D5F8800497D2A /* AsyncBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncBlockOperation.swift; sourceTree = "<group>"; };
 		668CE842244D01F50065960A /* ContactTraceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactTraceManager.swift; sourceTree = "<group>"; };
 		668D4B22244D705100D90C26 /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
@@ -261,6 +262,7 @@
 				"hi-IN",
 				"zh-Hans",
 				"sr-RS",
+				de,
 			);
 			mainGroup = 66F8185E2448FD5C0043AC2D;
 			productRefGroup = 66F818682448FD5C0043AC2D /* Products */;
@@ -338,6 +340,7 @@
 				662105782452602D0011EB42 /* hi-IN */,
 				6625219B2453955F00C68AD1 /* zh-Hans */,
 				6625219C2453957100C68AD1 /* sr-RS */,
+				667938932454665E00868B84 /* de */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
