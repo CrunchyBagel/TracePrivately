@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import DeviceCheck
 
 struct AuthenticationToken: CustomDebugStringConvertible, CustomStringConvertible {
     let string: String
@@ -21,15 +22,10 @@ protocol KeyServerAuthentication {
     func saveAuthenticationToken(token: AuthenticationToken)
     var currentAuthenticationToken: AuthenticationToken? { get }
     
-    func buildAuthRequestJsonObject() throws -> [String: Any]
+    func buildAuthRequestJsonObject(completion: @escaping ([String: Any]?, Error?) -> Void)
 }
 
-class KeyServerReceiptAuthentication: KeyServerAuthentication {
-    
-    enum AuthError: LocalizedError {
-        case receiptNotFound
-    }
-    
+class KeyServerBaseAuthentication: KeyServerAuthentication {
     static let storageKey = "KeyServer_AuthToken"
     
     func saveAuthenticationToken(token: AuthenticationToken) {
@@ -46,28 +42,61 @@ class KeyServerReceiptAuthentication: KeyServerAuthentication {
         return .init(string: str)
     }
     
-    func buildAuthRequestJsonObject() throws -> [String : Any] {
+    func buildAuthRequestJsonObject(completion: ([String : Any]?, Error?) -> Void) {
+        completion(nil, nil)
+    }
+}
+
+class KeyServerDeviceCheckAuthentication: KeyServerBaseAuthentication {
+    enum AuthError: LocalizedError {
+        case notAvailable
+    }
+
+    func buildAuthRequestJsonObject(completion: @escaping ([String : Any]?, Error?) -> Void) {
+        if #available(iOS 11, *) {
+            DCDevice.current.generateToken { data, error in
+                if let data = data {
+                    completion(["token": data.base64EncodedString()], nil)
+                }
+                else {
+                    completion(nil, error)
+                }
+            }
+        }
+        else {
+            completion(nil, AuthError.notAvailable)
+        }
+    }
+}
+
+class KeyServerReceiptAuthentication: KeyServerBaseAuthentication {
+    enum AuthError: LocalizedError {
+        case receiptNotFound
+    }
+    
+    func buildAuthRequestJsonObject(completion: @escaping ([String : Any]?, Error?) -> Void) {
         // TODO: In development there won't be a receipt
         
         let isInDev = true
         
         if isInDev {
-            return [
-                "receipt": UUID().uuidString
-            ]
+            completion(["receipt": UUID().uuidString], nil)
         }
         else {
             guard let url = Bundle.main.appStoreReceiptURL, FileManager.default.fileExists(atPath: url.path) else {
-                throw AuthError.receiptNotFound
+                completion(nil, AuthError.receiptNotFound)
             }
             
-            let receiptData = try Data(contentsOf: url, options: .alwaysMapped)
-            
-            let receiptString = receiptData.base64EncodedString(options: [])
+            do {
+                let receiptData = try Data(contentsOf: url, options: .alwaysMapped)
+                
+                let receiptString = receiptData.base64EncodedString(options: [])
 
-            return [
-                "receipt": receiptString
-            ]
+                completion(["receipt": receiptString], nil)
+            }
+            catch {
+                completion(nil, error)
+            }
         }
     }
 }

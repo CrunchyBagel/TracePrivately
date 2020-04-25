@@ -96,71 +96,80 @@ extension KeyServer {
         do {
             print("Requesting authorization ...")
             
-            var request = try self.createRequest(endPoint: authentication.endpoint, authentication: auth, throwIfMissing: false)
-            
-            let requestJson = try auth.buildAuthRequestJsonObject()
-            let jsonData = try JSONSerialization.data(withJSONObject: requestJson, options: [])
+            auth.buildAuthRequestJsonObject { requestJson, error in
+                do {
+                    if let error = error {
+                        throw error
+                    }
 
-            request.httpBody = jsonData
-            request.setValue(String(jsonData.count), forHTTPHeaderField: "Content-Length")
-            request.setValue("application/json", forHTTPHeaderField: "Accept")
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                    var request = try self.createRequest(endPoint: authentication.endpoint, authentication: auth, throwIfMissing: false)
 
-            let task = self.urlSession.dataTask(with: request) { data, response, error in
-                
-                if let error = error {
-                    completion(false, error)
-                    return
-                }
-                
-                guard let response = response as? HTTPURLResponse else {
-                    completion(false, Error.responseDataNotReceived)
-                    return
-                }
-                
-                switch response.statusCode {
-                case 401:
-                    completion(false, Error.notAuthorized)
-                    return
-                default:
-                    break
-                }
-                
-                guard let data = data else {
-                    completion(false, Error.responseDataNotReceived)
-                    return
-                }
+                    if let requestJson = requestJson {
+                        let jsonData = try JSONSerialization.data(withJSONObject: requestJson, options: [])
+                        
+                        request.httpBody = jsonData
+                        request.setValue(String(jsonData.count), forHTTPHeaderField: "Content-Length")
+                        request.setValue("application/json", forHTTPHeaderField: "Accept")
+                        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                    }
 
-                guard let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
-                    if let str = String(data: data, encoding: .utf8) {
-                        print("Response: \(str)")
+                    let task = self.urlSession.dataTask(with: request) { data, response, error in
+                        
+                        if let error = error {
+                            completion(false, error)
+                            return
+                        }
+                        
+                        guard let response = response as? HTTPURLResponse else {
+                            completion(false, Error.responseDataNotReceived)
+                            return
+                        }
+                        
+                        switch response.statusCode {
+                        case 401:
+                            completion(false, Error.notAuthorized)
+                            return
+                        default:
+                            break
+                        }
+                        
+                        guard let data = data else {
+                            completion(false, Error.responseDataNotReceived)
+                            return
+                        }
+
+                        guard let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+                            if let str = String(data: data, encoding: .utf8) {
+                                print("Response: \(str)")
+                            }
+                            
+                            completion(false, Error.jsonDecodingError)
+                            return
+                        }
+                        
+                        guard let status = json["status"] as? String, status == "OK" else {
+                            completion(false, Error.okStatusNotReceived)
+                            return
+                        }
+                        
+                        guard let tokenStr = json["token"] as? String else {
+                            completion(false, Error.notAuthorized)
+                            return
+                        }
+                        
+                        let token = AuthenticationToken(string: tokenStr)
+                        auth.saveAuthenticationToken(token: token)
+
+                        completion(true, nil)
                     }
                     
-                    completion(false, Error.jsonDecodingError)
-                    return
+                    task.priority = URLSessionTask.highPriority
+                    task.resume()
                 }
-                
-                guard let status = json["status"] as? String, status == "OK" else {
-                    completion(false, Error.okStatusNotReceived)
-                    return
+                catch {
+                    completion(false, error)
                 }
-                
-                guard let tokenStr = json["token"] as? String else {
-                    completion(false, Error.notAuthorized)
-                    return
-                }
-                
-                let token = AuthenticationToken(string: tokenStr)
-                auth.saveAuthenticationToken(token: token)
-
-                completion(true, nil)
             }
-            
-            task.priority = URLSessionTask.highPriority
-            task.resume()
-        }
-        catch {
-            completion(false, error)
         }
     }
 }

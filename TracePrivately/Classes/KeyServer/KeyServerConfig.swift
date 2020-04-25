@@ -82,6 +82,12 @@ extension KeyServerConfig {
                             authentication: KeyServerReceiptAuthentication()
                         )
                         
+                    case "deviceCheck":
+                        authentication = Authentication(
+                            endpoint: authUrl,
+                            authentication: KeyServerDeviceCheckAuthentication()
+                        )
+
                     default:
                         break
                     }
