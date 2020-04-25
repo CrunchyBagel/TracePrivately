@@ -5,6 +5,8 @@
 
 import UIKit
 
+// TODO: Allow the user to reset their keys with ENSelfExposureResetRequest
+
 class MainViewController: UIViewController {
 
     /// Constants
@@ -242,7 +244,7 @@ extension MainViewController {
 
         ContactTraceManager.shared.startTracing { error in
             if let error = error {
-                if let error = error as? CTError, error == .permissionDenied {
+                if let error = error as? ENError, error.errorCode == .notAuthorized {
                     
                 }
                 else {

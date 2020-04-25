@@ -19,7 +19,7 @@ class ExposedViewController: UICollectionViewController {
     }
 
     enum CellType {
-        case contact(CTContactInfo)
+        case contact(ENExposureInfo)
         case intro(String)
         case nextSteps
     }
@@ -70,7 +70,7 @@ class ExposedViewController: UICollectionViewController {
             entities = []
         }
         
-        let contacts: [CTContactInfo] = entities.compactMap { $0.contactInfo }
+        let contacts: [ENExposureInfo] = entities.compactMap { $0.contactInfo }
 
         if contacts.count == 0 {
             let title = String(format: NSLocalizedString("exposure.none.message", comment: ""), Disease.current.localizedTitle)
