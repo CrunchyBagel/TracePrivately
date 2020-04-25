@@ -42,7 +42,7 @@ extension SubmitInfectionViewController {
             defer {
                 request.invalidate()
             }
-            
+             
             guard let exposureInfo = request.selfExposureInfo else {
                 var showError = true
 

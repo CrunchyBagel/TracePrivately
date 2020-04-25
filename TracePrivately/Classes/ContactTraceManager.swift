@@ -369,6 +369,8 @@ extension ContactTraceManager {
         var sessionError: Swift.Error?
         
         dispatchGroup.enter()
+        
+        // TODO: This session is never invalidated, but it likely should be somewhere
         session.activateWithCompletion { error in
             
             if let error = error {

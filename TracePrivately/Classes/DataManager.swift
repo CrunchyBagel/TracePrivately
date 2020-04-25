@@ -285,6 +285,8 @@ extension DataManager {
                     let entity = ExposureContactInfoEntity(context: context)
                     entity.timestamp = contact.date
                     entity.duration = contact.duration
+                    entity.attenuationValue = Int16(contact.attenuationValue)
+                    
                     entity.status = ExposureStatus.detected.rawValue
                     entity.localNotificationStatus = ExposureLocalNotificationStatus.notSent.rawValue
                 }
@@ -366,12 +368,13 @@ extension ExposureContactInfoEntity {
             return nil
         }
         
-        // TODO: Save/restore attenuation value
-        return ENExposureInfo(attenuationValue: 0, date: timestamp, duration: self.duration)
+        return ENExposureInfo(attenuationValue: UInt8(self.attenuationValue), date: timestamp, duration: self.duration)
     }
     
     func matches(contact: ENExposureInfo) -> Bool {
-        // TODO: Handle attenuation value here
+        if contact.attenuationValue != UInt8(self.attenuationValue) {
+            return false
+        }
         
         if contact.duration != self.duration {
             return false

@@ -33,7 +33,6 @@
 		66F818722448FD5C0043AC2D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66F818702448FD5C0043AC2D /* Main.storyboard */; };
 		66F818742448FD5E0043AC2D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66F818732448FD5E0043AC2D /* Assets.xcassets */; };
 		66F818772448FD5E0043AC2D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66F818752448FD5E0043AC2D /* LaunchScreen.storyboard */; };
-		66F818832448FE020043AC2D /* CTMockFramework.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F818822448FE020043AC2D /* CTMockFramework.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -73,6 +72,7 @@
 		6698C573244BFAB600F046E4 /* KeyServer.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = KeyServer.plist; sourceTree = "<group>"; };
 		66A039D6245005B700A569BE /* FontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
 		66CB7BD02453D51A0044D32B /* ENMockFramework.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ENMockFramework.swift; sourceTree = "<group>"; };
+		66CB7BD22453EB190044D32B /* Model 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 5.xcdatamodel"; sourceTree = "<group>"; };
 		66CB95BC244FB51000D775B6 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		66CB95BE244FB5CD00D775B6 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		66CB95C0244FBBC800D775B6 /* Privacy.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Privacy.storyboard; sourceTree = "<group>"; };
@@ -88,7 +88,6 @@
 		66F818732448FD5E0043AC2D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		66F818762448FD5E0043AC2D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		66F818782448FD5E0043AC2D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		66F818822448FE020043AC2D /* CTMockFramework.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTMockFramework.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,7 +135,6 @@
 				66437F78244A8A54000B8C6C /* View Controllers */,
 				66F8186A2448FD5C0043AC2D /* AppDelegate.swift */,
 				6698C56F24492BC500F046E4 /* KeyServer.swift */,
-				66F818822448FE020043AC2D /* CTMockFramework.swift */,
 				66CB7BD02453D51A0044D32B /* ENMockFramework.swift */,
 				66437F75244A86AE000B8C6C /* Disease.swift */,
 				66437F9F244A9B2C000B8C6C /* DataManager.swift */,
@@ -321,7 +319,6 @@
 				66CB7BD12453D51A0044D32B /* ENMockFramework.swift in Sources */,
 				66EAEB66244DC62A0044FF70 /* SubmittedInfectionViewController.swift in Sources */,
 				6698C572244936AF00F046E4 /* ExposedViewController.swift in Sources */,
-				66F818832448FE020043AC2D /* CTMockFramework.swift in Sources */,
 				6614BB052452B9D900885F23 /* ExposureDetailsViewController.swift in Sources */,
 				668CE843244D01F50065960A /* ContactTraceManager.swift in Sources */,
 			);
@@ -583,12 +580,13 @@
 		66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				66CB7BD22453EB190044D32B /* Model 5.xcdatamodel */,
 				661B6C6A2452CE2500CC1DC6 /* Model 4.xcdatamodel */,
 				66CB95C6244FCC9A00D775B6 /* Model 3.xcdatamodel */,
 				668D4B22244D705100D90C26 /* Model 2.xcdatamodel */,
 				66437F9D244A9A02000B8C6C /* Model.xcdatamodel */,
 			);
-			currentVersion = 661B6C6A2452CE2500CC1DC6 /* Model 4.xcdatamodel */;
+			currentVersion = 66CB7BD22453EB190044D32B /* Model 5.xcdatamodel */;
 			path = TracePrivately.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
