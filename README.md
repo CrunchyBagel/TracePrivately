@@ -31,21 +31,25 @@ There are a number of ways you can help. You can:
 
 ### Key Server
 
-The mobile apps communicates with a server to retrieve infected keys. The API specification is here: https://github.com/CrunchyBagel/TracePrivately/blob/master/KeyServer/KeyServer.yaml
+The mobile app communicates with a server to retrieve infected keys. API specification: https://github.com/CrunchyBagel/TracePrivately/blob/master/KeyServer/KeyServer.yaml
 
-The current options are:
+Current server options:
 
-1. PHP: This project contains a very basic sample PHP implementation: https://github.com/CrunchyBagel/TracePrivately/tree/master/KeyServer
-2. Ruby: https://github.com/tatey/trace_privately by @tatey.
+1. *PHP*: This project contains a very basic sample PHP implementation: https://github.com/CrunchyBagel/TracePrivately/tree/master/KeyServer
+2. *Ruby*: https://github.com/tatey/trace_privately by @tatey.
     * You can use a demo server of this implementation here: https://github.com/CrunchyBagel/TracePrivately/issues/36
 3. Create your own according to the above OpenAPI specification
 
 ### iOS App
 
 1. Configure `KeyServer.plist` to point to your server
-2. Configure `ExposureNotifications.plist` if you require different thresholds.
-    * `attenuationThreshold` is UInt8
-    * `durationThreshold` is a duration in seconds.
+    * The endpoints are constructed by joining `BaseUrl` with each corresponding endpoint value.
+    * Authentication is optional. Remove the `Authenticaftion` key to disable. Otherwise, the types available are:
+      * `receipt`: Submit the App Store receipt data to the `auth` endpoint. This data isn't available in development
+      * `deviceCheck`: Submit the info from `DeviceCheck` to the `auth` endpoint. This is only available from iOS 11.
+2. Configure `ExposureNotifications.plist` if you want to filter returned results
+    * `attenuationThreshold` is UInt8. Attenuation is calculated by subtracting the measured RSSI from the reported transmit power. Results above this value are not returned. `0` to include all.
+    * `durationThreshold` is a duration in seconds. Exposures shorter than this are not returned. `0` to include all.
 3. Build and run in Xcode
 
 ### Workflow
