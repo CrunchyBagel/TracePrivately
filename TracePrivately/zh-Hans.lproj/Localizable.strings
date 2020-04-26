@@ -1,0 +1,67 @@
+/* parameter is localized disease name */
+"infection.infected.title" = "您确诊%@";
+"exposure.exposed.details.title" = "接触";
+/* 
+  Localizable.strings
+  TracePrivately
+*/
+
+"app.title" = "隐私追踪";
+
+"tracing.title" = "接触者追踪";
+/* parameter is localized disease name */
+"tracing.message" = "遇到他人时安全地交换匿名信息，自动检测是否接触过%@。";
+"tracing.start.title" = "开始追踪";
+"tracing.stop.title" = "停止追踪";
+
+"disease.covid19.title" = "2019冠状病毒病";
+
+"infection.title" = "提交感染";
+
+/* parameter is localized disease name */
+"infection.report.title" = "我确诊%@";
+"infection.report.message" = "如果您被诊断为%@，在此提交诊断。\n\n系统将提示您进行确认。";
+"infection.report.gathering_data.error" = "无法创造您的匿名案例。";
+"infection.report.gathering.empty.title" = "无信息";
+"infection.report.gathering.empty.message" = "无法查到您的追踪信息。也许您没有开启追踪？";
+"infection.report.submit.title" = "提交诊断";
+"infection.report.submit.message" = "请确认要提交。\n\n提交将允许近期在您附近的人得知可能接触过。";
+"infection.report.submit.error" = "无法提交您的信息。";
+"infection.report.submitting.title" = "稍等……";
+"infection.report.submitting.message" = "正在提交您的匿名信息。";
+"infection.pending.title" = "正在等待确认";
+
+/* parameter is localized disease name */
+"exposure.none.message" = "没有发现任何确诊%@的接触者！\n\n请保持安全措施，多次洗手。";
+"exposure.exposed.banner.title" = "您有可能接触过%@";
+"exposure.exposed.title" = "接触事项";
+/* parameter is localized disease name */
+"exposure.exposed.message" = "我们认为您有可能接触过%@。";
+/* parameter is a localized duration */
+"exposure.times.duration" = "持续时间：%@";
+
+"exposure.next_steps.title" = "后续步骤";
+"exposure.next_steps.message" = "请遵循当局概述的步骤。";
+
+"unknown" = "未知";
+"submit" = "提交";
+"error" = "错误";
+
+"ok" = "确定";
+"cancel" = "取消";
+
+"keyserver.error.no_response_data" = "未收到响应数据";
+"keyserver.error.response_decoding_error" = "响应解码出错";
+"keyserver.error.key_data_missing" = "缺少密钥数据";
+"keyserver.error.date_missing" = "缺少日期";
+"keyserver.error.not_ok" = "未收到确定状态";
+"keyserver.error.invalid_config" = "密钥服务器配置无效";
+
+/* parameter is localized disease name */
+"notification.exposure_detected.title" = "注意：检测到接触%@";
+/* 1st parameter is formatted localized time, 2nd parameter is formatted localized duration */
+"notification.exposure_detected.single.body" = "您有可能在%1$@接触过%2$@";
+"notification.exposure_detected.multiple.body" = "我们检测到您有可能多次接触过。";
+
+"privacy.title" = "私隐资讯";
+

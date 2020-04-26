@@ -1,0 +1,67 @@
+/* parameter is localized disease name */
+"infection.infected.title" = "Имате %@";
+"exposure.exposed.details.title" = "Изложеност";
+/* 
+  Localizable.strings
+  TracePrivately
+*/
+
+"app.title" = "Анонимно праћење";
+
+"tracing.title" = "Праћење изложености";
+/* parameter is localized disease name */
+"tracing.message" = "Безбедно размени анонимне податке приликом сусрета са другим људим и аутоматски провери изложеност %@.";
+"tracing.start.title" = "Почни са праћењем";
+"tracing.stop.title" = "Заустави праћење";
+
+"disease.covid19.title" = "COVID-19";
+
+"infection.title" = "Пријави зараженост";
+
+/* parameter is localized disease name */
+"infection.report.title" = "Имам %@.";
+"infection.report.message" = "Уколико вам је дијагностификован %@, пошаљите дијагнозу овде.\nБиће потребно да потврдите.";
+"infection.report.gathering_data.error" = "Није могуће направити анонимни профил.";
+"infection.report.gathering.empty.title" = "Нема информација";
+"infection.report.gathering.empty.message" = "Није могуће пронаћи податке о праћењу. Да ли је праћење омогућено?";
+"infection.report.submit.title" = "Пошаљи дијагнозу.";
+"infection.report.submit.message" = "Потврдите слање.\nНа овај начин ће људи који су били у вашој близини знати да су можда били изложени.";
+"infection.report.submit.error" = "Није могуће послати ваше податке.";
+"infection.report.submitting.title" = "Тренутак...";
+"infection.report.submitting.message" = "Слање анонимних података.";
+"infection.pending.title" = "Чекање потврде";
+
+/* parameter is localized disease name */
+"exposure.none.message" = "Није детектован контакт са %@!\nČuvajte se i perite ruke.";
+"exposure.exposed.banner.title" = "Могуће је да сте били изложени";
+"exposure.exposed.title" = "Изложеност";
+/* parameter is localized disease name */
+"exposure.exposed.message" = "Могуће је да сте били у контакту са %@";
+/* parameter is a localized duration */
+"exposure.times.duration" = "Трајање: %@";
+
+"exposure.next_steps.title" = "Следећи кораци";
+"exposure.next_steps.message" = "Пратите кораке надлежних";
+
+"unknown" = "Непознато";
+"submit" = "Пошаљи";
+"error" = "Грешка";
+
+"ok" = "У реду";
+"cancel" = "Откажи";
+
+"keyserver.error.no_response_data" = "Није примљен одговор";
+"keyserver.error.response_decoding_error" = "Грешка у тумачењу одговора";
+"keyserver.error.key_data_missing" = "Недостају кључни подаци";
+"keyserver.error.date_missing" = "Недостаје датум";
+"keyserver.error.not_ok" = "Није примљен статус да је све у реду";
+"keyserver.error.invalid_config" = "Лоше KeyServer подешавање";
+
+/* parameter is localized disease name */
+"notification.exposure_detected.title" = "Упозорење: детектована изложеност %@";
+/* 1st parameter is formatted localized time, 2nd parameter is formatted localized duration */
+"notification.exposure_detected.single.body" = "Могуће је да сте били изложени %1$@ у трајању од %2$@";
+"notification.exposure_detected.multiple.body" = "Установљено је да сте можда били изложени више пута.";
+
+"privacy.title" = "Информације о приватности";
+

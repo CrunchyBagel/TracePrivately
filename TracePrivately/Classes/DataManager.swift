@@ -82,7 +82,7 @@ class DataManager {
 extension DataManager {
     // TODO: Need to automatically purge old keys
 
-    func saveInfectedKeys(keys: [CTDailyTracingKey], completion: @escaping (_ numNewKeys: Int, _ error: Swift.Error?) -> Void) {
+    func saveInfectedKeys(keys: [ENTemporaryExposureKey], completion: @escaping (_ numNewKeys: Int, _ error: Swift.Error?) -> Void) {
         
         guard keys.count > 0 else {
             completion(0, nil)
@@ -182,7 +182,7 @@ extension DataManager {
         }
     }
     
-    func allInfectedKeys(completion: @escaping ([CTDailyTracingKey]?, Swift.Error?) -> Void) {
+    func allInfectedKeys(completion: @escaping ([ENTemporaryExposureKey]?, Swift.Error?) -> Void) {
         let context = self.persistentContainer.newBackgroundContext()
         
         context.perform {
@@ -191,7 +191,8 @@ extension DataManager {
             do {
                 let entities = try context.fetch(request)
                 
-                let keys: [CTDailyTracingKey] = entities.compactMap { $0.infectedKey }.map { CTDailyTracingKey(keyData: $0) }
+                // TODO: Handle rolling start number
+                let keys: [ENTemporaryExposureKey] = entities.compactMap { $0.infectedKey }.map { ENTemporaryExposureKey(keyData: $0, rollingStartNumber: 0) }
                 completion(keys, nil)
             }
             catch {
@@ -223,14 +224,14 @@ extension DataManager {
         case sent = "S"
     }
     
-    func saveExposures(contacts: [CTContactInfo], completion: @escaping (Error?) -> Void) {
+    func saveExposures(contacts: [ENExposureInfo], completion: @escaping (Error?) -> Void) {
         
         let context = self.persistentContainer.newBackgroundContext()
         
         context.perform {
             
             var delete: [ExposureContactInfoEntity] = []
-            var insert: [CTContactInfo] = []
+            var insert: [ENExposureInfo] = []
 
             do {
                 let request = ExposureFetchRequest(includeStatuses: [], includeNotificationStatuses: [], sortDirection: nil)
@@ -284,6 +285,8 @@ extension DataManager {
                     let entity = ExposureContactInfoEntity(context: context)
                     entity.timestamp = contact.date
                     entity.duration = contact.duration
+                    entity.attenuationValue = Int16(contact.attenuationValue)
+                    
                     entity.status = ExposureStatus.detected.rawValue
                     entity.localNotificationStatus = ExposureLocalNotificationStatus.notSent.rawValue
                 }
@@ -360,15 +363,19 @@ extension DataManager {
 }
 
 extension ExposureContactInfoEntity {
-    var contactInfo: CTContactInfo? {
+    var contactInfo: ENExposureInfo? {
         guard let timestamp = self.timestamp else {
             return nil
         }
         
-        return CTContactInfo(duration: self.duration, timestamp: timestamp.timeIntervalSinceReferenceDate)
+        return ENExposureInfo(attenuationValue: UInt8(self.attenuationValue), date: timestamp, duration: self.duration)
     }
     
-    func matches(contact: CTContactInfo) -> Bool {
+    func matches(contact: ENExposureInfo) -> Bool {
+        if contact.attenuationValue != UInt8(self.attenuationValue) {
+            return false
+        }
+        
         if contact.duration != self.duration {
             return false
         }

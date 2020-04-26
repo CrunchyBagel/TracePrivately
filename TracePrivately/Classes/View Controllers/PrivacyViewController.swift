@@ -7,17 +7,17 @@ import UIKit
 
 class PrivacyViewController: UIViewController {
 
+    @IBOutlet var okButton: ActionButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.title = NSLocalizedString("privacy.title", comment: "")
         
-        // Swipe down to dismiss also available on iOS 13+
-        let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(Self.doneTapped(_:)))
-        self.navigationItem.rightBarButtonItem = button
+        self.okButton.setTitle(NSLocalizedString("ok", comment: ""), for: .normal)
     }
     
-    @objc func doneTapped(_ sender: UIBarButtonItem) {
+    @IBAction func doneTapped(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
 }

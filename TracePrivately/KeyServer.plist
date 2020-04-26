@@ -10,6 +10,13 @@
 		<string>infected</string>
 		<key>SubmitInfectedKeys</key>
 		<string>submit</string>
+		<key>Authentication</key>
+		<string>auth</string>
+	</dict>
+	<key>Authentication</key>
+	<dict>
+		<key>Type</key>
+		<string>receipt</string>
 	</dict>
 </dict>
 </plist>

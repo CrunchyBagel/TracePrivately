@@ -8,18 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		39BD8849244C6D3D00EB8B6C /* ExposedView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 39BD8848244C6D3D00EB8B6C /* ExposedView.storyboard */; };
-		66437F74244A73F0000B8C6C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 66437F73244A73F0000B8C6C /* Localizable.strings */; };
+		6614BB052452B9D900885F23 /* ExposureDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6614BB042452B9D900885F23 /* ExposureDetailsViewController.swift */; };
+		6621056D245251B10011EB42 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6621056C245251B10011EB42 /* main.swift */; };
+		6621057124525FC90011EB42 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6621057324525FC90011EB42 /* Localizable.strings */; };
 		66437F76244A86AE000B8C6C /* Disease.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F75244A86AE000B8C6C /* Disease.swift */; };
 		66437F9E244A9A02000B8C6C /* TracePrivately.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */; };
 		66437FA0244A9B2C000B8C6C /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9F244A9B2C000B8C6C /* DataManager.swift */; };
 		6673EED42451785300244287 /* SubmitConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6673EED32451785300244287 /* SubmitConfig.plist */; };
 		6673EED62451C10000244287 /* SubmitInfectionConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6673EED52451C10000244287 /* SubmitInfectionConfig.swift */; };
+		66793890245460B600868B84 /* KeyServerAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6679388D245460B600868B84 /* KeyServerAuthentication.swift */; };
+		66793891245460B600868B84 /* KeyServerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6679388E245460B600868B84 /* KeyServerConfig.swift */; };
+		66793892245460B600868B84 /* KeyServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6679388F245460B600868B84 /* KeyServer.swift */; };
 		66848C2D244D5F8800497D2A /* AsyncBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66848C2C244D5F8800497D2A /* AsyncBlockOperation.swift */; };
 		668CE843244D01F50065960A /* ContactTraceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668CE842244D01F50065960A /* ContactTraceManager.swift */; };
-		6698C57024492BC500F046E4 /* KeyServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6698C56F24492BC500F046E4 /* KeyServer.swift */; };
 		6698C572244936AF00F046E4 /* ExposedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6698C571244936AF00F046E4 /* ExposedViewController.swift */; };
 		6698C574244BFAB600F046E4 /* KeyServer.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6698C573244BFAB600F046E4 /* KeyServer.plist */; };
 		66A039D7245005B700A569BE /* FontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A039D6245005B700A569BE /* FontExtension.swift */; };
+		66CB7BD12453D51A0044D32B /* ENMockFramework.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CB7BD02453D51A0044D32B /* ENMockFramework.swift */; };
 		66CB95BD244FB51000D775B6 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CB95BC244FB51000D775B6 /* ActionButton.swift */; };
 		66CB95BF244FB5CD00D775B6 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CB95BE244FB5CD00D775B6 /* MainViewController.swift */; };
 		66CB95C1244FBBC800D775B6 /* Privacy.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66CB95C0244FBBC800D775B6 /* Privacy.storyboard */; };
@@ -32,24 +37,51 @@
 		66F818722448FD5C0043AC2D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66F818702448FD5C0043AC2D /* Main.storyboard */; };
 		66F818742448FD5E0043AC2D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66F818732448FD5E0043AC2D /* Assets.xcassets */; };
 		66F818772448FD5E0043AC2D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66F818752448FD5E0043AC2D /* LaunchScreen.storyboard */; };
-		66F818832448FE020043AC2D /* CTMockFramework.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F818822448FE020043AC2D /* CTMockFramework.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		66210568245251B10011EB42 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		39BD8848244C6D3D00EB8B6C /* ExposedView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ExposedView.storyboard; sourceTree = "<group>"; };
-		66437F73244A73F0000B8C6C /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		6614BB042452B9D900885F23 /* ExposureDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureDetailsViewController.swift; sourceTree = "<group>"; };
+		661B6C6A2452CE2500CC1DC6 /* Model 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 4.xcdatamodel"; sourceTree = "<group>"; };
+		6621056A245251B10011EB42 /* OneSkyDownload */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OneSkyDownload; sourceTree = BUILT_PRODUCTS_DIR; };
+		6621056C245251B10011EB42 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		6621057224525FC90011EB42 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6621057424525FE70011EB42 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6621057524525FF40011EB42 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		66210576245260010011EB42 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		662105772452601E0011EB42 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		662105782452602D0011EB42 /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		6625219B2453955F00C68AD1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		6625219C2453957100C68AD1 /* sr-RS */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sr-RS"; path = "sr-RS.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		66437F75244A86AE000B8C6C /* Disease.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disease.swift; sourceTree = "<group>"; };
 		66437F9D244A9A02000B8C6C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		66437F9F244A9B2C000B8C6C /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		6673EED32451785300244287 /* SubmitConfig.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SubmitConfig.plist; sourceTree = "<group>"; };
 		6673EED52451C10000244287 /* SubmitInfectionConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitInfectionConfig.swift; sourceTree = "<group>"; };
+		6679388D245460B600868B84 /* KeyServerAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyServerAuthentication.swift; sourceTree = "<group>"; };
+		6679388E245460B600868B84 /* KeyServerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyServerConfig.swift; sourceTree = "<group>"; };
+		6679388F245460B600868B84 /* KeyServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyServer.swift; sourceTree = "<group>"; };
+		667938932454665E00868B84 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		66848C2C244D5F8800497D2A /* AsyncBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncBlockOperation.swift; sourceTree = "<group>"; };
 		668CE842244D01F50065960A /* ContactTraceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactTraceManager.swift; sourceTree = "<group>"; };
 		668D4B22244D705100D90C26 /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
-		6698C56F24492BC500F046E4 /* KeyServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyServer.swift; sourceTree = "<group>"; };
 		6698C571244936AF00F046E4 /* ExposedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposedViewController.swift; sourceTree = "<group>"; };
 		6698C573244BFAB600F046E4 /* KeyServer.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = KeyServer.plist; sourceTree = "<group>"; };
 		66A039D6245005B700A569BE /* FontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
+		66CB7BD02453D51A0044D32B /* ENMockFramework.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ENMockFramework.swift; sourceTree = "<group>"; };
+		66CB7BD22453EB190044D32B /* Model 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 5.xcdatamodel"; sourceTree = "<group>"; };
 		66CB95BC244FB51000D775B6 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		66CB95BE244FB5CD00D775B6 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		66CB95C0244FBBC800D775B6 /* Privacy.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Privacy.storyboard; sourceTree = "<group>"; };
@@ -65,10 +97,16 @@
 		66F818732448FD5E0043AC2D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		66F818762448FD5E0043AC2D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		66F818782448FD5E0043AC2D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		66F818822448FE020043AC2D /* CTMockFramework.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTMockFramework.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		66210567245251B10011EB42 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		66F818642448FD5C0043AC2D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -82,6 +120,7 @@
 		39BD8847244C6CF000EB8B6C /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
+				66F818752448FD5E0043AC2D /* LaunchScreen.storyboard */,
 				66CB95C0244FBBC800D775B6 /* Privacy.storyboard */,
 				66F818702448FD5C0043AC2D /* Main.storyboard */,
 				39BD8848244C6D3D00EB8B6C /* ExposedView.storyboard */,
@@ -91,13 +130,21 @@
 			path = Storyboards;
 			sourceTree = "<group>";
 		};
+		6621056B245251B10011EB42 /* OneSkyDownload */ = {
+			isa = PBXGroup;
+			children = (
+				6621056C245251B10011EB42 /* main.swift */,
+			);
+			path = OneSkyDownload;
+			sourceTree = "<group>";
+		};
 		66437F77244A8A4C000B8C6C /* Classes */ = {
 			isa = PBXGroup;
 			children = (
 				66437F78244A8A54000B8C6C /* View Controllers */,
+				6679388C245460B600868B84 /* KeyServer */,
 				66F8186A2448FD5C0043AC2D /* AppDelegate.swift */,
-				6698C56F24492BC500F046E4 /* KeyServer.swift */,
-				66F818822448FE020043AC2D /* CTMockFramework.swift */,
+				66CB7BD02453D51A0044D32B /* ENMockFramework.swift */,
 				66437F75244A86AE000B8C6C /* Disease.swift */,
 				66437F9F244A9B2C000B8C6C /* DataManager.swift */,
 				668CE842244D01F50065960A /* ContactTraceManager.swift */,
@@ -113,6 +160,7 @@
 			children = (
 				66CB95BE244FB5CD00D775B6 /* MainViewController.swift */,
 				6698C571244936AF00F046E4 /* ExposedViewController.swift */,
+				6614BB042452B9D900885F23 /* ExposureDetailsViewController.swift */,
 				66EAEB61244DA72E0044FF70 /* SubmitInfectionViewController.swift */,
 				6673EED52451C10000244287 /* SubmitInfectionConfig.swift */,
 				66EAEB65244DC62A0044FF70 /* SubmittedInfectionViewController.swift */,
@@ -121,10 +169,21 @@
 			path = "View Controllers";
 			sourceTree = "<group>";
 		};
+		6679388C245460B600868B84 /* KeyServer */ = {
+			isa = PBXGroup;
+			children = (
+				6679388D245460B600868B84 /* KeyServerAuthentication.swift */,
+				6679388E245460B600868B84 /* KeyServerConfig.swift */,
+				6679388F245460B600868B84 /* KeyServer.swift */,
+			);
+			path = KeyServer;
+			sourceTree = "<group>";
+		};
 		66F8185E2448FD5C0043AC2D = {
 			isa = PBXGroup;
 			children = (
 				66F818692448FD5C0043AC2D /* TracePrivately */,
+				6621056B245251B10011EB42 /* OneSkyDownload */,
 				66F818682448FD5C0043AC2D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -133,6 +192,7 @@
 			isa = PBXGroup;
 			children = (
 				66F818672448FD5C0043AC2D /* TracePrivately.app */,
+				6621056A245251B10011EB42 /* OneSkyDownload */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -144,9 +204,8 @@
 				66437F77244A8A4C000B8C6C /* Classes */,
 				66F818732448FD5E0043AC2D /* Assets.xcassets */,
 				66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */,
-				66F818752448FD5E0043AC2D /* LaunchScreen.storyboard */,
 				66F818782448FD5E0043AC2D /* Info.plist */,
-				66437F73244A73F0000B8C6C /* Localizable.strings */,
+				6621057324525FC90011EB42 /* Localizable.strings */,
 				6698C573244BFAB600F046E4 /* KeyServer.plist */,
 				6673EED32451785300244287 /* SubmitConfig.plist */,
 			);
@@ -156,6 +215,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		66210569245251B10011EB42 /* OneSkyDownload */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 66210570245251B10011EB42 /* Build configuration list for PBXNativeTarget "OneSkyDownload" */;
+			buildPhases = (
+				66210566245251B10011EB42 /* Sources */,
+				66210567245251B10011EB42 /* Frameworks */,
+				66210568245251B10011EB42 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OneSkyDownload;
+			productName = OneSkyDownload;
+			productReference = 6621056A245251B10011EB42 /* OneSkyDownload */;
+			productType = "com.apple.product-type.tool";
+		};
 		66F818662448FD5C0043AC2D /* TracePrivately */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 66F8187B2448FD5E0043AC2D /* Build configuration list for PBXNativeTarget "TracePrivately" */;
@@ -183,6 +259,9 @@
 				LastUpgradeCheck = 1140;
 				ORGANIZATIONNAME = "Quentin Zervaas";
 				TargetAttributes = {
+					66210569245251B10011EB42 = {
+						CreatedOnToolsVersion = 11.4.1;
+					};
 					66F818662448FD5C0043AC2D = {
 						CreatedOnToolsVersion = 11.4.1;
 						LastSwiftMigration = 1140;
@@ -196,6 +275,14 @@
 			knownRegions = (
 				en,
 				Base,
+				fr,
+				hr,
+				"pt-BR",
+				"es-MX",
+				"hi-IN",
+				"zh-Hans",
+				"sr-RS",
+				de,
 			);
 			mainGroup = 66F8185E2448FD5C0043AC2D;
 			productRefGroup = 66F818682448FD5C0043AC2D /* Products */;
@@ -203,6 +290,7 @@
 			projectRoot = "";
 			targets = (
 				66F818662448FD5C0043AC2D /* TracePrivately */,
+				66210569245251B10011EB42 /* OneSkyDownload */,
 			);
 		};
 /* End PBXProject section */
@@ -217,7 +305,7 @@
 				39BD8849244C6D3D00EB8B6C /* ExposedView.storyboard in Resources */,
 				66EAEB60244DA70E0044FF70 /* SubmitInfection.storyboard in Resources */,
 				66EAEB64244DC5E40044FF70 /* SubmittedInfection.storyboard in Resources */,
-				66437F74244A73F0000B8C6C /* Localizable.strings in Resources */,
+				6621057124525FC90011EB42 /* Localizable.strings in Resources */,
 				66F818742448FD5E0043AC2D /* Assets.xcassets in Resources */,
 				66F818722448FD5C0043AC2D /* Main.storyboard in Resources */,
 				6673EED42451785300244287 /* SubmitConfig.plist in Resources */,
@@ -228,24 +316,35 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		66210566245251B10011EB42 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6621056D245251B10011EB42 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		66F818632448FD5C0043AC2D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66793892245460B600868B84 /* KeyServer.swift in Sources */,
 				66848C2D244D5F8800497D2A /* AsyncBlockOperation.swift in Sources */,
 				66EAEB62244DA72E0044FF70 /* SubmitInfectionViewController.swift in Sources */,
 				66A039D7245005B700A569BE /* FontExtension.swift in Sources */,
 				66CB95C3244FBBF300D775B6 /* PrivacyViewController.swift in Sources */,
 				66CB95BD244FB51000D775B6 /* ActionButton.swift in Sources */,
+				66793891245460B600868B84 /* KeyServerConfig.swift in Sources */,
 				66437F76244A86AE000B8C6C /* Disease.swift in Sources */,
 				66437FA0244A9B2C000B8C6C /* DataManager.swift in Sources */,
 				66F8186B2448FD5C0043AC2D /* AppDelegate.swift in Sources */,
+				66793890245460B600868B84 /* KeyServerAuthentication.swift in Sources */,
 				66CB95BF244FB5CD00D775B6 /* MainViewController.swift in Sources */,
 				66437F9E244A9A02000B8C6C /* TracePrivately.xcdatamodeld in Sources */,
-				6698C57024492BC500F046E4 /* KeyServer.swift in Sources */,
+				66CB7BD12453D51A0044D32B /* ENMockFramework.swift in Sources */,
 				66EAEB66244DC62A0044FF70 /* SubmittedInfectionViewController.swift in Sources */,
 				6698C572244936AF00F046E4 /* ExposedViewController.swift in Sources */,
-				66F818832448FE020043AC2D /* CTMockFramework.swift in Sources */,
+				6614BB052452B9D900885F23 /* ExposureDetailsViewController.swift in Sources */,
 				668CE843244D01F50065960A /* ContactTraceManager.swift in Sources */,
 				6673EED62451C10000244287 /* SubmitInfectionConfig.swift in Sources */,
 			);
@@ -254,6 +353,22 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		6621057324525FC90011EB42 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6621057224525FC90011EB42 /* en */,
+				6621057424525FE70011EB42 /* fr */,
+				6621057524525FF40011EB42 /* hr */,
+				66210576245260010011EB42 /* pt-BR */,
+				662105772452601E0011EB42 /* es-MX */,
+				662105782452602D0011EB42 /* hi-IN */,
+				6625219B2453955F00C68AD1 /* zh-Hans */,
+				6625219C2453957100C68AD1 /* sr-RS */,
+				667938932454665E00868B84 /* de */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		66F818702448FD5C0043AC2D /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -273,10 +388,37 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		6621056E245251B10011EB42 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CHZS3BHM57;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		6621056F245251B10011EB42 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CHZS3BHM57;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		66F818792448FD5E0043AC2D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -337,6 +479,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -431,6 +574,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		66210570245251B10011EB42 /* Build configuration list for PBXNativeTarget "OneSkyDownload" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6621056E245251B10011EB42 /* Debug */,
+				6621056F245251B10011EB42 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		66F818622448FD5C0043AC2D /* Build configuration list for PBXProject "TracePrivately" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -455,11 +607,13 @@
 		66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				66CB7BD22453EB190044D32B /* Model 5.xcdatamodel */,
+				661B6C6A2452CE2500CC1DC6 /* Model 4.xcdatamodel */,
 				66CB95C6244FCC9A00D775B6 /* Model 3.xcdatamodel */,
 				668D4B22244D705100D90C26 /* Model 2.xcdatamodel */,
 				66437F9D244A9A02000B8C6C /* Model.xcdatamodel */,
 			);
-			currentVersion = 66CB95C6244FCC9A00D775B6 /* Model 3.xcdatamodel */;
+			currentVersion = 66CB7BD22453EB190044D32B /* Model 5.xcdatamodel */;
 			path = TracePrivately.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

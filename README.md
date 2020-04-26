@@ -1,7 +1,9 @@
 # TracePrivately
-A sample app using Apple's contact tracing framework, as documented here:
+A functioning app using Apple's contact tracing framework, as documented here:
 
 https://www.apple.com/covid19/contacttracing
+
+**24 April 2020:** Trace Privately has been updated to be compatible with v1.1 of Apple's framework, now called *Exposure Notification* framework.
 
 *Note: The Apple framework is not actually yet released. This app is being developed using a mock version of the framework based on the published documentation. This will generate false exposures for the purposes of testing and development.*
 
@@ -21,8 +23,8 @@ This app will be evolving quickly as I'm trying to publish new functionality as 
 There are a number of ways you can help. You can:
 
 * We need non-English translations: https://github.com/CrunchyBagel/TracePrivately/issues/30
-* We need an Android implementation
-* We need testing (download, install, try the app - submit any issues you find)
+* We need an Android implementation: https://github.com/CrunchyBagel/TracePrivately/issues/32
+* We need testing (download, install, try the app - submit any issues you find). Pull requests with unit tests also welcome.
 * Suggestions, ideas, thoughts about any aspect of the app.
 
 ## Instructions
@@ -33,11 +35,15 @@ There are a number of ways you can help. You can:
 4. The sample key server requires manual approval of infection submissions, using the `./tools/pending.php` and `./tools/approve.php` scripts.
 5. In this proof of concept, every client will detect an exposure for any infection submitted
 
+Demo server information: https://github.com/CrunchyBagel/TracePrivately/issues/36
+
 ## Localizations
 
 If you can help translate the app, please help our crowd-sourced effort here:
 
 https://traceprivately.oneskyapp.com/collaboration/project?id=170066
+
+Currently available in: English, French, Spanish, Portuguese, German, Simplified Chinese, Croatian, Serbian and Hindi.
 
 ## Screenshots
 
