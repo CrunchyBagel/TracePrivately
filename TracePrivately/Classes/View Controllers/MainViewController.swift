@@ -198,7 +198,7 @@ class MainViewController: UIViewController {
                 }
                 
                 let indicator = UIActivityIndicatorView(style: style)
-                indicator.starttAnimating()
+                indicator.startAnimating()
 
                 let button = UIBarButtonItem(customView: indicator)
 
