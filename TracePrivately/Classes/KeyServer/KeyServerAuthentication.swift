@@ -8,9 +8,10 @@ import DeviceCheck
 
 struct AuthenticationToken: CustomDebugStringConvertible, CustomStringConvertible {
     let string: String
+    let expiresAt: Date?
     
     var debugDescription: String {
-        return "token=\(string)"
+        return "token=\(string) expiresAt=\(String(describing: expiresAt))"
     }
     
     var description: String {
@@ -26,20 +27,33 @@ protocol KeyServerAuthentication {
 }
 
 class KeyServerBaseAuthentication: KeyServerAuthentication {
-    static let storageKey = "KeyServer_AuthToken"
-    
+    static let tokenStorageKey = "KeyServer_AuthToken"
+    static let expiryStorageKey = "KeyServer_AuthTokenExpiry"
+
     func saveAuthenticationToken(token: AuthenticationToken) {
         print("Saving token: \(token)")
-        UserDefaults.standard.set(token.string, forKey: Self.storageKey)
-        UserDefaults.standard.synchronize()
+        
+        let defaults = UserDefaults.standard
+        defaults.set(token.string, forKey: Self.tokenStorageKey)
+        
+        if let date = token.expiresAt {
+            defaults.set(date, forKey: Self.expiryStorageKey)
+        }
+        else {
+            defaults.removeObject(forKey: Self.expiryStorageKey)
+        }
+        
+        defaults.synchronize()
     }
     
     var currentAuthenticationToken: AuthenticationToken? {
-        guard let str = UserDefaults.standard.string(forKey: Self.storageKey) else {
+        guard let str = UserDefaults.standard.string(forKey: Self.tokenStorageKey) else {
             return nil
         }
         
-        return .init(string: str)
+        let expiresAt = UserDefaults.standard.object(forKey: Self.expiryStorageKey) as? Date
+        
+        return .init(string: str, expiresAt: expiresAt)
     }
     
     func buildAuthRequestJsonObject(completion: ([String : Any]?, Error?) -> Void) {

@@ -47,6 +47,9 @@ paths:
                     description: A newly-generated token
                     schema:
                         type: object
+                        required:
+                            - status
+                            - token
                         properties:
                             status:
                                 type: string
@@ -56,6 +59,15 @@ paths:
                                 type: string
                                 example: "SOME_TOKEN_DATA"
                                 description: This can be in whatever format is necessary for your system
+                            expires_at:
+                                type: string
+                                format: date-time
+                                description: |
+                                    This indicates when the token will definitely no longer work, meaning the client
+                                    can simply request a new one without needing determine it's invalidated. Server
+                                    can choose expiry time, and it can expire the token prematurely if necessary. If expired
+                                    prematurely, client will receive a 401 and request a new token.
+
                 401:
                     description: Unable to authorize user.
             
@@ -84,6 +96,10 @@ paths:
                     description: A list of infected keys since the specified date.
                     schema:
                         type: object
+                        required:
+                            - status
+                            - date
+                            - keys
                         properties:
                             status:
                                 type: string
@@ -135,9 +151,13 @@ paths:
                               description: List of infected keys
                               minimum: 1
                               items:
-                                  type: string
-                                  example: "Base 64 Encoded String"
-                                  description: Base 64 encoded binary data representing a single key
+                                  type: object
+                                  description: Contains information about a single key
+                                  properties:
+                                      d:
+                                        type: string
+                                        example: "Base 64 Encoded String"
+                                        description: Base 64 encoded binary data representing a single key
                           identifier:
                               type: string
                               description: An optional unique identifier from a previous submission so newly-submitted keys can be appended to an existing submission.
@@ -146,6 +166,8 @@ paths:
                     description: A list of infected keys since the specified date.
                     schema:
                         type: object
+                        required:
+                            - status
                         properties:
                             status:
                                 type: string
