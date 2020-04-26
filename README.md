@@ -43,7 +43,7 @@ If you can help translate the app, please help our crowd-sourced effort here:
 
 https://traceprivately.oneskyapp.com/collaboration/project?id=170066
 
-Currently available in: French, Spanish, Portuguese, German, Simplified Chinese, Croatian, Serbian and Hindi.
+Currently available in: English, French, Spanish, Portuguese, German, Simplified Chinese, Croatian, Serbian and Hindi.
 
 ## Screenshots
 
