@@ -41,7 +41,7 @@ class SubmitInfectionViewController: UIViewController {
         
         let elements = self.config.sortedFields.compactMap { self.createFormElement(field: $0) }
         
-        elements.forEach { self.stackView.addArrangedSubview($0) }
+        elements.forEach { self.stackView.insertArrangedSubview($0, at: elements.count - 1) }
 
       if #available(iOS 13, *) {
             self.isModalInPresentation = true
@@ -70,6 +70,8 @@ extension SubmitInfectionViewController {
             let label = UILabel()
             label.text = str
             label.font = UIFont.preferredFont(forTextStyle: .headline)
+            label.numberOfLines = 0
+            
             if #available(iOS 13.0, *) {
                 label.textColor = .label
             } else {
@@ -83,6 +85,8 @@ extension SubmitInfectionViewController {
             let label = UILabel()
             label.text = str
             label.font = UIFont.preferredFont(forTextStyle: .body)
+            label.numberOfLines = 0
+            
             if #available(iOS 13.0, *) {
                 label.textColor = .label
             } else {
@@ -119,8 +123,22 @@ extension SubmitInfectionViewController {
         }
         
         
-        let container = UIStackView(arrangedSubviews: subViews)
-        container.axis = .vertical
+        let stackView = UIStackView(arrangedSubviews: subViews)
+        stackView.axis = .vertical
+        stackView.spacing = 6
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let container = UIView()
+        container.addSubview(stackView)
+        container.backgroundColor = .white
+        container.layer.cornerRadius = 12
+        
+        NSLayoutConstraint.activate([
+            stackView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10),
+            stackView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10),
+            stackView.topAnchor.constraint(equalTo: container.topAnchor, constant: 10),
+            stackView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -10),
+        ])
         
         return container
     }
