@@ -13,6 +13,8 @@ class ContactTraceManager: NSObject {
 
     static let shared = ContactTraceManager()
     
+    var config: ExposureNotificationConfig = .defaultConfig
+    
     enum Error: LocalizedError {
         case unknownError
     }
@@ -367,6 +369,8 @@ extension ContactTraceManager {
         let dispatchGroup = DispatchGroup()
         
         let session = ENExposureDetectionSession()
+        session.attenuationThreshold = self.config.session.attenuationThreshold
+        session.durationThreshold = self.config.session.durationThreshold
         
         var sessionError: Swift.Error?
         

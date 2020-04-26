@@ -16,14 +16,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
+        
         if let url = Bundle.main.url(forResource: "KeyServer", withExtension: "plist") {
             if let config = KeyServerConfig(plistUrl: url) {
                 KeyServer.shared.config = config
             }
         }
         
+        if let url = Bundle.main.url(forResource: "ExposureNotifications", withExtension: "plist") {
+            if let config = ExposureNotificationConfig(plistUrl: url) {
+                print("CONFIG: \(config)")
+                ContactTraceManager.shared.config = config
+            }
+        }
         
+
         ContactTraceManager.shared.applicationDidFinishLaunching()
 
         if Self.useModernBackgroundProcessing {

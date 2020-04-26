@@ -22,6 +22,8 @@
 		6698C572244936AF00F046E4 /* ExposedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6698C571244936AF00F046E4 /* ExposedViewController.swift */; };
 		6698C574244BFAB600F046E4 /* KeyServer.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6698C573244BFAB600F046E4 /* KeyServer.plist */; };
 		66A039D7245005B700A569BE /* FontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A039D6245005B700A569BE /* FontExtension.swift */; };
+		66C4BBC324564AFB008AACC2 /* ExposureNotifications.plist in Resources */ = {isa = PBXBuildFile; fileRef = 66C4BBC224564AFB008AACC2 /* ExposureNotifications.plist */; };
+		66C4BBC524564B56008AACC2 /* ExposureNotificationConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C4BBC424564B56008AACC2 /* ExposureNotificationConfig.swift */; };
 		66CB7BD12453D51A0044D32B /* ENMockFramework.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CB7BD02453D51A0044D32B /* ENMockFramework.swift */; };
 		66CB95BD244FB51000D775B6 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CB95BC244FB51000D775B6 /* ActionButton.swift */; };
 		66CB95BF244FB5CD00D775B6 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CB95BE244FB5CD00D775B6 /* MainViewController.swift */; };
@@ -76,6 +78,8 @@
 		6698C571244936AF00F046E4 /* ExposedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposedViewController.swift; sourceTree = "<group>"; };
 		6698C573244BFAB600F046E4 /* KeyServer.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = KeyServer.plist; sourceTree = "<group>"; };
 		66A039D6245005B700A569BE /* FontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
+		66C4BBC224564AFB008AACC2 /* ExposureNotifications.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ExposureNotifications.plist; sourceTree = "<group>"; };
+		66C4BBC424564B56008AACC2 /* ExposureNotificationConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureNotificationConfig.swift; sourceTree = "<group>"; };
 		66CB7BD02453D51A0044D32B /* ENMockFramework.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ENMockFramework.swift; sourceTree = "<group>"; };
 		66CB7BD22453EB190044D32B /* Model 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 5.xcdatamodel"; sourceTree = "<group>"; };
 		66CB95BC244FB51000D775B6 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
@@ -144,6 +148,7 @@
 				66437F75244A86AE000B8C6C /* Disease.swift */,
 				66437F9F244A9B2C000B8C6C /* DataManager.swift */,
 				668CE842244D01F50065960A /* ContactTraceManager.swift */,
+				66C4BBC424564B56008AACC2 /* ExposureNotificationConfig.swift */,
 				66CB95BC244FB51000D775B6 /* ActionButton.swift */,
 				66848C2C244D5F8800497D2A /* AsyncBlockOperation.swift */,
 				66A039D6245005B700A569BE /* FontExtension.swift */,
@@ -202,6 +207,7 @@
 				66F818782448FD5E0043AC2D /* Info.plist */,
 				6621057324525FC90011EB42 /* Localizable.strings */,
 				6698C573244BFAB600F046E4 /* KeyServer.plist */,
+				66C4BBC224564AFB008AACC2 /* ExposureNotifications.plist */,
 			);
 			path = TracePrivately;
 			sourceTree = "<group>";
@@ -296,6 +302,7 @@
 			files = (
 				6698C574244BFAB600F046E4 /* KeyServer.plist in Resources */,
 				66F818772448FD5E0043AC2D /* LaunchScreen.storyboard in Resources */,
+				66C4BBC324564AFB008AACC2 /* ExposureNotifications.plist in Resources */,
 				39BD8849244C6D3D00EB8B6C /* ExposedView.storyboard in Resources */,
 				66EAEB60244DA70E0044FF70 /* SubmitInfection.storyboard in Resources */,
 				66EAEB64244DC5E40044FF70 /* SubmittedInfection.storyboard in Resources */,
@@ -338,6 +345,7 @@
 				66EAEB66244DC62A0044FF70 /* SubmittedInfectionViewController.swift in Sources */,
 				6698C572244936AF00F046E4 /* ExposedViewController.swift in Sources */,
 				6614BB052452B9D900885F23 /* ExposureDetailsViewController.swift in Sources */,
+				66C4BBC524564B56008AACC2 /* ExposureNotificationConfig.swift in Sources */,
 				668CE843244D01F50065960A /* ContactTraceManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

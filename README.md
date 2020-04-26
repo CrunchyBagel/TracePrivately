@@ -29,13 +29,34 @@ There are a number of ways you can help. You can:
 
 ## Instructions
 
-1. Set up a key server using the sample code in `KeyServer`
-2. In the iOS project, configure `KeyServer.plist` to point to your server
-3. Build and run in Xcode
-4. The sample key server requires manual approval of infection submissions, using the `./tools/pending.php` and `./tools/approve.php` scripts.
-5. In this proof of concept, every client will detect an exposure for any infection submitted
+### Key Server
 
-Demo server information: https://github.com/CrunchyBagel/TracePrivately/issues/36
+The mobile apps communicates with a server to retrieve infected keys. The API specification is here: https://github.com/CrunchyBagel/TracePrivately/blob/master/KeyServer/KeyServer.yaml
+
+The current options are:
+
+1. PHP: This project contains a very basic sample PHP implementation: https://github.com/CrunchyBagel/TracePrivately/tree/master/KeyServer
+2. Ruby: https://github.com/tatey/trace_privately by @tatey.
+    * You can use a demo server of this implementation here: https://github.com/CrunchyBagel/TracePrivately/issues/36
+3. Create your own according to the above OpenAPI specification
+
+### iOS App
+
+1. Configure `KeyServer.plist` to point to your server
+2. Configure `ExposureNotifications.plist` if you require different thresholds.
+    * `attenuationThreshold` is UInt8
+    * `durationThreshold` is a duration in seconds.
+3. Build and run in Xcode
+
+### Workflow
+
+If you're using the sample PHP implementation, it goes something like:
+
+1. App: Enable tracing in the app
+2. App: Submit that you're infected
+3. Server: Approve submission using the `./tools/pending.php` and `./tools/approve.php` scripts.
+
+Those keys are now in the infected list so they can be matched against.
 
 ## Localizations
 
