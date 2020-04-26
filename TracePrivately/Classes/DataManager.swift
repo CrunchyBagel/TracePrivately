@@ -203,6 +203,51 @@ extension DataManager {
 }
 
 extension DataManager {
+    func submitReport(keys: [ENTemporaryExposureKey], completion: @escaping (Bool, Swift.Error?) -> Void) {
+        let context = self.persistentContainer.newBackgroundContext()
+        
+        context.perform {
+            // Putting this as pending effectively saves a draft in case something goes wrong in submission
+            
+            let entity = LocalInfectionEntity(context: context)
+            entity.dateAdded = Date()
+            entity.status = DataManager.InfectionStatus.pendingSubmission.rawValue
+            
+            try? context.save()
+        
+            NotificationCenter.default.post(name: DataManager.infectionsUpdatedNotification, object: nil)
+
+            KeyServer.shared.submitInfectedKeys(keys: keys, previousSubmissionId: nil) { success, submissionId, error in
+                
+                context.perform {
+                    if success {
+                        // TODO: Check against the local database to see if it should be submittedApproved or submittedUnapproved.
+                        entity.status = DataManager.InfectionStatus.submittedUnapproved.rawValue
+                        entity.remoteIdentifier = submissionId
+                        
+                        for key in keys {
+                            let keyEntity = LocalInfectionKeyEntity(context: context)
+                            keyEntity.infectedKey = key.keyData
+                            keyEntity.infection = entity
+                        }
+
+                        try? context.save()
+                        
+                        NotificationCenter.default.post(name: DataManager.infectionsUpdatedNotification, object: nil)
+                        
+                        completion(true, nil)
+                    }
+                    else {
+                        completion(false, error)
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+extension DataManager {
     enum InfectionStatus: String {
         case pendingSubmission = "P"
         case submittedUnapproved = "U" // Submitted but hasn't been received back as an infected key

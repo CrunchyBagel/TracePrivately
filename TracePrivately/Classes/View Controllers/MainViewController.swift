@@ -21,6 +21,7 @@ class MainViewController: UIViewController {
     
     /// Storyboard outlets
     
+    @IBOutlet var noIssuesButton: ActionButton!
     @IBOutlet var infectedButton: ActionButton!
     @IBOutlet var pendingButton: ActionButton!
     @IBOutlet var exposedButton: ActionButton!
@@ -48,6 +49,7 @@ class MainViewController: UIViewController {
 
         self.title = NSLocalizedString("app.title", comment: "")
         
+        self.noIssuesButton.setTitle(String(format: NSLocalizedString("exposure.none.banner.title", comment: ""), Disease.current.localizedTitle), for: .normal)
         self.exposedButton.setTitle(String(format: NSLocalizedString("exposure.exposed.banner.title", comment: ""), Disease.current.localizedTitle), for: .normal)
         self.pendingButton.setTitle(NSLocalizedString("infection.pending.title", comment: ""), for: .normal)
         self.infectedButton.setTitle(String(format: NSLocalizedString("infection.infected.title", comment: ""), Disease.current.localizedTitle), for: .normal)
@@ -55,6 +57,7 @@ class MainViewController: UIViewController {
         self.tracingOffButton.setTitle(NSLocalizedString("tracing.stop.title", comment: ""), for: .normal)
         self.tracingPrivacyButton.setTitle(NSLocalizedString("privacy.title", comment: ""), for: .normal)
 
+        self.noIssuesButton.accessory = .disclosure
         self.exposedButton.accessory = .disclosure
         self.infectedButton.accessory = .disclosure
         self.pendingButton.accessory = .disclosure
@@ -70,7 +73,7 @@ class MainViewController: UIViewController {
         self.submitInfectionTitleLabel.text = NSLocalizedString("infection.title", comment: "")
         self.submitInfectionDescriptionLabel.text = String(format: NSLocalizedString("infection.report.message", comment: ""), Disease.current.localizedTitle)
         
-        
+        self.noIssuesButton.isHidden = false
         self.infectedButton.isHidden = true
         self.pendingButton.isHidden = true
         self.exposedButton.isHidden = true
@@ -148,26 +151,31 @@ class MainViewController: UIViewController {
             self.exposedButton.isHidden = false
             self.infectedButton.isHidden = true
             self.pendingButton.isHidden = true
-            
+            self.noIssuesButton.isHidden = true
+
         case .infection:
             self.infectedButton.isHidden = false
             self.exposedButton.isHidden = true
             self.pendingButton.isHidden = true
-            
+            self.noIssuesButton.isHidden = true
+
         case .infectionPending:
             self.pendingButton.isHidden = false
             self.infectedButton.isHidden = true
             self.exposedButton.isHidden = true
-            
+            self.noIssuesButton.isHidden = true
+
         case .infectionPendingAndExposed:
             self.pendingButton.isHidden = false
             self.exposedButton.isHidden = false
             self.infectedButton.isHidden = true
-            
+            self.noIssuesButton.isHidden = true
+
         case .nothingDetected:
             self.infectedButton.isHidden = true
             self.exposedButton.isHidden = true
             self.pendingButton.isHidden = true
+            self.noIssuesButton.isHidden = false
         }
         
         if status == .infection {
@@ -190,7 +198,7 @@ class MainViewController: UIViewController {
                 }
                 
                 let indicator = UIActivityIndicatorView(style: style)
-                indicator.startAnimating()
+                indicator.starttAnimating()
 
                 let button = UIBarButtonItem(customView: indicator)
 
@@ -198,9 +206,7 @@ class MainViewController: UIViewController {
             }
         }
         else {
-            if self.navigationItem.rightBarButtonItem != nil {
-                self.navigationItem.setRightBarButton(nil, animated: animated)
-            }
+            self.navigationItem.setRightBarButton(nil, animated: animated)
         }
         
         if ContactTraceManager.shared.isContactTracingEnabled {
@@ -222,6 +228,10 @@ extension MainViewController {
 }
 
 extension MainViewController {
+    @IBAction func noIssuesButtonTapped(_ sender: ActionButton) {
+        self.performSegue(withIdentifier: Segue.viewExposures, sender: nil)
+    }
+
     @IBAction func infectedButtonTapped(_ sender: ActionButton) {
         self.performSegue(withIdentifier: Segue.viewInfection, sender: nil)
     }

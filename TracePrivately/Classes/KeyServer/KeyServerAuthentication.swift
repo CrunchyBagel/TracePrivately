@@ -74,12 +74,16 @@ class KeyServerReceiptAuthentication: KeyServerBaseAuthentication {
         case receiptNotFound
     }
     
+    private var isInDev: Bool {
+        #if DEBUG
+        return true
+        #else
+        return false
+        #endif
+    }
+    
     func buildAuthRequestJsonObject(completion: @escaping ([String : Any]?, Error?) -> Void) {
-        // TODO: In development there won't be a receipt
-        
-        let isInDev = true
-        
-        if isInDev {
+        if self.isInDev {
             completion(["receipt": UUID().uuidString], nil)
         }
         else {

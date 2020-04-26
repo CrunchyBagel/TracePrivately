@@ -31,6 +31,8 @@
 "infection.pending.title" = "Pending Confirmation";
 
 /* parameter is localized disease name */
+"exposure.none.banner.title" = "No Exposure Detected";
+/* parameter is localized disease name */
 "exposure.none.message" = "No contact detected with a %@ infection!\n\nStay safe and wash your hands.";
 /* parameter %@ may be included, which is localized disease name */
 "exposure.exposed.banner.title" = "You May Have Been Exposed";

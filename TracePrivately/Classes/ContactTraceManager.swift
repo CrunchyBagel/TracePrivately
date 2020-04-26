@@ -356,8 +356,8 @@ extension ContactTraceManager {
                 request.invalidate()
             }
 
-            self.isUpdatingEnabledState = false
             self.isContactTracingEnabled = false
+            self.isUpdatingEnabledState = false
         }
     }
 }
