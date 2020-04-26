@@ -1,0 +1,28 @@
+/* parameter is localized disease name */
+"infection.infected.title" = "Du hast %@";
+"exposure.exposed.details.title" = "Aufdeckung";
+/* 
+  Localizable.strings
+  TracePrivately
+*/
+
+"app.title" = "Privat aufzeichnen";
+
+"tracing.title" = "Kontaktverfolgung";
+/* parameter is localized disease name */
+"tracing.message" = "Tauschen Sie anonyme Informationen sicher aus, wenn Sie anderen Personen begegnen, und überprüfen Sie automatisch, ob Sie Kontakt mit %@ haben.";
+"tracing.start.title" = "Aufzeichnung starten";
+"tracing.stop.title" = "Aufzeichnung stoppen";
+
+"disease.covid19.title" = "COVID-19";
+
+"infection.title" = "Infektion mitteilen";
+
+/* parameter is localized disease name */
+"infection.report.title" = "Ich habe %@";
+"infection.report.message" = "Wenn bei Ihnen eine Infektion mit %@ diagnostiziert wurde, reichen Sie hier Ihre Diagnose ein.\n\nSie können es dann bestätigen.";
+"infection.report.gathering_data.error" = "Die Erstellung Ihres anonymen Profils war nicht möglich.";
+"infection.report.gathering.empty.title" = "Keine Informationen";
+"infection.report.gathering.empty.message" = "Ihre Kontaktverfolgungsinformationen konnten nicht gefunden werden. Vielleicht hatten Sie die Kontaktverfolgung nicht aktiviert?";
+"infection.report.submit.title" = "Diagnose einreichen";
+"infection.report.submit.message" = "Bitte bestätigen Sie, dass Sie einreichen möchten.\n\nDas wird Leuten die in Ihrer Nähe waren ermöglichen zu wissen, dass sie dem Virus ausgesetzt gewesen sein könnten.";

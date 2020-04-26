@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -99,33 +100,44 @@
                                     <rect key="frame" x="0.0" y="0.0" width="300" height="72"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="tDm-gx-eiN">
-                                            <rect key="frame" x="10" y="12.5" width="280" height="47"/>
+                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="fEp-aC-tbx">
+                                            <rect key="frame" x="20" y="0.0" width="260" height="72"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You may be exposed." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xmE-hx-kk3">
-                                                    <rect key="frame" x="0.0" y="0.0" width="280" height="20.5"/>
-                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You may be exposed." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a6D-g2-CtN">
-                                                    <rect key="frame" x="0.0" y="26.5" width="280" height="20.5"/>
-                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="tDm-gx-eiN">
+                                                    <rect key="frame" x="0.0" y="12.5" width="169" height="47"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You may be exposed." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xmE-hx-kk3">
+                                                            <rect key="frame" x="0.0" y="0.0" width="169" height="20.5"/>
+                                                            <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You may be exposed." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a6D-g2-CtN">
+                                                            <rect key="frame" x="0.0" y="26.5" width="169" height="20.5"/>
+                                                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </stackView>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZrG-Id-Me9">
+                                                    <rect key="frame" x="210" y="11" width="50" height="50"/>
+                                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </imageView>
                                             </subviews>
                                         </stackView>
                                     </subviews>
                                     <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
-                                        <constraint firstItem="tDm-gx-eiN" firstAttribute="leading" secondItem="Wfs-mi-Zv6" secondAttribute="leading" constant="10" id="8AD-Yw-xeM"/>
-                                        <constraint firstAttribute="trailing" secondItem="tDm-gx-eiN" secondAttribute="trailing" constant="10" id="H4O-Uo-nLY"/>
-                                        <constraint firstItem="tDm-gx-eiN" firstAttribute="centerY" secondItem="Wfs-mi-Zv6" secondAttribute="centerY" id="yZs-P2-fyW"/>
+                                        <constraint firstAttribute="trailing" secondItem="fEp-aC-tbx" secondAttribute="trailing" constant="20" id="HVJ-UR-Atp"/>
+                                        <constraint firstAttribute="bottom" secondItem="fEp-aC-tbx" secondAttribute="bottom" id="ItK-za-Tqk"/>
+                                        <constraint firstItem="fEp-aC-tbx" firstAttribute="leading" secondItem="Wfs-mi-Zv6" secondAttribute="leading" constant="20" id="VIu-7S-Y0a"/>
+                                        <constraint firstItem="fEp-aC-tbx" firstAttribute="top" secondItem="Wfs-mi-Zv6" secondAttribute="top" id="mp0-NJ-q6O"/>
                                     </constraints>
                                 </collectionViewCellContentView>
                                 <size key="customSize" width="300" height="72"/>
                                 <connections>
+                                    <outlet property="accessoryImageView" destination="ZrG-Id-Me9" id="tKZ-UE-Bh4"/>
                                     <outlet property="durationLabel" destination="a6D-g2-CtN" id="LqQ-WJ-OcJ"/>
                                     <outlet property="timeLabel" destination="xmE-hx-kk3" id="4YA-jq-Lel"/>
                                 </connections>
@@ -137,10 +149,44 @@
                         </connections>
                     </collectionView>
                     <navigationItem key="navigationItem" id="D3K-Vd-dTj"/>
+                    <connections>
+                        <segue destination="8iZ-yV-yiH" kind="show" identifier="ExposureDetailsSegue" id="Xeg-ie-Us3"/>
+                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uOG-9Z-AAg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2596" y="-224"/>
+        </scene>
+        <!--Exposure Details-->
+        <scene sceneID="OZw-2V-JHH">
+            <objects>
+                <viewController id="8iZ-yV-yiH" customClass="ExposureDetailsViewController" customModule="TracePrivately" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="m21-55-Vi1">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eRm-hy-6OW" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
+                                <rect key="frame" x="20" y="422" width="374" height="52"/>
+                                <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="52" id="nBt-dh-h1z"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="MTL-nO-r7N" firstAttribute="trailing" secondItem="eRm-hy-6OW" secondAttribute="trailing" constant="20" id="Nbi-IB-P9Q"/>
+                            <constraint firstItem="eRm-hy-6OW" firstAttribute="centerY" secondItem="m21-55-Vi1" secondAttribute="centerY" id="S0c-6M-b9P"/>
+                            <constraint firstItem="eRm-hy-6OW" firstAttribute="leading" secondItem="MTL-nO-r7N" secondAttribute="leading" constant="20" id="lJi-gw-0f0"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="MTL-nO-r7N"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Exposure Details" id="pfY-nM-Vhb"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="a5k-5c-t7F" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3778" y="-224"/>
         </scene>
     </scenes>
 </document>

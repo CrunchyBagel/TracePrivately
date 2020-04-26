@@ -6,6 +6,7 @@
 import UIKit
 
 // TODO: Assuming there will be more fields in future (e.g. pathology lab test ID or photo), prepopulate with any pending submission requests
+
 class SubmitInfectionViewController: UIViewController {
 
     @IBOutlet var submitButton: ActionButton!
@@ -24,6 +25,11 @@ class SubmitInfectionViewController: UIViewController {
         // Swipe down to dismiss also available on iOS 13+
         let button = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(Self.cancelTapped(_:)))
         self.navigationItem.leftBarButtonItem = button
+        
+        if #available(iOS 13, *) {
+            self.isModalInPresentation = true
+        }
+
     }
     
     @objc func cancelTapped(_ sender: UIBarButtonItem) {
@@ -33,16 +39,20 @@ class SubmitInfectionViewController: UIViewController {
 
 extension SubmitInfectionViewController {
     @IBAction func submitTapped(_ sender: ActionButton) {
-        let request = CTSelfTracingInfoRequest()
         
-        request.completionHandler = { info, error in
-            guard let keys = info?.dailyTracingKeys else {
-                
+        let request = ENSelfExposureInfoRequest()
+        
+        request.activateWithCompletion { error in
+            defer {
+                request.invalidate()
+            }
+             
+            guard let exposureInfo = request.selfExposureInfo else {
                 var showError = true
-                
-                if let error = error as? CTError {
-                    switch error {
-                    case .permissionDenied:
+
+                if let error = error as? ENError {
+                    switch error.errorCode {
+                    case .notAuthorized:
                         showError = false
                     default:
                         break
@@ -58,6 +68,10 @@ extension SubmitInfectionViewController {
                 
                 return
             }
+            
+            // TODO: This isn't a great strategy. We still want the report submitted so the user can continue to submit their daily keys
+            
+            let keys = exposureInfo.keys
 
             guard keys.count > 0 else {
                 let alert = UIAlertController(title: NSLocalizedString("infection.report.gathering.empty.title", comment: ""), message: NSLocalizedString("infection.report.gathering.empty.message", comment: ""), preferredStyle: .alert)
@@ -79,14 +93,12 @@ extension SubmitInfectionViewController {
             
             self.present(alert, animated: true, completion: nil)
         }
-        
-        request.perform()
     }
 }
 
 extension SubmitInfectionViewController {
     // TODO: Make it super clear to the user if an error occurred, so they have an opportunity to submit again
-    func submitReport(keys: [CTDailyTracingKey]) {
+    func submitReport(keys: [ENTemporaryExposureKey]) {
         
         let loadingAlert = UIAlertController(title: NSLocalizedString("infection.report.submitting.title", comment: ""), message: NSLocalizedString("infection.report.submitting.message", comment: ""), preferredStyle: .alert)
 
@@ -106,12 +118,13 @@ extension SubmitInfectionViewController {
         
             NotificationCenter.default.post(name: DataManager.infectionsUpdatedNotification, object: nil)
 
-            KeyServer.shared.submitInfectedKeys(keys: keys) { success, error in
+            KeyServer.shared.submitInfectedKeys(keys: keys, previousSubmissionId: nil) { success, submissionId, error in
                 
                 context.perform {
                     if success {
                         // TODO: Check against the local database to see if it should be submittedApproved or submittedUnapproved.
                         entity.status = DataManager.InfectionStatus.submittedUnapproved.rawValue
+                        entity.remoteIdentifier = submissionId
                         
                         for key in keys {
                             let keyEntity = LocalInfectionKeyEntity(context: context)
