@@ -33,7 +33,7 @@
 
 /* parameter is localized disease name */
 "exposure.none.message" = "没有发现任何确诊%@的接触者！\n\n请保持安全措施，多次洗手。";
-"exposure.exposed.banner.title" = "您有可能接触过";
+"exposure.exposed.banner.title" = "您有可能接触过%@";
 "exposure.exposed.title" = "接触事项";
 /* parameter is localized disease name */
 "exposure.exposed.message" = "我们认为您有可能接触过%@。";
@@ -60,7 +60,7 @@
 /* parameter is localized disease name */
 "notification.exposure_detected.title" = "注意：检测到接触%@";
 /* 1st parameter is formatted localized time, 2nd parameter is formatted localized duration */
-"notification.exposure_detected.single.body" = "您有可能在%2$@接触过%1$@";
+"notification.exposure_detected.single.body" = "您有可能在%1$@接触过%2$@";
 "notification.exposure_detected.multiple.body" = "我们检测到您有可能多次接触过。";
 
 "privacy.title" = "私隐资讯";
