@@ -25,6 +25,7 @@
 		6698C574244BFAB600F046E4 /* KeyServer.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6698C573244BFAB600F046E4 /* KeyServer.plist */; };
 		66A039D7245005B700A569BE /* FontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A039D6245005B700A569BE /* FontExtension.swift */; };
 		66CB7BD12453D51A0044D32B /* ENMockFramework.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CB7BD02453D51A0044D32B /* ENMockFramework.swift */; };
+		66CB7BDF245545EB0044D32B /* TracePrivately-Siri.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 66CB7BDE245545DF0044D32B /* TracePrivately-Siri.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		66CB95BD244FB51000D775B6 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CB95BC244FB51000D775B6 /* ActionButton.swift */; };
 		66CB95BF244FB5CD00D775B6 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CB95BE244FB5CD00D775B6 /* MainViewController.swift */; };
 		66CB95C1244FBBC800D775B6 /* Privacy.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66CB95C0244FBBC800D775B6 /* Privacy.storyboard */; };
@@ -56,6 +57,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				66CB7BDF245545EB0044D32B /* TracePrivately-Siri.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -76,7 +78,6 @@
 		6614BB042452B9D900885F23 /* ExposureDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureDetailsViewController.swift; sourceTree = "<group>"; };
 		661B6C6A2452CE2500CC1DC6 /* Model 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 4.xcdatamodel"; sourceTree = "<group>"; };
 		66210552245127340011EB42 /* Intents.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Intents.intentdefinition; sourceTree = "<group>"; };
-		66210558245129690011EB42 /* TracePrivately-Siri.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; name = "TracePrivately-Siri.appex"; path = "/Users/quentin/Developer/TracePrivately/build/Debug/TracePrivately-Siri.appex"; sourceTree = "<absolute>"; };
 		6621055A245129690011EB42 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
 		6621055C245129690011EB42 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6621056524512D3B0011EB42 /* TracePrivately.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TracePrivately.entitlements; sourceTree = "<group>"; };
@@ -106,6 +107,7 @@
 		66CB7BD02453D51A0044D32B /* ENMockFramework.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ENMockFramework.swift; sourceTree = "<group>"; };
 		66CB7BD22453EB190044D32B /* Model 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 5.xcdatamodel"; sourceTree = "<group>"; };
 		66CB7BD7245545500044D32B /* OneSkyDownload */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OneSkyDownload; sourceTree = BUILT_PRODUCTS_DIR; };
+		66CB7BDE245545DF0044D32B /* TracePrivately-Siri.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "TracePrivately-Siri.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		66CB95BC244FB51000D775B6 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		66CB95BE244FB5CD00D775B6 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		66CB95C0244FBBC800D775B6 /* Privacy.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Privacy.storyboard; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 				66F818672448FD5C0043AC2D /* TracePrivately.app */,
 				6621056A245251B10011EB42 /* OneSkyDownload */,
 				66CB7BD7245545500044D32B /* OneSkyDownload */,
+				66CB7BDE245545DF0044D32B /* TracePrivately-Siri.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -271,7 +274,7 @@
 			);
 			name = "TracePrivately-Siri";
 			productName = "TracePrivately-Siri";
-			productReference = 66210558245129690011EB42 /* TracePrivately-Siri.appex */;
+			productReference = 66CB7BDE245545DF0044D32B /* TracePrivately-Siri.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		66CB7BD6245545500044D32B /* OneSkyDownload */ = {
