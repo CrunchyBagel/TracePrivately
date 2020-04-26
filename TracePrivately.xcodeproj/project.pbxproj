@@ -8,12 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		39BD8849244C6D3D00EB8B6C /* ExposedView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 39BD8848244C6D3D00EB8B6C /* ExposedView.storyboard */; };
+		6614BB052452B9D900885F23 /* ExposureDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6614BB042452B9D900885F23 /* ExposureDetailsViewController.swift */; };
 		66210553245127340011EB42 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 66210552245127340011EB42 /* Intents.intentdefinition */; };
 		6621055B245129690011EB42 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6621055A245129690011EB42 /* IntentHandler.swift */; };
-		6621055F245129690011EB42 /* TracePrivately-Siri.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 66210558245129690011EB42 /* TracePrivately-Siri.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		662105642451299B0011EB42 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 66210552245127340011EB42 /* Intents.intentdefinition */; };
-		6614BB052452B9D900885F23 /* ExposureDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6614BB042452B9D900885F23 /* ExposureDetailsViewController.swift */; };
-		6621056D245251B10011EB42 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6621056C245251B10011EB42 /* main.swift */; };
 		6621057124525FC90011EB42 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6621057324525FC90011EB42 /* Localizable.strings */; };
 		66437F76244A86AE000B8C6C /* Disease.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F75244A86AE000B8C6C /* Disease.swift */; };
 		66437F9E244A9A02000B8C6C /* TracePrivately.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */; };
@@ -58,15 +56,11 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				6621055F245129690011EB42 /* TracePrivately-Siri.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-/* End PBXCopyFilesBuildPhase section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		66210568245251B10011EB42 /* CopyFiles */ = {
+		66CB7BD5245545500044D32B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -79,13 +73,13 @@
 
 /* Begin PBXFileReference section */
 		39BD8848244C6D3D00EB8B6C /* ExposedView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ExposedView.storyboard; sourceTree = "<group>"; };
+		6614BB042452B9D900885F23 /* ExposureDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureDetailsViewController.swift; sourceTree = "<group>"; };
+		661B6C6A2452CE2500CC1DC6 /* Model 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 4.xcdatamodel"; sourceTree = "<group>"; };
 		66210552245127340011EB42 /* Intents.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Intents.intentdefinition; sourceTree = "<group>"; };
-		66210558245129690011EB42 /* TracePrivately-Siri.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "TracePrivately-Siri.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		66210558245129690011EB42 /* TracePrivately-Siri.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; name = "TracePrivately-Siri.appex"; path = "/Users/quentin/Developer/TracePrivately/build/Debug/TracePrivately-Siri.appex"; sourceTree = "<absolute>"; };
 		6621055A245129690011EB42 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
 		6621055C245129690011EB42 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6621056524512D3B0011EB42 /* TracePrivately.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TracePrivately.entitlements; sourceTree = "<group>"; };
-		6614BB042452B9D900885F23 /* ExposureDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureDetailsViewController.swift; sourceTree = "<group>"; };
-		661B6C6A2452CE2500CC1DC6 /* Model 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 4.xcdatamodel"; sourceTree = "<group>"; };
 		6621056A245251B10011EB42 /* OneSkyDownload */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OneSkyDownload; sourceTree = BUILT_PRODUCTS_DIR; };
 		6621056C245251B10011EB42 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		6621057224525FC90011EB42 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -111,6 +105,7 @@
 		66A039D6245005B700A569BE /* FontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
 		66CB7BD02453D51A0044D32B /* ENMockFramework.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ENMockFramework.swift; sourceTree = "<group>"; };
 		66CB7BD22453EB190044D32B /* Model 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 5.xcdatamodel"; sourceTree = "<group>"; };
+		66CB7BD7245545500044D32B /* OneSkyDownload */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OneSkyDownload; sourceTree = BUILT_PRODUCTS_DIR; };
 		66CB95BC244FB51000D775B6 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		66CB95BE244FB5CD00D775B6 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		66CB95C0244FBBC800D775B6 /* Privacy.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Privacy.storyboard; sourceTree = "<group>"; };
@@ -136,7 +131,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		66210567245251B10011EB42 /* Frameworks */ = {
+		66CB7BD4245545500044D32B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -237,8 +232,8 @@
 			isa = PBXGroup;
 			children = (
 				66F818672448FD5C0043AC2D /* TracePrivately.app */,
-				66210558245129690011EB42 /* TracePrivately-Siri.appex */,
 				6621056A245251B10011EB42 /* OneSkyDownload */,
+				66CB7BD7245545500044D32B /* OneSkyDownload */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -279,22 +274,22 @@
 			productReference = 66210558245129690011EB42 /* TracePrivately-Siri.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		66210569245251B10011EB42 /* OneSkyDownload */ = {
+		66CB7BD6245545500044D32B /* OneSkyDownload */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 66210570245251B10011EB42 /* Build configuration list for PBXNativeTarget "OneSkyDownload" */;
+			buildConfigurationList = 66CB7BDB245545500044D32B /* Build configuration list for PBXNativeTarget "OneSkyDownload" */;
 			buildPhases = (
-				66210566245251B10011EB42 /* Sources */,
-				66210567245251B10011EB42 /* Frameworks */,
-				66210568245251B10011EB42 /* CopyFiles */,
+				66CB7BD3245545500044D32B /* Sources */,
+				66CB7BD4245545500044D32B /* Frameworks */,
+				66CB7BD5245545500044D32B /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "TracePrivately-Siri";
-			productName = "TracePrivately-Siri";
-			productReference = 66210558245129690011EB42 /* TracePrivately-Siri.appex */;
-			productType = "com.apple.product-type.app-extension";
+			name = OneSkyDownload;
+			productName = OneSkyDownload;
+			productReference = 66CB7BD7245545500044D32B /* OneSkyDownload */;
+			productType = "com.apple.product-type.tool";
 		};
 		66F818662448FD5C0043AC2D /* TracePrivately */ = {
 			isa = PBXNativeTarget;
@@ -328,7 +323,7 @@
 					66210557245129690011EB42 = {
 						CreatedOnToolsVersion = 11.4.1;
 					};
-					66210569245251B10011EB42 = {
+					66CB7BD6245545500044D32B = {
 						CreatedOnToolsVersion = 11.4.1;
 					};
 					66F818662448FD5C0043AC2D = {
@@ -360,7 +355,7 @@
 			targets = (
 				66F818662448FD5C0043AC2D /* TracePrivately */,
 				66210557245129690011EB42 /* TracePrivately-Siri */,
-				66210569245251B10011EB42 /* OneSkyDownload */,
+				66CB7BD6245545500044D32B /* OneSkyDownload */,
 			);
 		};
 /* End PBXProject section */
@@ -401,11 +396,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		66210566245251B10011EB42 /* Sources */ = {
+		66CB7BD3245545500044D32B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6621056D245251B10011EB42 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -519,7 +513,7 @@
 			};
 			name = Release;
 		};
-		6621056E245251B10011EB42 /* Debug */ = {
+		66CB7BDC245545500044D32B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -532,7 +526,7 @@
 			};
 			name = Debug;
 		};
-		6621056F245251B10011EB42 /* Release */ = {
+		66CB7BDD245545500044D32B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -718,11 +712,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		66210570245251B10011EB42 /* Build configuration list for PBXNativeTarget "OneSkyDownload" */ = {
+		66CB7BDB245545500044D32B /* Build configuration list for PBXNativeTarget "OneSkyDownload" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				6621056E245251B10011EB42 /* Debug */,
-				6621056F245251B10011EB42 /* Release */,
+				66CB7BDC245545500044D32B /* Debug */,
+				66CB7BDD245545500044D32B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
