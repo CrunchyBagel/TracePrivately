@@ -14,9 +14,11 @@
 		66437F76244A86AE000B8C6C /* Disease.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F75244A86AE000B8C6C /* Disease.swift */; };
 		66437F9E244A9A02000B8C6C /* TracePrivately.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */; };
 		66437FA0244A9B2C000B8C6C /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9F244A9B2C000B8C6C /* DataManager.swift */; };
+		66793890245460B600868B84 /* KeyServerAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6679388D245460B600868B84 /* KeyServerAuthentication.swift */; };
+		66793891245460B600868B84 /* KeyServerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6679388E245460B600868B84 /* KeyServerConfig.swift */; };
+		66793892245460B600868B84 /* KeyServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6679388F245460B600868B84 /* KeyServer.swift */; };
 		66848C2D244D5F8800497D2A /* AsyncBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66848C2C244D5F8800497D2A /* AsyncBlockOperation.swift */; };
 		668CE843244D01F50065960A /* ContactTraceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668CE842244D01F50065960A /* ContactTraceManager.swift */; };
-		6698C57024492BC500F046E4 /* KeyServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6698C56F24492BC500F046E4 /* KeyServer.swift */; };
 		6698C572244936AF00F046E4 /* ExposedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6698C571244936AF00F046E4 /* ExposedViewController.swift */; };
 		6698C574244BFAB600F046E4 /* KeyServer.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6698C573244BFAB600F046E4 /* KeyServer.plist */; };
 		66A039D7245005B700A569BE /* FontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A039D6245005B700A569BE /* FontExtension.swift */; };
@@ -64,11 +66,13 @@
 		66437F75244A86AE000B8C6C /* Disease.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disease.swift; sourceTree = "<group>"; };
 		66437F9D244A9A02000B8C6C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		66437F9F244A9B2C000B8C6C /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		6679388D245460B600868B84 /* KeyServerAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyServerAuthentication.swift; sourceTree = "<group>"; };
+		6679388E245460B600868B84 /* KeyServerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyServerConfig.swift; sourceTree = "<group>"; };
+		6679388F245460B600868B84 /* KeyServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyServer.swift; sourceTree = "<group>"; };
 		667938932454665E00868B84 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		66848C2C244D5F8800497D2A /* AsyncBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncBlockOperation.swift; sourceTree = "<group>"; };
 		668CE842244D01F50065960A /* ContactTraceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactTraceManager.swift; sourceTree = "<group>"; };
 		668D4B22244D705100D90C26 /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
-		6698C56F24492BC500F046E4 /* KeyServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyServer.swift; sourceTree = "<group>"; };
 		6698C571244936AF00F046E4 /* ExposedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposedViewController.swift; sourceTree = "<group>"; };
 		6698C573244BFAB600F046E4 /* KeyServer.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = KeyServer.plist; sourceTree = "<group>"; };
 		66A039D6245005B700A569BE /* FontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
@@ -134,8 +138,8 @@
 			isa = PBXGroup;
 			children = (
 				66437F78244A8A54000B8C6C /* View Controllers */,
+				6679388C245460B600868B84 /* KeyServer */,
 				66F8186A2448FD5C0043AC2D /* AppDelegate.swift */,
-				6698C56F24492BC500F046E4 /* KeyServer.swift */,
 				66CB7BD02453D51A0044D32B /* ENMockFramework.swift */,
 				66437F75244A86AE000B8C6C /* Disease.swift */,
 				66437F9F244A9B2C000B8C6C /* DataManager.swift */,
@@ -158,6 +162,16 @@
 				66CB95C2244FBBF300D775B6 /* PrivacyViewController.swift */,
 			);
 			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		6679388C245460B600868B84 /* KeyServer */ = {
+			isa = PBXGroup;
+			children = (
+				6679388D245460B600868B84 /* KeyServerAuthentication.swift */,
+				6679388E245460B600868B84 /* KeyServerConfig.swift */,
+				6679388F245460B600868B84 /* KeyServer.swift */,
+			);
+			path = KeyServer;
 			sourceTree = "<group>";
 		};
 		66F8185E2448FD5C0043AC2D = {
@@ -307,17 +321,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66793892245460B600868B84 /* KeyServer.swift in Sources */,
 				66848C2D244D5F8800497D2A /* AsyncBlockOperation.swift in Sources */,
 				66EAEB62244DA72E0044FF70 /* SubmitInfectionViewController.swift in Sources */,
 				66A039D7245005B700A569BE /* FontExtension.swift in Sources */,
 				66CB95C3244FBBF300D775B6 /* PrivacyViewController.swift in Sources */,
 				66CB95BD244FB51000D775B6 /* ActionButton.swift in Sources */,
+				66793891245460B600868B84 /* KeyServerConfig.swift in Sources */,
 				66437F76244A86AE000B8C6C /* Disease.swift in Sources */,
 				66437FA0244A9B2C000B8C6C /* DataManager.swift in Sources */,
 				66F8186B2448FD5C0043AC2D /* AppDelegate.swift in Sources */,
+				66793890245460B600868B84 /* KeyServerAuthentication.swift in Sources */,
 				66CB95BF244FB5CD00D775B6 /* MainViewController.swift in Sources */,
 				66437F9E244A9A02000B8C6C /* TracePrivately.xcdatamodeld in Sources */,
-				6698C57024492BC500F046E4 /* KeyServer.swift in Sources */,
 				66CB7BD12453D51A0044D32B /* ENMockFramework.swift in Sources */,
 				66EAEB66244DC62A0044FF70 /* SubmittedInfectionViewController.swift in Sources */,
 				6698C572244936AF00F046E4 /* ExposedViewController.swift in Sources */,

@@ -16,16 +16,59 @@ basePath: /api
 produces:
     - application/json
 
-paths:
+securityDefinitions:
+    BearerAuth:
+        type: apiKey
+        in: header
+        name: Authorization
 
+paths:
+    /auth:
+        post:
+            operationId: "keyserver_auth"
+            summary: Generate an authentication token for subsequent API requests
+            description: |
+                Server should create a token that expires periodically (e.g. after X number. of days).
+                If one of the other API keys doesn't have a valid key, a 401 is returned and the client
+                should reauthenticate using this endpoint. Client may include the old token as authorization
+                in this request to invalidate it.
+            security:
+                -  BearerAuth: []
+            produces:
+                - "application/json"
+            parameters:
+                - in: body
+                  name: Request data
+                  schema:
+                      type: object
+                      description: The structure is undefined, as its depends on what authentication data the app is using.
+            responses:
+                200:
+                    description: A newly-generated token
+                    schema:
+                        type: object
+                        properties:
+                            status:
+                                type: string
+                                example: "OK"
+                                description: OK
+                            token:
+                                type: string
+                                example: "SOME_TOKEN_DATA"
+                                description: This can be in whatever format is necessary for your system
+                401:
+                    description: Unable to authorize user.
+            
     /infected:
         get:
             operationId: "keyserver_infected"
             summary: Retrieve a list of active infected keys
             description: |
                 This endpoint returns a list of keys for users that have indicated that have contracted COVID-19.
+            security:
+                -  BearerAuth: []
             produces:
-            - "application/json"
+                - "application/json"
             parameters:
                 - name: since
                   description: |
@@ -65,6 +108,8 @@ paths:
                                     type: string
                                     example: "Base 64 Encoded String"
                                     description: Base 64 encoded binary data representing a single key
+                401:
+                    description: Unable to authorize user. Need to request a token before calling this endpoint again.
 
     /submit:
         post:
@@ -72,10 +117,12 @@ paths:
             summary: Submit keys that represent a person who has contracted COVID-19.
             description: |
                 This endpoint allows the client to submit keys after its user has indicated they have contracted COVID-19.
+            security:
+                -  BearerAuth: []
             consumes:
-            - "application/json"
+                - "application/json"
             produces:
-            - "application/json"
+                - "application/json"
 
             parameters:
                 - in: body
@@ -109,3 +156,5 @@ paths:
                                 example: "SOME_UNIQUE_IDENTIFIER"
                                 description: An identifier specific to this report, so the client can append new keys to the newly-created submission.
 
+                401:
+                    description: Unable to authorize user. Need to request a token before calling this endpoint again.

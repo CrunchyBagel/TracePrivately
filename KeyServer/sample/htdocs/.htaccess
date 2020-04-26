@@ -1,6 +1,7 @@
 RewriteEngine on
 RewriteRule ^api/infected$ /infected.php?%{QUERY_STRING} [L]
 RewriteRule ^api/submit$ /submit.php?%{QUERY_STRING} [L]
+RewriteRule ^api/auth$ /auth.php?%{QUERY_STRING} [L]
 
 SetOutputFilter DEFLATE
 AddOutputFilterByType DEFLATE application/x-httpd-php
