@@ -1,5 +1,5 @@
 # TracePrivately
-A sample app using Apple's contact tracing framework, as documented here:
+A functioning app using Apple's contact tracing framework, as documented here:
 
 https://www.apple.com/covid19/contacttracing
 
