@@ -155,6 +155,8 @@ extension DataManager {
                         let entity = RemoteInfectedKeyEntity(context: context)
                         entity.dateAdded = date
                         entity.infectedKey = data
+                        // Core data doesn't support unsigned ints, so using Int64 instead of UInt32
+                        entity.rollingStartNumber = Int64(key.rollingStartNumber)
                         
                         numNewKeys += 1
                     }
@@ -191,14 +193,26 @@ extension DataManager {
             do {
                 let entities = try context.fetch(request)
                 
-                // TODO: Handle rolling start number
-                let keys: [ENTemporaryExposureKey] = entities.compactMap { $0.infectedKey }.map { ENTemporaryExposureKey(keyData: $0, rollingStartNumber: 0) }
+                let keys: [ENTemporaryExposureKey] = entities.compactMap { $0.temporaryExposureKey }
                 completion(keys, nil)
             }
             catch {
                 completion(nil, error)
             }
         }
+    }
+}
+
+extension RemoteInfectedKeyEntity {
+    var temporaryExposureKey: ENTemporaryExposureKey? {
+        guard let keyData = self.infectedKey else {
+            return nil
+        }
+        
+        return ENTemporaryExposureKey(
+            keyData: keyData,
+            rollingStartNumber: ENIntervalNumber(self.rollingStartNumber)
+        )
     }
 }
 

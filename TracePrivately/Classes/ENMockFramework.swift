@@ -138,7 +138,7 @@ class ENSettingsChangeRequest: ENAuthorizableBaseRequest {
     }
 }
 
-typealias ENIntervalNumber = Int
+typealias ENIntervalNumber = UInt32
 
 struct ENTemporaryExposureKey {
     let keyData: Data
@@ -345,7 +345,7 @@ class ENSelfExposureInfoRequest: ENAuthorizableBaseRequest {
         
         queue.asyncAfter(deadline: .now() + delay) {
             
-            let keys: [ENTemporaryExposureKey] = ENInternalState.shared.dailyKeys.map { ENTemporaryExposureKey(keyData: $0, rollingStartNumber: 0) }
+            let keys: [ENTemporaryExposureKey] = ENInternalState.shared.dailyKeys.map { ENTemporaryExposureKey(keyData: $0, rollingStartNumber: 1234) }
             
             let info = ENSelfExposureInfo(keys: keys)
             self.selfExposureInfo = info
