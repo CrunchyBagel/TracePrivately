@@ -158,7 +158,17 @@ extension KeyServer {
                             return
                         }
                         
-                        let token = AuthenticationToken(string: tokenStr)
+                        let expiresAt: Date?
+                        
+                        if let expiresAtStr = json["expires_at"] as? String {
+                            let df = ISO8601DateFormatter()
+                            expiresAt = df.date(from: expiresAtStr)
+                        }
+                        else {
+                            expiresAt = nil
+                        }
+                        
+                        let token = AuthenticationToken(string: tokenStr, expiresAt: expiresAt)
                         auth.saveAuthenticationToken(token: token)
 
                         completion(true, nil)
@@ -213,7 +223,12 @@ extension KeyServer {
         do {
             var request = try self.createRequest(endPoint: endPoint, authentication: self.config.authentication?.authentication)
             
-            let encodedKeys: [String] = keys.map { $0.keyData.base64EncodedString() }
+            let encodedKeys: [[String: Any]] = keys.map { key in
+                // TODO: include rolling start number when more is known about its data type
+                return [
+                    "d": key.keyData.base64EncodedString()
+                ]
+            }
             
             var requestData: [String: Any] = [
                 "keys": encodedKeys
