@@ -137,7 +137,7 @@ extension ContactTraceManager {
     
     fileprivate func addAndFinalizeKeys(session: ENExposureDetectionSession, keys: [ENTemporaryExposureKey], completion: @escaping (Swift.Error?) -> Void) {
 
-        session.addDiagnosisKeys(inKeys: keys) { error in
+        session.batchAddDiagnosisKeys(inKeys: keys) { error in
             session.finishedDiagnosisKeysWithCompletion { summary, error in
                 guard let summary = summary else {
                     completion(error)
@@ -408,7 +408,6 @@ extension ContactTraceManager {
             
             dispatchGroup.enter()
             unc.requestAuthorization(options: [ .alert, .sound, .badge ]) { success, error in
-
                 dispatchGroup.leave()
             }
 
@@ -450,5 +449,35 @@ extension ContactTraceManager: UNUserNotificationCenterDelegate {
         // This prevents the notification from appearing when in the foreground
         completionHandler([ .alert, .badge, .sound ])
         
+    }
+}
+
+extension ENExposureDetectionSession {
+    // Modified from https://gist.github.com/mattt/17c880d64c362b923e13c765f5b1c75a
+    func batchAddDiagnosisKeys(inKeys keys: [ENTemporaryExposureKey], completion: @escaping ENErrorHandler) {
+        
+        guard !keys.isEmpty else {
+            completion(nil)
+            return
+        }
+        
+        guard maxKeyCount > 0 else {
+            completion(nil)
+            return
+        }
+
+        let cursor = keys.index(keys.startIndex, offsetBy: maxKeyCount, limitedBy: keys.endIndex) ?? keys.endIndex
+        let batch = Array(keys.prefix(upTo: cursor))
+        let remaining = Array(keys.suffix(from: cursor))
+
+        withoutActuallyEscaping(completion) { escapingCompletion in
+            addDiagnosisKeys(inKeys: batch) { error in
+                if let error = error {
+                    escapingCompletion(error)
+                } else {
+                    self.batchAddDiagnosisKeys(inKeys: remaining, completion: completion)
+                }
+            }
+        }
     }
 }

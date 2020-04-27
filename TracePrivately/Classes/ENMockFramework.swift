@@ -193,7 +193,7 @@ typealias ENExposureDetectionGetExposureInfoCompletion = (([ENExposureInfo]?, Bo
 class ENExposureDetectionSession: ENBaseRequest {
     var attenuationThreshold: UInt8 = 0
     var durationThreshold: TimeInterval = 0
-    var maxKeyCount: Int = 0
+    var maxKeyCount: Int = 50
     
     private var _infectedKeys: [ENTemporaryExposureKey] = []
 
