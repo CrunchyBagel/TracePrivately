@@ -48,8 +48,8 @@ Current server options:
       * `receipt`: Submit the App Store receipt data to the `auth` endpoint. This data isn't available in development
       * `deviceCheck`: Submit the info from `DeviceCheck` to the `auth` endpoint. This is only available from iOS 11.
 2. Configure `ExposureNotifications.plist` if you want to filter returned results
-    * `attenuationThreshold` is UInt8. Attenuation is calculated by subtracting the measured RSSI from the reported transmit power. Results above this value are not returned. `0` to include all.
-    * `durationThreshold` is a duration in seconds. Exposures shorter than this are not returned. `0` to include all.
+    * `attenuationThreshold` (0-255). Attenuation is calculated by subtracting the measured RSSI from the reported transmit power. Results above this value are not returned. `0` to include all.
+    * `durationThreshold` (duration in seconds). Exposures shorter than this are not returned. `0` to include all.
 3. Build and run in Xcode
 
 ### Workflow
