@@ -1,3 +1,6 @@
+/* parameter is localized disease name */
+"infection.infected.title" = "Vous êtes atteint par le %@";
+"exposure.exposed.details.title" = "Exposition";
 /* 
   Localizable.strings
   TracePrivately

@@ -1,0 +1,14 @@
+/* parameter is localized disease name */
+"infection.infected.title" = "Oled nakatunud %@";
+"tracing.start.title" = "Alusta";
+"tracing.stop.title" = "Lõpeta";
+
+"disease.covid19.title" = "Koroona viirus";
+
+"infection.title" = "Märgi end nakatunuks";
+
+/* parameter is localized disease name */
+"infection.report.title" = "Mul on %@";
+"infection.report.message" = "Sul on %@ diagnoos, palun lisa ennast andmebaasi. \n\nJärgmisel lehel tuleb veel võimalus kinnituseks.";
+"infection.report.gathering_data.error" = "Anonüümse proofili tegemine ebaõnnestus.";
+"infection.report.gathering.empty.title" = "Informatsioon puudub";

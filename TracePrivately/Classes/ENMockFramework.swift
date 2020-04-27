@@ -272,8 +272,6 @@ class ENExposureDetectionSession: ENBaseRequest {
             let fromIndex = self.cursor
             let toIndex   = min(allMatchedKeys.count, self.cursor + Int(maxCount))
             
-            print("RETRIEVING FROM \(fromIndex) to \(toIndex)")
-            
             guard fromIndex < toIndex else {
                 self.cursor = 0
                 completion([], true, nil)
