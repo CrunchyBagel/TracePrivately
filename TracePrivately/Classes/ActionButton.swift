@@ -51,6 +51,7 @@ class ActionButton: UIButton {
     
     private func setup() {
         self.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
+        self.titleLabel?.adjustsFontSizeToFitWidth = true
     }
     
     override var isHighlighted: Bool {
