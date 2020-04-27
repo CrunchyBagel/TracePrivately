@@ -138,6 +138,24 @@ paths:
                                   type: string
                                   example: "Base 64 Encoded String"
                                   description: Base 64 encoded binary data representing a single key
+                          form:
+                              type: array
+                              description: Additional form data gathered from user. Each item
+                              items:
+                                  type: object
+                                  description: A single form element
+                                  properties:
+                                      name:
+                                          type: string
+                                          description: The name of the form element
+                                      type:
+                                          type: string
+                                          description: The type of content
+                                          example: image/png
+                                      str:
+                                          type: string
+                                          description: The element data in string format
+
                           identifier:
                               type: string
                               description: An optional unique identifier from a previous submission so newly-submitted keys can be appended to an existing submission.

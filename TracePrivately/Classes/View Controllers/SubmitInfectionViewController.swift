@@ -204,8 +204,25 @@ extension SubmitInfectionViewController {
 }
 
 extension SubmitInfectionViewController {
+    private func formDataForField(field: SubmitInfectionConfig.Field) -> InfectedKeysFormDataField? {
+        
+        // TODO: Complete this
+        return nil
+    }
+    
+    var gatherFormData: InfectedKeysFormData {
+        let fields: [InfectedKeysFormDataField] = self.config.sortedFields.compactMap { self.formDataForField(field: $0) }
+        
+        return InfectedKeysFormData(fields: fields)
+    }
+}
+
+extension SubmitInfectionViewController {
     // TODO: Make it super clear to the user if an error occurred, so they have an opportunity to submit again
+    
     func submitReport(keys: [ENTemporaryExposureKey]) {
+        
+        let formData = self.gatherFormData
         
         let loadingAlert = UIAlertController(title: NSLocalizedString("infection.report.submitting.title", comment: ""), message: NSLocalizedString("infection.report.submitting.message", comment: ""), preferredStyle: .alert)
 
@@ -225,7 +242,7 @@ extension SubmitInfectionViewController {
         
             NotificationCenter.default.post(name: DataManager.infectionsUpdatedNotification, object: nil)
 
-            KeyServer.shared.submitInfectedKeys(keys: keys, previousSubmissionId: nil) { success, submissionId, error in
+            KeyServer.shared.submitInfectedKeys(formData: formData, keys: keys, previousSubmissionId: nil) { success, submissionId, error in
                 
                 context.perform {
                     if success {
