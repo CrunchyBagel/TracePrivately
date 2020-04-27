@@ -345,9 +345,7 @@ class ENSelfExposureInfoRequest: ENAuthorizableBaseRequest {
         
         queue.asyncAfter(deadline: .now() + delay) {
             
-            let keys: [ENTemporaryExposureKey] = ENInternalState.shared.dailyKeys.map { ENTemporaryExposureKey(keyData: $0, rollingStartNumber: 1234) }
-            
-            let info = ENSelfExposureInfo(keys: keys)
+            let info = ENSelfExposureInfo(keys: ENInternalState.shared.dailyKeys)
             self.selfExposureInfo = info
             
             completion(nil)
@@ -544,10 +542,8 @@ private class ENInternalState {
     }()
     
     // These keys are stable for this device as they use a device specific ID with an index appended
-    var dailyKeys: [Data] {
+    var dailyKeys: [ENTemporaryExposureKey] {
         return enQueue.sync {
-            
-            var keys: [String] = []
             
             let deviceId = self.localDeviceId
             
@@ -562,23 +558,32 @@ private class ENInternalState {
                 return []
             }
             
+            var keys: [ENTemporaryExposureKey] = []
+            
             for idx in 0 ..< 14 {
                 guard let date = calendar.date(byAdding: .day, value: -idx, to: todayMidday, wrappingComponents: false) else {
                     continue
                 }
-
+                
                 let dc = calendar.dateComponents([ .day, .month, .year ], from: date)
                 
                 let dateStr = String(format: "%04d%02d%02d", dc.year!, dc.month!, dc.day!)
                 
                 let str = deviceId + "_" + dateStr
-                keys.append(str)
                 
+                guard let keyData = str.data(using: .utf8) else {
+                    continue
+                }
+
+                let intervalNumber = ENIntervalNumber(date.timeIntervalSince1970 / 600)
+                let rollingStartNumber = intervalNumber / 144 * 144
+
+                keys.append(ENTemporaryExposureKey(keyData: keyData, rollingStartNumber: rollingStartNumber))
             }
             
             print("Generated keys: \(keys)")
-            
-            return keys.compactMap { $0.data(using: .utf8) }
+
+            return keys
         }
     }
 
