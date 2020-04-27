@@ -221,7 +221,7 @@ extension DataManager {
                 
                 context.perform {
                     if success {
-                        // TODO: Check against the local database to see if it should be submittedApproved or submittedUnapproved.
+                        // XXX: Check against the local database to see if it should be submittedApproved or submittedUnapproved.
                         entity.status = DataManager.InfectionStatus.submittedUnapproved.rawValue
                         entity.remoteIdentifier = submissionId
                         
@@ -269,7 +269,7 @@ extension DataManager {
         case sent = "S"
     }
     
-    func saveExposures(contacts: [ENExposureInfo], completion: @escaping (Error?) -> Void) {
+    func saveExposures(exposures: [ENExposureInfo], completion: @escaping (Error?) -> Void) {
         
         let context = self.persistentContainer.newBackgroundContext()
         
@@ -285,8 +285,8 @@ extension DataManager {
                 for entity in existingEntities {
                     var found = false
                     
-                    for contact in contacts {
-                        if entity.matches(contact: contact) {
+                    for exposure in exposures {
+                        if entity.matches(exposure: exposure) {
                             found = true
                             break
                         }
@@ -302,11 +302,11 @@ extension DataManager {
                     }
                 }
                 
-                for contact in contacts {
+                for exposure in exposures {
                     var found = false
                     
                     for entity in existingEntities {
-                        if entity.matches(contact: contact) {
+                        if entity.matches(exposure: exposure) {
                             found = true
                             break
                         }
@@ -316,8 +316,8 @@ extension DataManager {
                         // Already have this contact
                     }
                     else {
-                        print("New exposure detected: \(contact)")
-                        insert.append(contact)
+                        print("New exposure detected: \(exposure)")
+                        insert.append(exposure)
                     }
                 }
                 
@@ -416,16 +416,16 @@ extension ExposureContactInfoEntity {
         return ENExposureInfo(attenuationValue: UInt8(self.attenuationValue), date: timestamp, duration: self.duration)
     }
     
-    func matches(contact: ENExposureInfo) -> Bool {
-        if contact.attenuationValue != UInt8(self.attenuationValue) {
+    func matches(exposure: ENExposureInfo) -> Bool {
+        if exposure.attenuationValue != UInt8(self.attenuationValue) {
             return false
         }
         
-        if contact.duration != self.duration {
+        if exposure.duration != self.duration {
             return false
         }
         
-        if contact.date != self.timestamp {
+        if exposure.date != self.timestamp {
             return false
         }
         

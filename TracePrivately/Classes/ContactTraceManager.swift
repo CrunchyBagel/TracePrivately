@@ -145,7 +145,7 @@ extension ContactTraceManager {
                 }
 
                 guard summary.matchedKeyCount > 0 else {
-                    DataManager.shared.saveExposures(contacts: []) { error in
+                    DataManager.shared.saveExposures(exposures: []) { error in
                         completion(error)
                     }
                     
@@ -153,19 +153,18 @@ extension ContactTraceManager {
                 }
                 
                 // Documentation says use a reasonable number, such as 100
-
-                session.getExposureInfoWithMaxCount(maxCount: 100) { contacts, inDone, error in
-                    guard let contacts = contacts else {
+                let maxCount: UInt32 = 100
+                
+                self.getExposures(session: session, maxCount: maxCount, exposures: []) { exposures, error in
+                    guard let exposures = exposures else {
                         completion(error)
                         return
                     }
                     
-                    // TODO: Continue to call getExposureInfo until inDone is false
-                    
-                    DataManager.shared.saveExposures(contacts: contacts) { error in
+                    DataManager.shared.saveExposures(exposures: exposures) { error in
                         
                         DispatchQueue.main.sync {
-                            UIApplication.shared.applicationIconBadgeNumber = contacts.count == 0 ? -1 : contacts.count
+                            UIApplication.shared.applicationIconBadgeNumber = exposures.count == 0 ? -1 : exposures.count
                         }
                         
                         self.sendExposureNotificationForPendingContacts { notificationError in
@@ -173,6 +172,26 @@ extension ContactTraceManager {
                         }
                     }
                 }
+            }
+        }
+    }
+    
+    // Recursively retrieves exposures until all are received
+    private func getExposures(session: ENExposureDetectionSession, maxCount: UInt32, exposures: [ENExposureInfo], completion: @escaping ([ENExposureInfo]?, Swift.Error?) -> Void) {
+        session.getExposureInfoWithMaxCount(maxCount: maxCount) { newExposures, inDone, error in
+            
+            if let error = error {
+                completion(exposures, error)
+                return
+            }
+
+            let allExposures = exposures + (newExposures ?? [])
+            
+            if inDone {
+                completion(allExposures, nil)
+            }
+            else {
+                self.getExposures(session: session, maxCount: maxCount, exposures: allExposures, completion: completion)
             }
         }
     }

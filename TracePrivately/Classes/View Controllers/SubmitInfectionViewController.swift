@@ -69,8 +69,6 @@ extension SubmitInfectionViewController {
                 return
             }
             
-            // TODO: This isn't a great strategy. We still want the report submitted so the user can continue to submit their daily keys
-            
             let keys = exposureInfo.keys
 
             let alert = UIAlertController(title: NSLocalizedString("infection.report.submit.title", comment: ""), message: NSLocalizedString("infection.report.submit.message", comment: ""), preferredStyle: .alert)

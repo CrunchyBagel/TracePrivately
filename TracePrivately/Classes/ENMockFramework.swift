@@ -197,7 +197,7 @@ class ENExposureDetectionSession: ENBaseRequest {
     
     private var _infectedKeys: [ENTemporaryExposureKey] = []
 
-    private static let maximumFakeMatches = 1
+    private static let maximumFakeMatches = 5
     
     private var remoteInfectedKeys: [ENTemporaryExposureKey] {
         // Filters out keys for local device for the purposes of better testing
@@ -244,6 +244,8 @@ class ENExposureDetectionSession: ENBaseRequest {
 
     }
     
+    private var cursor: Int = 0
+    
     func getExposureInfoWithMaxCount(maxCount: UInt32, completion: @escaping ENExposureDetectionGetExposureInfoCompletion) {
         
         let queue: DispatchQueue = self.dispatchQueue ?? .main
@@ -252,13 +254,34 @@ class ENExposureDetectionSession: ENBaseRequest {
                 
         queue.asyncAfter(deadline: .now() + delay) {
             guard !self.isInvalidated else {
+                self.cursor = 0
                 completion(nil, true, ENError(errorCode: .invalidated))
                 return
             }
 
             // For now this is assuming that every key is infected. Obviously this isn't accurate, just useful for testing.
-            let keys: [ENTemporaryExposureKey] = enQueue.sync { self.remoteInfectedKeys }
-                    
+            let allKeys: [ENTemporaryExposureKey] = enQueue.sync { self.remoteInfectedKeys }
+            
+            guard allKeys.count > 0 else {
+                completion([], true, nil)
+                return
+            }
+            
+            let allMatchedKeys: [ENTemporaryExposureKey] = Array(allKeys[0 ..< min(Self.maximumFakeMatches, allKeys.count)])
+            
+            let fromIndex = self.cursor
+            let toIndex   = min(allMatchedKeys.count, self.cursor + Int(maxCount))
+            
+            print("RETRIEVING FROM \(fromIndex) to \(toIndex)")
+            
+            guard fromIndex < toIndex else {
+                self.cursor = 0
+                completion([], true, nil)
+                return
+            }
+            
+            let keys = Array(allMatchedKeys[fromIndex ..< toIndex])
+            
             let calendar = Calendar(identifier: .gregorian)
             
             let contacts: [ENExposureInfo] = keys.compactMap { key in
@@ -278,21 +301,12 @@ class ENExposureDetectionSession: ENBaseRequest {
                 let duration: TimeInterval = 15 * 60
 
                 return ENExposureInfo(attenuationValue: 0, date: date, duration: duration)
-
-//                let duration = TimeInterval.random(in: 3 ... 7200)
-//                let age = TimeInterval.random(in: 300 ... 604800)
-//
-//                return CTContactInfo(duration: duration, timestamp: Date().addingTimeInterval(-age).timeIntervalSinceReferenceDate)
             }
-                    
-            let numItems = min(Self.maximumFakeMatches, contacts.count)
             
-            if numItems == 0 {
-                completion([], true, nil)
-            }
-            else {
-                completion(Array(contacts[0 ..< numItems ]), true, nil)
-            }
+            self.cursor = toIndex
+                    
+            let inDone = toIndex >= allMatchedKeys.count
+            completion(contacts, inDone, nil)
         }
     }
 }

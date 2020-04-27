@@ -28,6 +28,7 @@ protocol KeyServerAuthentication {
 class KeyServerBaseAuthentication: KeyServerAuthentication {
     static let storageKey = "KeyServer_AuthToken"
     
+    // TODO: Consider saving this to the keychain
     func saveAuthenticationToken(token: AuthenticationToken) {
         print("Saving token: \(token)")
         UserDefaults.standard.set(token.string, forKey: Self.storageKey)
