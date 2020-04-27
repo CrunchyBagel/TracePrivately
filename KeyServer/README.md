@@ -16,6 +16,7 @@ The server serves the following purposes:
 
 * PHP: This repository contains a basic implementation in PHP
 * Ruby: https://github.com/tatey/trace_privately
+* Go: https://github.com/dstotijn/ct-diag-server - Note: not currently compatible with TracePrivately, but we're working on it.
 
 Want to build your own? Use the `KeyServer.yaml` for the requests and responses the mobile app expects.
 
