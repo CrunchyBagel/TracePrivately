@@ -82,6 +82,7 @@
 		6698C571244936AF00F046E4 /* ExposedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposedViewController.swift; sourceTree = "<group>"; };
 		6698C573244BFAB600F046E4 /* KeyServer.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = KeyServer.plist; sourceTree = "<group>"; };
 		66A039D6245005B700A569BE /* FontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
+		66BF646624578E2B00492070 /* Model 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 6.xcdatamodel"; sourceTree = "<group>"; };
 		66C4BBC224564AFB008AACC2 /* ExposureNotifications.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ExposureNotifications.plist; sourceTree = "<group>"; };
 		66C4BBC424564B56008AACC2 /* ExposureNotificationConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureNotificationConfig.swift; sourceTree = "<group>"; };
 		66CB7BD02453D51A0044D32B /* ENMockFramework.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ENMockFramework.swift; sourceTree = "<group>"; };
@@ -619,13 +620,14 @@
 		66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				66BF646624578E2B00492070 /* Model 6.xcdatamodel */,
 				66CB7BD22453EB190044D32B /* Model 5.xcdatamodel */,
 				661B6C6A2452CE2500CC1DC6 /* Model 4.xcdatamodel */,
 				66CB95C6244FCC9A00D775B6 /* Model 3.xcdatamodel */,
 				668D4B22244D705100D90C26 /* Model 2.xcdatamodel */,
 				66437F9D244A9A02000B8C6C /* Model.xcdatamodel */,
 			);
-			currentVersion = 66CB7BD22453EB190044D32B /* Model 5.xcdatamodel */;
+			currentVersion = 66BF646624578E2B00492070 /* Model 6.xcdatamodel */;
 			path = TracePrivately.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

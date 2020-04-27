@@ -44,13 +44,16 @@ if (count($keys) > 0) {
 
     $submissionId = $db->lastInsertRowID();
 
-    $stmt = $db->prepare('INSERT INTO infected_keys (infected_key, timestamp, status, status_updated, submission_id) VALUES (:k, :t, :s, :d, :i)');
+    $stmt = $db->prepare('INSERT INTO infected_keys (infected_key, rolling_start_number, timestamp, status, status_updated, submission_id) VALUES (:k, :r, :t, :s, :d, :i)');
 
     foreach ($json['keys'] as $key) {
 	$encodedKey = $key['d']; // TODO: Validate the $key array
+	$rollingStartNumber = $key['r'];
+
 	// TODO: Handle the rolling start number once we know more about how it works
 
         $stmt->bindValue(':k', $encodedKey, SQLITE3_TEXT);
+	$stmt->bindValue(':r', $rollingStartNumber, SQLITE3_INTEGER);
         $stmt->bindValue(':t', $time, SQLITE3_INTEGER);
 	$stmt->bindValue(':s', 'P', SQLITE3_TEXT); // Pending state, must be approved
         $stmt->bindValue(':d', $time, SQLITE3_INTEGER);
