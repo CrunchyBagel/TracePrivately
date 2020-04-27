@@ -46,7 +46,10 @@ if (count($keys) > 0) {
 
     $stmt = $db->prepare('INSERT INTO infected_keys (infected_key, timestamp, status, status_updated, submission_id) VALUES (:k, :t, :s, :d, :i)');
 
-    foreach ($json['keys'] as $encodedKey) {
+    foreach ($json['keys'] as $key) {
+	$encodedKey = $key['d']; // TODO: Validate the $key array
+	// TODO: Handle the rolling start number once we know more about how it works
+
         $stmt->bindValue(':k', $encodedKey, SQLITE3_TEXT);
         $stmt->bindValue(':t', $time, SQLITE3_INTEGER);
 	$stmt->bindValue(':s', 'P', SQLITE3_TEXT); // Pending state, must be approved
