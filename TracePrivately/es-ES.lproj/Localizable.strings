@@ -1,6 +1,3 @@
-/* parameter is localized disease name */
-"infection.infected.title" = "Tienes %@";
-"exposure.exposed.details.title" = "Exposición";
 /* 
   Localizable.strings
   TracePrivately
@@ -29,5 +26,8 @@
 "infection.report.submit.error" = "No se puede enviar tu información.";
 "infection.report.submitting.title" = "Un momento…";
 "infection.report.submitting.message" = "Enviar tu información anónima";
+/* parameter is localized disease name */
+"infection.infected.title" = "Tienes %@";
 "infection.pending.title" = "Confirmación pendiente";
 
+"exposure.exposed.details.title" = "Exposición";

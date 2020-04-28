@@ -30,6 +30,7 @@
 
 /* parameter is localized disease name */
 "exposure.none.message" = "Nije bilo kontakta s %@.\n\nBudite pažljivi i perite ruke.";
+/* parameter %@ may be included, which is localized disease name */
 "exposure.exposed.banner.title" = "Moguće je da ste bili izloženi";
 "exposure.exposed.title" = "Izloženost";
 /* parameter is localized disease name */

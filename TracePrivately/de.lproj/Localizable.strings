@@ -1,6 +1,3 @@
-/* parameter is localized disease name */
-"infection.infected.title" = "Du hast %@";
-"exposure.exposed.details.title" = "Aufdeckung";
 /* 
   Localizable.strings
   TracePrivately
@@ -26,3 +23,6 @@
 "infection.report.gathering.empty.message" = "Ihre Kontaktverfolgungsinformationen konnten nicht gefunden werden. Vielleicht hatten Sie die Kontaktverfolgung nicht aktiviert?";
 "infection.report.submit.title" = "Diagnose einreichen";
 "infection.report.submit.message" = "Bitte bestätigen Sie, dass Sie einreichen möchten.\n\nDas wird Leuten die in Ihrer Nähe waren ermöglichen zu wissen, dass sie dem Virus ausgesetzt gewesen sein könnten.";
+/* parameter is localized disease name */
+"infection.infected.title" = "Du hast %@";
+"exposure.exposed.details.title" = "Aufdeckung";

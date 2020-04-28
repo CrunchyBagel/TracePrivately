@@ -1,6 +1,3 @@
-/* parameter is localized disease name */
-"infection.infected.title" = "Имате %@";
-"exposure.exposed.details.title" = "Изложеност";
 /* 
   Localizable.strings
   TracePrivately
@@ -29,12 +26,16 @@
 "infection.report.submit.error" = "Није могуће послати ваше податке.";
 "infection.report.submitting.title" = "Тренутак...";
 "infection.report.submitting.message" = "Слање анонимних података.";
+/* parameter is localized disease name */
+"infection.infected.title" = "Имате %@";
 "infection.pending.title" = "Чекање потврде";
 
 /* parameter is localized disease name */
 "exposure.none.message" = "Није детектован контакт са %@!\nČuvajte se i perite ruke.";
+/* parameter %@ may be included, which is localized disease name */
 "exposure.exposed.banner.title" = "Могуће је да сте били изложени";
 "exposure.exposed.title" = "Изложеност";
+"exposure.exposed.details.title" = "Изложеност";
 /* parameter is localized disease name */
 "exposure.exposed.message" = "Могуће је да сте били у контакту са %@";
 /* parameter is a localized duration */

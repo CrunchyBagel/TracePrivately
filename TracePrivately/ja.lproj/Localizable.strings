@@ -1,6 +1,3 @@
-/* parameter is localized disease name */
-"infection.infected.title" = "あなたは%@を患っています";
-"exposure.exposed.details.title" = "曝露";
 /* 
   Localizable.strings
   TracePrivately
@@ -29,12 +26,16 @@
 "infection.report.submit.error" = "あなたの情報を提出できませんでした。";
 "infection.report.submitting.title" = "少々お待ちください...";
 "infection.report.submitting.message" = "あなたの匿名情報を提出しています。";
+/* parameter is localized disease name */
+"infection.infected.title" = "あなたは%@を患っています";
 "infection.pending.title" = "確認保留中";
 
 /* parameter is localized disease name */
 "exposure.none.message" = "%@感染者との接触を検知できませんでした。\n安全に行動し、手をしっかり洗いましょう。";
+/* parameter %@ may be included, which is localized disease name */
 "exposure.exposed.banner.title" = "あんたは曝露されたかもしれません";
 "exposure.exposed.title" = "接触事項";
+"exposure.exposed.details.title" = "曝露";
 /* parameter is localized disease name */
 "exposure.exposed.message" = "あなたは%@と接触した可能性が高いです。";
 /* parameter is a localized duration */
