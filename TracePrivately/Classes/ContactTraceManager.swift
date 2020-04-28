@@ -469,15 +469,17 @@ extension ENExposureDetectionSession {
         let cursor = keys.index(keys.startIndex, offsetBy: maxKeyCount, limitedBy: keys.endIndex) ?? keys.endIndex
         let batch = Array(keys.prefix(upTo: cursor))
         let remaining = Array(keys.suffix(from: cursor))
+        
+        print("Adding: \(batch)")
 
-        withoutActuallyEscaping(completion) { escapingCompletion in
+//        withoutActuallyEscaping(completion) { escapingCompletion in
             addDiagnosisKeys(inKeys: batch) { error in
                 if let error = error {
-                    escapingCompletion(error)
+                    completion(error)
                 } else {
                     self.batchAddDiagnosisKeys(inKeys: remaining, completion: completion)
                 }
             }
-        }
+//        }
     }
 }

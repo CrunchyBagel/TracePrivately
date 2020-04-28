@@ -234,7 +234,7 @@ You will be prompted for confirmation.</string>
                                     <constraint firstAttribute="trailing" secondItem="qDp-7Q-TUt" secondAttribute="trailing" constant="-20" id="PC5-z1-obs"/>
                                     <constraint firstItem="qDp-7Q-TUt" firstAttribute="top" secondItem="v7D-t5-OfK" secondAttribute="top" constant="20" id="Q9q-Nt-yyO"/>
                                     <constraint firstItem="qDp-7Q-TUt" firstAttribute="leading" secondItem="v7D-t5-OfK" secondAttribute="leading" constant="20" id="TGc-n6-hQ1"/>
-                                    <constraint firstAttribute="bottom" secondItem="qDp-7Q-TUt" secondAttribute="bottom" id="z2z-eA-6dG"/>
+                                    <constraint firstAttribute="bottom" secondItem="qDp-7Q-TUt" secondAttribute="bottom" constant="20" id="z2z-eA-6dG"/>
                                 </constraints>
                             </scrollView>
                         </subviews>

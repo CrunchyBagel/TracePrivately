@@ -11,7 +11,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 //    static let backgroundProcessingInterval: TimeInterval = 10
     static let backgroundProcessingInterval: TimeInterval = 3600
+    
+    #if targetEnvironment(simulator)
+    static let useModernBackgroundProcessing = false
+    #else
     static let useModernBackgroundProcessing = true
+    #endif
 
     var window: UIWindow?
 
