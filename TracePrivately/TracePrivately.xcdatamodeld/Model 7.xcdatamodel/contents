@@ -11,7 +11,7 @@
         <attribute name="dateAdded" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="remoteIdentifier" optional="YES" attributeType="String"/>
         <attribute name="status" optional="YES" attributeType="String"/>
-        <relationship name="infectedKey" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="LocalInfectionKeyEntity" inverseName="infection" inverseEntity="LocalInfectionKeyEntity"/>
+        <relationship name="infectedKey" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="LocalInfectionKeyEntity" inverseName="infection" inverseEntity="LocalInfectionKeyEntity"/>
     </entity>
     <entity name="LocalInfectionKeyEntity" representedClassName="LocalInfectionKeyEntity" syncable="YES" codeGenerationType="class">
         <attribute name="infectedKey" optional="YES" attributeType="Binary"/>

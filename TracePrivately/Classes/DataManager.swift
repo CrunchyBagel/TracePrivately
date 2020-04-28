@@ -80,7 +80,26 @@ class DataManager {
 }
 
 extension DataManager {
-    // TODO: Need to automatically purge old keys
+    func deleteLocalInfections(completion: @escaping (Swift.Error?) -> Void) {
+        
+        let context = self.persistentContainer.newBackgroundContext()
+        
+        context.perform {
+            do {
+                let fetchRequest: NSFetchRequest<NSFetchRequestResult> = LocalInfectionEntity.fetchRequest()
+                
+                let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+                try context.execute(deleteRequest)
+                
+                try context.save()
+                
+                NotificationCenter.default.post(name: DataManager.infectionsUpdatedNotification, object: nil)
+            }
+            catch {
+                completion(nil)
+            }
+        }
+    }
 
     func saveInfectedKeys(keys: [ENTemporaryExposureKey], completion: @escaping (_ numNewKeys: Int, _ error: Swift.Error?) -> Void) {
         

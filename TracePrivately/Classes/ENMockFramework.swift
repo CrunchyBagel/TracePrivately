@@ -284,9 +284,9 @@ class ENExposureDetectionSession: ENBaseRequest {
                 return ENExposureInfo(attenuationValue: 0, date: date, duration: duration)
             }
             
-            self.cursor = toIndex
-                    
             let inDone = toIndex >= allMatchedKeys.count
+            self.cursor = inDone ? 0 : toIndex
+            
             completion(contacts, inDone, nil)
         }
     }

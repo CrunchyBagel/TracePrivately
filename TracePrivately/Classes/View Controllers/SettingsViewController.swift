@@ -31,7 +31,6 @@ class SettingsViewController: UIViewController {
 
 extension SettingsViewController {
     @IBAction func resetKeysTapped(_ sender: ActionButton) {
-        
         let alert = UIAlertController(title: NSLocalizedString("reset_keys.title", comment: ""), message: NSLocalizedString("reset_keys.message", comment: ""), preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
@@ -44,7 +43,13 @@ extension SettingsViewController {
             let request = ENSelfExposureResetRequest()
             
             request.activateWithCompletion { _ in
-                request.invalidate()
+                defer {
+                    request.invalidate()
+                }
+
+                DataManager.shared.deleteLocalInfections { _ in
+
+                }
             }
         }))
         

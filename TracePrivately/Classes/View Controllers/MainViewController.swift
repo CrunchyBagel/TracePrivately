@@ -30,6 +30,7 @@ class MainViewController: UIViewController {
     @IBOutlet var tracingDescriptionLabel: UILabel!
     @IBOutlet var tracingOnButton: ActionButton!
     @IBOutlet var tracingOffButton: ActionButton!
+    @IBOutlet var tracingLoadingButton: ActionButton!
     @IBOutlet var tracingPrivacyButton: ActionButton!
     @IBOutlet var submitInfectionContainer: UIView!
     @IBOutlet var submitInfectionTitleLabel: UILabel!
@@ -55,6 +56,28 @@ class MainViewController: UIViewController {
         self.tracingOnButton.setTitle(NSLocalizedString("tracing.start.title", comment: ""), for: .normal)
         self.tracingOffButton.setTitle(NSLocalizedString("tracing.stop.title", comment: ""), for: .normal)
         self.tracingPrivacyButton.setTitle(NSLocalizedString("privacy.title", comment: ""), for: .normal)
+        
+        self.tracingLoadingButton.setTitle(nil, for: .normal)
+        
+        let style: UIActivityIndicatorView.Style
+        
+        if #available(iOS 13.0, *) {
+            style = .medium
+        } else {
+            style = .gray
+        }
+        
+        let indicator = UIActivityIndicatorView(style: style)
+        indicator.startAnimating()
+        indicator.tintColor = .white
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.tracingLoadingButton.addSubview(indicator)
+        
+        NSLayoutConstraint.activate([
+            indicator.centerXAnchor.constraint(equalTo: self.tracingLoadingButton.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: self.tracingLoadingButton.centerYAnchor)
+        ])
 
         self.noIssuesButton.accessory = .disclosure
         self.exposedButton.accessory = .disclosure
@@ -201,34 +224,19 @@ class MainViewController: UIViewController {
         }
         
         if ContactTraceManager.shared.isUpdatingEnabledState {
-            if self.navigationItem.rightBarButtonItem == nil {
-                let style: UIActivityIndicatorView.Style
-                
-                if #available(iOS 13.0, *) {
-                    style = .medium
-                } else {
-                    style = .gray
-                }
-                
-                let indicator = UIActivityIndicatorView(style: style)
-                indicator.startAnimating()
-
-                let button = UIBarButtonItem(customView: indicator)
-
-                self.navigationItem.setRightBarButton(button, animated: animated)
-            }
+            self.tracingLoadingButton.isHidden = false
+            self.tracingOnButton.isHidden = true
+            self.tracingOffButton.isHidden = true
         }
-        else {
-            self.navigationItem.setRightBarButton(nil, animated: animated)
-        }
-        
-        if ContactTraceManager.shared.isContactTracingEnabled {
+        else if ContactTraceManager.shared.isContactTracingEnabled {
             self.tracingOnButton.isHidden = true
             self.tracingOffButton.isHidden = false
+            self.tracingLoadingButton.isHidden = true
         }
         else {
             self.tracingOnButton.isHidden = false
             self.tracingOffButton.isHidden = true
+            self.tracingLoadingButton.isHidden = true
         }
     }
 }
