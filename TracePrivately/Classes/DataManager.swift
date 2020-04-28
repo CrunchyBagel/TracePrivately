@@ -104,18 +104,18 @@ extension DataManager {
                 
                 let entities = try context.fetch(fetchRequest)
                 
-                let keyData: Set<Data> = Set(keys.map { $0.keyData })
+                let keyData: Set<Data> = Set(keys.map { $0.networkData })
                 
                 var approvedEntities: [LocalInfectionEntity] = []
                 
                 for entity in entities {
-                    guard let keySet = entity.infectedKey else {
+                    guard let keysSet = entity.infectedKey else {
                         continue
                     }
                     
-                    let keyEntities = keySet.compactMap { $0 as? LocalInfectionKeyEntity }
+                    let keyEntities = keysSet.compactMap { $0 as? LocalInfectionKeyEntity }
                     
-                    let localData: Set<Data> = Set(keyEntities.compactMap { $0.infectedKey })
+                    let localData: Set<Data> = Set(keyEntities.compactMap { $0.temporaryExposureKey?.networkData })
                     
                     if keyData.intersection(localData).count > 0 {
                         approvedEntities.append(entity)
@@ -145,7 +145,7 @@ extension DataManager {
                 
                 let data = key.keyData
                 
-                request.predicate = NSPredicate(format: "infectedKey = %@", data as CVarArg)
+                request.predicate = NSPredicate(format: "infectedKey = %@ AND rollingStartNumber = %@", data as CVarArg, Int64(key.rollingStartNumber) as NSNumber)
                 
                 do {
                     let count = try context.count(for: request)
@@ -216,6 +216,19 @@ extension RemoteInfectedKeyEntity {
     }
 }
 
+extension LocalInfectionKeyEntity {
+    var temporaryExposureKey: ENTemporaryExposureKey? {
+        guard let keyData = self.infectedKey else {
+            return nil
+        }
+        
+        return ENTemporaryExposureKey(
+            keyData: keyData,
+            rollingStartNumber: ENIntervalNumber(self.rollingStartNumber)
+        )
+    }
+}
+
 extension DataManager {
     func submitReport(keys: [ENTemporaryExposureKey], completion: @escaping (Bool, Swift.Error?) -> Void) {
         let context = self.persistentContainer.newBackgroundContext()
@@ -242,6 +255,7 @@ extension DataManager {
                         for key in keys {
                             let keyEntity = LocalInfectionKeyEntity(context: context)
                             keyEntity.infectedKey = key.keyData
+                            keyEntity.rollingStartNumber = Int64(key.rollingStartNumber)
                             keyEntity.infection = entity
                         }
 

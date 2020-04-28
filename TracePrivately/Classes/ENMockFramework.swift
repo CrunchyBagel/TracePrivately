@@ -202,14 +202,10 @@ class ENExposureDetectionSession: ENBaseRequest {
     private var remoteInfectedKeys: [ENTemporaryExposureKey] {
         // Filters out keys for local device for the purposes of better testing
         
-        let localDeviceId = ENInternalState.shared.localDeviceId
+        let localDeviceId = ENInternalState.shared.localDeviceId.data
         
         return self._infectedKeys.filter { key in
-            guard let str = key.stringValue else {
-                return false
-            }
-            
-            return !str.hasPrefix(localDeviceId)
+            return key.keyData != localDeviceId
         }
     }
 
@@ -280,22 +276,9 @@ class ENExposureDetectionSession: ENBaseRequest {
             
             let keys = Array(allMatchedKeys[fromIndex ..< toIndex])
             
-            let calendar = Calendar(identifier: .gregorian)
-            
             let contacts: [ENExposureInfo] = keys.compactMap { key in
-                        
-                guard var dc = key.ymd else {
-                    return nil
-                }
-                
-                dc.hour = 12
-                dc.minute = 12
-                dc.second = 0
-                
-                guard let date = calendar.date(from: dc) else {
-                    return nil
-                }
-                
+
+                let date = Date(timeIntervalSince1970: TimeInterval(key.rollingStartNumber * 600))
                 let duration: TimeInterval = 15 * 60
 
                 return ENExposureInfo(attenuationValue: 0, date: date, duration: duration)
@@ -541,8 +524,8 @@ private class ENInternalState {
     // This is only for testing as it would otherwise be considered identifiable. This class is purely
     // a mock implementation of Apple's framework, so allowances like this are made in order to help
     // develop and test.
-    fileprivate lazy var localDeviceId: String = {
-        return UIDevice.current.identifierForVendor!.uuidString
+    fileprivate lazy var localDeviceId: UUID = {
+        return UIDevice.current.identifierForVendor!
     }()
     
     // These keys are stable for this device as they use a device specific ID with an index appended
@@ -564,21 +547,23 @@ private class ENInternalState {
             
             var keys: [ENTemporaryExposureKey] = []
             
+            let keyData = deviceId.data
+            
             for idx in 0 ..< 14 {
                 guard let date = calendar.date(byAdding: .day, value: -idx, to: todayMidday, wrappingComponents: false) else {
                     continue
                 }
                 
-                let dc = calendar.dateComponents([ .day, .month, .year ], from: date)
+//                let dc = calendar.dateComponents([ .day, .month, .year ], from: date)
+//
+//                let dateStr = String(format: "%04d%02d%02d", dc.year!, dc.month!, dc.day!)
+//
+//                let str = deviceId + "_" + dateStr
+//
+//                guard let keyData = str.data(using: .utf8) else {
+//                    continue
+//                }
                 
-                let dateStr = String(format: "%04d%02d%02d", dc.year!, dc.month!, dc.day!)
-                
-                let str = deviceId + "_" + dateStr
-                
-                guard let keyData = str.data(using: .utf8) else {
-                    continue
-                }
-
                 let intervalNumber = ENIntervalNumber(date.timeIntervalSince1970 / 600)
                 let rollingStartNumber = intervalNumber / 144 * 144
 

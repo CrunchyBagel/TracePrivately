@@ -426,6 +426,18 @@ extension ENTemporaryExposureKey {
     }
 }
 
+extension ENTemporaryExposureKey {
+    // TODO: Implement this so data can be read off the wire in binary format
+//    init?(networkData: Data) {
+//
+//    }
+    
+    var networkData: Data {
+        let rollingData = withUnsafeBytes(of: rollingStartNumber.bigEndian) { Data($0) }
+        return self.keyData + rollingData
+    }
+}
+
 extension URL {
     func withQueryItem(item: URLQueryItem) -> URL? {
         guard var components = URLComponents(url: self, resolvingAgainstBaseURL: false) else {

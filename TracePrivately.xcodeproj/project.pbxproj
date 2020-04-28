@@ -70,6 +70,7 @@
 		66437F75244A86AE000B8C6C /* Disease.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disease.swift; sourceTree = "<group>"; };
 		66437F9D244A9A02000B8C6C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		66437F9F244A9B2C000B8C6C /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		664C5236245802C9003EBE63 /* Model 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 7.xcdatamodel"; sourceTree = "<group>"; };
 		6679388D245460B600868B84 /* KeyServerAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyServerAuthentication.swift; sourceTree = "<group>"; };
 		6679388E245460B600868B84 /* KeyServerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyServerConfig.swift; sourceTree = "<group>"; };
 		6679388F245460B600868B84 /* KeyServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyServer.swift; sourceTree = "<group>"; };
@@ -631,6 +632,7 @@
 		66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				664C5236245802C9003EBE63 /* Model 7.xcdatamodel */,
 				66BF646624578E2B00492070 /* Model 6.xcdatamodel */,
 				66CB7BD22453EB190044D32B /* Model 5.xcdatamodel */,
 				661B6C6A2452CE2500CC1DC6 /* Model 4.xcdatamodel */,
@@ -638,7 +640,7 @@
 				668D4B22244D705100D90C26 /* Model 2.xcdatamodel */,
 				66437F9D244A9A02000B8C6C /* Model.xcdatamodel */,
 			);
-			currentVersion = 66BF646624578E2B00492070 /* Model 6.xcdatamodel */;
+			currentVersion = 664C5236245802C9003EBE63 /* Model 7.xcdatamodel */;
 			path = TracePrivately.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
