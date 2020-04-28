@@ -31,6 +31,8 @@
 "infection.pending.title" = "Чекање потврде";
 
 /* parameter is localized disease name */
+"exposure.none.banner.title" = "Није детектована изложеност";
+/* parameter is localized disease name */
 "exposure.none.message" = "Није детектован контакт са %@!\nČuvajte se i perite ruke.";
 /* parameter %@ may be included, which is localized disease name */
 "exposure.exposed.banner.title" = "Могуће је да сте били изложени";
@@ -65,4 +67,11 @@
 "notification.exposure_detected.multiple.body" = "Установљено је да сте можда били изложени више пута.";
 
 "privacy.title" = "Информације о приватности";
+
+"settings.title" = "Подешавања";
+
+"reset_keys.title" = "Брисање кључева за праћење";
+"reset_keys.message" = "Ово ће спречити детекцију изложености које су се десиле пре овог тренутка";
+"reset_keys.button.title" = "Обриши";
+
 
