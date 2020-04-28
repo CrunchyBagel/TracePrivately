@@ -224,7 +224,6 @@ extension KeyServer {
             var request = try self.createRequest(endPoint: endPoint, authentication: self.config.authentication?.authentication)
             
             let encodedKeys: [[String: Any]] = keys.map { key in
-                // TODO: include rolling start number when more is known about its data type
                 return [
                     "d": key.keyData.base64EncodedString(),
                     "r": key.rollingStartNumber
@@ -286,7 +285,6 @@ extension KeyServer {
                     return
                 }
 
-                // TODO: Make use of this value so new keys can be appended to this original submission
                 let submissionIdentifier = json["identifier"] as? String
                 
                 completion(true, submissionIdentifier, nil)

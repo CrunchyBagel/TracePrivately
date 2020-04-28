@@ -369,6 +369,9 @@ extension ContactTraceManager {
 
         self.isUpdatingEnabledState = true
         self.stopExposureChecking()
+        
+        self.exposureDetectionSession?.invalidate()
+        self.exposureDetectionSession = nil
 
         let settings = ENSettings(enableState: false)
         let request = ENSettingsChangeRequest(settings: settings)
@@ -395,7 +398,6 @@ extension ContactTraceManager {
         
         dispatchGroup.enter()
         
-        // TODO: This session is never invalidated, but it likely should be somewhere
         session.activateWithCompletion { error in
             
             if let error = error {

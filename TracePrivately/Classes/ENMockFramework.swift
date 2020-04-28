@@ -107,7 +107,7 @@ class ENSettingsGetRequest: ENBaseRequest {
 
     }
     
-    override func activate(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
+    override fileprivate func activate(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
         queue.async {
             self.settings = ENSettings(enableState: ENInternalState.shared.tracingEnabled)
             completion(nil)
@@ -130,7 +130,7 @@ class ENSettingsChangeRequest: ENAuthorizableBaseRequest {
         return self.settings.enableState == true
     }
     
-    override func activateWithPermission(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
+    override fileprivate func activateWithPermission(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
         queue.async {
             ENInternalState.shared.tracingEnabled = self.settings.enableState
             completion(nil)
@@ -339,7 +339,7 @@ class ENSelfExposureInfoRequest: ENAuthorizableBaseRequest {
         return "Allow this app to retrieve your anonymous tracing keys?"
     }
     
-    override func activateWithPermission(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
+    override fileprivate func activateWithPermission(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
         
         let delay: TimeInterval = 0.5
         
@@ -359,8 +359,12 @@ class ENSelfExposureResetRequest: ENAuthorizableBaseRequest {
         return "Allow this app to reset your anonymous tracing keys?"
     }
 
-    override func activateWithPermission(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
-        queue.async {
+    override fileprivate func activateWithPermission(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
+        
+        print("Resetting keys ...")
+        queue.asyncAfter(deadline: .now() + 0.5) {
+            print("Finished resetting keys")
+            
             // Nothing to do since we're generating fake stable keys for the purpose of testing
             completion(nil)
         }
@@ -382,7 +386,7 @@ class ENAuthorizableBaseRequest: ENBaseRequest, ENAuthorizable {
         return true
     }
     
-    final override func activate(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
+    final override fileprivate func activate(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
         
         if self.shouldPrompt {
             DispatchQueue.main.async {
@@ -419,7 +423,7 @@ class ENAuthorizableBaseRequest: ENBaseRequest, ENAuthorizable {
         }
     }
     
-    func activateWithPermission(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
+    fileprivate func activateWithPermission(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
         queue.async {
             print("Should be overridden")
             completion(nil)

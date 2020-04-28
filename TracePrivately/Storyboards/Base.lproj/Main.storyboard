@@ -8,6 +8,14 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Settings-->
+        <scene sceneID="FWX-ZT-gA0">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Settings" id="30j-Tt-NZz" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="L2s-vF-Tzr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1027" y="704"/>
+        </scene>
         <!--ExposedView-->
         <scene sceneID="1o1-R7-cA2">
             <objects>
@@ -268,6 +276,7 @@ You will be prompted for confirmation.</string>
                         <segue destination="vN2-Cb-gOp" kind="presentation" identifier="ExposuresSegue" id="446-k3-Kkz"/>
                         <segue destination="JKf-Kk-Eda" kind="presentation" identifier="ViewInfectionSegue" id="W1v-L3-1eu"/>
                         <segue destination="pq8-YU-2gj" kind="presentation" identifier="PrivacySegue" id="olr-l8-am9"/>
+                        <segue destination="30j-Tt-NZz" kind="presentation" identifier="SettingsSegue" id="zGF-2d-o7Y"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rxr-lo-sic" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

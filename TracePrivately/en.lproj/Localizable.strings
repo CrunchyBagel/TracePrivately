@@ -68,3 +68,10 @@
 
 "privacy.title" = "Privacy Information";
 
+"settings.title" = "Settings";
+
+"reset_keys.title" = "Reset Tracing Keys";
+"reset_keys.message" = "Doing so will prevent you from detecting exposures that occurred before now.";
+"reset_keys.button.title" = "Reset";
+
+

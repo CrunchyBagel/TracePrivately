@@ -5,8 +5,6 @@
 
 import UIKit
 
-// TODO: Allow the user to reset their keys with ENSelfExposureResetRequest
-
 class MainViewController: UIViewController {
 
     /// Constants
@@ -16,6 +14,7 @@ class MainViewController: UIViewController {
         static let privacy = "PrivacySegue"
         static let submitInfection = "SubmitInfectionSegue"
         static let viewInfection = "ViewInfectionSegue"
+        static let settings = "SettingsSegue"
     }
 
     
@@ -112,6 +111,20 @@ class MainViewController: UIViewController {
 
         self.updateViewTheme()
         self.updateViewState(animated: false)
+        
+        var settingsButton: UIBarButtonItem?
+        
+        if #available(iOS 13.0, *) {
+            if let image = UIImage(systemName: "ellipsis.circle.fill") {
+                settingsButton = UIBarButtonItem(image: image, style: .done, target: self, action: #selector(Self.settingsTapped(_:)))
+            }
+        }
+            
+        if settingsButton == nil {
+            settingsButton = UIBarButtonItem(title: NSLocalizedString("settings.title", comment: ""), style: .done, target: self, action: #selector(Self.settingsTapped(_:)))
+        }
+        
+        self.navigationItem.rightBarButtonItem = settingsButton
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -228,6 +241,10 @@ extension MainViewController {
 }
 
 extension MainViewController {
+    @objc func settingsTapped(_ sender: Any) {
+        self.performSegue(withIdentifier: Segue.settings, sender: nil)
+    }
+
     @IBAction func noIssuesButtonTapped(_ sender: ActionButton) {
         self.performSegue(withIdentifier: Segue.viewExposures, sender: nil)
     }
@@ -244,8 +261,7 @@ extension MainViewController {
         self.performSegue(withIdentifier: Segue.viewExposures, sender: nil)
     }
     
-    // TODO: This could be slow, and doesn't really show the user what's happening other than the loading spinner in the top right. This should be more obvious.
-    // TODO: To speed this up, can add and finalize strings, but no need to retrieve the contact info here. Can be done after tracing is enabled
+    // TODO: This could be slow, and doesn't really show the user what's happening other than the loading spinner in the top right. This should be more obvious. To speed this up, can add and finalize strings, but no need to retrieve the contact info here. Can be done after tracing is enabled
     @IBAction func tracingOnButtonTapped(_ sender: ActionButton) {
         guard !ContactTraceManager.shared.isUpdatingEnabledState else {
             print("Already updating state, ignoring this tap")

@@ -17,6 +17,8 @@
 		66793890245460B600868B84 /* KeyServerAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6679388D245460B600868B84 /* KeyServerAuthentication.swift */; };
 		66793891245460B600868B84 /* KeyServerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6679388E245460B600868B84 /* KeyServerConfig.swift */; };
 		66793892245460B600868B84 /* KeyServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6679388F245460B600868B84 /* KeyServer.swift */; };
+		667C7C982457B10100D280A9 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 667C7C972457B10100D280A9 /* Settings.storyboard */; };
+		667C7C9A2457B13600D280A9 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 667C7C992457B13600D280A9 /* SettingsViewController.swift */; };
 		66848C2D244D5F8800497D2A /* AsyncBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66848C2C244D5F8800497D2A /* AsyncBlockOperation.swift */; };
 		668CE843244D01F50065960A /* ContactTraceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668CE842244D01F50065960A /* ContactTraceManager.swift */; };
 		6698C572244936AF00F046E4 /* ExposedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6698C571244936AF00F046E4 /* ExposedViewController.swift */; };
@@ -76,6 +78,8 @@
 		6679389724570A0B00868B84 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		6679389824570A1700868B84 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6679389924570A2700868B84 /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/Localizable.strings; sourceTree = "<group>"; };
+		667C7C972457B10100D280A9 /* Settings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Settings.storyboard; sourceTree = "<group>"; };
+		667C7C992457B13600D280A9 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		66848C2C244D5F8800497D2A /* AsyncBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncBlockOperation.swift; sourceTree = "<group>"; };
 		668CE842244D01F50065960A /* ContactTraceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactTraceManager.swift; sourceTree = "<group>"; };
 		668D4B22244D705100D90C26 /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
@@ -131,6 +135,7 @@
 				39BD8848244C6D3D00EB8B6C /* ExposedView.storyboard */,
 				66EAEB5F244DA70E0044FF70 /* SubmitInfection.storyboard */,
 				66EAEB63244DC5E40044FF70 /* SubmittedInfection.storyboard */,
+				667C7C972457B10100D280A9 /* Settings.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -170,6 +175,7 @@
 				66EAEB61244DA72E0044FF70 /* SubmitInfectionViewController.swift */,
 				66EAEB65244DC62A0044FF70 /* SubmittedInfectionViewController.swift */,
 				66CB95C2244FBBF300D775B6 /* PrivacyViewController.swift */,
+				667C7C992457B13600D280A9 /* SettingsViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -311,6 +317,7 @@
 			files = (
 				6698C574244BFAB600F046E4 /* KeyServer.plist in Resources */,
 				66F818772448FD5E0043AC2D /* LaunchScreen.storyboard in Resources */,
+				667C7C982457B10100D280A9 /* Settings.storyboard in Resources */,
 				66C4BBC324564AFB008AACC2 /* ExposureNotifications.plist in Resources */,
 				39BD8849244C6D3D00EB8B6C /* ExposedView.storyboard in Resources */,
 				66EAEB60244DA70E0044FF70 /* SubmitInfection.storyboard in Resources */,
@@ -340,6 +347,7 @@
 				66793892245460B600868B84 /* KeyServer.swift in Sources */,
 				66848C2D244D5F8800497D2A /* AsyncBlockOperation.swift in Sources */,
 				66EAEB62244DA72E0044FF70 /* SubmitInfectionViewController.swift in Sources */,
+				667C7C9A2457B13600D280A9 /* SettingsViewController.swift in Sources */,
 				66A039D7245005B700A569BE /* FontExtension.swift in Sources */,
 				66CB95C3244FBBF300D775B6 /* PrivacyViewController.swift in Sources */,
 				66CB95BD244FB51000D775B6 /* ActionButton.swift in Sources */,
