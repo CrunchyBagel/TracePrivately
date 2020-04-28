@@ -81,6 +81,7 @@ paths:
                 -  BearerAuth: []
             produces:
                 - "application/json"
+                - "application/x-msgpack"
             parameters:
                 - name: since
                   description: |
@@ -112,18 +113,40 @@ paths:
                             keys:
                                 type: array
                                 items:
-                                    type: string
-                                    example: "Base 64 Encoded String"
-                                    description: Base 64 encoded binary data representing a single key
+                                    type: object
+                                    required:
+                                    - d
+                                    - r
+                                    description: Contains information about a single key
+                                    properties:
+                                        d:
+                                            type: string
+                                            example: "Base 64 Encoded String"
+                                            description: Base 64 encoded binary data representing a single key
+                                        r:
+                                            type: integer
+                                            example: 1234
+                                            description: The rolling start number for the key.
                             deleted_keys:
-                                type: array
                                 description: |
                                     A list of keys that have subsequently been marked as not infected. Client should remove them from their cache.
                                     These keys should also honor the "since" parameter and return deleted keys based on when their status was changed to deleted.
+                                type: array
                                 items:
-                                    type: string
-                                    example: "Base 64 Encoded String"
-                                    description: Base 64 encoded binary data representing a single key
+                                    type: object
+                                    required:
+                                    - d
+                                    - r
+                                    description: Contains information about a single key
+                                    properties:
+                                        d:
+                                            type: string
+                                            example: "Base 64 Encoded String"
+                                            description: Base 64 encoded binary data representing a single key
+                                        r:
+                                            type: integer
+                                            example: 1234
+                                            description: The rolling start number for the key.
                 401:
                     description: Unable to authorize user. Need to request a token before calling this endpoint again.
 

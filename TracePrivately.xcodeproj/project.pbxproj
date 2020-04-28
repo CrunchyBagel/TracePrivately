@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -24,6 +24,7 @@
 		6698C572244936AF00F046E4 /* ExposedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6698C571244936AF00F046E4 /* ExposedViewController.swift */; };
 		6698C574244BFAB600F046E4 /* KeyServer.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6698C573244BFAB600F046E4 /* KeyServer.plist */; };
 		66A039D7245005B700A569BE /* FontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A039D6245005B700A569BE /* FontExtension.swift */; };
+		66B5C6E72458559B0031B03C /* MessagePack in Frameworks */ = {isa = PBXBuildFile; productRef = 66B5C6E62458559B0031B03C /* MessagePack */; };
 		66C4BBC324564AFB008AACC2 /* ExposureNotifications.plist in Resources */ = {isa = PBXBuildFile; fileRef = 66C4BBC224564AFB008AACC2 /* ExposureNotifications.plist */; };
 		66C4BBC524564B56008AACC2 /* ExposureNotificationConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C4BBC424564B56008AACC2 /* ExposureNotificationConfig.swift */; };
 		66CB7BD12453D51A0044D32B /* ENMockFramework.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CB7BD02453D51A0044D32B /* ENMockFramework.swift */; };
@@ -122,6 +123,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66B5C6E72458559B0031B03C /* MessagePack in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,6 +260,9 @@
 			dependencies = (
 			);
 			name = TracePrivately;
+			packageProductDependencies = (
+				66B5C6E62458559B0031B03C /* MessagePack */,
+			);
 			productName = TracePrivately;
 			productReference = 66F818672448FD5C0043AC2D /* TracePrivately.app */;
 			productType = "com.apple.product-type.application";
@@ -303,6 +308,9 @@
 				"lv-LV",
 			);
 			mainGroup = 66F8185E2448FD5C0043AC2D;
+			packageReferences = (
+				66B5C6E52458559B0031B03C /* XCRemoteSwiftPackageReference "MessagePack" */,
+			);
 			productRefGroup = 66F818682448FD5C0043AC2D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -627,6 +635,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		66B5C6E52458559B0031B03C /* XCRemoteSwiftPackageReference "MessagePack" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Flight-School/MessagePack";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		66B5C6E62458559B0031B03C /* MessagePack */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 66B5C6E52458559B0031B03C /* XCRemoteSwiftPackageReference "MessagePack" */;
+			productName = MessagePack;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */ = {
