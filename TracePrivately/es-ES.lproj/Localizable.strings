@@ -1,0 +1,33 @@
+/* 
+  Localizable.strings
+  TracePrivately
+*/
+
+"app.title" = "Rastrear en privado";
+
+"tracing.title" = "Seguimiento de contactos";
+/* parameter is localized disease name */
+"tracing.message" = "Intercambia información anónima de forma segura cuando te encuentras con otras personas y verifica automáticamente la exposición a %@.";
+"tracing.start.title" = "Empieza a rastrear";
+"tracing.stop.title" = "Para de rastrear";
+
+"disease.covid19.title" = "COVID-19";
+
+"infection.title" = "Notificar infección";
+
+/* parameter is localized disease name */
+"infection.report.title" = "Tengo %@";
+"infection.report.message" = "Si te diagnosticaron %@, envía tu diagnóstico aquí.\n\nSe te pedirá confirmación.";
+"infection.report.gathering_data.error" = "No se puede crear tu perfil anónimo.";
+"infection.report.gathering.empty.title" = "Sin información";
+"infection.report.gathering.empty.message" = "No se puede encontrar tú información de rastreo.  ¿Quizás no has habilitado el rastreo?";
+"infection.report.submit.title" = "Enviar diagnóstico";
+"infection.report.submit.message" = "Por favor confirma que desea enviar.\n\nEsto permitirá que las personas que hayan estado cerca de ti sepan que pueden haber estado expuestas.\n";
+"infection.report.submit.error" = "No se puede enviar tu información.";
+"infection.report.submitting.title" = "Un momento…";
+"infection.report.submitting.message" = "Enviar tu información anónima";
+/* parameter is localized disease name */
+"infection.infected.title" = "Tienes %@";
+"infection.pending.title" = "Confirmación pendiente";
+
+"exposure.exposed.details.title" = "Exposición";

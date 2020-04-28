@@ -1,0 +1,68 @@
+/* 
+  Localizable.strings
+  TracePrivately
+*/
+
+"app.title" = "Privāta saskarsmes atsekošana";
+
+"tracing.title" = "Saskarsmes atsekošana";
+/* parameter is localized disease name */
+"tracing.message" = "Droši apmainies ar anonīmiem datiem, kad satiec citus un automātiski uzzini par nonākšanu saskarsmē ar %@.";
+"tracing.start.title" = "Sākt saskarsmes atsekošanu";
+"tracing.stop.title" = "Apstādināt";
+
+"disease.covid19.title" = "COVID-19";
+
+"infection.title" = "Ziņo par inficēšanos";
+
+/* parameter is localized disease name */
+"infection.report.title" = "Man ir %@";
+"infection.report.message" = "Ja jums ir diagnosticēta saslimšana ar %@, lūdzu aplieciniet savu diagnozi.\n\nApliecinājums prasīs papildus apstiprinājumu.";
+"infection.report.gathering_data.error" = "Nav iespējams izveidot jūsu anonīmo profilu.";
+"infection.report.gathering.empty.title" = "Nav informācijas";
+"infection.report.gathering.empty.message" = "Nav atrasta jūsu saskarsmes informācija. Varbūt neesat ieslēdzis saskarsmes atsekošanu?";
+"infection.report.submit.title" = "Aplieciniet savu diagnozi";
+"infection.report.submit.message" = "Lūdzu apstipriniet, ka vēlatiet nosūtīt savas diagnozes apliecinājumu.\n\nTas dos iespēju cilvēkiem, kuri bijuši fiziskā jūsu tuvumā, uzzināt, ka viņi ir nonākuši saskarsmē ar infekciju.";
+"infection.report.submit.error" = "Nav iespējams nosūtīt jūsu informāciju.";
+"infection.report.submitting.title" = "Mirkli uzgaidiet...";
+"infection.report.submitting.message" = "Nosūta jūsu anonīmos datus. ";
+/* parameter is localized disease name */
+"infection.infected.title" = "Jums ir %@";
+"infection.pending.title" = "Gaida apstiprinājumu";
+
+/* parameter is localized disease name */
+"exposure.none.message" = "Saskarsme ar %@ infekciju nav reģistrēta.\n\nMazgājiet rokas un ievērojiet distanci.";
+/* parameter %@ may be included, which is localized disease name */
+"exposure.exposed.banner.title" = "Jūs, iespējams, esat bijis saskarsmē ar infekciju.";
+"exposure.exposed.title" = "Saskarsmes";
+"exposure.exposed.details.title" = "Saskarsme ar infekciju";
+/* parameter is localized disease name */
+"exposure.exposed.message" = "Ir pamats uzskatīt, ka esat nonācis saskarsmē ar %@.";
+/* parameter is a localized duration */
+"exposure.times.duration" = "Ilgums: %@";
+
+"exposure.next_steps.title" = "Nākošie soļi";
+"exposure.next_steps.message" = "Sekojiet atbildīgo iestāžu norādītajiem soļiem.";
+
+"unknown" = "Nezināms";
+"submit" = "Nosūtīt";
+"error" = "Kļūda";
+
+"ok" = "OK";
+"cancel" = "Atcelt";
+
+"keyserver.error.no_response_data" = "Atbildes dati nav saņemti";
+"keyserver.error.response_decoding_error" = "Kļūda atkodējot atbildi";
+"keyserver.error.key_data_missing" = "Iztrūkst atslēgas dati";
+"keyserver.error.date_missing" = "Iztrūkst datums";
+"keyserver.error.not_ok" = "OK statuss nav saņemts";
+"keyserver.error.invalid_config" = "Nepareiza KeyServer konfigurācija";
+
+/* parameter is localized disease name */
+"notification.exposure_detected.title" = "Brīdinājums: konstatēta %@ saskarsme";
+/* 1st parameter is formatted localized time, 2nd parameter is formatted localized duration */
+"notification.exposure_detected.single.body" = "Jūs %1$@ bijāt %2$@ ilgā saskarsmē ar infekciju";
+"notification.exposure_detected.multiple.body" = "Jūs esat bijis saskarsmē ar infekciju vairākkārt.";
+
+"privacy.title" = "Privātums";
+

@@ -20,7 +20,7 @@ func writeToStdOut(_ str: String) {
     }
 }
 
-// TODO: Use ArgumentParser library when it's available
+// XXX: Use ArgumentParser library when it's available
 
 if CommandLine.arguments.count < 6 {
     writeToStdError(String(format: "%@ [api key] [api secret] [project id] [filename] [locale]\n", CommandLine.arguments[0]))

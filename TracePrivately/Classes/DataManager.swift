@@ -155,6 +155,8 @@ extension DataManager {
                         let entity = RemoteInfectedKeyEntity(context: context)
                         entity.dateAdded = date
                         entity.infectedKey = data
+                        // Core data doesn't support unsigned ints, so using Int64 instead of UInt32
+                        entity.rollingStartNumber = Int64(key.rollingStartNumber)
                         
                         numNewKeys += 1
                     }
@@ -191,14 +193,71 @@ extension DataManager {
             do {
                 let entities = try context.fetch(request)
                 
-                // TODO: Handle rolling start number
-                let keys: [ENTemporaryExposureKey] = entities.compactMap { $0.infectedKey }.map { ENTemporaryExposureKey(keyData: $0, rollingStartNumber: 0) }
+                let keys: [ENTemporaryExposureKey] = entities.compactMap { $0.temporaryExposureKey }
                 completion(keys, nil)
             }
             catch {
                 completion(nil, error)
             }
         }
+    }
+}
+
+extension RemoteInfectedKeyEntity {
+    var temporaryExposureKey: ENTemporaryExposureKey? {
+        guard let keyData = self.infectedKey else {
+            return nil
+        }
+        
+        return ENTemporaryExposureKey(
+            keyData: keyData,
+            rollingStartNumber: ENIntervalNumber(self.rollingStartNumber)
+        )
+    }
+}
+
+extension DataManager {
+    func submitReport(formData: InfectedKeysFormData, keys: [ENTemporaryExposureKey], completion: @escaping (Bool, Swift.Error?) -> Void) {
+        let context = self.persistentContainer.newBackgroundContext()
+        
+        context.perform {
+            // Putting this as pending effectively saves a draft in case something goes wrong in submission
+            
+            let entity = LocalInfectionEntity(context: context)
+            entity.dateAdded = Date()
+            entity.status = DataManager.InfectionStatus.pendingSubmission.rawValue
+            
+            try? context.save()
+        
+            NotificationCenter.default.post(name: DataManager.infectionsUpdatedNotification, object: nil)
+
+            KeyServer.shared.submitInfectedKeys(formData: formData, keys: keys, previousSubmissionId: nil) { success, submissionId, error in
+                
+                context.perform {
+                    if success {
+                        // XXX: Check against the local database to see if it should be submittedApproved or submittedUnapproved.
+                        entity.status = DataManager.InfectionStatus.submittedUnapproved.rawValue
+                        entity.remoteIdentifier = submissionId
+                        
+                        for key in keys {
+                            let keyEntity = LocalInfectionKeyEntity(context: context)
+                            keyEntity.infectedKey = key.keyData
+                            keyEntity.infection = entity
+                        }
+
+                        try? context.save()
+                        
+                        NotificationCenter.default.post(name: DataManager.infectionsUpdatedNotification, object: nil)
+                        
+                        completion(true, nil)
+                    }
+                    else {
+                        completion(false, error)
+                    }
+                }
+            }
+        }
+
     }
 }
 
@@ -224,7 +283,7 @@ extension DataManager {
         case sent = "S"
     }
     
-    func saveExposures(contacts: [ENExposureInfo], completion: @escaping (Error?) -> Void) {
+    func saveExposures(exposures: [ENExposureInfo], completion: @escaping (Error?) -> Void) {
         
         let context = self.persistentContainer.newBackgroundContext()
         
@@ -240,8 +299,8 @@ extension DataManager {
                 for entity in existingEntities {
                     var found = false
                     
-                    for contact in contacts {
-                        if entity.matches(contact: contact) {
+                    for exposure in exposures {
+                        if entity.matches(exposure: exposure) {
                             found = true
                             break
                         }
@@ -257,11 +316,11 @@ extension DataManager {
                     }
                 }
                 
-                for contact in contacts {
+                for exposure in exposures {
                     var found = false
                     
                     for entity in existingEntities {
-                        if entity.matches(contact: contact) {
+                        if entity.matches(exposure: exposure) {
                             found = true
                             break
                         }
@@ -271,8 +330,8 @@ extension DataManager {
                         // Already have this contact
                     }
                     else {
-                        print("New exposure detected: \(contact)")
-                        insert.append(contact)
+                        print("New exposure detected: \(exposure)")
+                        insert.append(exposure)
                     }
                 }
                 
@@ -371,16 +430,16 @@ extension ExposureContactInfoEntity {
         return ENExposureInfo(attenuationValue: UInt8(self.attenuationValue), date: timestamp, duration: self.duration)
     }
     
-    func matches(contact: ENExposureInfo) -> Bool {
-        if contact.attenuationValue != UInt8(self.attenuationValue) {
+    func matches(exposure: ENExposureInfo) -> Bool {
+        if exposure.attenuationValue != UInt8(self.attenuationValue) {
             return false
         }
         
-        if contact.duration != self.duration {
+        if exposure.duration != self.duration {
             return false
         }
         
-        if contact.date != self.timestamp {
+        if exposure.date != self.timestamp {
             return false
         }
         

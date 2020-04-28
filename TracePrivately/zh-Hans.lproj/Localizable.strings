@@ -1,6 +1,3 @@
-/* parameter is localized disease name */
-"infection.infected.title" = "您确诊%@";
-"exposure.exposed.details.title" = "接触";
 /* 
   Localizable.strings
   TracePrivately
@@ -29,12 +26,16 @@
 "infection.report.submit.error" = "无法提交您的信息。";
 "infection.report.submitting.title" = "稍等……";
 "infection.report.submitting.message" = "正在提交您的匿名信息。";
+/* parameter is localized disease name */
+"infection.infected.title" = "您确诊%@";
 "infection.pending.title" = "正在等待确认";
 
 /* parameter is localized disease name */
 "exposure.none.message" = "没有发现任何确诊%@的接触者！\n\n请保持安全措施，多次洗手。";
+/* parameter %@ may be included, which is localized disease name */
 "exposure.exposed.banner.title" = "您有可能接触过%@";
 "exposure.exposed.title" = "接触事项";
+"exposure.exposed.details.title" = "接触";
 /* parameter is localized disease name */
 "exposure.exposed.message" = "我们认为您有可能接触过%@。";
 /* parameter is a localized duration */

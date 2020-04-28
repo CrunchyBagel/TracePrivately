@@ -31,6 +31,8 @@
 "infection.pending.title" = "Pending Confirmation";
 
 /* parameter is localized disease name */
+"exposure.none.banner.title" = "No Exposure Detected";
+/* parameter is localized disease name */
 "exposure.none.message" = "No contact detected with a %@ infection!\n\nStay safe and wash your hands.";
 /* parameter %@ may be included, which is localized disease name */
 "exposure.exposed.banner.title" = "You May Have Been Exposed";
@@ -65,4 +67,11 @@
 "notification.exposure_detected.multiple.body" = "We have detected that you may have been exposed multiple times.";
 
 "privacy.title" = "Privacy Information";
+
+"settings.title" = "Settings";
+
+"reset_keys.title" = "Reset Tracing Keys";
+"reset_keys.message" = "Doing so will prevent you from detecting exposures that occurred before now.";
+"reset_keys.button.title" = "Reset";
+
 

@@ -107,7 +107,7 @@ class ENSettingsGetRequest: ENBaseRequest {
 
     }
     
-    override func activate(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
+    override fileprivate func activate(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
         queue.async {
             self.settings = ENSettings(enableState: ENInternalState.shared.tracingEnabled)
             completion(nil)
@@ -130,7 +130,7 @@ class ENSettingsChangeRequest: ENAuthorizableBaseRequest {
         return self.settings.enableState == true
     }
     
-    override func activateWithPermission(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
+    override fileprivate func activateWithPermission(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
         queue.async {
             ENInternalState.shared.tracingEnabled = self.settings.enableState
             completion(nil)
@@ -138,7 +138,7 @@ class ENSettingsChangeRequest: ENAuthorizableBaseRequest {
     }
 }
 
-typealias ENIntervalNumber = Int
+typealias ENIntervalNumber = UInt32
 
 struct ENTemporaryExposureKey {
     let keyData: Data
@@ -193,11 +193,11 @@ typealias ENExposureDetectionGetExposureInfoCompletion = (([ENExposureInfo]?, Bo
 class ENExposureDetectionSession: ENBaseRequest {
     var attenuationThreshold: UInt8 = 0
     var durationThreshold: TimeInterval = 0
-    var maxKeyCount: Int = 0
+    var maxKeyCount: Int = 10
     
     private var _infectedKeys: [ENTemporaryExposureKey] = []
 
-    private static let maximumFakeMatches = 1
+    private static let maximumFakeMatches = 5
     
     private var remoteInfectedKeys: [ENTemporaryExposureKey] {
         // Filters out keys for local device for the purposes of better testing
@@ -244,6 +244,8 @@ class ENExposureDetectionSession: ENBaseRequest {
 
     }
     
+    private var cursor: Int = 0
+    
     func getExposureInfoWithMaxCount(maxCount: UInt32, completion: @escaping ENExposureDetectionGetExposureInfoCompletion) {
         
         let queue: DispatchQueue = self.dispatchQueue ?? .main
@@ -252,13 +254,32 @@ class ENExposureDetectionSession: ENBaseRequest {
                 
         queue.asyncAfter(deadline: .now() + delay) {
             guard !self.isInvalidated else {
+                self.cursor = 0
                 completion(nil, true, ENError(errorCode: .invalidated))
                 return
             }
 
             // For now this is assuming that every key is infected. Obviously this isn't accurate, just useful for testing.
-            let keys: [ENTemporaryExposureKey] = enQueue.sync { self.remoteInfectedKeys }
-                    
+            let allKeys: [ENTemporaryExposureKey] = enQueue.sync { self.remoteInfectedKeys }
+            
+            guard allKeys.count > 0 else {
+                completion([], true, nil)
+                return
+            }
+            
+            let allMatchedKeys: [ENTemporaryExposureKey] = Array(allKeys[0 ..< min(Self.maximumFakeMatches, allKeys.count)])
+            
+            let fromIndex = self.cursor
+            let toIndex   = min(allMatchedKeys.count, self.cursor + Int(maxCount))
+            
+            guard fromIndex < toIndex else {
+                self.cursor = 0
+                completion([], true, nil)
+                return
+            }
+            
+            let keys = Array(allMatchedKeys[fromIndex ..< toIndex])
+            
             let calendar = Calendar(identifier: .gregorian)
             
             let contacts: [ENExposureInfo] = keys.compactMap { key in
@@ -278,21 +299,12 @@ class ENExposureDetectionSession: ENBaseRequest {
                 let duration: TimeInterval = 15 * 60
 
                 return ENExposureInfo(attenuationValue: 0, date: date, duration: duration)
-
-//                let duration = TimeInterval.random(in: 3 ... 7200)
-//                let age = TimeInterval.random(in: 300 ... 604800)
-//
-//                return CTContactInfo(duration: duration, timestamp: Date().addingTimeInterval(-age).timeIntervalSinceReferenceDate)
             }
-                    
-            let numItems = min(Self.maximumFakeMatches, contacts.count)
             
-            if numItems == 0 {
-                completion([], true, nil)
-            }
-            else {
-                completion(Array(contacts[0 ..< numItems ]), true, nil)
-            }
+            self.cursor = toIndex
+                    
+            let inDone = toIndex >= allMatchedKeys.count
+            completion(contacts, inDone, nil)
         }
     }
 }
@@ -327,15 +339,13 @@ class ENSelfExposureInfoRequest: ENAuthorizableBaseRequest {
         return "Allow this app to retrieve your anonymous tracing keys?"
     }
     
-    override func activateWithPermission(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
+    override fileprivate func activateWithPermission(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
         
         let delay: TimeInterval = 0.5
         
         queue.asyncAfter(deadline: .now() + delay) {
             
-            let keys: [ENTemporaryExposureKey] = ENInternalState.shared.dailyKeys.map { ENTemporaryExposureKey(keyData: $0, rollingStartNumber: 0) }
-            
-            let info = ENSelfExposureInfo(keys: keys)
+            let info = ENSelfExposureInfo(keys: ENInternalState.shared.dailyKeys)
             self.selfExposureInfo = info
             
             completion(nil)
@@ -349,8 +359,12 @@ class ENSelfExposureResetRequest: ENAuthorizableBaseRequest {
         return "Allow this app to reset your anonymous tracing keys?"
     }
 
-    override func activateWithPermission(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
-        queue.async {
+    override fileprivate func activateWithPermission(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
+        
+        print("Resetting keys ...")
+        queue.asyncAfter(deadline: .now() + 0.5) {
+            print("Finished resetting keys")
+            
             // Nothing to do since we're generating fake stable keys for the purpose of testing
             completion(nil)
         }
@@ -372,7 +386,7 @@ class ENAuthorizableBaseRequest: ENBaseRequest, ENAuthorizable {
         return true
     }
     
-    final override func activate(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
+    final override fileprivate func activate(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
         
         if self.shouldPrompt {
             DispatchQueue.main.async {
@@ -409,7 +423,7 @@ class ENAuthorizableBaseRequest: ENBaseRequest, ENAuthorizable {
         }
     }
     
-    func activateWithPermission(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
+    fileprivate func activateWithPermission(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
         queue.async {
             print("Should be overridden")
             completion(nil)
@@ -532,10 +546,8 @@ private class ENInternalState {
     }()
     
     // These keys are stable for this device as they use a device specific ID with an index appended
-    var dailyKeys: [Data] {
+    var dailyKeys: [ENTemporaryExposureKey] {
         return enQueue.sync {
-            
-            var keys: [String] = []
             
             let deviceId = self.localDeviceId
             
@@ -550,23 +562,32 @@ private class ENInternalState {
                 return []
             }
             
+            var keys: [ENTemporaryExposureKey] = []
+            
             for idx in 0 ..< 14 {
                 guard let date = calendar.date(byAdding: .day, value: -idx, to: todayMidday, wrappingComponents: false) else {
                     continue
                 }
-
+                
                 let dc = calendar.dateComponents([ .day, .month, .year ], from: date)
                 
                 let dateStr = String(format: "%04d%02d%02d", dc.year!, dc.month!, dc.day!)
                 
                 let str = deviceId + "_" + dateStr
-                keys.append(str)
                 
+                guard let keyData = str.data(using: .utf8) else {
+                    continue
+                }
+
+                let intervalNumber = ENIntervalNumber(date.timeIntervalSince1970 / 600)
+                let rollingStartNumber = intervalNumber / 144 * 144
+
+                keys.append(ENTemporaryExposureKey(keyData: keyData, rollingStartNumber: rollingStartNumber))
             }
             
             print("Generated keys: \(keys)")
-            
-            return keys.compactMap { $0.data(using: .utf8) }
+
+            return keys
         }
     }
 

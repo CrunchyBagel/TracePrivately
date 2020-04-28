@@ -21,6 +21,10 @@ struct KeyServerConfig {
     struct EndPoint {
         let url: URL
         let httpMethod: HttpMethod
+        
+        func with(url: URL) -> Self {
+            return Self(url: url, httpMethod: httpMethod)
+        }
     }
     
     struct Authentication {
@@ -33,6 +37,7 @@ struct KeyServerConfig {
     let authentication: Authentication?
     
     static let empty = KeyServerConfig(submitInfected: nil, getInfected: nil, authentication: nil)
+    
 }
 
 extension KeyServerConfig {

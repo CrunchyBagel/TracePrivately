@@ -13,6 +13,8 @@ class ContactTraceManager: NSObject {
 
     static let shared = ContactTraceManager()
     
+    var config: ExposureNotificationConfig = .defaultConfig
+    
     enum Error: LocalizedError {
         case unknownError
     }
@@ -135,7 +137,7 @@ extension ContactTraceManager {
     
     fileprivate func addAndFinalizeKeys(session: ENExposureDetectionSession, keys: [ENTemporaryExposureKey], completion: @escaping (Swift.Error?) -> Void) {
 
-        session.addDiagnosisKeys(inKeys: keys) { error in
+        session.batchAddDiagnosisKeys(inKeys: keys) { error in
             session.finishedDiagnosisKeysWithCompletion { summary, error in
                 guard let summary = summary else {
                     completion(error)
@@ -143,7 +145,7 @@ extension ContactTraceManager {
                 }
 
                 guard summary.matchedKeyCount > 0 else {
-                    DataManager.shared.saveExposures(contacts: []) { error in
+                    DataManager.shared.saveExposures(exposures: []) { error in
                         completion(error)
                     }
                     
@@ -151,19 +153,18 @@ extension ContactTraceManager {
                 }
                 
                 // Documentation says use a reasonable number, such as 100
-
-                session.getExposureInfoWithMaxCount(maxCount: 100) { contacts, inDone, error in
-                    guard let contacts = contacts else {
+                let maxCount: UInt32 = 100
+                
+                self.getExposures(session: session, maxCount: maxCount, exposures: []) { exposures, error in
+                    guard let exposures = exposures else {
                         completion(error)
                         return
                     }
                     
-                    // TODO: Continue to call getExposureInfo until inDone is false
-                    
-                    DataManager.shared.saveExposures(contacts: contacts) { error in
+                    DataManager.shared.saveExposures(exposures: exposures) { error in
                         
                         DispatchQueue.main.sync {
-                            UIApplication.shared.applicationIconBadgeNumber = contacts.count == 0 ? -1 : contacts.count
+                            UIApplication.shared.applicationIconBadgeNumber = exposures.count == 0 ? -1 : exposures.count
                         }
                         
                         self.sendExposureNotificationForPendingContacts { notificationError in
@@ -171,6 +172,26 @@ extension ContactTraceManager {
                         }
                     }
                 }
+            }
+        }
+    }
+    
+    // Recursively retrieves exposures until all are received
+    private func getExposures(session: ENExposureDetectionSession, maxCount: UInt32, exposures: [ENExposureInfo], completion: @escaping ([ENExposureInfo]?, Swift.Error?) -> Void) {
+        session.getExposureInfoWithMaxCount(maxCount: maxCount) { newExposures, inDone, error in
+            
+            if let error = error {
+                completion(exposures, error)
+                return
+            }
+
+            let allExposures = exposures + (newExposures ?? [])
+            
+            if inDone {
+                completion(allExposures, nil)
+            }
+            else {
+                self.getExposures(session: session, maxCount: maxCount, exposures: allExposures, completion: completion)
             }
         }
     }
@@ -348,6 +369,9 @@ extension ContactTraceManager {
 
         self.isUpdatingEnabledState = true
         self.stopExposureChecking()
+        
+        self.exposureDetectionSession?.invalidate()
+        self.exposureDetectionSession = nil
 
         let settings = ENSettings(enableState: false)
         let request = ENSettingsChangeRequest(settings: settings)
@@ -356,8 +380,8 @@ extension ContactTraceManager {
                 request.invalidate()
             }
 
-            self.isUpdatingEnabledState = false
             self.isContactTracingEnabled = false
+            self.isUpdatingEnabledState = false
         }
     }
 }
@@ -367,12 +391,13 @@ extension ContactTraceManager {
         let dispatchGroup = DispatchGroup()
         
         let session = ENExposureDetectionSession()
+        session.attenuationThreshold = self.config.session.attenuationThreshold
+        session.durationThreshold = self.config.session.durationThreshold
         
         var sessionError: Swift.Error?
         
         dispatchGroup.enter()
         
-        // TODO: This session is never invalidated, but it likely should be somewhere
         session.activateWithCompletion { error in
             
             if let error = error {
@@ -385,7 +410,6 @@ extension ContactTraceManager {
             
             dispatchGroup.enter()
             unc.requestAuthorization(options: [ .alert, .sound, .badge ]) { success, error in
-
                 dispatchGroup.leave()
             }
 
@@ -427,5 +451,37 @@ extension ContactTraceManager: UNUserNotificationCenterDelegate {
         // This prevents the notification from appearing when in the foreground
         completionHandler([ .alert, .badge, .sound ])
         
+    }
+}
+
+extension ENExposureDetectionSession {
+    // Modified from https://gist.github.com/mattt/17c880d64c362b923e13c765f5b1c75a
+    func batchAddDiagnosisKeys(inKeys keys: [ENTemporaryExposureKey], completion: @escaping ENErrorHandler) {
+        
+        guard !keys.isEmpty else {
+            completion(nil)
+            return
+        }
+        
+        guard maxKeyCount > 0 else {
+            completion(nil)
+            return
+        }
+
+        let cursor = keys.index(keys.startIndex, offsetBy: maxKeyCount, limitedBy: keys.endIndex) ?? keys.endIndex
+        let batch = Array(keys.prefix(upTo: cursor))
+        let remaining = Array(keys.suffix(from: cursor))
+        
+        print("Adding: \(batch)")
+
+//        withoutActuallyEscaping(completion) { escapingCompletion in
+            addDiagnosisKeys(inKeys: batch) { error in
+                if let error = error {
+                    completion(error)
+                } else {
+                    self.batchAddDiagnosisKeys(inKeys: remaining, completion: completion)
+                }
+            }
+//        }
     }
 }

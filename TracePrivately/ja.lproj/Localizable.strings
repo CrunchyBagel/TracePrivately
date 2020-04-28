@@ -1,0 +1,68 @@
+/* 
+  Localizable.strings
+  TracePrivately
+*/
+
+"app.title" = "非公開で追跡する";
+
+"tracing.title" = "接触追跡";
+/* parameter is localized disease name */
+"tracing.message" = "あなたが他の人に出会った時に、安全的に匿名情報を交換し、自動的に%@への曝露を確認する。";
+"tracing.start.title" = "追跡を開始する";
+"tracing.stop.title" = "追跡を停止する";
+
+"disease.covid19.title" = "新型コロナウイルス感染症";
+
+"infection.title" = "感染を提出する";
+
+/* parameter is localized disease name */
+"infection.report.title" = "私は%@を感染しています。";
+"infection.report.message" = "もしあなたは%@を感染したと診断されたなら、診断書をここで提出してください。\nこれから確認が求められます。";
+"infection.report.gathering_data.error" = "あなたの匿名プロフィールを作成できませんでした。";
+"infection.report.gathering.empty.title" = "資料がありません";
+"infection.report.gathering.empty.message" = "あなたの追跡情報を取得できませんでした。追跡機能を有効にしましたか？";
+"infection.report.submit.title" = "診断書を提出する";
+"infection.report.submit.message" = "提出物をご確認ください。\nこれに基づいてあなたの周辺の人に彼らが曝露された可能性を知らせます。";
+"infection.report.submit.error" = "あなたの情報を提出できませんでした。";
+"infection.report.submitting.title" = "少々お待ちください...";
+"infection.report.submitting.message" = "あなたの匿名情報を提出しています。";
+/* parameter is localized disease name */
+"infection.infected.title" = "あなたは%@を患っています";
+"infection.pending.title" = "確認保留中";
+
+/* parameter is localized disease name */
+"exposure.none.message" = "%@感染者との接触を検知できませんでした。\n安全に行動し、手をしっかり洗いましょう。";
+/* parameter %@ may be included, which is localized disease name */
+"exposure.exposed.banner.title" = "あんたは曝露されたかもしれません";
+"exposure.exposed.title" = "接触事項";
+"exposure.exposed.details.title" = "曝露";
+/* parameter is localized disease name */
+"exposure.exposed.message" = "あなたは%@と接触した可能性が高いです。";
+/* parameter is a localized duration */
+"exposure.times.duration" = "期間：%@";
+
+"exposure.next_steps.title" = "次に";
+"exposure.next_steps.message" = "所在地の当局が発表した概要ステップに従いましょう。";
+
+"unknown" = "未知";
+"submit" = "提出";
+"error" = "エラー";
+
+"ok" = "はい";
+"cancel" = "キャンセル";
+
+"keyserver.error.no_response_data" = "レスポンスデータを取得できません。";
+"keyserver.error.response_decoding_error" = "レスポンスのデコードにエラーが発生しました";
+"keyserver.error.key_data_missing" = "キーデータがありません";
+"keyserver.error.date_missing" = "日付がありません";
+"keyserver.error.not_ok" = "完了ステータスを取得できません";
+"keyserver.error.invalid_config" = "無効なKeyServerコンフィグ";
+
+/* parameter is localized disease name */
+"notification.exposure_detected.title" = "アラート：%@からの曝露を検知しました";
+/* 1st parameter is formatted localized time, 2nd parameter is formatted localized duration */
+"notification.exposure_detected.single.body" = "あなたは%1$@に%2$@曝露された可能性が高いです";
+"notification.exposure_detected.multiple.body" = "あなたが複数回曝露されたかもしれないのを検知しました。";
+
+"privacy.title" = "プライバシー情報";
+

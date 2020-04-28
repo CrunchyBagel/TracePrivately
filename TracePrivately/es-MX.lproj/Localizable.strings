@@ -29,6 +29,7 @@
 
 /* parameter is localized disease name */
 "exposure.none.message" = "¡No se detectó a ningún contacto con %@!\n\nCuídate y lávate las manos.";
+/* parameter %@ may be included, which is localized disease name */
 "exposure.exposed.banner.title" = "Es posible que te hayas expuesto";
 "exposure.exposed.title" = "Exposiciones";
 /* parameter is localized disease name */

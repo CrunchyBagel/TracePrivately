@@ -158,7 +158,17 @@ extension KeyServer {
                             return
                         }
                         
-                        let token = AuthenticationToken(string: tokenStr)
+                        let expiresAt: Date?
+                        
+                        if let expiresAtStr = json["expires_at"] as? String {
+                            let df = ISO8601DateFormatter()
+                            expiresAt = df.date(from: expiresAtStr)
+                        }
+                        else {
+                            expiresAt = nil
+                        }
+                        
+                        let token = AuthenticationToken(string: tokenStr, expiresAt: expiresAt)
                         auth.saveAuthenticationToken(token: token)
 
                         completion(true, nil)
@@ -213,7 +223,12 @@ extension KeyServer {
         do {
             var request = try self.createRequest(endPoint: endPoint, authentication: self.config.authentication?.authentication)
             
-            let encodedKeys: [String] = keys.map { $0.keyData.base64EncodedString() }
+            let encodedKeys: [[String: Any]] = keys.map { key in
+                return [
+                    "d": key.keyData.base64EncodedString(),
+                    "r": key.rollingStartNumber
+                ]
+            }
             
             var requestData: [String: Any] = [
                 "keys": encodedKeys,
@@ -271,7 +286,6 @@ extension KeyServer {
                     return
                 }
 
-                // TODO: Make use of this value so new keys can be appended to this original submission
                 let submissionIdentifier = json["identifier"] as? String
                 
                 completion(true, submissionIdentifier, nil)
@@ -320,19 +334,17 @@ extension KeyServer {
 
     private func _retrieveInfectedKeys(since date: Date?, completion: @escaping (InfectedKeysResponse?, Swift.Error?) -> Void) {
 
-        guard let endPoint = self.config.getInfected else {
+        guard var endPoint = self.config.getInfected else {
             completion(nil, Error.invalidConfig)
             return
         }
         
-        var url = endPoint.url
-
         if let date = date {
             let df = ISO8601DateFormatter()
             let queryItem = URLQueryItem(name: "since", value: df.string(from: date))
             
-            if let u = url.withQueryItem(item: queryItem) {
-                url = u
+            if let u = endPoint.url.withQueryItem(item: queryItem) {
+                endPoint = endPoint.with(url: u)
             }
         }
         
@@ -372,7 +384,7 @@ extension KeyServer {
                     return
                 }
                 
-                guard let keyData = json["keys"] as? [String] else {
+                guard let keysData = json["keys"] as? [[String: Any]] else {
                     completion(nil, Error.keyDataMissing)
                     return
                 }
@@ -384,14 +396,13 @@ extension KeyServer {
                     return
                 }
                 
-                let keysData = keyData.compactMap { Data(base64Encoded: $0) }
+                let keys: [ENTemporaryExposureKey] = keysData.compactMap { ENTemporaryExposureKey(jsonData: $0) }
                 
-                // TODO: Handle the rolling start number
-                let tracingKeys = keysData.map { ENTemporaryExposureKey(keyData: $0, rollingStartNumber: 0) }
-
-                let infectedKeys = InfectedKeysResponse(date: date, keys: tracingKeys)
+                print("Found \(keys.count) key(s)")
                 
-                completion(infectedKeys, nil)
+                let infectedKeysResponse = InfectedKeysResponse(date: date, keys: keys)
+                
+                completion(infectedKeysResponse, nil)
             }
             
             task.resume()
@@ -399,6 +410,20 @@ extension KeyServer {
         catch {
             completion(nil, error)
         }
+    }
+}
+
+extension ENTemporaryExposureKey {
+    init?(jsonData: [String: Any]) {
+        guard let base64str = jsonData["d"] as? String, let keyData = Data(base64Encoded: base64str) else {
+            return nil
+        }
+        
+        guard let rollingStartNumber = jsonData["r"] as? UInt32 else {
+            return nil
+        }
+        
+        self.init(keyData: keyData, rollingStartNumber: rollingStartNumber)
     }
 }
 

@@ -17,6 +17,7 @@ CREATE INDEX infected_key_submissions_timestamp ON infected_key_submissions (tim
 
 CREATE TABLE infected_keys (
     infected_key STRING,
+    rolling_start_number INTEGER,
     status TEXT,
     timestamp INTEGER,
     status_updated INTEGER,

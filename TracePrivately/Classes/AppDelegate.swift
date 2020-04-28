@@ -11,19 +11,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 //    static let backgroundProcessingInterval: TimeInterval = 10
     static let backgroundProcessingInterval: TimeInterval = 3600
+    
+    #if targetEnvironment(simulator)
+    static let useModernBackgroundProcessing = false
+    #else
     static let useModernBackgroundProcessing = true
+    #endif
 
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
+        
         if let url = Bundle.main.url(forResource: "KeyServer", withExtension: "plist") {
             if let config = KeyServerConfig(plistUrl: url) {
                 KeyServer.shared.config = config
             }
         }
         
+        if let url = Bundle.main.url(forResource: "ExposureNotifications", withExtension: "plist") {
+            if let config = ExposureNotificationConfig(plistUrl: url) {
+                print("CONFIG: \(config)")
+                ContactTraceManager.shared.config = config
+            }
+        }
         
+
         ContactTraceManager.shared.applicationDidFinishLaunching()
 
         if Self.useModernBackgroundProcessing {

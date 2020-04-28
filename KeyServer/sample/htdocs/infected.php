@@ -19,7 +19,7 @@ if (array_key_exists('since', $_GET)) {
     }
 }
 
-$stmt = $db->prepare('SELECT infected_key FROM infected_keys WHERE status = :s AND status_updated >= :t');
+$stmt = $db->prepare('SELECT infected_key, rolling_start_number FROM infected_keys WHERE status = :s AND status_updated >= :t');
 $stmt->bindValue(':t', $time, SQLITE3_INTEGER);
 $stmt->bindValue(':s', 'A', SQLITE3_TEXT);
 
@@ -28,7 +28,10 @@ $result = $stmt->execute();
 $keys = array();
 
 while (($row = $result->fetchArray(SQLITE3_NUM))) {
-    $keys[] = $row[0];
+    $keys[] = array(
+	'd' => $row[0],
+	'r' => (int) $row[1]
+    );
 }
 
 $date = new DateTime();

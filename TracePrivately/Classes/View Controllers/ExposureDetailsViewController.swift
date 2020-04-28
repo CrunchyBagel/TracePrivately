@@ -5,6 +5,8 @@
 
 import UIKit
 
+// TODO: Treat an exposure as unread until user visits this screen, then mark it as viewed and update the app badge accordingly.
+
 class ExposureDetailsViewController: UIViewController {
 
     var contact: ExposureContactInfoEntity!

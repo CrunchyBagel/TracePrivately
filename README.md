@@ -29,13 +29,38 @@ There are a number of ways you can help. You can:
 
 ## Instructions
 
-1. Set up a key server using the sample code in `KeyServer`
-2. In the iOS project, configure `KeyServer.plist` to point to your server
-3. Build and run in Xcode
-4. The sample key server requires manual approval of infection submissions, using the `./tools/pending.php` and `./tools/approve.php` scripts.
-5. In this proof of concept, every client will detect an exposure for any infection submitted
+### Key Server
 
-Demo server information: https://github.com/CrunchyBagel/TracePrivately/issues/36
+The mobile app communicates with a server to retrieve infected keys. API specification: https://github.com/CrunchyBagel/TracePrivately/blob/master/KeyServer/KeyServer.yaml
+
+Current server options:
+
+1. *PHP*: This project contains a very basic sample PHP implementation: https://github.com/CrunchyBagel/TracePrivately/tree/master/KeyServer
+2. *Ruby*: https://github.com/tatey/trace_privately by @tatey.
+    * You can use a demo server of this implementation here: https://github.com/CrunchyBagel/TracePrivately/issues/36
+3. Create your own according to the above OpenAPI specification
+
+### iOS App
+
+1. Configure `KeyServer.plist` to point to your server
+    * The endpoints are constructed by joining `BaseUrl` with each corresponding endpoint value.
+    * Authentication is optional. Remove the `Authenticaftion` key to disable. Otherwise, the types available are:
+      * `receipt`: Submit the App Store receipt data to the `auth` endpoint. This data isn't available in development
+      * `deviceCheck`: Submit the info from `DeviceCheck` to the `auth` endpoint. This is only available from iOS 11.
+2. Configure `ExposureNotifications.plist` if you want to filter returned results
+    * `attenuationThreshold` (0-255). Attenuation is calculated by subtracting the measured RSSI from the reported transmit power. Results above this value are not returned. `0` to include all.
+    * `durationThreshold` (duration in seconds). Exposures shorter than this are not returned. `0` to include all.
+3. Build and run in Xcode
+
+### Workflow
+
+If you're using the sample PHP implementation, it goes something like:
+
+1. App: Enable tracing in the app
+2. App: Submit that you're infected
+3. Server: Approve submission using the `./tools/pending.php` and `./tools/approve.php` scripts.
+
+Those keys are now in the infected list so they can be matched against.
 
 ## Localizations
 
@@ -43,7 +68,8 @@ If you can help translate the app, please help our crowd-sourced effort here:
 
 https://traceprivately.oneskyapp.com/collaboration/project?id=170066
 
-Currently available in: English, French, Spanish, Portuguese, German, Simplified Chinese, Croatian, Serbian and Hindi.
+Currently available in:
+English, French, Spanish (ES, MX), Portuguese (PT, BR), German, Simplified Chinese, Croatian, Serbian, Japanese, Estonian, Latvian and Hindi.
 
 ## Screenshots
 

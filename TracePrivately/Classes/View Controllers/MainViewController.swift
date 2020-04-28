@@ -5,8 +5,6 @@
 
 import UIKit
 
-// TODO: Allow the user to reset their keys with ENSelfExposureResetRequest
-
 class MainViewController: UIViewController {
 
     /// Constants
@@ -16,11 +14,13 @@ class MainViewController: UIViewController {
         static let privacy = "PrivacySegue"
         static let submitInfection = "SubmitInfectionSegue"
         static let viewInfection = "ViewInfectionSegue"
+        static let settings = "SettingsSegue"
     }
 
     
     /// Storyboard outlets
     
+    @IBOutlet var noIssuesButton: ActionButton!
     @IBOutlet var infectedButton: ActionButton!
     @IBOutlet var pendingButton: ActionButton!
     @IBOutlet var exposedButton: ActionButton!
@@ -48,6 +48,7 @@ class MainViewController: UIViewController {
 
         self.title = NSLocalizedString("app.title", comment: "")
         
+        self.noIssuesButton.setTitle(String(format: NSLocalizedString("exposure.none.banner.title", comment: ""), Disease.current.localizedTitle), for: .normal)
         self.exposedButton.setTitle(String(format: NSLocalizedString("exposure.exposed.banner.title", comment: ""), Disease.current.localizedTitle), for: .normal)
         self.pendingButton.setTitle(NSLocalizedString("infection.pending.title", comment: ""), for: .normal)
         self.infectedButton.setTitle(String(format: NSLocalizedString("infection.infected.title", comment: ""), Disease.current.localizedTitle), for: .normal)
@@ -55,6 +56,7 @@ class MainViewController: UIViewController {
         self.tracingOffButton.setTitle(NSLocalizedString("tracing.stop.title", comment: ""), for: .normal)
         self.tracingPrivacyButton.setTitle(NSLocalizedString("privacy.title", comment: ""), for: .normal)
 
+        self.noIssuesButton.accessory = .disclosure
         self.exposedButton.accessory = .disclosure
         self.infectedButton.accessory = .disclosure
         self.pendingButton.accessory = .disclosure
@@ -70,7 +72,7 @@ class MainViewController: UIViewController {
         self.submitInfectionTitleLabel.text = NSLocalizedString("infection.title", comment: "")
         self.submitInfectionDescriptionLabel.text = String(format: NSLocalizedString("infection.report.message", comment: ""), Disease.current.localizedTitle)
         
-        
+        self.noIssuesButton.isHidden = false
         self.infectedButton.isHidden = true
         self.pendingButton.isHidden = true
         self.exposedButton.isHidden = true
@@ -109,6 +111,20 @@ class MainViewController: UIViewController {
 
         self.updateViewTheme()
         self.updateViewState(animated: false)
+        
+        var settingsButton: UIBarButtonItem?
+        
+        if #available(iOS 13.0, *) {
+            if let image = UIImage(systemName: "ellipsis.circle.fill") {
+                settingsButton = UIBarButtonItem(image: image, style: .done, target: self, action: #selector(Self.settingsTapped(_:)))
+            }
+        }
+            
+        if settingsButton == nil {
+            settingsButton = UIBarButtonItem(title: NSLocalizedString("settings.title", comment: ""), style: .done, target: self, action: #selector(Self.settingsTapped(_:)))
+        }
+        
+        self.navigationItem.rightBarButtonItem = settingsButton
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -148,26 +164,31 @@ class MainViewController: UIViewController {
             self.exposedButton.isHidden = false
             self.infectedButton.isHidden = true
             self.pendingButton.isHidden = true
-            
+            self.noIssuesButton.isHidden = true
+
         case .infection:
             self.infectedButton.isHidden = false
             self.exposedButton.isHidden = true
             self.pendingButton.isHidden = true
-            
+            self.noIssuesButton.isHidden = true
+
         case .infectionPending:
             self.pendingButton.isHidden = false
             self.infectedButton.isHidden = true
             self.exposedButton.isHidden = true
-            
+            self.noIssuesButton.isHidden = true
+
         case .infectionPendingAndExposed:
             self.pendingButton.isHidden = false
             self.exposedButton.isHidden = false
             self.infectedButton.isHidden = true
-            
+            self.noIssuesButton.isHidden = true
+
         case .nothingDetected:
             self.infectedButton.isHidden = true
             self.exposedButton.isHidden = true
             self.pendingButton.isHidden = true
+            self.noIssuesButton.isHidden = false
         }
         
         if status == .infection {
@@ -198,9 +219,7 @@ class MainViewController: UIViewController {
             }
         }
         else {
-            if self.navigationItem.rightBarButtonItem != nil {
-                self.navigationItem.setRightBarButton(nil, animated: animated)
-            }
+            self.navigationItem.setRightBarButton(nil, animated: animated)
         }
         
         if ContactTraceManager.shared.isContactTracingEnabled {
@@ -222,6 +241,14 @@ extension MainViewController {
 }
 
 extension MainViewController {
+    @objc func settingsTapped(_ sender: Any) {
+        self.performSegue(withIdentifier: Segue.settings, sender: nil)
+    }
+
+    @IBAction func noIssuesButtonTapped(_ sender: ActionButton) {
+        self.performSegue(withIdentifier: Segue.viewExposures, sender: nil)
+    }
+
     @IBAction func infectedButtonTapped(_ sender: ActionButton) {
         self.performSegue(withIdentifier: Segue.viewInfection, sender: nil)
     }
@@ -234,8 +261,10 @@ extension MainViewController {
         self.performSegue(withIdentifier: Segue.viewExposures, sender: nil)
     }
     
+    // TODO: This could be slow, and doesn't really show the user what's happening other than the loading spinner in the top right. This should be more obvious. To speed this up, can add and finalize strings, but no need to retrieve the contact info here. Can be done after tracing is enabled
     @IBAction func tracingOnButtonTapped(_ sender: ActionButton) {
         guard !ContactTraceManager.shared.isUpdatingEnabledState else {
+            print("Already updating state, ignoring this tap")
             return
         }
         

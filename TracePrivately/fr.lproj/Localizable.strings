@@ -26,12 +26,16 @@
 "infection.report.submit.error" = "Impossible de soumettre vos informations.";
 "infection.report.submitting.title" = "Un moment s'il vous plait...";
 "infection.report.submitting.message" = "Soumission anonyme de vos informations.";
+/* parameter is localized disease name */
+"infection.infected.title" = "Vous êtes atteint par le %@";
 "infection.pending.title" = "En attente de confirmation";
 
 /* parameter is localized disease name */
 "exposure.none.message" = "Aucun contact détecté avec une personne infectée par le %@!\n\nRestez en sécurité et lavez-vous les mains.";
+/* parameter %@ may be included, which is localized disease name */
 "exposure.exposed.banner.title" = "Vous avez peut-être été exposé";
 "exposure.exposed.title" = "Expositions";
+"exposure.exposed.details.title" = "Exposition";
 /* parameter is localized disease name */
 "exposure.exposed.message" = "Nous pensons que vous avez peut-être été en contact avec %@.";
 /* parameter is a localized duration */
