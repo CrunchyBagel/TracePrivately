@@ -41,10 +41,10 @@ enum ENErrorCode {
 }
 
 struct ENError: LocalizedError {
-    let errorCode: ENErrorCode
+    let code: ENErrorCode
     
     var localizedDescription: String {
-        return errorCode.localizedTitle
+        return code.localizedTitle
     }
 }
 
@@ -67,7 +67,7 @@ protocol ENActivatable {
     var dispatchQueue: DispatchQueue? { get set }
     var invalidationHandler: (() -> Void)? { get set }
     
-    func activateWithCompletion(_ completion: @escaping ENErrorHandler)
+    func activate(_ completion: @escaping ENErrorHandler)
     func invalidate()
 }
 
@@ -140,9 +140,26 @@ class ENSettingsChangeRequest: ENAuthorizableBaseRequest {
 
 typealias ENIntervalNumber = UInt32
 
-struct ENTemporaryExposureKey {
-    let keyData: Data
-    let rollingStartNumber: ENIntervalNumber
+enum ENRiskLevel {
+    case invalid
+    case lowest
+    case low
+    case lowMedium
+    case medium
+    case mediumHigh
+    case high
+    case veryHigh
+    case highest
+}
+
+class ENTemporaryExposureKey {
+    var keyData: Data!
+    var rollingStartNumber: ENIntervalNumber!
+    var transmissionRiskLevel: ENRiskLevel!
+    
+    init() {
+        
+    }
 }
 
 extension ENTemporaryExposureKey {
@@ -190,10 +207,13 @@ typealias ENExposureDetectionFinishCompletion = ((ENExposureDetectionSummary?, S
 
 typealias ENExposureDetectionGetExposureInfoCompletion = (([ENExposureInfo]?, Bool, Swift.Error?) -> Void)
 
+struct ENExposureConfiguration {
+    
+}
+
 class ENExposureDetectionSession: ENBaseRequest {
-    var attenuationThreshold: UInt8 = 0
-    var durationThreshold: TimeInterval = 0
-    var maxKeyCount: Int = 10
+    var configuration = ENExposureConfiguration()
+    var maximumKeyCount: Int = 10
     
     private var _infectedKeys: [ENTemporaryExposureKey] = []
 
@@ -251,7 +271,7 @@ class ENExposureDetectionSession: ENBaseRequest {
         queue.asyncAfter(deadline: .now() + delay) {
             guard !self.isInvalidated else {
                 self.cursor = 0
-                completion(nil, true, ENError(errorCode: .invalidated))
+                completion(nil, true, ENError(code: .invalidated))
                 return
             }
 
@@ -379,7 +399,7 @@ class ENAuthorizableBaseRequest: ENBaseRequest, ENAuthorizable {
                 let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
                 
                 alert.addAction(UIAlertAction(title: "Deny", style: .cancel, handler: { action in
-                    completion(ENError(errorCode: .notAuthorized))
+                    completion(ENError(code: .notAuthorized))
                     return
                 }))
 
@@ -388,7 +408,7 @@ class ENAuthorizableBaseRequest: ENBaseRequest, ENAuthorizable {
                 }))
                 
                 guard let vc = UIApplication.shared.windows.first?.rootViewController else {
-                    completion(ENError(errorCode: .unknown))
+                    completion(ENError(code: .unknown))
                     return
                 }
                 
@@ -463,14 +483,14 @@ class ENBaseRequest: ENActivatable {
         }
     }
 
-    final func activateWithCompletion(_ completion: @escaping (Swift.Error?) -> Void) {
+    final func activate(_ completion: @escaping (Swift.Error?) -> Void) {
         let queue: DispatchQueue = self.dispatchQueue ?? .main
         
         self.isRunning = true
         
         self.activate(queue: queue) { error in
             guard !self.isInvalidated else {
-                completion(ENError(errorCode: .invalidated))
+                completion(ENError(code: .invalidated))
                 return
             }
             
@@ -567,7 +587,14 @@ private class ENInternalState {
                 let intervalNumber = ENIntervalNumber(date.timeIntervalSince1970 / 600)
                 let rollingStartNumber = intervalNumber / 144 * 144
 
-                keys.append(ENTemporaryExposureKey(keyData: keyData, rollingStartNumber: rollingStartNumber))
+                
+                
+                let key = ENTemporaryExposureKey()
+                key.keyData = keyData
+                key.rollingStartNumber = rollingStartNumber
+                key.transmissionRiskLevel = .high // TODO: Make better use of risk level
+                
+                keys.append(key)
             }
             
             print("Generated keys: \(keys)")

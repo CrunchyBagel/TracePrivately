@@ -4,6 +4,7 @@
 //
 
 import UIKit
+import ExposureNotification
 
 class SubmitInfectionViewController: UIViewController {
 
@@ -408,7 +409,7 @@ extension SubmitInfectionViewController {
                     var showError = true
 
                     if let error = error as? ENError {
-                        switch error.errorCode {
+                        switch error.code {
                         case .notAuthorized:
                             showError = false
                         default:

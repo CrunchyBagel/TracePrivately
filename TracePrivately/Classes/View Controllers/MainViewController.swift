@@ -4,6 +4,7 @@
 //
 
 import UIKit
+import ExposureNotification
 
 class MainViewController: UIViewController {
 
@@ -281,7 +282,7 @@ extension MainViewController {
 
         ContactTraceManager.shared.startTracing { error in
             if let error = error {
-                if let error = error as? ENError, error.errorCode == .notAuthorized {
+                if let error = error as? ENError, error.code == .notAuthorized {
                     
                 }
                 else {

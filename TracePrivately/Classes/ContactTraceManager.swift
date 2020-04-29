@@ -140,7 +140,15 @@ extension ContactTraceManager {
     
     fileprivate func addAndFinalizeKeys(session: ENExposureDetectionSession, keys: [DataManager.TemporaryExposureKey], completion: @escaping (Swift.Error?) -> Void) {
 
-        let k: [ENTemporaryExposureKey] = keys.map { .init(keyData: $0.keyData, rollingStartNumber: $0.rollingStartNumber) }
+        let k: [ENTemporaryExposureKey] = keys.map { k in
+            
+            let key = ENTemporaryExposureKey()
+            key.keyData = k.keyData
+            key.rollingStartNumber = k.rollingStartNumber
+            key.transmissionRiskLevel = .high // TODO: Use correct value
+
+            return key
+        }
         
         session.batchAddDiagnosisKeys(inKeys: k) { error in
             session.finishedDiagnosisKeysWithCompletion { summary, error in
@@ -332,7 +340,7 @@ extension ContactTraceManager {
         let settings = ENSettings(enableState: true)
         
         let request = ENSettingsChangeRequest(settings: settings)
-        request.activateWithCompletion { error in
+        request.activate { error in
             defer {
                 request.invalidate()
             }
@@ -349,7 +357,7 @@ extension ContactTraceManager {
                 if error != nil {
                     let settings = ENSettings(enableState: false)
                     let request = ENSettingsChangeRequest(settings: settings)
-                    request.activateWithCompletion { _ in
+                    request.activate { _ in
                         defer {
                             request.invalidate()
                         }
@@ -383,7 +391,7 @@ extension ContactTraceManager {
 
         let settings = ENSettings(enableState: false)
         let request = ENSettingsChangeRequest(settings: settings)
-        request.activateWithCompletion { _ in
+        request.activate { _ in
             defer {
                 request.invalidate()
             }
@@ -399,14 +407,21 @@ extension ContactTraceManager {
         let dispatchGroup = DispatchGroup()
         
         let session = ENExposureDetectionSession()
+        
+        let configuration = ENExposureConfiguration()
+
+        // TODO: Handle the configuration correctly
+        /*
         session.attenuationThreshold = self.config.session.attenuationThreshold
         session.durationThreshold = self.config.session.durationThreshold
+ */
+        session.configuration = configuration
         
         var sessionError: Swift.Error?
         
         dispatchGroup.enter()
         
-        session.activateWithCompletion { error in
+        session.activate { error in
             
             if let error = error {
                 sessionError = error
@@ -472,12 +487,12 @@ extension ENExposureDetectionSession {
             return
         }
         
-        guard maxKeyCount > 0 else {
+        guard maximumKeyCount > 0 else {
             completion(nil)
             return
         }
 
-        let cursor = keys.index(keys.startIndex, offsetBy: maxKeyCount, limitedBy: keys.endIndex) ?? keys.endIndex
+        let cursor = keys.index(keys.startIndex, offsetBy: maximumKeyCount, limitedBy: keys.endIndex) ?? keys.endIndex
         let batch = Array(keys.prefix(upTo: cursor))
         let remaining = Array(keys.suffix(from: cursor))
         
@@ -499,7 +514,7 @@ extension ContactTraceManager {
     func retrieveSelfDiagnosisKeys(completion: @escaping ([DataManager.TemporaryExposureKey]?, Swift.Error?) -> Void) {
         let request = ENSelfExposureInfoRequest()
         
-        request.activateWithCompletion { error in
+        request.activate { error in
             defer {
                 request.invalidate()
             }
