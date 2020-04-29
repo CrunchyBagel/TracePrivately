@@ -22,7 +22,8 @@ class ContactTraceManager: NSObject {
     
     static let backgroundProcessingTaskIdentifier = "ctm.processor"
 
-    fileprivate var exposureDetectionSession: ENExposureDetectionSession?
+    fileprivate var enManager: ENManager?
+    fileprivate var enDetectionSession: ENExposureDetectionSession?
     
     private var _isUpdatingEnabledState = false
     @objc dynamic var isUpdatingEnabledState: Bool {
@@ -124,7 +125,7 @@ extension ContactTraceManager {
             self.saveNewInfectedKeys(keys: response.keys) { numNewKeys, error in
                 self.saveLastReceivedInfectedKeys(date: response.date)
 
-                guard let session = self.exposureDetectionSession else {
+                guard let session = self.enDetectionSession else {
                     self.isUpdatingExposures = false
                     completion(nil)
                     return
@@ -338,43 +339,48 @@ extension ContactTraceManager {
 
         self.isUpdatingEnabledState = true
         
-        let settings = ENSettings(enableState: true)
+        self.enManager?.invalidate()
         
-        let request = ENSettingsChangeRequest(settings: settings)
-        request.activate { error in
-            defer {
-                request.invalidate()
-            }
+        let manager = ENManager()
+        self.enManager = manager
+        
+        manager.activate { error in
             
             if let error = error {
+                manager.invalidate()
+                
                 self.isUpdatingEnabledState = false
                 self.isContactTracingEnabled = false
                 completion(error)
                 return
             }
-            
-            self.startExposureChecking { error in
-                
-                if error != nil {
-                    let settings = ENSettings(enableState: false)
-                    let request = ENSettingsChangeRequest(settings: settings)
-                    request.activate { _ in
-                        defer {
-                            request.invalidate()
-                        }
+
+            manager.setExposureNotificationEnabled(true) { error in
+                if let error = error {
+                    manager.invalidate()
+
+                    self.isUpdatingEnabledState = false
+                    self.isContactTracingEnabled = false
+                    completion(error)
+                    return
+                }
+
+                self.startExposureChecking { error in
+                    
+                    if error != nil {
+                        manager.invalidate()
 
                         self.isUpdatingEnabledState = false
                         self.isContactTracingEnabled = false
                         completion(error)
+                        return
                     }
-
-                    return
+                    
+                    self.isContactTracingEnabled = true
+                    self.isUpdatingEnabledState = false
+                    
+                    completion(error)
                 }
-                
-                self.isContactTracingEnabled = true
-                self.isUpdatingEnabledState = false
-                
-                completion(error)
             }
         }
     }
@@ -387,19 +393,14 @@ extension ContactTraceManager {
         self.isUpdatingEnabledState = true
         self.stopExposureChecking()
         
-        self.exposureDetectionSession?.invalidate()
-        self.exposureDetectionSession = nil
+        self.enDetectionSession?.invalidate()
+        self.enDetectionSession = nil
 
-        let settings = ENSettings(enableState: false)
-        let request = ENSettingsChangeRequest(settings: settings)
-        request.activate { _ in
-            defer {
-                request.invalidate()
-            }
-
-            self.isContactTracingEnabled = false
-            self.isUpdatingEnabledState = false
-        }
+        self.enManager?.invalidate()
+        self.enManager = nil
+        
+        self.isContactTracingEnabled = false
+        self.isUpdatingEnabledState = false
     }
 }
 
@@ -457,7 +458,7 @@ extension ContactTraceManager {
             }
         }
         
-        self.exposureDetectionSession = session
+        self.enDetectionSession = session
         
         dispatchGroup.notify(queue: .main) {
             let error = sessionError
@@ -466,7 +467,7 @@ extension ContactTraceManager {
     }
     
     fileprivate func stopExposureChecking() {
-        self.exposureDetectionSession = nil
+        self.enDetectionSession = nil
     }
 }
  
@@ -513,14 +514,15 @@ extension ENExposureDetectionSession {
 
 extension ContactTraceManager {
     func retrieveSelfDiagnosisKeys(completion: @escaping ([DataManager.TemporaryExposureKey]?, Swift.Error?) -> Void) {
-        let request = ENSelfExposureInfoRequest()
         
-        request.activate { error in
-            defer {
-                request.invalidate()
-            }
-            
-            guard let keys = request.selfExposureInfo?.keys else {
+        guard let manager = self.enManager else {
+            // TODO: Handle this error better
+            completion(nil, nil)
+            return
+        }
+        
+        manager.getDiagnosisKeys { keys, error in
+            guard let keys = keys else {
                 completion(nil, error)
                 return
             }
@@ -528,6 +530,19 @@ extension ContactTraceManager {
             let k: [DataManager.TemporaryExposureKey] = keys.map { .init(keyData: $0.keyData, rollingStartNumber: $0.rollingStartNumber) }
             
             completion(k, nil)
+        }
+    }
+}
+
+extension ContactTraceManager {
+    func resetAllData(completion: @escaping (Swift.Error?) -> Void) {
+        guard let manager = self.enManager else {
+            completion(nil)
+            return
+        }
+        
+        manager.resetAllData { error in
+            completion(error)
         }
     }
 }

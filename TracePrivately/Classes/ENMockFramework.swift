@@ -6,6 +6,7 @@
 import Foundation
 import UIKit
 
+/*
 enum ENErrorCode {
     case success
     case unknown
@@ -76,68 +77,6 @@ protocol ENAuthorizable {
     var authorizationMode: ENAuthorizationMode { get set }
 }
 
-typealias ENMultiState = Bool
-
-class ENSettings {
-    let enableState: ENMultiState
-    
-    init(enableState: ENMultiState) {
-        self.enableState = enableState
-    }
-}
-
-class ENMutableSettings: ENSettings {
-
-}
-
-class ENSettingsGetRequest: ENBaseRequest {
-    private var _settings: ENSettings? = nil
-    
-    var settings: ENSettings? {
-        get {
-            return enQueue.sync {
-                return self._settings
-            }
-        }
-        set {
-            enQueue.sync {
-                self._settings = newValue
-            }
-        }
-
-    }
-    
-    override fileprivate func activate(queue: DispatchQueue, completionHandler: @escaping (Error?) -> Void) {
-        queue.async {
-            self.settings = ENSettings(enableState: ENInternalState.shared.tracingEnabled)
-            completionHandler(nil)
-        }
-    }
-}
-
-class ENSettingsChangeRequest: ENAuthorizableBaseRequest {
-    let settings: ENSettings
-    
-    override var permissionDialogMessage: String? {
-        return "Allow this app to detect exposures?"
-    }
-    
-    init(settings: ENSettings) {
-        self.settings = settings
-    }
-    
-    override var shouldPrompt: Bool {
-        return self.settings.enableState == true
-    }
-    
-    override fileprivate func activateWithPermission(queue: DispatchQueue, completionHandler: @escaping (Error?) -> Void) {
-        queue.async {
-            ENInternalState.shared.tracingEnabled = self.settings.enableState
-            completionHandler(nil)
-        }
-    }
-}
-
 typealias ENIntervalNumber = UInt32
 
 enum ENRiskLevel {
@@ -195,6 +134,37 @@ extension ENTemporaryExposureKey {
 
     fileprivate var stringValue: String? {
         return String(data: self.keyData, encoding: .utf8)
+    }
+}
+
+typealias ENGetDiagnosisKeysHandler = ([ENTemporaryExposureKey]?, Error?) -> Void
+ 
+class ENManager: ENBaseRequest {
+
+    func setExposureNotificationEnabled(_ flag: Bool, completion: @escaping ENErrorHandler) {
+        // TODO: Doesn't do anything
+        // TODO: Request permission here
+        completion(nil)
+    }
+
+//    override var permissionDialogMessage: String? {
+//        return "Allow this app to retrieve your anonymous tracing keys?"
+//    }
+    
+    func getDiagnosisKeys(completionHandler: @escaping ENGetDiagnosisKeysHandler) {
+        
+        let delay: TimeInterval = 0.5
+        
+        let queue = self.dispatchQueue ?? .main
+        
+        queue.asyncAfter(deadline: .now() + delay) {
+            completionHandler(ENInternalState.shared.dailyKeys, nil)
+        }
+    }
+    
+    func resetAllData(completionHandler: @escaping ENErrorHandler) {
+        // TODO: Show auth dialog here
+        completionHandler(nil)
     }
 }
 
@@ -316,44 +286,6 @@ struct ENExposureInfo {
     let attenuationValue: UInt8
     let date: Date
     let duration: TimeInterval
-}
-
-struct ENSelfExposureInfo {
-    let keys: [ENTemporaryExposureKey]
-}
-
-class ENSelfExposureInfoRequest: ENAuthorizableBaseRequest {
-    private var _selfExposureInfo: ENSelfExposureInfo?
-    
-    var selfExposureInfo: ENSelfExposureInfo? {
-        get {
-            return enQueue.sync {
-                return self._selfExposureInfo
-            }
-        }
-        set {
-            enQueue.sync {
-                self._selfExposureInfo = newValue
-            }
-        }
-    }
-    
-    override var permissionDialogMessage: String? {
-        return "Allow this app to retrieve your anonymous tracing keys?"
-    }
-    
-    override fileprivate func activateWithPermission(queue: DispatchQueue, completionHandler: @escaping (Error?) -> Void) {
-        
-        let delay: TimeInterval = 0.5
-        
-        queue.asyncAfter(deadline: .now() + delay) {
-            
-            let info = ENSelfExposureInfo(keys: ENInternalState.shared.dailyKeys)
-            self.selfExposureInfo = info
-            
-            completionHandler(nil)
-        }
-    }
 }
 
 class ENSelfExposureResetRequest: ENAuthorizableBaseRequest {
@@ -623,3 +555,4 @@ extension String {
     }
 }
 
+*/
