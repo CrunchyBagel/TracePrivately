@@ -69,7 +69,7 @@ If you can help translate the app, please help our crowd-sourced effort here:
 https://traceprivately.oneskyapp.com/collaboration/project?id=170066
 
 Currently available in:
-English, French, Spanish (ES, MX), Portuguese (PT, BR), German, Simplified Chinese, Croatian, Serbian, Japanese, Estonian, Latvian and Hindi.
+English, French, Spanish (ES, MX), Portuguese (PT, BR), German, Simplified Chinese, Croatian, Serbian, Japanese, Estonian, Latvian, Dutch, Italian, Ukrainian and Hindi.
 
 ## Screenshots
 
