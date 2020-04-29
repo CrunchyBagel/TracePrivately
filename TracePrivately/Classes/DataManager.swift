@@ -4,6 +4,7 @@
 //
 
 import CoreData
+import ExposureNotification
 
 class DataManager {
     static let shared = DataManager()
@@ -108,6 +109,15 @@ extension DataManager {
         let rollingStartNumber: ENIntervalNumber
         // TODO: Support risk level
     }
+    
+    struct ExposureInfo {
+        let attenuationValue: ENAttenuation
+        let date: Date
+        let duration: TimeInterval
+        let totalRiskScore: ENRiskScore
+        let transmissionRiskLevel: ENRiskLevel
+    }
+
 
     func saveInfectedKeys(keys: [TemporaryExposureKey], completion: @escaping (_ numNewKeys: Int, _ error: Swift.Error?) -> Void) {
         
@@ -463,12 +473,18 @@ extension DataManager {
 }
 
 extension ExposureContactInfoEntity {
-    var contactInfo: ENExposureInfo? {
+    var contactInfo: DataManager.ExposureInfo? {
         guard let timestamp = self.timestamp else {
             return nil
         }
         
-        return ENExposureInfo(attenuationValue: UInt8(self.attenuationValue), date: timestamp, duration: self.duration)
+        return .init(
+            attenuationValue: UInt8(self.attenuationValue),
+            date: timestamp,
+            duration: self.duration,
+            totalRiskScore: .zero, // TODO: Fix
+            transmissionRiskLevel: .low // TODO: Fix
+        )
     }
     
     func matches(exposure: ENExposureInfo) -> Bool {

@@ -6,6 +6,7 @@
 import Foundation
 import UserNotifications
 import UIKit
+import ExposureNotification
 
 class ContactTraceManager: NSObject {
     
