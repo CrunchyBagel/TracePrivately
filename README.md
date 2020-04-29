@@ -20,6 +20,7 @@ This app will be evolving quickly as I'm trying to publish new functionality as 
     * Different privacy statements
     * Different data gathered for positive diagnoses
     * Different server/authorization needs
+    * Different thresholds to define a contact (attenuation and duration)
 * Create a functioning server prototype that can be used as a basis for more robust solutions that fit into governments' existing architecture.
 
 ## How Can You Help?
