@@ -79,6 +79,8 @@
 		660408B62458F555004710F7 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		660408B72458F562004710F7 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		660408B82458F562004710F7 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
+		660408B924595848004710F7 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		660408BA24595848004710F7 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		6614BB042452B9D900885F23 /* ExposureDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureDetailsViewController.swift; sourceTree = "<group>"; };
 		661B6C6A2452CE2500CC1DC6 /* Model 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 4.xcdatamodel"; sourceTree = "<group>"; };
 		6621056A245251B10011EB42 /* OneSkyDownload */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OneSkyDownload; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -94,9 +96,9 @@
 		66437F75244A86AE000B8C6C /* Disease.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disease.swift; sourceTree = "<group>"; };
 		66437F9D244A9A02000B8C6C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		66437F9F244A9B2C000B8C6C /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		664C5236245802C9003EBE63 /* Model 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 7.xcdatamodel"; sourceTree = "<group>"; };
 		6673EED32451785300244287 /* SubmitConfig.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SubmitConfig.plist; sourceTree = "<group>"; };
 		6673EED52451C10000244287 /* SubmitInfectionConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitInfectionConfig.swift; sourceTree = "<group>"; };
-		664C5236245802C9003EBE63 /* Model 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 7.xcdatamodel"; sourceTree = "<group>"; };
 		6679388D245460B600868B84 /* KeyServerAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyServerAuthentication.swift; sourceTree = "<group>"; };
 		6679388E245460B600868B84 /* KeyServerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyServerConfig.swift; sourceTree = "<group>"; };
 		6679388F245460B600868B84 /* KeyServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyServer.swift; sourceTree = "<group>"; };
@@ -335,6 +337,7 @@
 				it,
 				nl,
 				uk,
+				"zh-Hant",
 			);
 			mainGroup = 66F8185E2448FD5C0043AC2D;
 			productRefGroup = 66F818682448FD5C0043AC2D /* Products */;
@@ -431,6 +434,7 @@
 				660408B32458F54B004710F7 /* it */,
 				660408B52458F555004710F7 /* nl */,
 				660408B72458F562004710F7 /* uk */,
+				660408B924595848004710F7 /* zh-Hant */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -455,6 +459,7 @@
 				660408B42458F54B004710F7 /* it */,
 				660408B62458F555004710F7 /* nl */,
 				660408B82458F562004710F7 /* uk */,
+				660408BA24595848004710F7 /* zh-Hant */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
