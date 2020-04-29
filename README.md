@@ -50,7 +50,10 @@ Current server options:
 2. Configure `ExposureNotifications.plist` if you want to filter returned results
     * `attenuationThreshold` (0-255). Attenuation is calculated by subtracting the measured RSSI from the reported transmit power. Results above this value are not returned. `0` to include all.
     * `durationThreshold` (duration in seconds). Exposures shorter than this are not returned. `0` to include all.
-3. Configure `SubmitConfig.plist` if you want the user to submit additional information with a positive diagnosis. This system is extensible and localizable.
+3. Configure `SubmitConfig.plist` if you want the user to submit additional information with a positive diagnosis.
+    * This system is extensible and localizable.
+    * You will need to configure your server to save and use this data accordingly.
+    * For example, your workflow for approving new infected keys may involve reviewing this data before approving the submission.
 4. Build and run in Xcode
 
 ### Workflow
