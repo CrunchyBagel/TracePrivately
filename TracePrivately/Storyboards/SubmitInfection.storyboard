@@ -76,6 +76,9 @@
                                     <constraint firstItem="1LA-LQ-UrL" firstAttribute="top" secondItem="EVu-IG-vzh" secondAttribute="top" constant="20" id="uWg-jL-8Kh"/>
                                     <constraint firstAttribute="trailing" secondItem="1LA-LQ-UrL" secondAttribute="trailing" constant="-20" id="xRg-Lk-ZYp"/>
                                 </constraints>
+                                <connections>
+                                    <outlet property="delegate" destination="qJn-sc-WK5" id="MsL-QU-6ha"/>
+                                </connections>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -90,6 +93,7 @@
                     <navigationItem key="navigationItem" id="ZTP-2p-wQi"/>
                     <connections>
                         <outlet property="infoLabel" destination="yMu-S3-J9M" id="bPF-KO-43J"/>
+                        <outlet property="scrollView" destination="EVu-IG-vzh" id="rct-dg-CtX"/>
                         <outlet property="stackView" destination="1LA-LQ-UrL" id="H05-Oi-wz4"/>
                         <outlet property="submitButton" destination="YLA-Ut-Ua8" id="XDm-8D-xGQ"/>
                         <outlet property="submitLoadingButton" destination="NvG-Os-MS1" id="Xb5-Ku-ZEh"/>

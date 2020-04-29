@@ -33,6 +33,8 @@ class SubmitInfectionViewController: UIViewController {
     
     var config: SubmitInfectionConfig = .empty
     
+    @IBOutlet var scrollView: UIScrollView!
+    
     // Holds the form elements
     @IBOutlet var stackView: UIStackView!
     
@@ -74,18 +76,14 @@ class SubmitInfectionViewController: UIViewController {
             indicator.centerYAnchor.constraint(equalTo: self.submitLoadingButton.centerYAnchor)
         ])
 
-        
+        self.navigationController?.presentationController?.delegate = self
         
         
         // Swipe down to dismiss also available on iOS 13+
         let button = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(Self.cancelTapped(_:)))
         self.navigationItem.leftBarButtonItem = button
         
-        
-        
         let elements = self.config.sortedFields.compactMap { self.createFormElement(field: $0) }
-        
-        print("ELEMENTS: \(elements)")
         
         // -2: 1 for the submit button, 1 for the submit loading button
         elements.forEach { self.stackView.insertArrangedSubview($0, at: self.stackView.arrangedSubviews.count - 2) }
@@ -97,6 +95,20 @@ class SubmitInfectionViewController: UIViewController {
     
     @objc func cancelTapped(_ sender: UIBarButtonItem) {
         self.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension SubmitInfectionViewController: UIScrollViewDelegate, UIAdaptivePresentationControllerDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        self.formContainerViews.forEach { let _ = $0.resignFirstResponder() }
+    }
+    
+    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+        self.formContainerViews.forEach { let _ = $0.resignFirstResponder() }
+    }
+    
+    func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+        return false
     }
 }
 
@@ -132,6 +144,11 @@ class SubmitInfectionFormShortTextContainerView: SubmitInfectionFormContainerVie
         
         return InfectedKeysFormDataStringField(name: self.formName, value: text)
     }
+    
+    override func resignFirstResponder() -> Bool {
+        self.textField?.resignFirstResponder()
+        return super.resignFirstResponder()
+    }
 }
 
 class SubmitInfectionFormLongTextContainerView: SubmitInfectionFormContainerView {
@@ -147,6 +164,11 @@ class SubmitInfectionFormLongTextContainerView: SubmitInfectionFormContainerView
         }
 
         return InfectedKeysFormDataStringField(name: self.formName, value: text)
+    }
+
+    override func resignFirstResponder() -> Bool {
+        self.textView?.resignFirstResponder()
+        return super.resignFirstResponder()
     }
 }
 
@@ -377,12 +399,13 @@ extension SubmitInfectionViewController {
         
         // Form is valid here, don't throw
     }
+
+    var formContainerViews: [SubmitInfectionFormContainerView] {
+        return self.stackView.arrangedSubviews.compactMap { $0 as? SubmitInfectionFormContainerView }
+    }
     
     var gatherFormData: InfectedKeysFormData {
-        
-        let containers = self.stackView.arrangedSubviews.compactMap { $0 as? SubmitInfectionFormContainerView }
-        
-        let fields = containers.compactMap { $0.formField }
+        let fields = self.formContainerViews.compactMap { $0.formField }
         
         return InfectedKeysFormData(fields: fields)
     }
