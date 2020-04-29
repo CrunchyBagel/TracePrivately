@@ -150,8 +150,8 @@ extension ContactTraceManager {
             return key
         }
         
-        session.batchAddDiagnosisKeys(inKeys: k) { error in
-            session.finishedDiagnosisKeysWithCompletion { summary, error in
+        session.batchAddDiagnosisKeys(k) { error in
+            session.finishedDiagnosisKeys { summary, error in
                 guard let summary = summary else {
                     completion(error)
                     return
@@ -166,9 +166,9 @@ extension ContactTraceManager {
                 }
                 
                 // Documentation says use a reasonable number, such as 100
-                let maxCount: UInt32 = 100
+                let maximumCount: Int = 100
                 
-                self.getExposures(session: session, maxCount: maxCount, exposures: []) { exposures, error in
+                self.getExposures(session: session, maximumCount: maximumCount, exposures: []) { exposures, error in
                     guard let exposures = exposures else {
                         completion(error)
                         return
@@ -190,8 +190,9 @@ extension ContactTraceManager {
     }
     
     // Recursively retrieves exposures until all are received
-    private func getExposures(session: ENExposureDetectionSession, maxCount: UInt32, exposures: [ENExposureInfo], completion: @escaping ([ENExposureInfo]?, Swift.Error?) -> Void) {
-        session.getExposureInfoWithMaxCount(maxCount: maxCount) { newExposures, inDone, error in
+    private func getExposures(session: ENExposureDetectionSession, maximumCount: Int, exposures: [ENExposureInfo], completion: @escaping ([ENExposureInfo]?, Swift.Error?) -> Void) {
+        
+        session.getExposureInfo(withMaximumCount: maximumCount) { newExposures, inDone, error in
             
             if let error = error {
                 completion(exposures, error)
@@ -204,7 +205,7 @@ extension ContactTraceManager {
                 completion(allExposures, nil)
             }
             else {
-                self.getExposures(session: session, maxCount: maxCount, exposures: allExposures, completion: completion)
+                self.getExposures(session: session, maximumCount: maximumCount, exposures: allExposures, completion: completion)
             }
         }
     }
@@ -480,7 +481,7 @@ extension ContactTraceManager: UNUserNotificationCenterDelegate {
 
 extension ENExposureDetectionSession {
     // Modified from https://gist.github.com/mattt/17c880d64c362b923e13c765f5b1c75a
-    func batchAddDiagnosisKeys(inKeys keys: [ENTemporaryExposureKey], completion: @escaping ENErrorHandler) {
+    func batchAddDiagnosisKeys(_ keys: [ENTemporaryExposureKey], completion: @escaping ENErrorHandler) {
         
         guard !keys.isEmpty else {
             completion(nil)
@@ -499,11 +500,11 @@ extension ENExposureDetectionSession {
         print("Adding: \(batch)")
 
 //        withoutActuallyEscaping(completion) { escapingCompletion in
-            addDiagnosisKeys(inKeys: batch) { error in
+            addDiagnosisKeys(batch) { error in
                 if let error = error {
                     completion(error)
                 } else {
-                    self.batchAddDiagnosisKeys(inKeys: remaining, completion: completion)
+                    self.batchAddDiagnosisKeys(remaining, completion: completion)
                 }
             }
 //        }

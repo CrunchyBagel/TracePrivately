@@ -67,7 +67,7 @@ protocol ENActivatable {
     var dispatchQueue: DispatchQueue? { get set }
     var invalidationHandler: (() -> Void)? { get set }
     
-    func activate(_ completion: @escaping ENErrorHandler)
+    func activate(_ completionHandler: @escaping ENErrorHandler)
     func invalidate()
 }
 
@@ -107,10 +107,10 @@ class ENSettingsGetRequest: ENBaseRequest {
 
     }
     
-    override fileprivate func activate(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
+    override fileprivate func activate(queue: DispatchQueue, completionHandler: @escaping (Error?) -> Void) {
         queue.async {
             self.settings = ENSettings(enableState: ENInternalState.shared.tracingEnabled)
-            completion(nil)
+            completionHandler(nil)
         }
     }
 }
@@ -130,10 +130,10 @@ class ENSettingsChangeRequest: ENAuthorizableBaseRequest {
         return self.settings.enableState == true
     }
     
-    override fileprivate func activateWithPermission(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
+    override fileprivate func activateWithPermission(queue: DispatchQueue, completionHandler: @escaping (Error?) -> Void) {
         queue.async {
             ENInternalState.shared.tracingEnabled = self.settings.enableState
-            completion(nil)
+            completionHandler(nil)
         }
     }
 }
@@ -205,7 +205,7 @@ struct ENExposureDetectionSummary {
 
 typealias ENExposureDetectionFinishCompletion = ((ENExposureDetectionSummary?, Swift.Error?) -> Void)
 
-typealias ENExposureDetectionGetExposureInfoCompletion = (([ENExposureInfo]?, Bool, Swift.Error?) -> Void)
+typealias ENGetExposureInfoCompletion = (([ENExposureInfo]?, Bool, Swift.Error?) -> Void)
 
 struct ENExposureConfiguration {
     
@@ -229,7 +229,7 @@ class ENExposureDetectionSession: ENBaseRequest {
         }
     }
 
-    func addDiagnosisKeys(inKeys keys: [ENTemporaryExposureKey], completion: @escaping ENErrorHandler) {
+    func addDiagnosisKeys(_ keys: [ENTemporaryExposureKey], completionHandler: @escaping ENErrorHandler) {
         enQueue.sync {
             self._infectedKeys.append(contentsOf: keys)
         }
@@ -237,11 +237,11 @@ class ENExposureDetectionSession: ENBaseRequest {
         let queue = self.dispatchQueue ?? .main
         
         queue.asyncAfter(deadline: .now() + 0.5) {
-            completion(nil)
+            completionHandler(nil)
         }
     }
     
-    func finishedDiagnosisKeysWithCompletion(completion: @escaping ENExposureDetectionFinishCompletion) {
+    func finishedDiagnosisKeys(completionHandler: @escaping ENExposureDetectionFinishCompletion) {
         
         let delay: TimeInterval = 0.5
         
@@ -255,14 +255,14 @@ class ENExposureDetectionSession: ENBaseRequest {
                 matchedKeyCount: UInt64(min(Self.maximumFakeMatches, keys.count))
             )
             
-            completion(summary, nil)
+            completionHandler(summary, nil)
         }
 
     }
     
     private var cursor: Int = 0
     
-    func getExposureInfoWithMaxCount(maxCount: UInt32, completion: @escaping ENExposureDetectionGetExposureInfoCompletion) {
+    func getExposureInfo(withMaximumCount maximumCount: Int, completionHandler: @escaping ENGetExposureInfoCompletion) {
         
         let queue: DispatchQueue = self.dispatchQueue ?? .main
 
@@ -271,7 +271,7 @@ class ENExposureDetectionSession: ENBaseRequest {
         queue.asyncAfter(deadline: .now() + delay) {
             guard !self.isInvalidated else {
                 self.cursor = 0
-                completion(nil, true, ENError(code: .invalidated))
+                completionHandler(nil, true, ENError(code: .invalidated))
                 return
             }
 
@@ -279,18 +279,18 @@ class ENExposureDetectionSession: ENBaseRequest {
             let allKeys: [ENTemporaryExposureKey] = enQueue.sync { self.remoteInfectedKeys }
             
             guard allKeys.count > 0 else {
-                completion([], true, nil)
+                completionHandler([], true, nil)
                 return
             }
             
             let allMatchedKeys: [ENTemporaryExposureKey] = Array(allKeys[0 ..< min(Self.maximumFakeMatches, allKeys.count)])
             
             let fromIndex = self.cursor
-            let toIndex   = min(allMatchedKeys.count, self.cursor + Int(maxCount))
+            let toIndex   = min(allMatchedKeys.count, self.cursor + Int(maximumCount))
             
             guard fromIndex < toIndex else {
                 self.cursor = 0
-                completion([], true, nil)
+                completionHandler([], true, nil)
                 return
             }
             
@@ -307,7 +307,7 @@ class ENExposureDetectionSession: ENBaseRequest {
             let inDone = toIndex >= allMatchedKeys.count
             self.cursor = inDone ? 0 : toIndex
             
-            completion(contacts, inDone, nil)
+            completionHandler(contacts, inDone, nil)
         }
     }
 }
@@ -342,7 +342,7 @@ class ENSelfExposureInfoRequest: ENAuthorizableBaseRequest {
         return "Allow this app to retrieve your anonymous tracing keys?"
     }
     
-    override fileprivate func activateWithPermission(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
+    override fileprivate func activateWithPermission(queue: DispatchQueue, completionHandler: @escaping (Error?) -> Void) {
         
         let delay: TimeInterval = 0.5
         
@@ -351,7 +351,7 @@ class ENSelfExposureInfoRequest: ENAuthorizableBaseRequest {
             let info = ENSelfExposureInfo(keys: ENInternalState.shared.dailyKeys)
             self.selfExposureInfo = info
             
-            completion(nil)
+            completionHandler(nil)
         }
     }
 }
@@ -362,14 +362,14 @@ class ENSelfExposureResetRequest: ENAuthorizableBaseRequest {
         return "Allow this app to reset your anonymous tracing keys?"
     }
 
-    override fileprivate func activateWithPermission(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
+    override fileprivate func activateWithPermission(queue: DispatchQueue, completionHandler: @escaping (Error?) -> Void) {
         
         print("Resetting keys ...")
         queue.asyncAfter(deadline: .now() + 0.5) {
             print("Finished resetting keys")
             
             // Nothing to do since we're generating fake stable keys for the purpose of testing
-            completion(nil)
+            completionHandler(nil)
         }
     }
 }
@@ -389,7 +389,7 @@ class ENAuthorizableBaseRequest: ENBaseRequest, ENAuthorizable {
         return true
     }
     
-    final override fileprivate func activate(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
+    final override fileprivate func activate(queue: DispatchQueue, completionHandler: @escaping (Error?) -> Void) {
         
         if self.shouldPrompt {
             DispatchQueue.main.async {
@@ -399,16 +399,16 @@ class ENAuthorizableBaseRequest: ENBaseRequest, ENAuthorizable {
                 let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
                 
                 alert.addAction(UIAlertAction(title: "Deny", style: .cancel, handler: { action in
-                    completion(ENError(code: .notAuthorized))
+                    completionHandler(ENError(code: .notAuthorized))
                     return
                 }))
 
                 alert.addAction(UIAlertAction(title: "Allow", style: .default, handler: { action in
-                    self.activateWithPermission(queue: queue, completion: completion)
+                    self.activateWithPermission(queue: queue, completionHandler: completionHandler)
                 }))
                 
                 guard let vc = UIApplication.shared.windows.first?.rootViewController else {
-                    completion(ENError(code: .unknown))
+                    completionHandler(ENError(code: .unknown))
                     return
                 }
                 
@@ -422,14 +422,14 @@ class ENAuthorizableBaseRequest: ENBaseRequest, ENAuthorizable {
         }
         else {
             let queue = self.dispatchQueue ?? .main
-            self.activateWithPermission(queue: queue, completion: completion)
+            self.activateWithPermission(queue: queue, completionHandler: completionHandler)
         }
     }
     
-    fileprivate func activateWithPermission(queue: DispatchQueue, completion: @escaping (Error?) -> Void) {
+    fileprivate func activateWithPermission(queue: DispatchQueue, completionHandler: @escaping (Error?) -> Void) {
         queue.async {
             print("Should be overridden")
-            completion(nil)
+            completionHandler(nil)
         }
     }
 }
@@ -483,26 +483,26 @@ class ENBaseRequest: ENActivatable {
         }
     }
 
-    final func activate(_ completion: @escaping (Swift.Error?) -> Void) {
+    final func activate(_ completionHandler: @escaping (Swift.Error?) -> Void) {
         let queue: DispatchQueue = self.dispatchQueue ?? .main
         
         self.isRunning = true
         
         self.activate(queue: queue) { error in
             guard !self.isInvalidated else {
-                completion(ENError(code: .invalidated))
+                completionHandler(ENError(code: .invalidated))
                 return
             }
             
             self.isRunning = false
-            completion(error)
+            completionHandler(error)
         }
     }
     
-    fileprivate func activate(queue: DispatchQueue, completion: @escaping (Swift.Error?) -> Void) {
+    fileprivate func activate(queue: DispatchQueue, completionHandler: @escaping (Swift.Error?) -> Void) {
         queue.async {
             print("Should be overridden")
-            completion(nil)
+            completionHandler(nil)
         }
     }
     
@@ -622,5 +622,4 @@ extension String {
         }
     }
 }
-
 
