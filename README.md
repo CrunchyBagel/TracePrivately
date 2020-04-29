@@ -15,7 +15,10 @@ This app will be evolving quickly as I'm trying to publish new functionality as 
 * Implement correct security and privacy principles to maximise uptake of said government apps
 * Remain open source for independent verification
 * Properly use the Apple / Google contact tracing specification
-* Work in a localized manner so it can be used in any language or jurisdiction
+* Accessible to as many users as possible:
+    * Localized to many langauges
+    * Adopt correct accessibility principles and functions
+    * Support older devices
 * Be easily configurable to suit needs of different jurisdictions:
     * Different privacy statements
     * Different data gathered for positive diagnoses
