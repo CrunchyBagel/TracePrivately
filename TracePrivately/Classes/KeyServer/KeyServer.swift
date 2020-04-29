@@ -191,9 +191,9 @@ extension KeyServer {
         Refer to `KeyServer.yaml` for expected request and response format.
      */
     
-    func submitInfectedKeys(keys: [ENTemporaryExposureKey], previousSubmissionId: String?, completion: @escaping (Bool, String?, Swift.Error?) -> Void) {
+    func submitInfectedKeys(formData: InfectedKeysFormData, keys: [ENTemporaryExposureKey], previousSubmissionId: String?, completion: @escaping (Bool, String?, Swift.Error?) -> Void) {
         
-        self._submitInfectedKeys(keys: keys, previousSubmissionId: previousSubmissionId) { success, submissionId, error in
+        self._submitInfectedKeys(formData: formData, keys: keys, previousSubmissionId: previousSubmissionId) { success, submissionId, error in
             if let error = error as? KeyServer.Error, error.shouldRetryWithAuthRequest {
                 
                 self.requestAuthorizationToken { success, authError in
@@ -202,7 +202,7 @@ extension KeyServer {
                         return
                     }
                     
-                    self._submitInfectedKeys(keys: keys, previousSubmissionId: previousSubmissionId, completion: completion)
+                    self._submitInfectedKeys(formData: formData, keys: keys, previousSubmissionId: previousSubmissionId, completion: completion)
                 }
                 
                 return
@@ -212,7 +212,7 @@ extension KeyServer {
         }
     }
 
-    private func _submitInfectedKeys(keys: [ENTemporaryExposureKey], previousSubmissionId: String?, completion: @escaping (Bool, String?, Swift.Error?) -> Void) {
+    private func _submitInfectedKeys(formData: InfectedKeysFormData, keys: [ENTemporaryExposureKey], previousSubmissionId: String?, completion: @escaping (Bool, String?, Swift.Error?) -> Void) {
         
         guard let endPoint = self.config.submitInfected else {
             completion(false, nil, Error.invalidConfig)
@@ -230,14 +230,17 @@ extension KeyServer {
             }
             
             var requestData: [String: Any] = [
-                "keys": encodedKeys
+                "keys": encodedKeys,
+                "form": formData.requestJson
             ]
+            
+            print("Form Data: \(requestData)")
 
             // TODO: Ensure this is secure and that identifiers can't be hijacked into false submissions
             if let identifier = previousSubmissionId {
                 requestData["identifier"] = identifier
             }
-
+            
             let jsonData = try JSONSerialization.data(withJSONObject: requestData, options: [])
 
             request.httpBody = jsonData

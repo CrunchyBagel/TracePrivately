@@ -250,7 +250,7 @@ extension LocalInfectionKeyEntity {
 }
 
 extension DataManager {
-    func submitReport(keys: [ENTemporaryExposureKey], completion: @escaping (Bool, Swift.Error?) -> Void) {
+    func submitReport(formData: InfectedKeysFormData, keys: [ENTemporaryExposureKey], completion: @escaping (Bool, Swift.Error?) -> Void) {
         let context = self.persistentContainer.newBackgroundContext()
         
         context.perform {
@@ -264,7 +264,7 @@ extension DataManager {
         
             NotificationCenter.default.post(name: DataManager.infectionsUpdatedNotification, object: nil)
 
-            KeyServer.shared.submitInfectedKeys(keys: keys, previousSubmissionId: nil) { success, submissionId, error in
+            KeyServer.shared.submitInfectedKeys(formData: formData, keys: keys, previousSubmissionId: nil) { success, submissionId, error in
                 
                 context.perform {
                     if success {

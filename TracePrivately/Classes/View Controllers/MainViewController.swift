@@ -58,6 +58,7 @@ class MainViewController: UIViewController {
         self.tracingPrivacyButton.setTitle(NSLocalizedString("privacy.title", comment: ""), for: .normal)
         
         self.tracingLoadingButton.setTitle(nil, for: .normal)
+        self.tracingLoadingButton.isEnabled = false
         
         let style: UIActivityIndicatorView.Style
         
