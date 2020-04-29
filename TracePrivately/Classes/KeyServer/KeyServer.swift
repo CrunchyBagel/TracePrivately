@@ -421,8 +421,9 @@ extension KeyServer {
                     }
 
                     let keys: [ENTemporaryExposureKey] = decoded.keys.compactMap { $0.exposureKey }
+                    let deletedKeys: [ENTemporaryExposureKey] = decoded.deleted_keys.compactMap { $0.exposureKey }
 
-                    let infectedKeysResponse = InfectedKeysResponse(date: date, keys: keys)
+                    let infectedKeysResponse = InfectedKeysResponse(date: date, keys: keys, deletedKeys: deletedKeys)
 
                     completion(infectedKeysResponse, nil)
                 }
