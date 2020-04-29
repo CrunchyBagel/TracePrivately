@@ -3,7 +3,7 @@
   TracePrivately
 */
 
-"app.title" = "Privāta saskarsmes atsekošana";
+"app.title" = "Saskarsme ar %@";
 
 "tracing.title" = "Saskarsmes atsekošana";
 /* parameter is localized disease name */
@@ -31,9 +31,11 @@
 "infection.pending.title" = "Gaida apstiprinājumu";
 
 /* parameter is localized disease name */
+"exposure.none.banner.title" = "Saskarsme nav konstatēta";
+/* parameter is localized disease name */
 "exposure.none.message" = "Saskarsme ar %@ infekciju nav reģistrēta.\n\nMazgājiet rokas un ievērojiet distanci.";
 /* parameter %@ may be included, which is localized disease name */
-"exposure.exposed.banner.title" = "Jūs, iespējams, esat bijis saskarsmē ar infekciju.";
+"exposure.exposed.banner.title" = "Jūs, iespējams, esat bijis saskarsmē ar %@.";
 "exposure.exposed.title" = "Saskarsmes";
 "exposure.exposed.details.title" = "Saskarsme ar infekciju";
 /* parameter is localized disease name */
@@ -65,4 +67,11 @@
 "notification.exposure_detected.multiple.body" = "Jūs esat bijis saskarsmē ar infekciju vairākkārt.";
 
 "privacy.title" = "Privātums";
+
+"settings.title" = "Uzstādījumi";
+
+"reset_keys.title" = "Nomainīt atsekošanas atslēgu";
+"reset_keys.message" = "Nomaiņa liegs jums uzzināt par iepriekšējām saskarsmēm ar infekciju, kas reģistrētas līdz šim brīdim.";
+"reset_keys.button.title" = "Nomainīt";
+
 

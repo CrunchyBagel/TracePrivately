@@ -28,6 +28,7 @@ class DataManager {
         if let description = container.persistentStoreDescriptions.first {
             description.shouldMigrateStoreAutomatically = true
             description.shouldInferMappingModelAutomatically = true
+            description.setOption(FileProtectionType.complete as NSObject, forKey: NSPersistentStoreFileProtectionKey)
             
             if #available(iOS 11.0, *) {
                 description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)

@@ -47,7 +47,7 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.title = NSLocalizedString("app.title", comment: "")
+        self.title = String(format: NSLocalizedString("app.title", comment: ""), Disease.current.localizedTitle)
         
         self.noIssuesButton.setTitle(String(format: NSLocalizedString("exposure.none.banner.title", comment: ""), Disease.current.localizedTitle), for: .normal)
         self.exposedButton.setTitle(String(format: NSLocalizedString("exposure.exposed.banner.title", comment: ""), Disease.current.localizedTitle), for: .normal)
@@ -69,7 +69,7 @@ class MainViewController: UIViewController {
         
         let indicator = UIActivityIndicatorView(style: style)
         indicator.startAnimating()
-        indicator.tintColor = .white
+        indicator.color = .white
         indicator.translatesAutoresizingMaskIntoConstraints = false
         
         self.tracingLoadingButton.addSubview(indicator)

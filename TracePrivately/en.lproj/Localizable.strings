@@ -3,6 +3,7 @@
   TracePrivately
 */
 
+/* optional parameter is localized disease name */
 "app.title" = "Trace Privately";
 
 "tracing.title" = "Contact Tracing";

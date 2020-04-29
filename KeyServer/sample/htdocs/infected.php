@@ -1,8 +1,11 @@
 <?php
 require_once('../vendor/autoload.php');
+require_once('shared.php');
 
-$path = realpath(dirname(__FILE__) . '/../data/trace.sqlite');
-$db = new SQLite3($path, SQLITE3_OPEN_READWRITE);
+if (!isValidBearer($db)) {
+    sendJsonErrorResponse(401, 'Invalid bearer token');
+    exit;
+}
 
 $useBinary = false;
 
@@ -13,10 +16,6 @@ if (array_key_exists('HTTP_ACCEPT', $_SERVER)) {
 
 // https://github.com/rybakit/msgpack.php
 use MessagePack\Packer;
-
-
-// TODO: Validate bearer token and throw 401 if not valid
-// TODO: Implement proper error responses
 
 $minTime = time() - (86400 * 14);
 $time = $minTime;
@@ -77,10 +76,6 @@ if ($useBinary) {
     echo $packed;
 }
 else {
-    //$data = json_encode($json, JSON_PRETTY_PRINT);
-    $data = json_encode($json);
-
-    header('Content-type: application/json; charset=utf-8');
-    echo $data;
+    sendJsonResponse(200, $json);
 }
 

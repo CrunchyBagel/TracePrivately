@@ -118,6 +118,8 @@ extension ContactTraceManager {
                 return
             }
             
+            // TODO: Delete deleted keys from local database
+            
             self.saveNewInfectedKeys(keys: response.keys) { numNewKeys, error in
                 self.saveLastReceivedInfectedKeys(date: response.date)
 
