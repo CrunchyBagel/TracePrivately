@@ -69,7 +69,7 @@ class MainViewController: UIViewController {
         
         let indicator = UIActivityIndicatorView(style: style)
         indicator.startAnimating()
-        indicator.tintColor = .white
+        indicator.color = .white
         indicator.translatesAutoresizingMaskIntoConstraints = false
         
         self.tracingLoadingButton.addSubview(indicator)
