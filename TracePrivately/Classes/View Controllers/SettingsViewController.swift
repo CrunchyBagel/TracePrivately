@@ -37,6 +37,8 @@ extension SettingsViewController {
         
         alert.addAction(UIAlertAction(title: NSLocalizedString("reset_keys.button.title", comment: ""), style: .destructive, handler: { _ in
             
+            // TODO: Fix
+            /*
             let request = ENSelfExposureResetRequest()
             
             request.activateWithCompletion { _ in
@@ -50,6 +52,7 @@ extension SettingsViewController {
                     }
                 }
             }
+ */
         }))
         
         self.present(alert, animated: true, completion: nil)

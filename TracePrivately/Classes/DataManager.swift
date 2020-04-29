@@ -101,8 +101,15 @@ extension DataManager {
             }
         }
     }
+    
+    // TODO: Refactor this a bit more neatly
+    struct TemporaryExposureKey {
+        let keyData: Data
+        let rollingStartNumber: ENIntervalNumber
+        // TODO: Support risk level
+    }
 
-    func saveInfectedKeys(keys: [ENTemporaryExposureKey], completion: @escaping (_ numNewKeys: Int, _ error: Swift.Error?) -> Void) {
+    func saveInfectedKeys(keys: [TemporaryExposureKey], completion: @escaping (_ numNewKeys: Int, _ error: Swift.Error?) -> Void) {
         
         guard keys.count > 0 else {
             completion(0, nil)
@@ -204,7 +211,7 @@ extension DataManager {
         }
     }
     
-    func allInfectedKeys(completion: @escaping ([ENTemporaryExposureKey]?, Swift.Error?) -> Void) {
+    func allInfectedKeys(completion: @escaping ([TemporaryExposureKey]?, Swift.Error?) -> Void) {
         let context = self.persistentContainer.newBackgroundContext()
         
         context.perform {
@@ -213,7 +220,7 @@ extension DataManager {
             do {
                 let entities = try context.fetch(request)
                 
-                let keys: [ENTemporaryExposureKey] = entities.compactMap { $0.temporaryExposureKey }
+                let keys: [TemporaryExposureKey] = entities.compactMap { $0.temporaryExposureKey }
                 completion(keys, nil)
             }
             catch {
@@ -224,12 +231,12 @@ extension DataManager {
 }
 
 extension RemoteInfectedKeyEntity {
-    var temporaryExposureKey: ENTemporaryExposureKey? {
+    var temporaryExposureKey: DataManager.TemporaryExposureKey? {
         guard let keyData = self.infectedKey else {
             return nil
         }
         
-        return ENTemporaryExposureKey(
+        return .init(
             keyData: keyData,
             rollingStartNumber: ENIntervalNumber(self.rollingStartNumber)
         )
@@ -237,12 +244,12 @@ extension RemoteInfectedKeyEntity {
 }
 
 extension LocalInfectionKeyEntity {
-    var temporaryExposureKey: ENTemporaryExposureKey? {
+    var temporaryExposureKey: DataManager.TemporaryExposureKey? {
         guard let keyData = self.infectedKey else {
             return nil
         }
         
-        return ENTemporaryExposureKey(
+        return .init(
             keyData: keyData,
             rollingStartNumber: ENIntervalNumber(self.rollingStartNumber)
         )
@@ -250,7 +257,7 @@ extension LocalInfectionKeyEntity {
 }
 
 extension DataManager {
-    func submitReport(formData: InfectedKeysFormData, keys: [ENTemporaryExposureKey], completion: @escaping (Bool, Swift.Error?) -> Void) {
+    func submitReport(formData: InfectedKeysFormData, keys: [DataManager.TemporaryExposureKey], completion: @escaping (Bool, Swift.Error?) -> Void) {
         let context = self.persistentContainer.newBackgroundContext()
         
         context.perform {

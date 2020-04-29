@@ -191,7 +191,7 @@ extension KeyServer {
         Refer to `KeyServer.yaml` for expected request and response format.
      */
     
-    func submitInfectedKeys(formData: InfectedKeysFormData, keys: [ENTemporaryExposureKey], previousSubmissionId: String?, completion: @escaping (Bool, String?, Swift.Error?) -> Void) {
+    func submitInfectedKeys(formData: InfectedKeysFormData, keys: [DataManager.TemporaryExposureKey], previousSubmissionId: String?, completion: @escaping (Bool, String?, Swift.Error?) -> Void) {
         
         self._submitInfectedKeys(formData: formData, keys: keys, previousSubmissionId: previousSubmissionId) { success, submissionId, error in
             if let error = error as? KeyServer.Error, error.shouldRetryWithAuthRequest {
@@ -212,7 +212,7 @@ extension KeyServer {
         }
     }
 
-    private func _submitInfectedKeys(formData: InfectedKeysFormData, keys: [ENTemporaryExposureKey], previousSubmissionId: String?, completion: @escaping (Bool, String?, Swift.Error?) -> Void) {
+    private func _submitInfectedKeys(formData: InfectedKeysFormData, keys: [DataManager.TemporaryExposureKey], previousSubmissionId: String?, completion: @escaping (Bool, String?, Swift.Error?) -> Void) {
         
         guard let endPoint = self.config.submitInfected else {
             completion(false, nil, Error.invalidConfig)
@@ -310,8 +310,8 @@ extension KeyServer {
     
     struct InfectedKeysResponse {
         let date: Date
-        let keys: [ENTemporaryExposureKey]
-        let deletedKeys: [ENTemporaryExposureKey]
+        let keys: [DataManager.TemporaryExposureKey]
+        let deletedKeys: [DataManager.TemporaryExposureKey]
     }
     
     func retrieveInfectedKeys(since date: Date?, completion: @escaping (InfectedKeysResponse?, Swift.Error?) -> Void) {
@@ -398,7 +398,7 @@ extension KeyServer {
                     return
                 }
                 
-                let keys: [ENTemporaryExposureKey] = keysData.compactMap { ENTemporaryExposureKey(jsonData: $0) }
+                let keys: [DataManager.TemporaryExposureKey] = keysData.compactMap { DataManager.TemporaryExposureKey(jsonData: $0) }
                 
                 print("Found \(keys.count) key(s)")
                 
@@ -415,7 +415,7 @@ extension KeyServer {
     }
 }
 
-extension ENTemporaryExposureKey {
+extension DataManager.TemporaryExposureKey {
     init?(jsonData: [String: Any]) {
         guard let base64str = jsonData["d"] as? String, let keyData = Data(base64Encoded: base64str) else {
             return nil
@@ -429,7 +429,7 @@ extension ENTemporaryExposureKey {
     }
 }
 
-extension ENTemporaryExposureKey {
+extension DataManager.TemporaryExposureKey {
     // TODO: Implement this so data can be read off the wire in binary format
 //    init?(networkData: Data) {
 //

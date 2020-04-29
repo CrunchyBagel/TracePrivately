@@ -137,9 +137,11 @@ extension ContactTraceManager {
         }
     }
     
-    fileprivate func addAndFinalizeKeys(session: ENExposureDetectionSession, keys: [ENTemporaryExposureKey], completion: @escaping (Swift.Error?) -> Void) {
+    fileprivate func addAndFinalizeKeys(session: ENExposureDetectionSession, keys: [DataManager.TemporaryExposureKey], completion: @escaping (Swift.Error?) -> Void) {
 
-        session.batchAddDiagnosisKeys(inKeys: keys) { error in
+        let k: [ENTemporaryExposureKey] = keys.map { .init(keyData: $0.keyData, rollingStartNumber: $0.rollingStartNumber) }
+        
+        session.batchAddDiagnosisKeys(inKeys: k) { error in
             session.finishedDiagnosisKeysWithCompletion { summary, error in
                 guard let summary = summary else {
                     completion(error)
@@ -198,8 +200,11 @@ extension ContactTraceManager {
         }
     }
     
-    private func saveNewInfectedKeys(keys: [ENTemporaryExposureKey], completion: @escaping (_ numNewRemoteKeys: Int, Swift.Error?) -> Void) {
-        DataManager.shared.saveInfectedKeys(keys: keys) { numNewKeys, error in
+    private func saveNewInfectedKeys(keys: [DataManager.TemporaryExposureKey], completion: @escaping (_ numNewRemoteKeys: Int, Swift.Error?) -> Void) {
+        
+        let k: [DataManager.TemporaryExposureKey] = keys.map { .init(keyData: $0.keyData, rollingStartNumber: $0.rollingStartNumber) }
+        
+        DataManager.shared.saveInfectedKeys(keys: k) { numNewKeys, error in
             if let error = error {
                 completion(0, error)
                 return
@@ -486,5 +491,26 @@ extension ENExposureDetectionSession {
                 }
             }
 //        }
+    }
+}
+
+extension ContactTraceManager {
+    func retrieveSelfDiagnosisKeys(completion: @escaping ([DataManager.TemporaryExposureKey]?, Swift.Error?) -> Void) {
+        let request = ENSelfExposureInfoRequest()
+        
+        request.activateWithCompletion { error in
+            defer {
+                request.invalidate()
+            }
+            
+            guard let keys = request.selfExposureInfo?.keys else {
+                completion(nil, error)
+                return
+            }
+            
+            let k: [DataManager.TemporaryExposureKey] = keys.map { .init(keyData: $0.keyData, rollingStartNumber: $0.rollingStartNumber) }
+            
+            completion(k, nil)
+        }
     }
 }
