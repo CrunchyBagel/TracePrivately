@@ -104,7 +104,6 @@ extension KeyServer {
                     
                     let requestJson = requestJson ?? [:]
 
-                    print("REQUEST: \(requestJson)")
                     var request = try self.createRequest(endPoint: authentication.endpoint, authentication: auth, throwIfMissing: false)
 
                     let jsonData = try JSONSerialization.data(withJSONObject: requestJson, options: [])
@@ -309,6 +308,7 @@ extension KeyServer {
     struct InfectedKeysResponse {
         let date: Date
         let keys: [ENTemporaryExposureKey]
+        let deletedKeys: [ENTemporaryExposureKey]
     }
     
     func retrieveInfectedKeys(since date: Date?, completion: @escaping (InfectedKeysResponse?, Swift.Error?) -> Void) {
@@ -399,7 +399,7 @@ extension KeyServer {
                 
                 print("Found \(keys.count) key(s)")
                 
-                let infectedKeysResponse = InfectedKeysResponse(date: date, keys: keys)
+                let infectedKeysResponse = InfectedKeysResponse(date: date, keys: keys, deletedKeys: [])
                 
                 completion(infectedKeysResponse, nil)
             }

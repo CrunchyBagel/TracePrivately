@@ -67,7 +67,20 @@ paths:
                                     can simply request a new one without needing determine it's invalidated. Server
                                     can choose expiry time, and it can expire the token prematurely if necessary. If expired
                                     prematurely, client will receive a 401 and request a new token.
-
+                400:
+                    description: Invalid request data
+                    schema:
+                        type: object
+                        required:
+                            - status
+                        properties:
+                            status:
+                                type: string
+                                example: "ERROR"
+                                description: ERROR
+                            message:
+                                type: string
+                                description: Human-readable string of the error that occurred
                 401:
                     description: Unable to authorize user.
             
@@ -146,6 +159,20 @@ paths:
                                             type: integer
                                             example: 1234
                                             description: The rolling start number for the key.
+                400:
+                    description: Invalid request data
+                    schema:
+                        type: object
+                        required:
+                            - status
+                        properties:
+                            status:
+                                type: string
+                                example: "ERROR"
+                                description: ERROR
+                            message:
+                                type: string
+                                description: Human-readable string of the error that occurred
                 401:
                     description: Unable to authorize user. Need to request a token before calling this endpoint again.
 
@@ -206,6 +233,19 @@ paths:
                                 type: string
                                 example: "SOME_UNIQUE_IDENTIFIER"
                                 description: An identifier specific to this report, so the client can append new keys to the newly-created submission.
-
+                400:
+                    description: Invalid request data
+                    schema:
+                        type: object
+                        required:
+                            - status
+                        properties:
+                            status:
+                                type: string
+                                example: "ERROR"
+                                description: ERROR
+                            message:
+                                type: string
+                                description: Human-readable string of the error that occurred
                 401:
                     description: Unable to authorize user. Need to request a token before calling this endpoint again.
