@@ -8,24 +8,6 @@
 		<array>
 			<dict>
 				<key>Type</key>
-				<string>Photo</string>
-				<key>Required</key>
-				<false/>
-				<key>FormName</key>
-				<string>photo</string>
-				<key>LocalizedTitle</key>
-				<dict>
-					<key>Base</key>
-					<string>Photo</string>
-				</dict>
-				<key>LocalizedDescription</key>
-				<dict>
-					<key>Base</key>
-					<string>Take a photo of your pathology report.</string>
-				</dict>
-			</dict>
-			<dict>
-				<key>Type</key>
 				<string>ShortText</string>
 				<key>Required</key>
 				<true/>

@@ -85,9 +85,12 @@ class SubmitInfectionViewController: UIViewController {
         
         let elements = self.config.sortedFields.compactMap { self.createFormElement(field: $0) }
         
-        elements.forEach { self.stackView.insertArrangedSubview($0, at: elements.count - 1) }
+        print("ELEMENTS: \(elements)")
+        
+        // -2: 1 for the submit button, 1 for the submit loading button
+        elements.forEach { self.stackView.insertArrangedSubview($0, at: self.stackView.arrangedSubviews.count - 2) }
 
-      if #available(iOS 13, *) {
+        if #available(iOS 13, *) {
             self.isModalInPresentation = true
         }
     }
