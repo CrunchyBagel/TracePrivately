@@ -1,0 +1,77 @@
+/* 
+  Localizable.strings
+  TracePrivately
+*/
+
+"app.title" = "Відстежити приватно";
+
+"tracing.title" = "Відстеження контактів";
+/* parameter is localized disease name */
+"tracing.message" = "Обмінюватись анонімною інформацією коли ви зустрічаєте інших людей і автоматично перевіряти на ймовірність зараження %@.";
+"tracing.start.title" = "Почати стеження";
+"tracing.stop.title" = "Зупинити стеження";
+
+"disease.covid19.title" = "COVID-19";
+
+"infection.title" = "Підтвердити інфікування";
+
+/* parameter is localized disease name */
+"infection.report.title" = "Я хворію на %@";
+"infection.report.message" = "Якщо у вас діагностовано наявність %@, подайте свій діагноз тут.\n\nМи перепитаємо Вас про підтвердження.";
+"infection.report.gathering_data.error" = "Неможливо створити Ваш анонімний профіль.";
+"infection.report.gathering.empty.title" = "Немає інформації";
+"infection.report.gathering.empty.message" = "Неможливо знайти Вашу інформацію. Можливо Ви не ввімкнули відстеження.";
+"infection.report.submit.title" = "Надіслати діагноз";
+"infection.report.submit.message" = "Будь ласка підтвердіть.\n\nЦе дозволить людям котрі були поряд з Вами знати що вони  можуть бути інфіковані.";
+"infection.report.submit.error" = "Неможливо надіслати вашу інформацію.";
+"infection.report.submitting.title" = "Одну хвилину...";
+"infection.report.submitting.message" = "Надсилання Вашої анонімної інформації.";
+/* parameter is localized disease name */
+"infection.infected.title" = "Ви хворієте на %@";
+"infection.pending.title" = "Очікуємо підтвердження";
+
+/* parameter is localized disease name */
+"exposure.none.banner.title" = "Жодних контактів з носіямі вірусу не виявлено";
+/* parameter is localized disease name */
+"exposure.none.message" = "Жодних контактів з носіямі %@ не виявлено!\n\nБережіть себе та мийте руки.";
+/* parameter %@ may be included, which is localized disease name */
+"exposure.exposed.banner.title" = "Ви могли перебувати в зоні ураження вірусом";
+"exposure.exposed.title" = "Контакти";
+"exposure.exposed.details.title" = "Контакт";
+/* parameter is localized disease name */
+"exposure.exposed.message" = "Ми підозрюємо що ви могли контактувати з особою хворою на %@.";
+/* parameter is a localized duration */
+"exposure.times.duration" = "Тривалість: %@";
+
+"exposure.next_steps.title" = "Наступні кроки";
+"exposure.next_steps.message" = "Виконайте дії, визначені органами влади.";
+
+"unknown" = "Невідомо";
+"submit" = "Надіслати";
+"error" = "Помилка";
+
+"ok" = "Так";
+"cancel" = "Відмінини";
+
+"keyserver.error.no_response_data" = "Дані не отримані";
+"keyserver.error.response_decoding_error" = "Помилка розшифровки відповіді";
+"keyserver.error.key_data_missing" = "Вістудні ключові дані";
+"keyserver.error.date_missing" = "Відсутня дата";
+"keyserver.error.not_ok" = "ОК статус не отримано";
+"keyserver.error.invalid_config" = "Некорекні налаштування сервера";
+
+/* parameter is localized disease name */
+"notification.exposure_detected.title" = "Увага: Відслідковано контакт з %@";
+/* 1st parameter is formatted localized time, 2nd parameter is formatted localized duration */
+"notification.exposure_detected.single.body" = "Ви були в потенційній зоні зараження о %1$@ протягом %2$@";
+"notification.exposure_detected.multiple.body" = "Ми відслідкували що Ви контаткували з вірусом кілька разів.";
+
+"privacy.title" = "Приватна інформація";
+
+"settings.title" = "Налаштування";
+
+"reset_keys.title" = "Скинути ідентифікатори вістеження";
+"reset_keys.message" = "Виконуючи цю дію ми не зможемо відслідкувати Ваше перебування в зоні впливу вірусу до нині.";
+"reset_keys.button.title" = "Скинути";
+
+

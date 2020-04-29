@@ -234,6 +234,8 @@ extension KeyServer {
                 "keys": encodedKeys,
                 "form": formData.requestJson
             ]
+            
+            print("Form Data: \(requestData)")
 
             // TODO: Ensure this is secure and that identifiers can't be hijacked into false submissions
             if let identifier = previousSubmissionId {
@@ -424,6 +426,18 @@ extension ENTemporaryExposureKey {
         }
         
         self.init(keyData: keyData, rollingStartNumber: rollingStartNumber)
+    }
+}
+
+extension ENTemporaryExposureKey {
+    // TODO: Implement this so data can be read off the wire in binary format
+//    init?(networkData: Data) {
+//
+//    }
+    
+    var networkData: Data {
+        let rollingData = withUnsafeBytes(of: rollingStartNumber.bigEndian) { Data($0) }
+        return self.keyData + rollingData
     }
 }
 

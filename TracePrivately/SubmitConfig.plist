@@ -28,7 +28,7 @@
 				<key>Type</key>
 				<string>ShortText</string>
 				<key>Required</key>
-				<false/>
+				<true/>
 				<key>FormName</key>
 				<string>test_number</string>
 				<key>LocalizedTitle</key>

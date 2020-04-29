@@ -8,6 +8,8 @@ import UIKit
 protocol InfectedKeysFormDataField {
     var name: String { get }
     var requestJson: [String: Any]? { get }
+    
+    var isValid: Bool { get }
 }
 
 struct InfectedKeysFormDataStringField: InfectedKeysFormDataField {
@@ -20,6 +22,10 @@ struct InfectedKeysFormDataStringField: InfectedKeysFormDataField {
             "type": "string",
             "str": self.value
         ]
+    }
+    
+    var isValid: Bool {
+        return true
     }
 }
 
@@ -38,6 +44,10 @@ struct InfectedKeysFormDataImageField: InfectedKeysFormDataField {
             "type": "image/png",
             "str": pngData.base64EncodedString(),
         ]
+    }
+    
+    var isValid: Bool {
+        return true
     }
 }
 

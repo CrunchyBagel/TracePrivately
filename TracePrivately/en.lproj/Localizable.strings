@@ -3,6 +3,7 @@
   TracePrivately
 */
 
+/* optional parameter is localized disease name */
 "app.title" = "Trace Privately";
 
 "tracing.title" = "Contact Tracing";
@@ -29,6 +30,9 @@
 /* parameter is localized disease name */
 "infection.infected.title" = "You Have %@";
 "infection.pending.title" = "Pending Confirmation";
+
+"infection.report.form.error.value_invalid" = "Please enter a valid value for this field.";
+"infection.report.form.error.value_missing" = "This field is required.";
 
 /* parameter is localized disease name */
 "exposure.none.banner.title" = "No Exposure Detected";
