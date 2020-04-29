@@ -270,7 +270,6 @@ extension MainViewController {
         self.performSegue(withIdentifier: Segue.viewExposures, sender: nil)
     }
     
-    // TODO: This could be slow, and doesn't really show the user what's happening other than the loading spinner in the top right. This should be more obvious. To speed this up, can add and finalize strings, but no need to retrieve the contact info here. Can be done after tracing is enabled
     @IBAction func tracingOnButtonTapped(_ sender: ActionButton) {
         guard !ContactTraceManager.shared.isUpdatingEnabledState else {
             print("Already updating state, ignoring this tap")

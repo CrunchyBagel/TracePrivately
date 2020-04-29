@@ -145,6 +145,10 @@ class SubmitInfectionFormShortTextContainerView: SubmitInfectionFormContainerVie
         return InfectedKeysFormDataStringField(name: self.formName, value: text)
     }
     
+    override func becomeFirstResponder() -> Bool {
+        return self.textField?.becomeFirstResponder() ?? super.becomeFirstResponder()
+    }
+    
     override func resignFirstResponder() -> Bool {
         self.textField?.resignFirstResponder()
         return super.resignFirstResponder()
@@ -164,6 +168,10 @@ class SubmitInfectionFormLongTextContainerView: SubmitInfectionFormContainerView
         }
 
         return InfectedKeysFormDataStringField(name: self.formName, value: text)
+    }
+
+    override func becomeFirstResponder() -> Bool {
+        return self.textView?.becomeFirstResponder() ?? super.becomeFirstResponder()
     }
 
     override func resignFirstResponder() -> Bool {
@@ -326,7 +334,9 @@ extension SubmitInfectionViewController {
             return
         }
         
-        
+        let haptics = UINotificationFeedbackGenerator()
+        haptics.notificationOccurred(.success)
+
         let request = ENSelfExposureInfoRequest()
         
         request.activateWithCompletion { error in

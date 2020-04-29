@@ -29,7 +29,7 @@ struct InfectedKeysFormDataStringField: InfectedKeysFormDataField {
     }
 }
 
-// TODO: Ensure resized to an adequate size
+// TODO: Resize image to an adequate size
 struct InfectedKeysFormDataImageField: InfectedKeysFormDataField {
     let name: String
     let image: UIImage

@@ -427,6 +427,7 @@ extension ContactTraceManager {
                     return
                 }
                 
+                // TODO: Perhaps this shouldn't be done in the "turn on" phase, but in the background afterwards. This way it won't slow down the app as much.
                 self.addAndFinalizeKeys(session: session, keys: keys) { error in
                     sessionError = error
                     dispatchGroup.leave()
