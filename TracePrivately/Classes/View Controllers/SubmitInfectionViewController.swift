@@ -86,11 +86,40 @@ class SubmitInfectionViewController: UIViewController {
         let elements = self.config.sortedFields.compactMap { self.createFormElement(field: $0) }
         
         // -2: 1 for the submit button, 1 for the submit loading button
-        elements.forEach { self.stackView.insertArrangedSubview($0, at: self.stackView.arrangedSubviews.count - 2) }
+        elements.forEach { element in
+            
+            let tapGr = UITapGestureRecognizer(target: self, action: #selector(Self.formContainerTapped(_:)))
+            element.addGestureRecognizer(tapGr)
+            
+            self.stackView.insertArrangedSubview(element, at: self.stackView.arrangedSubviews.count - 2)
+        }
 
         if #available(iOS 13, *) {
             self.isModalInPresentation = true
         }
+        
+        self.updateViewTheme()
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        self.updateViewTheme()
+    }
+    
+    func updateViewTheme() {
+        let isDarkMode = self.isDarkMode
+        
+        self.formContainerViews.forEach { $0.updateViewTheme(isDarkMode: isDarkMode)}
+    }
+}
+
+extension SubmitInfectionViewController {
+    @objc func formContainerTapped(_ sender: UITapGestureRecognizer) {
+        guard let view = sender.view as? SubmitInfectionFormContainerView else {
+            return
+        }
+        
+        view.becomeFirstResponder()
     }
     
     @objc func cancelTapped(_ sender: UIBarButtonItem) {
@@ -113,6 +142,10 @@ extension SubmitInfectionViewController: UIScrollViewDelegate, UIAdaptivePresent
 }
 
 class SubmitInfectionFormContainerView: UIView {
+    
+    var headingLabel: UILabel?
+    var descriptionLabel: UILabel?
+    
     let formName: String
     
     init(formName: String) {
@@ -127,6 +160,18 @@ class SubmitInfectionFormContainerView: UIView {
     var formField: InfectedKeysFormDataField? {
         print("Not implemented for \(formName)")
         return nil
+    }
+    
+    func updateViewTheme(isDarkMode: Bool) {
+        self.backgroundColor = isDarkMode ? UIColor(white: 0.2, alpha: 1) : .white
+        
+        if #available(iOS 13.0, *) {
+            self.headingLabel?.textColor = .label
+            self.descriptionLabel?.textColor = .label
+        } else {
+            self.headingLabel?.textColor = isDarkMode ? .white : .black
+            self.descriptionLabel?.textColor = isDarkMode ? .white : .black
+        }
     }
 }
 
@@ -153,6 +198,11 @@ class SubmitInfectionFormShortTextContainerView: SubmitInfectionFormContainerVie
         self.textField?.resignFirstResponder()
         return super.resignFirstResponder()
     }
+    
+    override func updateViewTheme(isDarkMode: Bool) {
+        super.updateViewTheme(isDarkMode: isDarkMode)
+        self.textField?.textColor = isDarkMode ? .systemYellow : .systemBlue
+    }
 }
 
 class SubmitInfectionFormLongTextContainerView: SubmitInfectionFormContainerView {
@@ -178,6 +228,11 @@ class SubmitInfectionFormLongTextContainerView: SubmitInfectionFormContainerView
         self.textView?.resignFirstResponder()
         return super.resignFirstResponder()
     }
+
+    override func updateViewTheme(isDarkMode: Bool) {
+        super.updateViewTheme(isDarkMode: isDarkMode)
+        self.textView?.textColor = isDarkMode ? .systemYellow : .systemBlue
+    }
 }
 
 class SubmitInfectionFormPhotoContainerView: SubmitInfectionFormContainerView {
@@ -185,57 +240,34 @@ class SubmitInfectionFormPhotoContainerView: SubmitInfectionFormContainerView {
 }
 
 extension SubmitInfectionViewController {
-    func createFormElement(field: SubmitInfectionConfig.Field) -> SubmitInfectionFormContainerView? {
-        let isDarkMode: Bool
-        
+    var isDarkMode: Bool {
         if #available(iOS 12, *) {
-            isDarkMode = self.traitCollection.userInterfaceStyle == .dark
+            return self.traitCollection.userInterfaceStyle == .dark
         }
         else {
-            isDarkMode = false
+            return false
         }
-
-        var subViews: [UIView] = []
+    }
+    
+    func createFormElement(field: SubmitInfectionConfig.Field) -> SubmitInfectionFormContainerView? {
         
-        if let str = field.localizedTitle {
-            let label = UILabel()
-            label.text = str
-            label.font = UIFont.preferredFont(forTextStyle: .headline)
-            label.numberOfLines = 0
-            
-            if #available(iOS 13.0, *) {
-                label.textColor = .label
-            } else {
-                label.textColor = isDarkMode ? .white : .black
-            }
-            
-            subViews.append(label)
-        }
+        let isDarkMode = self.isDarkMode
         
-        if let str = field.localizedDescription {
-            let label = UILabel()
-            label.text = str
-            label.font = UIFont.preferredFont(forTextStyle: .body)
-            label.numberOfLines = 0
-            
-            if #available(iOS 13.0, *) {
-                label.textColor = .label
-            } else {
-                label.textColor = isDarkMode ? .white : .black
-            }
 
-            subViews.append(label)
-        }
-
+        var headingSubViews: [UIView] = []
+        var bodySubViews: [UIView] = []
+        
         let container: SubmitInfectionFormContainerView
 
         switch field.type {
         case .shortText:
             
             let textField = UITextField()
+            textField.font = UIFont.preferredFont(forTextStyle: .headline)
             textField.placeholder = field.placeholder
+            textField.autocorrectionType = .no
             
-            subViews.append(textField)
+            bodySubViews.append(textField)
 
             let c = SubmitInfectionFormShortTextContainerView(formName: field.formName)
             c.textField = textField
@@ -244,7 +276,7 @@ extension SubmitInfectionViewController {
 
         case .longText:
             let textView = UITextView()
-            subViews.append(textView)
+            bodySubViews.append(textView)
             
             let c = SubmitInfectionFormLongTextContainerView(formName: field.formName)
             
@@ -261,7 +293,7 @@ extension SubmitInfectionViewController {
             let stackView = UIStackView(arrangedSubviews: [ button, previewImageView ])
             stackView.axis = .horizontal
             
-            subViews.append(stackView)
+            bodySubViews.append(stackView)
 
             let c = SubmitInfectionFormPhotoContainerView(formName: field.formName)
             
@@ -269,14 +301,48 @@ extension SubmitInfectionViewController {
             container = c
         }
         
+        if let str = field.localizedTitle {
+            let label = UILabel()
+            label.text = str
+            label.font = UIFont.preferredFont(forTextStyle: .headline)
+            label.numberOfLines = 0
+            
+            container.headingLabel = label
+            
+            headingSubViews.append(label)
+        }
+        
+        if let str = field.localizedDescription {
+            let label = UILabel()
+            label.text = str
+            label.font = UIFont.preferredFont(forTextStyle: .body)
+            label.numberOfLines = 0
+            
+            container.descriptionLabel = label
+            
+            headingSubViews.append(label)
+        }
+
+        
+        var subViews: [UIView] = []
+        
+        if headingSubViews.count > 0 {
+            let stackView = UIStackView(arrangedSubviews: headingSubViews)
+            stackView.axis = .vertical
+            stackView.spacing = 6
+
+            subViews.append(stackView)
+        }
+        
+        subViews.append(contentsOf: bodySubViews)
         
         let stackView = UIStackView(arrangedSubviews: subViews)
         stackView.axis = .vertical
-        stackView.spacing = 6
+        stackView.spacing = 20
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
         container.addSubview(stackView)
-        container.backgroundColor = .white
+        
         container.layer.cornerRadius = 12
         
         NSLayoutConstraint.activate([
@@ -302,6 +368,8 @@ extension SubmitInfectionViewController {
     }
     
     @IBAction func submitTapped(_ sender: ActionButton) {
+    
+        self.formContainerViews.forEach { let _ = $0.resignFirstResponder() }
         
         self.submitButton.isHidden = true
         self.submitLoadingButton.isHidden = false
