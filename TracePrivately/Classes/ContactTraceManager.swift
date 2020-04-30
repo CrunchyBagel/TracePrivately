@@ -6,7 +6,9 @@
 import Foundation
 import UserNotifications
 import UIKit
+#if canImport(ExposureNotification)
 import ExposureNotification
+#endif
 
 class ContactTraceManager: NSObject {
     

@@ -4,7 +4,9 @@
 //
 
 import Foundation
+#if canImport(ExposureNotification)
 import ExposureNotification
+#endif
 
 // These types map to the ExposureNotification framework so it can easily be factored out
 

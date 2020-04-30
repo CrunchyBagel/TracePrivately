@@ -6,6 +6,8 @@
 import Foundation
 import UIKit
 
+/// To use the real ExposureNotifications framework, just comment out this entire file. You must be running iOS 13.4 or newer
+
 enum ENErrorCode: Int {
     case unknown
     case badParameter
@@ -707,3 +709,4 @@ extension String {
         }
     }
 }
+

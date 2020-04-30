@@ -174,7 +174,13 @@ class MainViewController: UIViewController {
             self.submitInfectionContainer.backgroundColor = color
         }
         else {
-            self.view.backgroundColor = .groupTableViewBackground
+            if #available(iOS 13, *) {
+                self.view.backgroundColor = .systemGroupedBackground
+            }
+            else {
+                self.view.backgroundColor = .groupTableViewBackground
+            }
+            
             self.tracingContainer.backgroundColor = .white
             self.submitInfectionContainer.backgroundColor = .white
         }
