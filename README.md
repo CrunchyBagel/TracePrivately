@@ -3,9 +3,9 @@ A functioning app using Apple's contact tracing framework, as documented here:
 
 https://www.apple.com/covid19/contacttracing
 
-**24 April 2020:** Trace Privately has been updated to be compatible with v1.1 of Apple's framework, now called *Exposure Notification* framework.
+**29 April 2020:** Trace Privately has been updated to be compatible with v1.2 of Apple's framework. It will build against the `ExposureNotification` framework if you running Xcode 11.5, and run on iOS 13.5 devices.
 
-*Note: The Apple framework is not actually yet released. This app is being developed using a mock version of the framework based on the published documentation. This will generate false exposures for the purposes of testing and development.*
+*Note: To run the app the Apple framework, a special entitlement is required, only available to authorized organizations.*
 
 This app will be evolving quickly as I'm trying to publish new functionality as quickly as possible.
 
