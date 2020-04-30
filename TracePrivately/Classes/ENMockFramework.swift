@@ -236,7 +236,6 @@ typealias ENGetExposureInfoCompletion = (([ENExposureInfo]?, Bool, Swift.Error?)
 
 class ENExposureConfiguration {
     init() {
-        
         self.minimumRiskScore = 0
         
         self.attenuationScores = [ 1, 2, 3, 4, 5, 6, 7, 8 ]

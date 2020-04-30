@@ -416,7 +416,6 @@ extension KeyServer {
     }
 }
 
-// TODO: Ensure server supports this value
 extension TPTemporaryExposureKey {
     init?(jsonData: [String: Any]) {
         guard let base64str = jsonData["d"] as? String, let keyData = Data(base64Encoded: base64str) else {

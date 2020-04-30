@@ -14,6 +14,7 @@ typealias TPIntervalNumber = ENIntervalNumber
 typealias TPAttenuation = ENAttenuation
 typealias TPRiskScore = ENRiskScore
 typealias TPRiskLevel = ENRiskLevel
+typealias TPExposureConfiguration = ENExposureConfiguration
 
 struct TPTemporaryExposureKey {
     let keyData: Data

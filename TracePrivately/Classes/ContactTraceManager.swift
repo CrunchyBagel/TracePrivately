@@ -10,15 +10,13 @@ import UIKit
 import ExposureNotification
 #endif
 
-// TODO: It seems to me that the transmission risk level is manually input potentially. Need to add this to the submission form
-
 class ContactTraceManager: NSObject {
     
     fileprivate let queue = DispatchQueue(label: "ContactTraceManager", qos: .default, attributes: [])
 
     static let shared = ContactTraceManager()
     
-    var config: ExposureNotificationConfig = .defaultConfig
+    var config: ExposureNotificationConfig?
     
     enum Error: LocalizedError {
         case unknownError
@@ -415,14 +413,9 @@ extension ContactTraceManager {
         
         let session = ENExposureDetectionSession()
         
-        let configuration = ENExposureConfiguration()
-
-        // TODO: Handle the configuration correctly
-        /*
-        session.attenuationThreshold = self.config.session.attenuationThreshold
-        session.durationThreshold = self.config.session.durationThreshold
- */
-        session.configuration = configuration
+        if let config = self.config {
+            session.configuration = config.exposureConfig
+        }
         
         var sessionError: Swift.Error?
         
