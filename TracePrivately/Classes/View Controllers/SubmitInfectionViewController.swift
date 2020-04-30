@@ -5,6 +5,8 @@
 
 import UIKit
 
+// TODO: Need a way to determine the risk level of a submitted infection. This could be determined on device or on the server
+
 class SubmitInfectionViewController: UIViewController {
 
     struct FormValidationError: LocalizedError {
