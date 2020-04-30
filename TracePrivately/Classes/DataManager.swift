@@ -434,6 +434,8 @@ extension DataManager {
                     entity.timestamp = contact.date
                     entity.duration = contact.duration
                     entity.attenuationValue = Int16(contact.attenuationValue)
+                    entity.totalRiskScore = Int16(contact.totalRiskScore)
+                    entity.transmissionRiskLevel = Int16(contact.transmissionRiskLevel.rawValue)
                     
                     entity.status = ExposureStatus.detected.rawValue
                     entity.localNotificationStatus = ExposureLocalNotificationStatus.notSent.rawValue

@@ -145,7 +145,7 @@ class ContactTraceManager: NSObject {
     }
     
     func scheduleNextBackgroundUpdate() {
-        DispatchQueue.main.sync {
+        DispatchQueue.main.async {
             guard let delegate = UIApplication.shared.delegate as? AppDelegate else {
                 return
             }
@@ -212,6 +212,11 @@ extension ContactTraceManager {
     }
     
     fileprivate func addAndFinalizeKeys(session: ENExposureDetectionSession, keys: [TPTemporaryExposureKey], completion: @escaping (Swift.Error?) -> Void) {
+        
+        guard keys.count > 0 else {
+            completion(nil)
+            return
+        }
 
         let k: [ENTemporaryExposureKey] = keys.map { $0.enExposureKey }
         
@@ -232,6 +237,9 @@ extension ContactTraceManager {
                 
                 // Documentation says use a reasonable number, such as 100
                 let maximumCount: Int = 100
+                
+                
+                print(">>>> FINALIZING")
                 
                 self.getExposures(session: session, maximumCount: maximumCount, exposures: []) { exposures, error in
                     guard let exposures = exposures else {
@@ -478,9 +486,8 @@ extension ContactTraceManager {
 
             let unc = UNUserNotificationCenter.current()
             
-            dispatchGroup.enter()
             unc.requestAuthorization(options: [ .alert, .sound, .badge ]) { success, error in
-                dispatchGroup.leave()
+
             }
 
             DataManager.shared.allInfectedKeys { keys, error in
