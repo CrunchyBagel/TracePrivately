@@ -5,7 +5,7 @@
 
 import Foundation
 import UIKit
-/*
+
 enum ENErrorCode: Int {
     case unknown
     case badParameter
@@ -158,8 +158,41 @@ extension ENTemporaryExposureKey {
 
 typealias ENGetDiagnosisKeysHandler = ([ENTemporaryExposureKey]?, Error?) -> Void
  
+enum ENStatus : Int {
+
+    
+    /// Status of Exposure Notification is unknown. This is the status before ENManager has activated successfully.
+    case unknown = 0
+
+    
+    /// Exposure Notification is active on the system.
+    case active = 1
+
+    
+    /// Exposure Notification is disabled. setExposureNotificationEnabled:completionHandler can be used to enable it.
+    case disabled = 2
+
+    
+    /// Bluetooth has been turned off on the system. Bluetooth is required for Exposure Notification.
+        /// Note: this may not match the state of Bluetooth as reported by CoreBluetooth.
+        /// Exposure Notification is a system service and can use Bluetooth in situations when apps cannot.
+        /// So for the purposes of Exposure Notification, it's better to use this API instead of CoreBluetooth.
+    case bluetoothOff = 3
+
+    
+    /// Exposure Notification is not active due to system restrictions, such as parental controls.
+        /// When in this state, the app cannot enable Exposure Notification.
+    case restricted = 4
+}
+
+
 class ENManager: ENBaseRequest {
 
+    var exposureNotificationStatus: ENStatus {
+        // TODO: Implement properly
+        return .active
+    }
+    
     func setExposureNotificationEnabled(_ flag: Bool, completion: @escaping ENErrorHandler) {
         // TODO: Doesn't do anything
         // TODO: Request permission here
@@ -201,7 +234,15 @@ typealias ENGetExposureInfoCompletion = (([ENExposureInfo]?, Bool, Swift.Error?)
 
 class ENExposureConfiguration {
     init() {
-        
+        self.minimumRiskScore = 0
+        self.attenuationScores = []
+        self.attenuationWeight = 0
+        self.daysSinceLastExposureScores = []
+        self.daysSinceLastExposureWeight = 0
+        self.durationScores = []
+        self.durationWeight = 0
+        self.transmissionRiskScores = []
+        self.transmissionRiskWeight = 0
     }
     
     /// Minimum risk score. Excludes exposure incidents with scores lower than this. Defaults to no minimum.
@@ -375,7 +416,13 @@ class ENExposureDetectionSession: ENBaseRequest {
                 let date = Date(timeIntervalSince1970: TimeInterval(key.rollingStartNumber * 600))
                 let duration: TimeInterval = 15 * 60
 
-                return ENExposureInfo(attenuationValue: 0, date: date, duration: duration)
+                return ENExposureInfo(
+                    attenuationValue: 0,
+                    date: date,
+                    duration: duration,
+                    totalRiskScore: 51,
+                    transmissionRiskLevel: .medium
+                )
             }
             
             let inDone = toIndex >= allMatchedKeys.count
@@ -390,6 +437,8 @@ struct ENExposureInfo {
     let attenuationValue: ENAttenuation
     let date: Date
     let duration: TimeInterval
+    let totalRiskScore: ENRiskScore
+    let transmissionRiskLevel: ENRiskLevel
 }
 
 class ENSelfExposureResetRequest: ENAuthorizableBaseRequest {
@@ -658,6 +707,3 @@ extension String {
         }
     }
 }
-
-
-*/

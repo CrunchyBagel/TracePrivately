@@ -1,6 +1,8 @@
 <?php
 require_once('shared.php');
 
+// TODO: Handle additional form data
+
 if (!isValidBearer($db)) {
     sendJsonErrorResponse(401, 'Invalid bearer token');
     exit;
@@ -43,15 +45,17 @@ if (count($keys) > 0) {
 
     $submissionId = $db->lastInsertRowID();
 
-    $stmt = $db->prepare('INSERT INTO infected_keys (infected_key, rolling_start_number, timestamp, status, status_updated, submission_id) VALUES (:k, :r, :t, :s, :d, :i)');
+    $stmt = $db->prepare('INSERT INTO infected_keys (infected_key, rolling_start_number, risk_level, timestamp, status, status_updated, submission_id) VALUES (:k, :r, :l, :t, :s, :d, :i)');
 
     // It's possible there are no keys with a submission, and a placeholder record is created so subsequent keys can be recorded
     foreach ($json['keys'] as $key) {
 	$encodedKey = $key['d'];
 	$rollingStartNumber = $key['r'];
+	$riskLevel = $key['l'];
 
         $stmt->bindValue(':k', $encodedKey, SQLITE3_TEXT);
 	$stmt->bindValue(':r', $rollingStartNumber, SQLITE3_INTEGER);
+	$stmt->bindValue(':l', $riskLevel, SQLITE3_INTEGER);
         $stmt->bindValue(':t', $time, SQLITE3_INTEGER);
 	$stmt->bindValue(':s', 'P', SQLITE3_TEXT); // Pending state, must be approved
         $stmt->bindValue(':d', $time, SQLITE3_INTEGER);
