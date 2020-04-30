@@ -449,13 +449,20 @@ struct KeyServerMessagePackInfectedKeys: Codable {
     struct Key: Codable {
         let d: Data
         let r: Int
+        let l: Int
 
-        var exposureKey: ENTemporaryExposureKey? {
-            guard r < ENIntervalNumber.max else {
+        var exposureKey: TPTemporaryExposureKey? {
+            guard r < TPIntervalNumber.max else {
                 return nil
             }
             
-            return .init(keyData: d, rollingStartNumber: ENIntervalNumber(r))
+            let riskLevel: TPRiskLevel? = TPRiskLevel(rawValue: UInt8(l))
+            
+            return .init(
+                keyData: d,
+                rollingStartNumber: TPIntervalNumber(r),
+                transmissionRiskLevel: riskLevel ?? .invalid
+            )
         }
     }
     
@@ -495,49 +502,12 @@ extension KeyServerMessagePackInfectedKeys.Key {
         guard let rollingStartNumber = jsonData["r"] as? Int else {
             return nil
         }
-  
-        self.init(d: keyData, r: rollingStartNumber)
+        
+        let riskLevel = jsonData["l"] as? Int ?? 0
+
+        self.init(d: keyData, r: rollingStartNumber, l: riskLevel)
   
       }
-}
-
-extension TPTemporaryExposureKey {
-    init?(jsonData: [String: Any]) {
-        guard let base64str = jsonData["d"] as? String, let keyData = Data(base64Encoded: base64str) else {
-            return nil
-        }
-        
-        guard let rollingStartNumber = jsonData["r"] as? Int else {
-            return nil
-        }
-        
-        let riskLevel: TPRiskLevel?
-        
-        if let val = jsonData["l"] as? UInt8 {
-            riskLevel = TPRiskLevel(rawValue: val)
-        }
-        else {
-            riskLevel = nil
-        }
-        
-        self.init(
-            keyData: keyData,
-            rollingStartNumber: rollingStartNumber,
-            transmissionRiskLevel: riskLevel ?? .invalid
-        )
-    }
-}
-
-extension TPTemporaryExposureKey {
-    // TODO: Implement this so data can be read off the wire in binary format
-//    init?(networkData: Data) {
-//
-//    }
-    
-    var networkData: Data {
-        let rollingData = withUnsafeBytes(of: rollingStartNumber.bigEndian) { Data($0) }
-        return self.keyData + rollingData
-    }
 }
 
 extension URL {
