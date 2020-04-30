@@ -46,7 +46,8 @@ Current server options:
 1. *PHP*: This project contains a reference implementation in PHP: https://github.com/CrunchyBagel/TracePrivately/tree/master/KeyServer
 2. *Ruby*: https://github.com/tatey/trace_privately by @tatey.
     * Includes a 1-click setup process for quick deployment
-3. Create your own according to the above OpenAPI specification
+3. *Vapor (Swift)*: https://github.com/kevinrmblr/traceprivately-server
+4. Create your own according to the above OpenAPI specification
 
 ### iOS App
 
