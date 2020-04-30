@@ -529,16 +529,28 @@ extension ExposureContactInfoEntity {
         )
     }
     
-    func matches(exposure: TPExposureInfo) -> Bool {
-        if exposure.attenuationValue != UInt8(self.attenuationValue) {
+    func matches(exposure b: TPExposureInfo) -> Bool {
+        guard let a = self.contactInfo else {
             return false
         }
         
-        if exposure.duration != self.duration {
+        if a.attenuationValue != b.attenuationValue {
             return false
         }
         
-        if exposure.date != self.timestamp {
+        if a.duration != b.duration  {
+            return false
+        }
+
+        if a.date != b.date {
+            return false
+        }
+
+        if a.transmissionRiskLevel != b.transmissionRiskLevel {
+            return false
+        }
+
+        if a.totalRiskScore != b.totalRiskScore {
             return false
         }
         
