@@ -4,7 +4,6 @@
 //
 
 import UIKit
-import ExposureNotification
 
 class MainViewController: UIViewController {
 
@@ -279,18 +278,18 @@ extension MainViewController {
         
         let haptics = UINotificationFeedbackGenerator()
         haptics.notificationOccurred(.success)
-
+        
         ContactTraceManager.shared.startTracing { error in
             if let error = error {
-                if let error = error as? ENError, error.code == .notAuthorized {
-                    
-                }
-                else {
-                    let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
-                    
-                    self.present(alert, animated: true, completion: nil)
-                }
+                print("Error: \(error)")
+                
+                // Will show alert on permission denied as it's not possible to tell if the user made the decision now or earlier.
+                // Perhaps include instruction on how to resolve this
+
+                let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
+                
+                self.present(alert, animated: true, completion: nil)
             }
         }
     }

@@ -5,10 +5,8 @@
 
 import Foundation
 import UIKit
-
 /*
-enum ENErrorCode {
-    case success
+enum ENErrorCode: Int {
     case unknown
     case badParameter
     case notEntitled
@@ -19,12 +17,12 @@ enum ENErrorCode {
     case insufficientStorage
     case notEnabled
     case apiMisuse
-    case internalError
+    case `internal`
     case insufficientMemory
+    case rateLimited
     
     var localizedTitle: String {
         switch self {
-        case .success: return "Success"
         case .unknown: return "Unknown"
         case .badParameter: return "Bad Parameter"
         case .notEntitled: return "Not Entitled"
@@ -35,8 +33,9 @@ enum ENErrorCode {
         case .insufficientStorage: return "Insufficient Storage"
         case .notEnabled: return "Not Enabled"
         case .apiMisuse: return "API Miuse"
-        case .internalError: return "Internal Error"
+        case .internal: return "Internal Error"
         case .insufficientMemory: return "Insufficient Memory"
+        case .rateLimited: return "Rate Limited"
         }
     }
 }
@@ -79,16 +78,36 @@ protocol ENAuthorizable {
 
 typealias ENIntervalNumber = UInt32
 
-enum ENRiskLevel {
-    case invalid
-    case lowest
-    case low
-    case lowMedium
-    case medium
-    case mediumHigh
-    case high
-    case veryHigh
-    case highest
+typealias ENAttenuation = UInt8
+ 
+public enum ENRiskLevel : UInt8 {
+
+    
+    case invalid = 0 /// Invalid level. Used when it isn't available.
+
+    /// Invalid level. Used when it isn't available.
+    case lowest = 1 /// Lowest risk.
+
+    /// Lowest risk.
+    case low = 10 /// Low risk.
+
+    /// Low risk.
+    case lowMedium = 25 /// Risk between low and medium.
+
+    /// Risk between low and medium.
+    case medium = 50 /// Medium risk.
+
+    /// Medium risk.
+    case mediumHigh = 65 /// Risk between medium and high.
+
+    /// Risk between medium and high.
+    case high = 80 /// High risk.
+
+    /// High risk.
+    case veryHigh = 90 /// Very high risk.
+
+    /// Very high risk.
+    case highest = 100 /// Highest risk.
 }
 
 class ENTemporaryExposureKey {
@@ -168,17 +187,101 @@ class ENManager: ENBaseRequest {
     }
 }
 
+typealias ENRiskScore = UInt8
+ 
 struct ENExposureDetectionSummary {
     let daysSinceLastExposure: Int
     let matchedKeyCount: UInt64
+    let maximumRiskScore: ENRiskScore // TODO: Make use of this.
 }
 
 typealias ENExposureDetectionFinishCompletion = ((ENExposureDetectionSummary?, Swift.Error?) -> Void)
 
 typealias ENGetExposureInfoCompletion = (([ENExposureInfo]?, Bool, Swift.Error?) -> Void)
 
-struct ENExposureConfiguration {
+class ENExposureConfiguration {
+    init() {
+        
+    }
     
+    /// Minimum risk score. Excludes exposure incidents with scores lower than this. Defaults to no minimum.
+    var minimumRiskScore: ENRiskScore
+
+    
+    //---------------------------------------------------------------------------------------------------------------------------
+    /**    @brief    Scores for attenuation buckets. Must contain 8 scores, one for each bucket as defined below:
+        
+        attenuationScores[0] when Attenuation > 73.
+        attenuationScores[1] when 73 >= Attenuation > 63.
+        attenuationScores[2] when 63 >= Attenuation > 51.
+        attenuationScores[3] when 51 >= Attenuation > 33.
+        attenuationScores[4] when 33 >= Attenuation > 27.
+        attenuationScores[5] when 27 >= Attenuation > 15.
+        attenuationScores[6] when 15 >= Attenuation > 10.
+        attenuationScores[7] when 10 >= Attenuation.
+    */
+    var attenuationScores: [NSNumber]
+
+    
+    /// Weight to apply to the attenuation score. Must be in the range 0-100.
+    var attenuationWeight: Double
+
+    
+    //---------------------------------------------------------------------------------------------------------------------------
+    /**    @brief    Scores for days since last exposure buckets. Must contain 8 scores, one for each bucket as defined below:
+    
+        daysSinceLastExposureScores[0] when Days >= 14.
+        daysSinceLastExposureScores[1] else Days >= 12
+        daysSinceLastExposureScores[2] else Days >= 10
+        daysSinceLastExposureScores[3] else Days >= 8
+        daysSinceLastExposureScores[4] else Days >= 6
+        daysSinceLastExposureScores[5] else Days >= 4
+        daysSinceLastExposureScores[6] else Days >= 2
+        daysSinceLastExposureScores[7] else Days >= 0
+    */
+    var daysSinceLastExposureScores: [NSNumber]
+
+    
+    /// Weight to apply to the days since last exposure score. Must be in the range 0-100.
+    var daysSinceLastExposureWeight: Double
+
+    
+    //---------------------------------------------------------------------------------------------------------------------------
+    /**    @brief    Scores for duration buckets. Must contain 8 scores, one for each bucket as defined below:
+    
+        durationScores[0] when Duration == 0
+        durationScores[1] else Duration <= 5
+        durationScores[2] else Duration <= 10
+        durationScores[3] else Duration <= 15
+        durationScores[4] else Duration <= 20
+        durationScores[5] else Duration <= 25
+        durationScores[6] else Duration <= 30
+        durationScores[7] else Duration  > 30
+    */
+    var durationScores: [NSNumber]
+
+    
+    /// Weight to apply to the duration score. Must be in the range 0-100.
+    var durationWeight: Double
+
+    
+    //---------------------------------------------------------------------------------------------------------------------------
+    /**    @brief    Scores for transmission risk buckets. Must contain 8 scores, one for each bucket as defined below:
+    
+        transmissionRiskScores[0] for ENRiskLevelLowest.
+        transmissionRiskScores[1] for ENRiskLevelLow.
+        transmissionRiskScores[2] for ENRiskLevelLowMedium.
+        transmissionRiskScores[3] for ENRiskLevelMedium.
+        transmissionRiskScores[4] for ENRiskLevelMediumHigh.
+        transmissionRiskScores[5] for ENRiskLevelHigh.
+        transmissionRiskScores[6] for ENRiskLevelVeryHigh.
+        transmissionRiskScores[7] for ENRiskLevelHighest.
+    */
+    var transmissionRiskScores: [NSNumber]
+
+    
+    /// Weight to apply to the transmission risk score. Must be in the range 0-100.
+    var transmissionRiskWeight: Double
 }
 
 class ENExposureDetectionSession: ENBaseRequest {
@@ -222,7 +325,8 @@ class ENExposureDetectionSession: ENBaseRequest {
             
             let summary = ENExposureDetectionSummary(
                 daysSinceLastExposure: 0,
-                matchedKeyCount: UInt64(min(Self.maximumFakeMatches, keys.count))
+                matchedKeyCount: UInt64(min(Self.maximumFakeMatches, keys.count)),
+                maximumRiskScore: 8
             )
             
             completionHandler(summary, nil)
@@ -283,7 +387,7 @@ class ENExposureDetectionSession: ENBaseRequest {
 }
 
 struct ENExposureInfo {
-    let attenuationValue: UInt8
+    let attenuationValue: ENAttenuation
     let date: Date
     let duration: TimeInterval
 }
@@ -554,5 +658,6 @@ extension String {
         }
     }
 }
+
 
 */

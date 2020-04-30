@@ -139,17 +139,9 @@ extension ContactTraceManager {
         }
     }
     
-    fileprivate func addAndFinalizeKeys(session: ENExposureDetectionSession, keys: [DataManager.TemporaryExposureKey], completion: @escaping (Swift.Error?) -> Void) {
+    fileprivate func addAndFinalizeKeys(session: ENExposureDetectionSession, keys: [TPTemporaryExposureKey], completion: @escaping (Swift.Error?) -> Void) {
 
-        let k: [ENTemporaryExposureKey] = keys.map { k in
-            
-            let key = ENTemporaryExposureKey()
-            key.keyData = k.keyData
-            key.rollingStartNumber = k.rollingStartNumber
-            key.transmissionRiskLevel = .high // TODO: Use correct value
-
-            return key
-        }
+        let k: [ENTemporaryExposureKey] = keys.map { $0.enExposureKey }
         
         session.batchAddDiagnosisKeys(k) { error in
             session.finishedDiagnosisKeys { summary, error in
@@ -191,16 +183,16 @@ extension ContactTraceManager {
     }
     
     // Recursively retrieves exposures until all are received
-    private func getExposures(session: ENExposureDetectionSession, maximumCount: Int, exposures: [ENExposureInfo], completion: @escaping ([ENExposureInfo]?, Swift.Error?) -> Void) {
+    private func getExposures(session: ENExposureDetectionSession, maximumCount: Int, exposures: [TPExposureInfo], completion: @escaping ([TPExposureInfo]?, Swift.Error?) -> Void) {
         
         session.getExposureInfo(withMaximumCount: maximumCount) { newExposures, inDone, error in
             
-            if let error = error {
+            guard let newExposures = newExposures else {
                 completion(exposures, error)
                 return
             }
 
-            let allExposures = exposures + (newExposures ?? [])
+            let allExposures = exposures + newExposures.map { $0.tpExposureInfo }
             
             if inDone {
                 completion(allExposures, nil)
@@ -211,11 +203,9 @@ extension ContactTraceManager {
         }
     }
     
-    private func saveNewInfectedKeys(keys: [DataManager.TemporaryExposureKey], completion: @escaping (_ numNewRemoteKeys: Int, Swift.Error?) -> Void) {
+    private func saveNewInfectedKeys(keys: [TPTemporaryExposureKey], completion: @escaping (_ numNewRemoteKeys: Int, Swift.Error?) -> Void) {
         
-        let k: [DataManager.TemporaryExposureKey] = keys.map { .init(keyData: $0.keyData, rollingStartNumber: $0.rollingStartNumber) }
-        
-        DataManager.shared.saveInfectedKeys(keys: k) { numNewKeys, error in
+        DataManager.shared.saveInfectedKeys(keys: keys) { numNewKeys, error in
             if let error = error {
                 completion(0, error)
                 return
@@ -342,13 +332,22 @@ extension ContactTraceManager {
         self.enManager?.invalidate()
         
         let manager = ENManager()
+        
+        switch manager.exposureNotificationStatus {
+        case .active: print("ACTIVE")
+        case .bluetoothOff: print("BLUETOOTH OFF")
+        case .disabled: print("DISABLED")
+        case .restricted: print("RESTRICTED")
+        case .unknown: print("UNKNOWN")
+        }
+        
         self.enManager = manager
         
         manager.activate { error in
-            
+
             if let error = error {
                 manager.invalidate()
-                
+
                 self.isUpdatingEnabledState = false
                 self.isContactTracingEnabled = false
                 completion(error)
@@ -359,6 +358,8 @@ extension ContactTraceManager {
                 if let error = error {
                     manager.invalidate()
 
+                    print("ERROR: \(error)")
+                    
                     self.isUpdatingEnabledState = false
                     self.isContactTracingEnabled = false
                     completion(error)
@@ -513,10 +514,10 @@ extension ENExposureDetectionSession {
 }
 
 extension ContactTraceManager {
-    func retrieveSelfDiagnosisKeys(completion: @escaping ([DataManager.TemporaryExposureKey]?, Swift.Error?) -> Void) {
+    func retrieveSelfDiagnosisKeys(completion: @escaping ([TPTemporaryExposureKey]?, Swift.Error?) -> Void) {
         
         guard let manager = self.enManager else {
-            // TODO: Handle this error better
+            // XXX: Shouldn't get here, but handle this error better
             completion(nil, nil)
             return
         }
@@ -527,7 +528,7 @@ extension ContactTraceManager {
                 return
             }
             
-            let k: [DataManager.TemporaryExposureKey] = keys.map { .init(keyData: $0.keyData, rollingStartNumber: $0.rollingStartNumber) }
+            let k: [TPTemporaryExposureKey] = keys.map { $0.tpExposureKey }
             
             completion(k, nil)
         }

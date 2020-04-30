@@ -4,7 +4,6 @@
 //
 
 import CoreData
-import ExposureNotification
 
 class DataManager {
     static let shared = DataManager()
@@ -102,24 +101,9 @@ extension DataManager {
             }
         }
     }
-    
-    // TODO: Refactor this a bit more neatly
-    struct TemporaryExposureKey {
-        let keyData: Data
-        let rollingStartNumber: ENIntervalNumber
-        // TODO: Support risk level
-    }
-    
-    struct ExposureInfo {
-        let attenuationValue: ENAttenuation
-        let date: Date
-        let duration: TimeInterval
-        let totalRiskScore: ENRiskScore
-        let transmissionRiskLevel: ENRiskLevel
-    }
 
 
-    func saveInfectedKeys(keys: [TemporaryExposureKey], completion: @escaping (_ numNewKeys: Int, _ error: Swift.Error?) -> Void) {
+    func saveInfectedKeys(keys: [TPTemporaryExposureKey], completion: @escaping (_ numNewKeys: Int, _ error: Swift.Error?) -> Void) {
         
         guard keys.count > 0 else {
             completion(0, nil)
@@ -194,6 +178,7 @@ extension DataManager {
                         entity.infectedKey = data
                         // Core data doesn't support unsigned ints, so using Int64 instead of UInt32
                         entity.rollingStartNumber = Int64(key.rollingStartNumber)
+                        entity.transmissionRiskLevel = Int16(key.transmissionRiskLevel.rawValue)
                         
                         numNewKeys += 1
                     }
@@ -221,7 +206,7 @@ extension DataManager {
         }
     }
     
-    func allInfectedKeys(completion: @escaping ([TemporaryExposureKey]?, Swift.Error?) -> Void) {
+    func allInfectedKeys(completion: @escaping ([TPTemporaryExposureKey]?, Swift.Error?) -> Void) {
         let context = self.persistentContainer.newBackgroundContext()
         
         context.perform {
@@ -230,7 +215,7 @@ extension DataManager {
             do {
                 let entities = try context.fetch(request)
                 
-                let keys: [TemporaryExposureKey] = entities.compactMap { $0.temporaryExposureKey }
+                let keys: [TPTemporaryExposureKey] = entities.compactMap { $0.temporaryExposureKey }
                 completion(keys, nil)
             }
             catch {
@@ -241,33 +226,39 @@ extension DataManager {
 }
 
 extension RemoteInfectedKeyEntity {
-    var temporaryExposureKey: DataManager.TemporaryExposureKey? {
+    var temporaryExposureKey: TPTemporaryExposureKey? {
         guard let keyData = self.infectedKey else {
             return nil
         }
         
+        let riskLevel: TPRiskLevel? = TPRiskLevel(rawValue: UInt8(self.transmissionRiskLevel))
+
         return .init(
             keyData: keyData,
-            rollingStartNumber: ENIntervalNumber(self.rollingStartNumber)
+            rollingStartNumber: TPIntervalNumber(self.rollingStartNumber),
+            transmissionRiskLevel: riskLevel ?? .invalid
         )
     }
 }
 
 extension LocalInfectionKeyEntity {
-    var temporaryExposureKey: DataManager.TemporaryExposureKey? {
+    var temporaryExposureKey: TPTemporaryExposureKey? {
         guard let keyData = self.infectedKey else {
             return nil
         }
         
+        let riskLevel: TPRiskLevel? = TPRiskLevel(rawValue: UInt8(self.transmissionRiskLevel))
+        
         return .init(
             keyData: keyData,
-            rollingStartNumber: ENIntervalNumber(self.rollingStartNumber)
+            rollingStartNumber: TPIntervalNumber(self.rollingStartNumber),
+            transmissionRiskLevel: riskLevel ?? .invalid
         )
     }
 }
 
 extension DataManager {
-    func submitReport(formData: InfectedKeysFormData, keys: [DataManager.TemporaryExposureKey], completion: @escaping (Bool, Swift.Error?) -> Void) {
+    func submitReport(formData: InfectedKeysFormData, keys: [TPTemporaryExposureKey], completion: @escaping (Bool, Swift.Error?) -> Void) {
         let context = self.persistentContainer.newBackgroundContext()
         
         context.perform {
@@ -293,6 +284,7 @@ extension DataManager {
                             let keyEntity = LocalInfectionKeyEntity(context: context)
                             keyEntity.infectedKey = key.keyData
                             keyEntity.rollingStartNumber = Int64(key.rollingStartNumber)
+                            keyEntity.transmissionRiskLevel = Int16(key.transmissionRiskLevel.rawValue)
                             keyEntity.infection = entity
                         }
 
@@ -334,14 +326,14 @@ extension DataManager {
         case sent = "S"
     }
     
-    func saveExposures(exposures: [ENExposureInfo], completion: @escaping (Error?) -> Void) {
+    func saveExposures(exposures: [TPExposureInfo], completion: @escaping (Error?) -> Void) {
         
         let context = self.persistentContainer.newBackgroundContext()
         
         context.perform {
             
             var delete: [ExposureContactInfoEntity] = []
-            var insert: [ENExposureInfo] = []
+            var insert: [TPExposureInfo] = []
 
             do {
                 let request = ExposureFetchRequest(includeStatuses: [], includeNotificationStatuses: [], sortDirection: nil)
@@ -473,21 +465,23 @@ extension DataManager {
 }
 
 extension ExposureContactInfoEntity {
-    var contactInfo: DataManager.ExposureInfo? {
+    var contactInfo: TPExposureInfo? {
         guard let timestamp = self.timestamp else {
             return nil
         }
+        
+        let transmissionRiskLevel: TPRiskLevel? = TPRiskLevel(rawValue: UInt8(self.transmissionRiskLevel))
         
         return .init(
             attenuationValue: UInt8(self.attenuationValue),
             date: timestamp,
             duration: self.duration,
-            totalRiskScore: .zero, // TODO: Fix
-            transmissionRiskLevel: .low // TODO: Fix
+            totalRiskScore: TPRiskScore(self.totalRiskScore),
+            transmissionRiskLevel: transmissionRiskLevel ?? .invalid
         )
     }
     
-    func matches(exposure: ENExposureInfo) -> Bool {
+    func matches(exposure: TPExposureInfo) -> Bool {
         if exposure.attenuationValue != UInt8(self.attenuationValue) {
             return false
         }

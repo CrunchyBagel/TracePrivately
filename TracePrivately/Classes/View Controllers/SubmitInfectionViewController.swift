@@ -4,7 +4,6 @@
 //
 
 import UIKit
-import ExposureNotification
 
 class SubmitInfectionViewController: UIViewController {
 
@@ -406,20 +405,7 @@ extension SubmitInfectionViewController {
         ContactTraceManager.shared.retrieveSelfDiagnosisKeys { keys, error in
             DispatchQueue.main.async {
                 guard let keys = keys else {
-                    var showError = true
-
-                    if let error = error as? ENError {
-                        switch error.code {
-                        case .notAuthorized:
-                            showError = false
-                        default:
-                            break
-                        }
-                    }
-                    
-                    if showError {
-                        self.presentErrorAlert(title: nil, message: error?.localizedDescription ?? NSLocalizedString("infection.report.gathering_data.error", comment: ""))
-                    }
+                    self.presentErrorAlert(title: nil, message: error?.localizedDescription ?? NSLocalizedString("infection.report.gathering_data.error", comment: ""))
                     
                     completion(false, error)
                     return
@@ -482,7 +468,7 @@ extension SubmitInfectionViewController {
 }
 
 extension SubmitInfectionViewController {
-    func submitReport(keys: [DataManager.TemporaryExposureKey], completion: @escaping (Bool, Swift.Error?) -> Void) {
+    func submitReport(keys: [TPTemporaryExposureKey], completion: @escaping (Bool, Swift.Error?) -> Void) {
         
         let formData = self.gatherFormData
         
