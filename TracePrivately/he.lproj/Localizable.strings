@@ -1,0 +1,77 @@
+/* 
+  Localizable.strings
+  TracePrivately
+*/
+
+"app.title" = "עקוב באופן פרטי";
+
+"tracing.title" = "מעקב אחר קשר";
+/* parameter is localized disease name */
+"tracing.message" = "החלף באופן מאובטח מידע אנונימי כשאתה נתקל באנשים אחרים, ובדוק אוטומטית אם יש חשיפה ל-%@";
+"tracing.start.title" = "התחל מעקב";
+"tracing.stop.title" = "הפסק מעקב";
+
+"disease.covid19.title" = "COVID-19";
+
+"infection.title" = "שלח הדבקה";
+
+/* parameter is localized disease name */
+"infection.report.title" = "יש לי %@";
+"infection.report.message" = "אם אובחנת כבעל %@, שלח את האבחנה כאן. \n\nתתבקש לאשר.";
+"infection.report.gathering_data.error" = "לא ניתן ליצור את הפרופיל האנונימי שלך.";
+"infection.report.gathering.empty.title" = "אין מידע";
+"infection.report.gathering.empty.message" = "לא ניתן למצוא את פרטי המעקב שלך. אולי לא התחלת את המעקב?";
+"infection.report.submit.title" = "שלח אבחנה";
+"infection.report.submit.message" = "אנא אשר שברצונך לשלוח.\n\nזה יאפשר לאנשים שהיו בקרבתך לדעת שהם עשויים היו להיחשף.";
+"infection.report.submit.error" = "אין אפשרות לשלוח את המידע שלך.";
+"infection.report.submitting.title" = "רגע אחד...";
+"infection.report.submitting.message" = "שליחת המידע האנונימי שלך.";
+/* parameter is localized disease name */
+"infection.infected.title" = "יש לך %@";
+"infection.pending.title" = "ממתין לאישור";
+
+/* parameter is localized disease name */
+"exposure.none.banner.title" = "לא התגלתה חשיפה";
+/* parameter is localized disease name */
+"exposure.none.message" = "לא זוהה מגע עם הדבקת %@!\n\nהישארו בטוחים ושטפו ידיים";
+/* parameter %@ may be included, which is localized disease name */
+"exposure.exposed.banner.title" = "יתכן שנחשפת";
+"exposure.exposed.title" = "חשיפות";
+"exposure.exposed.details.title" = "חשיפה";
+/* parameter is localized disease name */
+"exposure.exposed.message" = "אנו מאמינים שאולי היית במגע עם %@.";
+/* parameter is a localized duration */
+"exposure.times.duration" = "משך: %@";
+
+"exposure.next_steps.title" = "הצעדים הבאים";
+"exposure.next_steps.message" = "עקוב אחר הצעדים המפורטים על ידי הרשויות שלך.";
+
+"unknown" = "לא ידוע";
+"submit" = "שלח";
+"error" = "שגיאה";
+
+"ok" = "אישור";
+"cancel" = "בטל";
+
+"keyserver.error.no_response_data" = "נתוני תגובה לא התקבלו";
+"keyserver.error.response_decoding_error" = "שגיאה בפענוח תגובה";
+"keyserver.error.key_data_missing" = "נתוני מפתח חסרים";
+"keyserver.error.date_missing" = "חסר תאריך";
+"keyserver.error.not_ok" = "סטטוס אישור לא התקבל";
+"keyserver.error.invalid_config" = "הגדרת שרת-מפתח לא חוקית";
+
+/* parameter is localized disease name */
+"notification.exposure_detected.title" = "התראה: חשיפת %@ זוהתה";
+/* 1st parameter is formatted localized time, 2nd parameter is formatted localized duration */
+"notification.exposure_detected.single.body" = "יתכן ונחשפת: %1$@ למשך %2$@";
+"notification.exposure_detected.multiple.body" = "גילינו שאולי נחשפת מספר פעמים.";
+
+"privacy.title" = "מידע על פרטיות";
+
+"settings.title" = "הגדרות";
+
+"reset_keys.title" = "אפס מפתחות מעקב";
+"reset_keys.message" = "פעולה זו תמנע ממך לגלות חשיפות שהתרחשו בעבר.";
+"reset_keys.button.title" = "איפוס";
+
+

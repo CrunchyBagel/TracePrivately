@@ -31,6 +31,8 @@
 "infection.pending.title" = "En attente de confirmation";
 
 /* parameter is localized disease name */
+"exposure.none.banner.title" = "Aucune exposition détectée";
+/* parameter is localized disease name */
 "exposure.none.message" = "Aucun contact détecté avec une personne infectée par le %@!\n\nRestez en sécurité et lavez-vous les mains.";
 /* parameter %@ may be included, which is localized disease name */
 "exposure.exposed.banner.title" = "Vous avez peut-être été exposé";
@@ -64,5 +66,11 @@
 "notification.exposure_detected.single.body" = "Vous avez été potentiellement exposé: le %1$@ pendant %2$@";
 "notification.exposure_detected.multiple.body" = "Nous avons détecté que vous avez peut-être été exposé plusieurs fois.";
 
-"privacy.title" = "Vie privée";
+"privacy.title" = "données personnelles";
+
+"settings.title" = "paramètres";
+
+"reset_keys.title" = "effacer les clés de traçage";
+"reset_keys.button.title" = "Ré-initialiser";
+
 

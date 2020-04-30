@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yes-6K-1c2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yes-6K-1c2">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -95,6 +95,9 @@
                         <outlet property="infoLabel" destination="yMu-S3-J9M" id="bPF-KO-43J"/>
                         <outlet property="scrollView" destination="EVu-IG-vzh" id="rct-dg-CtX"/>
                         <outlet property="stackView" destination="1LA-LQ-UrL" id="H05-Oi-wz4"/>
+                        <outlet property="stackViewLeadingConstraint" destination="sdg-4F-SJ5" id="mSs-5U-sB0"/>
+                        <outlet property="stackViewTrailingConstraint" destination="xRg-Lk-ZYp" id="a2v-PW-sI2"/>
+                        <outlet property="stackViewWidthConstraint" destination="EoF-gG-gbd" id="bWv-ja-Ol5"/>
                         <outlet property="submitButton" destination="YLA-Ut-Ua8" id="XDm-8D-xGQ"/>
                         <outlet property="submitLoadingButton" destination="NvG-Os-MS1" id="Xb5-Ku-ZEh"/>
                     </connections>

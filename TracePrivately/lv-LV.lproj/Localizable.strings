@@ -3,7 +3,7 @@
   TracePrivately
 */
 
-"app.title" = "Saskarsme ar %@";
+"app.title" = "%@ saskarsme";
 
 "tracing.title" = "Saskarsmes atsekošana";
 /* parameter is localized disease name */
