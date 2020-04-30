@@ -55,9 +55,10 @@ Current server options:
     * Authentication is optional. Remove the `Authenticaftion` key to disable. Otherwise, the types available are:
       * `receipt`: Submit the App Store receipt data to the `auth` endpoint. This data isn't available in development
       * `deviceCheck`: Submit the info from `DeviceCheck` to the `auth` endpoint. This is only available from iOS 11.
-2. *Currently disabled:* Configure `ExposureNotifications.plist` if you want to filter returned results
-    * `attenuationThreshold` (0-255). Attenuation is calculated by subtracting the measured RSSI from the reported transmit power. Results above this value are not returned. `0` to include all.
-    * `durationThreshold` (duration in seconds). Exposures shorter than this are not returned. `0` to include all.
+2. Configure `ExposureNotifications.plist` to control how exposures are scored.
+    * This is based on weighting of attenuation, duration, days since exposed and risk level.
+    * Defaults in app are based on Apple's example in their documentation.
+    * Refer to Apple's documentation for more info: https://www.apple.com/covid19/contacttracing
 3. Configure `SubmitConfig.plist` if you want the user to submit additional information with a positive diagnosis.
     * This system is extensible and localizable.
     * You will need to configure your server to save and use this data accordingly.
