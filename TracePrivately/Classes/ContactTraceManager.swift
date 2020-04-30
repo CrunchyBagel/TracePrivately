@@ -404,8 +404,6 @@ extension ContactTraceManager {
             return
         }
         
-        // TODO: Handle permissions as necessary
-        
         self.isUpdatingEnabledState = true
         
         manager.setExposureNotificationEnabled(true) { error in
