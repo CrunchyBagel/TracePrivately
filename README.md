@@ -55,7 +55,7 @@ Current server options:
     * Authentication is optional. Remove the `Authenticaftion` key to disable. Otherwise, the types available are:
       * `receipt`: Submit the App Store receipt data to the `auth` endpoint. This data isn't available in development
       * `deviceCheck`: Submit the info from `DeviceCheck` to the `auth` endpoint. This is only available from iOS 11.
-2. Configure `ExposureNotifications.plist` if you want to filter returned results
+2. *Currently disabled:* Configure `ExposureNotifications.plist` if you want to filter returned results
     * `attenuationThreshold` (0-255). Attenuation is calculated by subtracting the measured RSSI from the reported transmit power. Results above this value are not returned. `0` to include all.
     * `durationThreshold` (duration in seconds). Exposures shorter than this are not returned. `0` to include all.
 3. Configure `SubmitConfig.plist` if you want the user to submit additional information with a positive diagnosis.
