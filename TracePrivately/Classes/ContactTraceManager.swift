@@ -187,7 +187,7 @@ extension ContactTraceManager {
     // Recursively retrieves exposures until all are received
     private func getExposures(session: ENExposureDetectionSession, maximumCount: Int, exposures: [TPExposureInfo], completion: @escaping ([TPExposureInfo]?, Swift.Error?) -> Void) {
         
-        session.getExposureInfo(withMaximumCount: maximumCount) { newExposures, inDone, error in
+        session.getExposureInfo(withMaximumCount: maximumCount) { newExposures, done, error in
             
             guard let newExposures = newExposures else {
                 completion(exposures, error)
@@ -196,7 +196,7 @@ extension ContactTraceManager {
 
             let allExposures = exposures + newExposures.map { $0.tpExposureInfo }
             
-            if inDone {
+            if done {
                 completion(allExposures, nil)
             }
             else {

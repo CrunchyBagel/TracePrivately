@@ -429,10 +429,10 @@ class ENExposureDetectionSession: ENBaseRequest {
                 )
             }
             
-            let inDone = toIndex >= allMatchedKeys.count
-            self.cursor = inDone ? 0 : toIndex
+            let done = toIndex >= allMatchedKeys.count
+            self.cursor = done ? 0 : toIndex
             
-            completionHandler(contacts, inDone, nil)
+            completionHandler(contacts, done, nil)
         }
     }
 }
