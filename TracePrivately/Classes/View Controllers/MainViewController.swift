@@ -248,6 +248,7 @@ class MainViewController: UIViewController {
     }
 }
 
+// TODO: Make use of the risk levels both here and on the exposure details screen
 extension MainViewController {
     var diseaseStatus: DataManager.DiseaseStatus {
         let context = DataManager.shared.persistentContainer.viewContext

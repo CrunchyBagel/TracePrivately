@@ -10,6 +10,8 @@ import UIKit
 import ExposureNotification
 #endif
 
+// TODO: It seems to me that the transmission risk level is manually input potentially. Need to add this to the submission form
+
 class ContactTraceManager: NSObject {
     
     fileprivate let queue = DispatchQueue(label: "ContactTraceManager", qos: .default, attributes: [])

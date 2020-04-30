@@ -236,15 +236,18 @@ typealias ENGetExposureInfoCompletion = (([ENExposureInfo]?, Bool, Swift.Error?)
 
 class ENExposureConfiguration {
     init() {
+        
         self.minimumRiskScore = 0
-        self.attenuationScores = []
-        self.attenuationWeight = 0
-        self.daysSinceLastExposureScores = []
-        self.daysSinceLastExposureWeight = 0
-        self.durationScores = []
-        self.durationWeight = 0
-        self.transmissionRiskScores = []
-        self.transmissionRiskWeight = 0
+        
+        self.attenuationScores = [ 1, 2, 3, 4, 5, 6, 7, 8 ]
+        self.daysSinceLastExposureScores = [ 1, 2, 3, 4, 5, 6, 7, 8 ]
+        self.durationScores = [ 1, 2, 3, 4, 5, 6, 7, 8 ]
+        self.transmissionRiskScores = [ 1, 2, 3, 4, 5, 6, 7, 8 ]
+
+        self.daysSinceLastExposureWeight = 100
+        self.attenuationWeight = 100
+        self.durationWeight = 100
+        self.transmissionRiskWeight = 100
     }
     
     /// Minimum risk score. Excludes exposure incidents with scores lower than this. Defaults to no minimum.

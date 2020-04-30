@@ -6,6 +6,8 @@
 import UIKit
 import CoreData
 
+// TODO: Make use of the totalRiskScore and transmissionRiskLevel
+
 class ExposedViewController: UICollectionViewController {
 
     struct Segue {
