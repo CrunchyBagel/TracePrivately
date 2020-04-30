@@ -198,9 +198,24 @@ class ENManager: ENBaseRequest {
         let queue = self.dispatchQueue ?? .main
         
         queue.asyncAfter(deadline: .now() + 0.1) {
-//            self.exposureNotificationStatus = .active
+            let status = self.mockStatus
+            
+            if status != .unknown {
+                self.exposureNotificationStatus = status
+            }
+            
             completionHandler(nil)
         }
+    }
+    
+    private func saveMockStatus(status: ENStatus) {
+        UserDefaults.standard.set(status.rawValue, forKey: "_mock_status")
+        UserDefaults.standard.synchronize()
+    }
+    
+    private var mockStatus: ENStatus {
+        let val = UserDefaults.standard.integer(forKey: "_mock_status")
+        return ENStatus(rawValue: val) ?? .unknown
     }
     
     func setExposureNotificationEnabled(_ flag: Bool, completionHandler: @escaping ENErrorHandler) {
@@ -235,11 +250,13 @@ class ENManager: ENBaseRequest {
                     let queue = self.dispatchQueue ?? .main
                     
                     queue.asyncAfter(deadline: .now() + 0.3) {
+                        self.saveMockStatus(status: .active)
                         self.exposureNotificationEnabled = flag
                         completionHandler(nil)
                     }
                 }
                 else {
+                    self.saveMockStatus(status: .disabled)
                     self.exposureNotificationEnabled = false
                     completionHandler(ENError(code: .notAuthorized))
                 }
