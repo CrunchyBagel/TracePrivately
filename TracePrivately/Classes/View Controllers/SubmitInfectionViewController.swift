@@ -251,9 +251,6 @@ extension SubmitInfectionViewController {
     
     func createFormElement(field: SubmitInfectionConfig.Field) -> SubmitInfectionFormContainerView? {
         
-        let isDarkMode = self.isDarkMode
-        
-
         var headingSubViews: [UIView] = []
         var bodySubViews: [UIView] = []
         
@@ -404,45 +401,26 @@ extension SubmitInfectionViewController {
         
         let haptics = UINotificationFeedbackGenerator()
         haptics.notificationOccurred(.success)
-
-        let request = ENSelfExposureInfoRequest()
         
-        request.activateWithCompletion { error in
-            defer {
-                request.invalidate()
-            }
-             
-            guard let exposureInfo = request.selfExposureInfo else {
-                var showError = true
-
-                if let error = error as? ENError {
-                    switch error.errorCode {
-                    case .notAuthorized:
-                        showError = false
-                    default:
-                        break
-                    }
-                }
-                
-                if showError {
+        ContactTraceManager.shared.retrieveSelfDiagnosisKeys { keys, error in
+            DispatchQueue.main.async {
+                guard let keys = keys else {
                     self.presentErrorAlert(title: nil, message: error?.localizedDescription ?? NSLocalizedString("infection.report.gathering_data.error", comment: ""))
+                    
+                    completion(false, error)
+                    return
                 }
                 
-                completion(false, error)
-                return
-            }
-            
-            let keys = exposureInfo.keys
-
-            let alert = UIAlertController(title: NSLocalizedString("infection.report.submit.title", comment: ""), message: NSLocalizedString("infection.report.submit.message", comment: ""), preferredStyle: .alert)
-            
-            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
-            alert.addAction(UIAlertAction(title: NSLocalizedString("submit", comment: ""), style: .destructive, handler: { action in
+                let alert = UIAlertController(title: NSLocalizedString("infection.report.submit.title", comment: ""), message: NSLocalizedString("infection.report.submit.message", comment: ""), preferredStyle: .alert)
                 
-                self.submitReport(keys: keys, completion: completion)
-            }))
-            
-            self.present(alert, animated: true, completion: nil)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: NSLocalizedString("submit", comment: ""), style: .destructive, handler: { action in
+                    
+                    self.submitReport(keys: keys, completion: completion)
+                }))
+                
+                self.present(alert, animated: true, completion: nil)
+            }
         }
     }
 }
@@ -490,7 +468,7 @@ extension SubmitInfectionViewController {
 }
 
 extension SubmitInfectionViewController {
-    func submitReport(keys: [ENTemporaryExposureKey], completion: @escaping (Bool, Swift.Error?) -> Void) {
+    func submitReport(keys: [TPTemporaryExposureKey], completion: @escaping (Bool, Swift.Error?) -> Void) {
         
         let formData = self.gatherFormData
         

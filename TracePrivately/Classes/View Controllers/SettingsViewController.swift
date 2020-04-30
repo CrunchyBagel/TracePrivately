@@ -37,13 +37,7 @@ extension SettingsViewController {
         
         alert.addAction(UIAlertAction(title: NSLocalizedString("reset_keys.button.title", comment: ""), style: .destructive, handler: { _ in
             
-            let request = ENSelfExposureResetRequest()
-            
-            request.activateWithCompletion { _ in
-                defer {
-                    request.invalidate()
-                }
-
+            ContactTraceManager.shared.resetAllData { _ in
                 DataManager.shared.deleteLocalInfections { _ in
                     DispatchQueue.main.async {
                         self.dismiss(animated: true, completion: nil)

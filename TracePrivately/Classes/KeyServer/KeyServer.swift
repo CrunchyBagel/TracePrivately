@@ -191,7 +191,7 @@ extension KeyServer {
         Refer to `KeyServer.yaml` for expected request and response format.
      */
     
-    func submitInfectedKeys(formData: InfectedKeysFormData, keys: [ENTemporaryExposureKey], previousSubmissionId: String?, completion: @escaping (Bool, String?, Swift.Error?) -> Void) {
+    func submitInfectedKeys(formData: InfectedKeysFormData, keys: [TPTemporaryExposureKey], previousSubmissionId: String?, completion: @escaping (Bool, String?, Swift.Error?) -> Void) {
         
         self._submitInfectedKeys(formData: formData, keys: keys, previousSubmissionId: previousSubmissionId) { success, submissionId, error in
             if let error = error as? KeyServer.Error, error.shouldRetryWithAuthRequest {
@@ -212,7 +212,7 @@ extension KeyServer {
         }
     }
 
-    private func _submitInfectedKeys(formData: InfectedKeysFormData, keys: [ENTemporaryExposureKey], previousSubmissionId: String?, completion: @escaping (Bool, String?, Swift.Error?) -> Void) {
+    private func _submitInfectedKeys(formData: InfectedKeysFormData, keys: [TPTemporaryExposureKey], previousSubmissionId: String?, completion: @escaping (Bool, String?, Swift.Error?) -> Void) {
         
         guard let endPoint = self.config.submitInfected else {
             completion(false, nil, Error.invalidConfig)
@@ -225,7 +225,8 @@ extension KeyServer {
             let encodedKeys: [[String: Any]] = keys.map { key in
                 return [
                     "d": key.keyData.base64EncodedString(),
-                    "r": key.rollingStartNumber
+                    "r": key.rollingStartNumber,
+                    "l": key.transmissionRiskLevel.rawValue
                 ]
             }
             
@@ -310,8 +311,8 @@ extension KeyServer {
     
     struct InfectedKeysResponse {
         let date: Date
-        let keys: [ENTemporaryExposureKey]
-        let deletedKeys: [ENTemporaryExposureKey]
+        let keys: [TPTemporaryExposureKey]
+        let deletedKeys: [TPTemporaryExposureKey]
     }
     
     func retrieveInfectedKeys(since date: Date?, completion: @escaping (InfectedKeysResponse?, Swift.Error?) -> Void) {
@@ -398,7 +399,7 @@ extension KeyServer {
                     return
                 }
                 
-                let keys: [ENTemporaryExposureKey] = keysData.compactMap { ENTemporaryExposureKey(jsonData: $0) }
+                let keys: [TPTemporaryExposureKey] = keysData.compactMap { TPTemporaryExposureKey(jsonData: $0) }
                 
                 print("Found \(keys.count) key(s)")
                 
@@ -415,7 +416,8 @@ extension KeyServer {
     }
 }
 
-extension ENTemporaryExposureKey {
+// TODO: Ensure server supports this value
+extension TPTemporaryExposureKey {
     init?(jsonData: [String: Any]) {
         guard let base64str = jsonData["d"] as? String, let keyData = Data(base64Encoded: base64str) else {
             return nil
@@ -425,11 +427,24 @@ extension ENTemporaryExposureKey {
             return nil
         }
         
-        self.init(keyData: keyData, rollingStartNumber: rollingStartNumber)
+        let riskLevel: TPRiskLevel?
+        
+        if let val = jsonData["l"] as? UInt8 {
+            riskLevel = TPRiskLevel(rawValue: val)
+        }
+        else {
+            riskLevel = nil
+        }
+        
+        self.init(
+            keyData: keyData,
+            rollingStartNumber: rollingStartNumber,
+            transmissionRiskLevel: riskLevel ?? .invalid
+        )
     }
 }
 
-extension ENTemporaryExposureKey {
+extension TPTemporaryExposureKey {
     // TODO: Implement this so data can be read off the wire in binary format
 //    init?(networkData: Data) {
 //
