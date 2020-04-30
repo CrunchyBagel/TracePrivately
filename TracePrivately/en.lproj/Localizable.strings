@@ -31,6 +31,9 @@
 "infection.infected.title" = "You Have %@";
 "infection.pending.title" = "Pending Confirmation";
 
+"infection.report.form.error.value_invalid" = "Please enter a valid value for this field.";
+"infection.report.form.error.value_missing" = "This field is required.";
+
 /* parameter is localized disease name */
 "exposure.none.banner.title" = "No Exposure Detected";
 /* parameter is localized disease name */

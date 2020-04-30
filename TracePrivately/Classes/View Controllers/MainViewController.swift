@@ -58,6 +58,7 @@ class MainViewController: UIViewController {
         self.tracingPrivacyButton.setTitle(NSLocalizedString("privacy.title", comment: ""), for: .normal)
         
         self.tracingLoadingButton.setTitle(nil, for: .normal)
+        self.tracingLoadingButton.isEnabled = false
         
         let style: UIActivityIndicatorView.Style
         
@@ -173,7 +174,13 @@ class MainViewController: UIViewController {
             self.submitInfectionContainer.backgroundColor = color
         }
         else {
-            self.view.backgroundColor = .groupTableViewBackground
+            if #available(iOS 13, *) {
+                self.view.backgroundColor = .systemGroupedBackground
+            }
+            else {
+                self.view.backgroundColor = .groupTableViewBackground
+            }
+            
             self.tracingContainer.backgroundColor = .white
             self.submitInfectionContainer.backgroundColor = .white
         }
@@ -241,6 +248,7 @@ class MainViewController: UIViewController {
     }
 }
 
+// TODO: Make use of the risk levels both here and on the exposure details screen
 extension MainViewController {
     var diseaseStatus: DataManager.DiseaseStatus {
         let context = DataManager.shared.persistentContainer.viewContext
@@ -269,7 +277,6 @@ extension MainViewController {
         self.performSegue(withIdentifier: Segue.viewExposures, sender: nil)
     }
     
-    // TODO: This could be slow, and doesn't really show the user what's happening other than the loading spinner in the top right. This should be more obvious. To speed this up, can add and finalize strings, but no need to retrieve the contact info here. Can be done after tracing is enabled
     @IBAction func tracingOnButtonTapped(_ sender: ActionButton) {
         guard !ContactTraceManager.shared.isUpdatingEnabledState else {
             print("Already updating state, ignoring this tap")
@@ -278,18 +285,18 @@ extension MainViewController {
         
         let haptics = UINotificationFeedbackGenerator()
         haptics.notificationOccurred(.success)
-
+        
         ContactTraceManager.shared.startTracing { error in
             if let error = error {
-                if let error = error as? ENError, error.errorCode == .notAuthorized {
-                    
-                }
-                else {
-                    let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
-                    
-                    self.present(alert, animated: true, completion: nil)
-                }
+                print("Error: \(error)")
+                
+                // Will show alert on permission denied as it's not possible to tell if the user made the decision now or earlier.
+                // Perhaps include instruction on how to resolve this
+
+                let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
+                
+                self.present(alert, animated: true, completion: nil)
             }
         }
     }

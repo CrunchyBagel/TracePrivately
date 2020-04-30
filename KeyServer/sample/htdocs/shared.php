@@ -51,8 +51,6 @@ function isValidBearer($db) {
     $stmt->bindValue(':e', time(), SQLITE3_INTEGER);
 
     $result = $stmt->execute();
-    var_dump($token);
-    var_dump($result);
 
     if (($row = $result->fetchArray(SQLITE3_NUM)) !== false) {
         $count = (int) $row[0];

@@ -3,9 +3,9 @@ A functioning app using Apple's contact tracing framework, as documented here:
 
 https://www.apple.com/covid19/contacttracing
 
-**24 April 2020:** Trace Privately has been updated to be compatible with v1.1 of Apple's framework, now called *Exposure Notification* framework.
+**29 April 2020:** Trace Privately has been updated to be compatible with v1.2 of Apple's framework. It will build against the `ExposureNotification` framework if you are running Xcode 11.5, and run on iOS 13.5 devices.
 
-*Note: The Apple framework is not actually yet released. This app is being developed using a mock version of the framework based on the published documentation. This will generate false exposures for the purposes of testing and development.*
+*Note: To run the app the Apple framework, a special entitlement is required, only available to authorized organizations.*
 
 This app will be evolving quickly as I'm trying to publish new functionality as quickly as possible.
 
@@ -15,7 +15,15 @@ This app will be evolving quickly as I'm trying to publish new functionality as 
 * Implement correct security and privacy principles to maximise uptake of said government apps
 * Remain open source for independent verification
 * Properly use the Apple / Google contact tracing specification
-* Work in a localized manner so it can be used in any language or jurisdiction
+* Accessible to as many users as possible:
+    * Localized to many langauges
+    * Adopt correct accessibility principles and functions
+    * Support older devices
+* Be easily configurable to suit needs of different jurisdictions:
+    * Different privacy statements
+    * Different data gathered for positive diagnoses
+    * Different server/authorization needs
+    * Different thresholds to define a contact (attenuation and duration)
 * Create a functioning server prototype that can be used as a basis for more robust solutions that fit into governments' existing architecture.
 
 ## How Can You Help?
@@ -35,9 +43,9 @@ The mobile app communicates with a server to retrieve infected keys. API specifi
 
 Current server options:
 
-1. *PHP*: This project contains a very basic sample PHP implementation: https://github.com/CrunchyBagel/TracePrivately/tree/master/KeyServer
+1. *PHP*: This project contains a reference implementation in PHP: https://github.com/CrunchyBagel/TracePrivately/tree/master/KeyServer
 2. *Ruby*: https://github.com/tatey/trace_privately by @tatey.
-    * You can use a demo server of this implementation here: https://github.com/CrunchyBagel/TracePrivately/issues/36
+    * Includes a 1-click setup process for quick deployment
 3. Create your own according to the above OpenAPI specification
 
 ### iOS App
@@ -47,10 +55,15 @@ Current server options:
     * Authentication is optional. Remove the `Authenticaftion` key to disable. Otherwise, the types available are:
       * `receipt`: Submit the App Store receipt data to the `auth` endpoint. This data isn't available in development
       * `deviceCheck`: Submit the info from `DeviceCheck` to the `auth` endpoint. This is only available from iOS 11.
-2. Configure `ExposureNotifications.plist` if you want to filter returned results
-    * `attenuationThreshold` (0-255). Attenuation is calculated by subtracting the measured RSSI from the reported transmit power. Results above this value are not returned. `0` to include all.
-    * `durationThreshold` (duration in seconds). Exposures shorter than this are not returned. `0` to include all.
-3. Build and run in Xcode
+2. Configure `ExposureNotifications.plist` to control how exposures are scored.
+    * This is based on weighting of attenuation, duration, days since exposed and risk level.
+    * Defaults in app are based on Apple's example in their documentation.
+    * Refer to Apple's documentation for more info: https://www.apple.com/covid19/contacttracing
+3. Configure `SubmitConfig.plist` if you want the user to submit additional information with a positive diagnosis.
+    * This system is extensible and localizable.
+    * You will need to configure your server to save and use this data accordingly.
+    * For example, your workflow for approving new infected keys may involve reviewing this data before approving the submission.
+4. Build and run in Xcode
 
 ### Workflow
 
@@ -69,18 +82,14 @@ If you can help translate the app, please help our crowd-sourced effort here:
 https://traceprivately.oneskyapp.com/collaboration/project?id=170066
 
 Currently available in:
-English, French, Spanish (ES, MX), Portuguese (PT, BR), German, Simplified Chinese, Croatian, Serbian, Japanese, Estonian, Latvian, Dutch, Italian, Ukrainian and Hindi.
+English, French, Spanish (ES, MX), Portuguese (PT, BR), German, Chinese (Simplified and Traditional), Croatian, Serbian, Japanese, Estonian, Latvian, Dutch, Italian, Ukrainian and Hindi.
 
 ## Screenshots
 
 * Updated Demo Video (21-Apr-20): https://youtu.be/EAT3p-v2y9k
 * Original Demo Video (17-Apr-20): https://youtu.be/rVaz8VQLoaE
 
-![Main Window](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/main.png?raw=true)
-
-![Submit Window](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/submit.png?raw=true)
-
-![Exposed Details Window](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/exposed.png?raw=true)
+![Screenshots](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/screenshots.png?raw=true)
 
 ## Other
 

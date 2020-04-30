@@ -4,10 +4,85 @@
 <dict>
 	<key>DetectionSession</key>
 	<dict>
-		<key>attenuationThreshold</key>
-		<integer>15</integer>
-		<key>durationThreshold</key>
-		<integer>300</integer>
+		<key>minimumRiskScore</key>
+		<dict>
+			<key>note</key>
+			<string>Value of 0-8. Exposures with a lower score are ignored. 0 means all exposures.</string>
+			<key>value</key>
+			<integer>0</integer>
+		</dict>
+		<key>transmissionRisk</key>
+		<dict>
+			<key>note</key>
+			<string>8 values of 1-8. First 5 unused, The 6th corresponds to the risk level from the infected user. 7th is noted as phone score, 8th is noted as occupation.</string>
+			<key>scores</key>
+			<array>
+				<integer>0</integer>
+				<integer>0</integer>
+				<integer>0</integer>
+				<integer>0</integer>
+				<integer>0</integer>
+				<integer>7</integer>
+				<integer>7</integer>
+				<integer>7</integer>
+			</array>
+			<key>weight</key>
+			<integer>75</integer>
+		</dict>
+		<key>attenuation</key>
+		<dict>
+			<key>note</key>
+			<string>8 values of 1-8. Each corresponds to the signal strength, weaker to stronger</string>
+			<key>scores</key>
+			<array>
+				<integer>1</integer>
+				<integer>1</integer>
+				<integer>1</integer>
+				<integer>8</integer>
+				<integer>8</integer>
+				<integer>8</integer>
+				<integer>8</integer>
+				<integer>8</integer>
+			</array>
+			<key>weight</key>
+			<integer>25</integer>
+		</dict>
+		<key>daysSinceLastExposure</key>
+		<dict>
+			<key>note</key>
+			<string>8 values of 1-8. Each corresponds to a date range since exposured, longer ago to more recent</string>
+			<key>scores</key>
+			<array>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>2</integer>
+				<integer>4</integer>
+				<integer>6</integer>
+				<integer>8</integer>
+				<integer>8</integer>
+				<integer>8</integer>
+			</array>
+			<key>weight</key>
+			<integer>50</integer>
+		</dict>
+		<key>duration</key>
+		<dict>
+			<key>note</key>
+			<string>8 values of 1-8. Each corresponds to how long exposed, short durations to longer durations</string>
+			<key>scores</key>
+			<array>
+				<integer>1</integer>
+				<integer>1</integer>
+				<integer>4</integer>
+				<integer>7</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>8</integer>
+				<integer>8</integer>
+			</array>
+			<key>weight</key>
+			<integer>50</integer>
+		</dict>
 	</dict>
 </dict>
 </plist>

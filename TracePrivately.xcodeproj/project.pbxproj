@@ -12,12 +12,16 @@
 		6614BB052452B9D900885F23 /* ExposureDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6614BB042452B9D900885F23 /* ExposureDetailsViewController.swift */; };
 		6621056D245251B10011EB42 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6621056C245251B10011EB42 /* main.swift */; };
 		6621057124525FC90011EB42 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6621057324525FC90011EB42 /* Localizable.strings */; };
+		663BD8B9245A510C00A3E029 /* ExposureDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663BD8B8245A510C00A3E029 /* ExposureDataTypes.swift */; };
 		66437F76244A86AE000B8C6C /* Disease.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F75244A86AE000B8C6C /* Disease.swift */; };
 		66437F9E244A9A02000B8C6C /* TracePrivately.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */; };
 		66437FA0244A9B2C000B8C6C /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9F244A9B2C000B8C6C /* DataManager.swift */; };
+		6673EED42451785300244287 /* SubmitConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6673EED32451785300244287 /* SubmitConfig.plist */; };
+		6673EED62451C10000244287 /* SubmitInfectionConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6673EED52451C10000244287 /* SubmitInfectionConfig.swift */; };
 		66793890245460B600868B84 /* KeyServerAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6679388D245460B600868B84 /* KeyServerAuthentication.swift */; };
 		66793891245460B600868B84 /* KeyServerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6679388E245460B600868B84 /* KeyServerConfig.swift */; };
 		66793892245460B600868B84 /* KeyServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6679388F245460B600868B84 /* KeyServer.swift */; };
+		6679389524568A3D00868B84 /* InfectedKeysFormData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6679389424568A3D00868B84 /* InfectedKeysFormData.swift */; };
 		667C7C982457B10100D280A9 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 667C7C972457B10100D280A9 /* Settings.storyboard */; };
 		667C7C9A2457B13600D280A9 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 667C7C992457B13600D280A9 /* SettingsViewController.swift */; };
 		66848C2D244D5F8800497D2A /* AsyncBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66848C2C244D5F8800497D2A /* AsyncBlockOperation.swift */; };
@@ -77,6 +81,8 @@
 		660408B62458F555004710F7 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		660408B72458F562004710F7 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		660408B82458F562004710F7 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
+		660408B924595848004710F7 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		660408BA24595848004710F7 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		6614BB042452B9D900885F23 /* ExposureDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureDetailsViewController.swift; sourceTree = "<group>"; };
 		661B6C6A2452CE2500CC1DC6 /* Model 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 4.xcdatamodel"; sourceTree = "<group>"; };
 		6621056A245251B10011EB42 /* OneSkyDownload */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OneSkyDownload; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -89,14 +95,20 @@
 		662105782452602D0011EB42 /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		6625219B2453955F00C68AD1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		6625219C2453957100C68AD1 /* sr-RS */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sr-RS"; path = "sr-RS.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		663BD8B7245A3F8100A3E029 /* TracePrivately.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TracePrivately.entitlements; sourceTree = "<group>"; };
+		663BD8B8245A510C00A3E029 /* ExposureDataTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureDataTypes.swift; sourceTree = "<group>"; };
+		663BD8BA245A537900A3E029 /* Model 8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 8.xcdatamodel"; sourceTree = "<group>"; };
 		66437F75244A86AE000B8C6C /* Disease.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disease.swift; sourceTree = "<group>"; };
 		66437F9D244A9A02000B8C6C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		66437F9F244A9B2C000B8C6C /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		664C5236245802C9003EBE63 /* Model 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 7.xcdatamodel"; sourceTree = "<group>"; };
+		6673EED32451785300244287 /* SubmitConfig.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SubmitConfig.plist; sourceTree = "<group>"; };
+		6673EED52451C10000244287 /* SubmitInfectionConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitInfectionConfig.swift; sourceTree = "<group>"; };
 		6679388D245460B600868B84 /* KeyServerAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyServerAuthentication.swift; sourceTree = "<group>"; };
 		6679388E245460B600868B84 /* KeyServerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyServerConfig.swift; sourceTree = "<group>"; };
 		6679388F245460B600868B84 /* KeyServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyServer.swift; sourceTree = "<group>"; };
 		667938932454665E00868B84 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6679389424568A3D00868B84 /* InfectedKeysFormData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfectedKeysFormData.swift; sourceTree = "<group>"; };
 		66793896245709FE00868B84 /* es-ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-ES"; path = "es-ES.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		6679389724570A0B00868B84 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		6679389824570A1700868B84 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -182,6 +194,7 @@
 				66CB7BD02453D51A0044D32B /* ENMockFramework.swift */,
 				66437F75244A86AE000B8C6C /* Disease.swift */,
 				66437F9F244A9B2C000B8C6C /* DataManager.swift */,
+				663BD8B8245A510C00A3E029 /* ExposureDataTypes.swift */,
 				668CE842244D01F50065960A /* ContactTraceManager.swift */,
 				66C4BBC424564B56008AACC2 /* ExposureNotificationConfig.swift */,
 				66CB95BC244FB51000D775B6 /* ActionButton.swift */,
@@ -198,6 +211,7 @@
 				6698C571244936AF00F046E4 /* ExposedViewController.swift */,
 				6614BB042452B9D900885F23 /* ExposureDetailsViewController.swift */,
 				66EAEB61244DA72E0044FF70 /* SubmitInfectionViewController.swift */,
+				6673EED52451C10000244287 /* SubmitInfectionConfig.swift */,
 				66EAEB65244DC62A0044FF70 /* SubmittedInfectionViewController.swift */,
 				66CB95C2244FBBF300D775B6 /* PrivacyViewController.swift */,
 				667C7C992457B13600D280A9 /* SettingsViewController.swift */,
@@ -211,6 +225,7 @@
 				6679388D245460B600868B84 /* KeyServerAuthentication.swift */,
 				6679388E245460B600868B84 /* KeyServerConfig.swift */,
 				6679388F245460B600868B84 /* KeyServer.swift */,
+				6679389424568A3D00868B84 /* InfectedKeysFormData.swift */,
 			);
 			path = KeyServer;
 			sourceTree = "<group>";
@@ -236,6 +251,7 @@
 		66F818692448FD5C0043AC2D /* TracePrivately */ = {
 			isa = PBXGroup;
 			children = (
+				663BD8B7245A3F8100A3E029 /* TracePrivately.entitlements */,
 				39BD8847244C6CF000EB8B6C /* Storyboards */,
 				66437F77244A8A4C000B8C6C /* Classes */,
 				66F818732448FD5E0043AC2D /* Assets.xcassets */,
@@ -244,6 +260,7 @@
 				660408A42458F49F004710F7 /* InfoPlist.strings */,
 				6621057324525FC90011EB42 /* Localizable.strings */,
 				6698C573244BFAB600F046E4 /* KeyServer.plist */,
+				6673EED32451785300244287 /* SubmitConfig.plist */,
 				66C4BBC224564AFB008AACC2 /* ExposureNotifications.plist */,
 			);
 			path = TracePrivately;
@@ -331,6 +348,7 @@
 				it,
 				nl,
 				uk,
+				"zh-Hant",
 			);
 			mainGroup = 66F8185E2448FD5C0043AC2D;
 			packageReferences = (
@@ -362,6 +380,7 @@
 				6621057124525FC90011EB42 /* Localizable.strings in Resources */,
 				66F818742448FD5E0043AC2D /* Assets.xcassets in Resources */,
 				66F818722448FD5C0043AC2D /* Main.storyboard in Resources */,
+				6673EED42451785300244287 /* SubmitConfig.plist in Resources */,
 				66CB95C1244FBBC800D775B6 /* Privacy.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -381,12 +400,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				663BD8B9245A510C00A3E029 /* ExposureDataTypes.swift in Sources */,
 				66793892245460B600868B84 /* KeyServer.swift in Sources */,
 				66848C2D244D5F8800497D2A /* AsyncBlockOperation.swift in Sources */,
 				66EAEB62244DA72E0044FF70 /* SubmitInfectionViewController.swift in Sources */,
 				667C7C9A2457B13600D280A9 /* SettingsViewController.swift in Sources */,
 				66A039D7245005B700A569BE /* FontExtension.swift in Sources */,
 				66CB95C3244FBBF300D775B6 /* PrivacyViewController.swift in Sources */,
+				6679389524568A3D00868B84 /* InfectedKeysFormData.swift in Sources */,
 				66CB95BD244FB51000D775B6 /* ActionButton.swift in Sources */,
 				66793891245460B600868B84 /* KeyServerConfig.swift in Sources */,
 				66437F76244A86AE000B8C6C /* Disease.swift in Sources */,
@@ -401,6 +422,7 @@
 				6614BB052452B9D900885F23 /* ExposureDetailsViewController.swift in Sources */,
 				66C4BBC524564B56008AACC2 /* ExposureNotificationConfig.swift in Sources */,
 				668CE843244D01F50065960A /* ContactTraceManager.swift in Sources */,
+				6673EED62451C10000244287 /* SubmitInfectionConfig.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -427,6 +449,7 @@
 				660408B32458F54B004710F7 /* it */,
 				660408B52458F555004710F7 /* nl */,
 				660408B72458F562004710F7 /* uk */,
+				660408B924595848004710F7 /* zh-Hant */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -451,6 +474,7 @@
 				660408B42458F54B004710F7 /* it */,
 				660408B62458F555004710F7 /* nl */,
 				660408B82458F562004710F7 /* uk */,
+				660408BA24595848004710F7 /* zh-Hant */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -621,6 +645,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = TracePrivately/TracePrivately.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CHZS3BHM57;
 				INFOPLIST_FILE = TracePrivately/Info.plist;
@@ -642,6 +667,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = TracePrivately/TracePrivately.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CHZS3BHM57;
 				INFOPLIST_FILE = TracePrivately/Info.plist;
@@ -712,6 +738,7 @@
 		66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				663BD8BA245A537900A3E029 /* Model 8.xcdatamodel */,
 				664C5236245802C9003EBE63 /* Model 7.xcdatamodel */,
 				66BF646624578E2B00492070 /* Model 6.xcdatamodel */,
 				66CB7BD22453EB190044D32B /* Model 5.xcdatamodel */,
@@ -720,7 +747,7 @@
 				668D4B22244D705100D90C26 /* Model 2.xcdatamodel */,
 				66437F9D244A9A02000B8C6C /* Model.xcdatamodel */,
 			);
-			currentVersion = 664C5236245802C9003EBE63 /* Model 7.xcdatamodel */;
+			currentVersion = 663BD8BA245A537900A3E029 /* Model 8.xcdatamodel */;
 			path = TracePrivately.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

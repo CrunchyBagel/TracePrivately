@@ -40,7 +40,7 @@
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zRg-ky-7Uc" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
                                 <rect key="frame" x="20" y="790" width="374" height="52"/>
-                                <color key="backgroundColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" systemColor="systemGray2Color" red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="52" id="4Tr-z2-Bno"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="52" id="cwL-lY-cEy"/>

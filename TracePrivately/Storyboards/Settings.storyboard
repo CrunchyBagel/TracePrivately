@@ -33,13 +33,12 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bOj-BS-XDp" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
-                                <rect key="frame" x="20" y="790" width="374" height="52"/>
-                                <color key="backgroundColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <rect key="frame" x="20" y="160" width="374" height="52"/>
+                                <color key="backgroundColor" systemColor="systemGray2Color" red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="52" id="mfv-rt-S5R"/>
                                     <constraint firstAttribute="height" constant="52" id="vNn-7D-G23"/>
                                 </constraints>
-                                <state key="normal" title="Privacy"/>
+                                <state key="normal" title="Reset"/>
                                 <connections>
                                     <action selector="resetKeysTapped:" destination="6l1-qo-aTA" eventType="touchUpInside" id="aUo-XJ-7IT"/>
                                 </connections>
@@ -49,7 +48,7 @@
                         <constraints>
                             <constraint firstItem="bOj-BS-XDp" firstAttribute="leading" secondItem="NPK-LJ-WN8" secondAttribute="leading" constant="20" id="5jA-2r-TNo"/>
                             <constraint firstItem="NPK-LJ-WN8" firstAttribute="trailing" secondItem="bOj-BS-XDp" secondAttribute="trailing" constant="20" id="C5O-5s-Pf1"/>
-                            <constraint firstItem="NPK-LJ-WN8" firstAttribute="bottom" secondItem="bOj-BS-XDp" secondAttribute="bottom" constant="20" id="s7H-hp-nVy"/>
+                            <constraint firstItem="bOj-BS-XDp" firstAttribute="top" secondItem="NPK-LJ-WN8" secondAttribute="top" constant="20" id="RYK-j3-rqA"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="NPK-LJ-WN8"/>
                     </view>

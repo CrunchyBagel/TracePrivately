@@ -6,6 +6,8 @@
 import UIKit
 import CoreData
 
+// TODO: Make use of the totalRiskScore and transmissionRiskLevel
+
 class ExposedViewController: UICollectionViewController {
 
     struct Segue {
@@ -19,7 +21,7 @@ class ExposedViewController: UICollectionViewController {
     }
 
     enum CellType {
-        case contact(ENExposureInfo)
+        case contact(TPExposureInfo)
         case intro(String)
         case nextSteps
     }
@@ -70,7 +72,7 @@ class ExposedViewController: UICollectionViewController {
             entities = []
         }
         
-        let contacts: [ENExposureInfo] = entities.compactMap { $0.contactInfo }
+        let contacts: [TPExposureInfo] = entities.compactMap { $0.contactInfo }
 
         if contacts.count == 0 {
             let title = String(format: NSLocalizedString("exposure.none.message", comment: ""), Disease.current.localizedTitle)

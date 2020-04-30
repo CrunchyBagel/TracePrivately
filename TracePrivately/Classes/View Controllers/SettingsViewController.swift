@@ -28,24 +28,20 @@ class SettingsViewController: UIViewController {
 
 extension SettingsViewController {
     @IBAction func resetKeysTapped(_ sender: ActionButton) {
+        let haptics = UINotificationFeedbackGenerator()
+        haptics.notificationOccurred(.success)
+
         let alert = UIAlertController(title: NSLocalizedString("reset_keys.title", comment: ""), message: NSLocalizedString("reset_keys.message", comment: ""), preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
         
         alert.addAction(UIAlertAction(title: NSLocalizedString("reset_keys.button.title", comment: ""), style: .destructive, handler: { _ in
             
-            let haptics = UINotificationFeedbackGenerator()
-            haptics.notificationOccurred(.success)
-
-            let request = ENSelfExposureResetRequest()
-            
-            request.activateWithCompletion { _ in
-                defer {
-                    request.invalidate()
-                }
-
+            ContactTraceManager.shared.resetAllData { _ in
                 DataManager.shared.deleteLocalInfections { _ in
-
+                    DispatchQueue.main.async {
+                        self.dismiss(animated: true, completion: nil)
+                    }
                 }
             }
         }))

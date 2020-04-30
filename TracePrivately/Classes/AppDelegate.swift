@@ -30,7 +30,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if let url = Bundle.main.url(forResource: "ExposureNotifications", withExtension: "plist") {
             if let config = ExposureNotificationConfig(plistUrl: url) {
-                print("CONFIG: \(config)")
                 ContactTraceManager.shared.config = config
             }
         }

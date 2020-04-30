@@ -30,7 +30,7 @@ if (array_key_exists('since', $_GET)) {
     }
 }
 
-$stmt = $db->prepare('SELECT infected_key, rolling_start_number FROM infected_keys WHERE status = :s AND status_updated >= :t');
+$stmt = $db->prepare('SELECT infected_key, rolling_start_number, risk_level FROM infected_keys WHERE status = :s AND status_updated >= :t');
 $stmt->bindValue(':t', $time, SQLITE3_INTEGER);
 $stmt->bindValue(':s', 'A', SQLITE3_TEXT);
 
@@ -45,7 +45,8 @@ if ($useBinary) {
     while (($row = $result->fetchArray(SQLITE3_NUM))) {
         $keys[] = array(
             'd' => base64_decode($row[0]),
-            'r' => (int) $row[1]
+	    'r' => (int) $row[1],
+	    'l' => (int) $row[2]
         );
     }
 }
@@ -53,7 +54,8 @@ else {
     while (($row = $result->fetchArray(SQLITE3_NUM))) {
         $keys[] = array(
 	    'd' => $row[0],
-	    'r' => (int) $row[1]
+	    'r' => (int) $row[1],
+	    'l' => (int) $row[2]
         );
     }
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Form</key>
+	<dict>
+		<key>SortedFields</key>
+		<array>
+			<dict>
+				<key>Type</key>
+				<string>ShortText</string>
+				<key>Required</key>
+				<true/>
+				<key>FormName</key>
+				<string>test_number</string>
+				<key>LocalizedTitle</key>
+				<dict>
+					<key>Base</key>
+					<string>Test Number</string>
+				</dict>
+				<key>LocalizedDescription</key>
+				<dict>
+					<key>Base</key>
+					<string>Enter the number on your pathology result.</string>
+				</dict>
+				<key>LocalizedPlaceholder</key>
+				<dict>
+					<key>Base</key>
+					<string>e.g. 12345678</string>
+				</dict>
+			</dict>
+		</array>
+	</dict>
+</dict>
+</plist>
