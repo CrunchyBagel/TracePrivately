@@ -204,8 +204,6 @@ class ENManager: ENBaseRequest {
     }
     
     func setExposureNotificationEnabled(_ flag: Bool, completionHandler: @escaping ENErrorHandler) {
-        // TODO: Request permission here
-        
         if !flag {
             self.exposureNotificationEnabled = false
             completionHandler(nil)
@@ -265,8 +263,19 @@ class ENManager: ENBaseRequest {
     }
     
     func resetAllData(completionHandler: @escaping ENErrorHandler) {
-        // TODO: Show auth dialog here
-        completionHandler(nil)
+        
+        self.showAuthorizationPrompt(title: nil, message: nil) { allowed in
+            if allowed {
+                let queue = self.dispatchQueue ?? .main
+                
+                queue.asyncAfter(deadline: .now() + 0.2) {
+                    completionHandler(nil)
+                }
+            }
+            else {
+                completionHandler(ENError(code: .notAuthorized))
+            }
+        }
     }
 }
 
@@ -275,7 +284,7 @@ typealias ENRiskScore = UInt8
 struct ENExposureDetectionSummary {
     let daysSinceLastExposure: Int
     let matchedKeyCount: UInt64
-    let maximumRiskScore: ENRiskScore // TODO: Make use of this.
+    let maximumRiskScore: ENRiskScore
 }
 
 typealias ENExposureDetectionFinishCompletion = ((ENExposureDetectionSummary?, Swift.Error?) -> Void)
@@ -472,7 +481,7 @@ class ENExposureDetectionSession: ENBaseRequest {
                     attenuationValue: 0,
                     date: date,
                     duration: duration,
-                    totalRiskScore: 51,
+                    totalRiskScore: 8,
                     transmissionRiskLevel: .medium
                 )
             }

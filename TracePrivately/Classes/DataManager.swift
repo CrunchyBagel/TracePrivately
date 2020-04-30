@@ -95,9 +95,10 @@ extension DataManager {
                 try context.save()
                 
                 NotificationCenter.default.post(name: DataManager.infectionsUpdatedNotification, object: nil)
+                completion(nil)
             }
             catch {
-                completion(nil)
+                completion(error)
             }
         }
     }
