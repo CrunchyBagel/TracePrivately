@@ -122,9 +122,13 @@ extension ContactTraceManager {
                 return
             }
             
-            // TODO: Delete deleted keys from local database
-            
-            self.saveNewInfectedKeys(keys: response.keys) { numNewKeys, error in
+            self.saveNewInfectedKeys(keys: response.keys, deletedKeys: response.deletedKeys) { keyCount, error in
+                guard let keyCount = keyCount else {
+                    self.isUpdatingExposures = false
+                    completion(error)
+                    return
+                }
+
                 self.saveLastReceivedInfectedKeys(date: response.date)
 
                 guard let session = self.enDetectionSession else {
@@ -132,7 +136,11 @@ extension ContactTraceManager {
                     completion(nil)
                     return
                 }
-
+                
+                if keyCount.deleted > 0 || keyCount.updated > 0 {
+                    // TODO: Rebuild the detection session
+                }
+                
                 self.addAndFinalizeKeys(session: session, keys: response.keys) { error in
                     self.isUpdatingExposures = false
                     completion(error)
@@ -205,15 +213,15 @@ extension ContactTraceManager {
         }
     }
     
-    private func saveNewInfectedKeys(keys: [TPTemporaryExposureKey], completion: @escaping (_ numNewRemoteKeys: Int, Swift.Error?) -> Void) {
+    private func saveNewInfectedKeys(keys: [TPTemporaryExposureKey], deletedKeys: [TPTemporaryExposureKey], completion: @escaping (DataManager.KeyUpdateCount?, Swift.Error?) -> Void) {
         
-        DataManager.shared.saveInfectedKeys(keys: keys) { numNewKeys, error in
+        DataManager.shared.saveInfectedKeys(keys: keys, deletedKeys: deletedKeys) { keyCount, error in
             if let error = error {
-                completion(0, error)
+                completion(nil, error)
                 return
             }
             
-            completion(numNewKeys, nil)
+            completion(keyCount, nil)
         }
     }
     

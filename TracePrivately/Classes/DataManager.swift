@@ -102,18 +102,60 @@ extension DataManager {
         }
     }
 
+    struct KeyUpdateCount {
+        let inserted: Int
+        let updated: Int
+        let deleted: Int
+        
+        static let empty = KeyUpdateCount(inserted: 0, updated: 0, deleted: 0)
+    }
 
-    func saveInfectedKeys(keys: [TPTemporaryExposureKey], completion: @escaping (_ numNewKeys: Int, _ error: Swift.Error?) -> Void) {
+    func saveInfectedKeys(keys: [TPTemporaryExposureKey], deletedKeys: [TPTemporaryExposureKey], completion: @escaping (KeyUpdateCount?, Swift.Error?) -> Void) {
         
         guard keys.count > 0 else {
-            completion(0, nil)
+            completion(.empty, nil)
             return
         }
         
         let context = self.persistentContainer.newBackgroundContext()
         
         context.perform {
+            let request: NSFetchRequest<RemoteInfectedKeyEntity> = RemoteInfectedKeyEntity.fetchRequest()
             
+            let date = Date()
+                
+            var numInserted = 0
+            var numUpdated = 0
+
+            // Remove deleted keys first
+            // TODO: Implement
+            
+            var deleteEntities: [RemoteInfectedKeyEntity] = []
+            
+            for key in deletedKeys {
+                
+                let data = key.keyData
+                
+                request.predicate = NSPredicate(format: "infectedKey = %@ AND rollingStartNumber = %@", data as CVarArg, Int64(key.rollingStartNumber) as NSNumber)
+                
+                let transmissionRiskLevel = Int16(key.transmissionRiskLevel.rawValue)
+                
+                do {
+                    let entities = try context.fetch(request)
+                    deleteEntities.append(contentsOf: entities)
+                }
+                catch {
+                    
+                }
+            }
+            
+            if deleteEntities.count > 0 {
+                print("Deleting entities: \(deleteEntities)")
+                deleteEntities.forEach { context.delete($0) }
+            }
+            
+            let numDeleted = deleteEntities.count
+
             // Check incoming keys against submitted keys to see if the
             // submitted infection has been approved
             
@@ -154,13 +196,6 @@ extension DataManager {
             catch {
                 
             }
-            
-            
-            let request: NSFetchRequest<RemoteInfectedKeyEntity> = RemoteInfectedKeyEntity.fetchRequest()
-            
-            let date = Date()
-                
-            var numNewKeys = 0
 
             for key in keys {
                 
@@ -168,26 +203,36 @@ extension DataManager {
                 
                 request.predicate = NSPredicate(format: "infectedKey = %@ AND rollingStartNumber = %@", data as CVarArg, Int64(key.rollingStartNumber) as NSNumber)
                 
+                let transmissionRiskLevel = Int16(key.transmissionRiskLevel.rawValue)
+                
                 do {
-                    let count = try context.count(for: request)
-                    let alreadyHasKey = count > 0
+                    let entities = try context.fetch(request)
                     
-                    if !alreadyHasKey {
+                    for entity in entities {
+                        if entity.transmissionRiskLevel != transmissionRiskLevel {
+                            entity.transmissionRiskLevel = transmissionRiskLevel
+                            numUpdated += 1
+                        }
+                    }
+                    
+                    if entities.count == 0 {
                         let entity = RemoteInfectedKeyEntity(context: context)
                         entity.dateAdded = date
                         entity.infectedKey = data
                         // Core data doesn't support unsigned ints, so using Int64 instead of UInt32
                         entity.rollingStartNumber = Int64(key.rollingStartNumber)
                         entity.transmissionRiskLevel = Int16(key.transmissionRiskLevel.rawValue)
-                        
-                        numNewKeys += 1
+
+                        numInserted += 1
                     }
                 }
                 catch {
-                    completion(0, error)
+                    completion(nil, error)
                     return
                 }
             }
+            
+            let keyCount = KeyUpdateCount(inserted: numInserted, updated: numUpdated, deleted: numDeleted)
             
             do {
                 if context.hasChanges {
@@ -198,10 +243,10 @@ extension DataManager {
                     NotificationCenter.default.post(name: DataManager.infectionsUpdatedNotification, object: nil)
                 }
                 
-                completion(numNewKeys, nil)
+                completion(keyCount, nil)
             }
             catch {
-                completion(numNewKeys, error)
+                completion(keyCount, error)
             }
         }
     }
