@@ -44,7 +44,7 @@ class ContactTraceManager: NSObject {
     }
     
     private var _isContactTracingEnabled = false
-    @objc dynamic  var isContactTracingEnabled: Bool {
+    @objc dynamic var isContactTracingEnabled: Bool {
         get {
             return queue.sync {
                 return self._isContactTracingEnabled
@@ -58,7 +58,7 @@ class ContactTraceManager: NSObject {
             self.didChangeValue(for: \.isContactTracingEnabled)
         }
     }
-
+    
     private var _isUpdatingExposures = false
     fileprivate var isUpdatingExposures: Bool {
         get {
@@ -72,9 +72,25 @@ class ContactTraceManager: NSObject {
             }
         }
     }
+    
+    private var _isBootStrapping = false
+    private var isBootStrapping: Bool {
+        get {
+            return queue.sync {
+                return self._isBootStrapping
+            }
+        }
+        set {
+            queue.sync {
+                self._isBootStrapping = newValue
+            }
+        }
+    }
 
     private override init() {}
     
+    static let backgroundProcessingInterval: TimeInterval = 3600
+
     func applicationDidFinishLaunching() {
         
         let request = ExposureFetchRequest(includeStatuses: [ .detected ], includeNotificationStatuses: [], sortDirection: .timestampAsc)
@@ -87,10 +103,55 @@ class ContactTraceManager: NSObject {
         
         UNUserNotificationCenter.current().delegate = self
         
-        // Not called here since it's called in applicationDidBecomeActive
-//        self.performBackgroundUpdate { _ in
-//
-//        }
+        // It's not clear how new keys will automatically be submitted, since the documentation indicates auth is required every time you retrieve keys. Maybe need to prompt the user with a notification.
+        
+        let manager = ENManager()
+        self.enManager = manager
+        
+        self.isBootStrapping = true
+        
+        manager.activate { error in
+            
+            guard error == nil else {
+                self.isBootStrapping = false
+                return
+            }
+            
+            if manager.exposureNotificationStatus == .active {
+                self.startTracing { _ in
+                    self.performBackgroundUpdate { _ in
+                        self.scheduleNextBackgroundUpdate()
+                        self.isBootStrapping = false
+                    }
+                }
+            }
+            else {
+                self.performBackgroundUpdate { _ in
+                    self.scheduleNextBackgroundUpdate()
+                    self.isBootStrapping = false
+                }
+            }
+        }
+    }
+    
+    func applicationDidBecomeActive() {
+        guard !self.isBootStrapping else {
+            return
+        }
+        
+        ContactTraceManager.shared.performBackgroundUpdate { _ in
+            self.scheduleNextBackgroundUpdate()
+        }
+    }
+    
+    func scheduleNextBackgroundUpdate() {
+        DispatchQueue.main.sync {
+            guard let delegate = UIApplication.shared.delegate as? AppDelegate else {
+                return
+            }
+            
+            delegate.scheduleNextBackgroundProcess(minimumDate: Date().addingTimeInterval(Self.backgroundProcessingInterval))
+        }
     }
 }
 
@@ -113,6 +174,7 @@ extension ContactTraceManager {
             return
         }
         
+        print("Updating exposures....")
         self.isUpdatingExposures = true
         
         KeyServer.shared.retrieveInfectedKeys(since: self.lastReceivedInfectedKeys) { response, error in
@@ -337,61 +399,42 @@ extension ContactTraceManager {
             return
         }
 
-        self.isUpdatingEnabledState = true
-        
-        self.enManager?.invalidate()
-        
-        let manager = ENManager()
-        
-        switch manager.exposureNotificationStatus {
-        case .active: print("ACTIVE")
-        case .bluetoothOff: print("BLUETOOTH OFF")
-        case .disabled: print("DISABLED")
-        case .restricted: print("RESTRICTED")
-        case .unknown: print("UNKNOWN")
+        guard let manager = self.enManager else {
+            completion(nil)
+            return
         }
         
-        self.enManager = manager
+        // TODO: Handle permissions as necessary
         
-        manager.activate { error in
-
+        self.isUpdatingEnabledState = true
+        
+        manager.setExposureNotificationEnabled(true) { error in
             if let error = error {
                 manager.invalidate()
 
+                print("ERROR: \(error)")
+                
                 self.isUpdatingEnabledState = false
                 self.isContactTracingEnabled = false
                 completion(error)
                 return
             }
 
-            manager.setExposureNotificationEnabled(true) { error in
-                if let error = error {
+            self.startExposureChecking { error in
+                
+                if error != nil {
                     manager.invalidate()
 
-                    print("ERROR: \(error)")
-                    
                     self.isUpdatingEnabledState = false
                     self.isContactTracingEnabled = false
                     completion(error)
                     return
                 }
-
-                self.startExposureChecking { error in
-                    
-                    if error != nil {
-                        manager.invalidate()
-
-                        self.isUpdatingEnabledState = false
-                        self.isContactTracingEnabled = false
-                        completion(error)
-                        return
-                    }
-                    
-                    self.isContactTracingEnabled = true
-                    self.isUpdatingEnabledState = false
-                    
-                    completion(error)
-                }
+                
+                self.isContactTracingEnabled = true
+                self.isUpdatingEnabledState = false
+                
+                completion(error)
             }
         }
     }
@@ -404,11 +447,9 @@ extension ContactTraceManager {
         self.isUpdatingEnabledState = true
         self.stopExposureChecking()
         
-        self.enDetectionSession?.invalidate()
-        self.enDetectionSession = nil
-
-        self.enManager?.invalidate()
-        self.enManager = nil
+        self.enManager?.setExposureNotificationEnabled(false) { _ in
+            
+        }
         
         self.isContactTracingEnabled = false
         self.isUpdatingEnabledState = false
@@ -473,6 +514,7 @@ extension ContactTraceManager {
     }
     
     fileprivate func stopExposureChecking() {
+        self.enDetectionSession?.invalidate()
         self.enDetectionSession = nil
     }
 }

@@ -160,7 +160,7 @@ extension ENTemporaryExposureKey {
 
 typealias ENGetDiagnosisKeysHandler = ([ENTemporaryExposureKey]?, Error?) -> Void
  
-enum ENStatus : Int {
+@objc enum ENStatus : Int {
 
     
     /// Status of Exposure Notification is unknown. This is the status before ENManager has activated successfully.
@@ -190,15 +190,63 @@ enum ENStatus : Int {
 
 class ENManager: ENBaseRequest {
 
-    var exposureNotificationStatus: ENStatus {
-        // TODO: Implement properly
-        return .active
+    @objc dynamic private(set) var exposureNotificationStatus: ENStatus = .unknown
+    
+    @objc dynamic private(set) var exposureNotificationEnabled = false
+    
+    override func activate(queue: DispatchQueue, completionHandler: @escaping (Error?) -> Void) {
+        let queue = self.dispatchQueue ?? .main
+        
+        queue.asyncAfter(deadline: .now() + 0.1) {
+//            self.exposureNotificationStatus = .active
+            completionHandler(nil)
+        }
     }
     
-    func setExposureNotificationEnabled(_ flag: Bool, completion: @escaping ENErrorHandler) {
-        // TODO: Doesn't do anything
+    func setExposureNotificationEnabled(_ flag: Bool, completionHandler: @escaping ENErrorHandler) {
         // TODO: Request permission here
-        completion(nil)
+        
+        if !flag {
+            self.exposureNotificationEnabled = false
+            completionHandler(nil)
+            return
+        }
+
+        switch self.exposureNotificationStatus {
+        case .bluetoothOff:
+            completionHandler(ENError(code: .bluetoothOff))
+            return
+
+        case .restricted:
+            completionHandler(ENError(code: .notAuthorized))
+            return
+
+        case .active:
+            let queue = self.dispatchQueue ?? .main
+            
+            queue.asyncAfter(deadline: .now() + 0.3) {
+                self.exposureNotificationEnabled = flag
+                completionHandler(nil)
+            }
+            
+        case .disabled, .unknown:
+            self.showAuthorizationPrompt(title: nil, message: nil) { allowed in
+                self.exposureNotificationStatus = allowed ? .active : .disabled
+                
+                if allowed {
+                    let queue = self.dispatchQueue ?? .main
+                    
+                    queue.asyncAfter(deadline: .now() + 0.3) {
+                        self.exposureNotificationEnabled = flag
+                        completionHandler(nil)
+                    }
+                }
+                else {
+                    self.exposureNotificationEnabled = false
+                    completionHandler(ENError(code: .notAuthorized))
+                }
+            }
+        }
     }
 
 //    override var permissionDialogMessage: String? {
@@ -484,28 +532,14 @@ class ENAuthorizableBaseRequest: ENBaseRequest, ENAuthorizable {
             DispatchQueue.main.async {
                 let title = self.permissionDialogTitle ?? "Permission"
                 let message = self.permissionDialogMessage ?? "Allow this?"
-                
-                let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                
-                alert.addAction(UIAlertAction(title: "Deny", style: .cancel, handler: { action in
-                    completionHandler(ENError(code: .notAuthorized))
-                    return
-                }))
 
-                alert.addAction(UIAlertAction(title: "Allow", style: .default, handler: { action in
+                self.showAuthorizationPrompt(title: title, message: message) { allowed in
+                    guard allowed else {
+                        completionHandler(ENError(code: .notAuthorized))
+                        return
+                    }
+
                     self.activateWithPermission(queue: queue, completionHandler: completionHandler)
-                }))
-                
-                guard let vc = UIApplication.shared.windows.first?.rootViewController else {
-                    completionHandler(ENError(code: .unknown))
-                    return
-                }
-                
-                if let presented = vc.presentedViewController {
-                    presented.present(alert, animated: true, completion: nil)
-                }
-                else {
-                    vc.present(alert, animated: true, completion: nil)
                 }
             }
         }
@@ -573,6 +607,9 @@ class ENBaseRequest: ENActivatable {
     }
 
     final func activate(_ completionHandler: @escaping (Swift.Error?) -> Void) {
+        
+        print("Activating ENManager ...")
+        
         let queue: DispatchQueue = self.dispatchQueue ?? .main
         
         self.isRunning = true
@@ -603,6 +640,36 @@ class ENBaseRequest: ENActivatable {
         queue.async {
             self.invalidationHandler?()
             self.invalidationHandler = nil
+        }
+    }
+    
+    func showAuthorizationPrompt(title: String?, message: String?, completionHandler: @escaping (Bool) -> Void) {
+        DispatchQueue.main.async {
+            let title = title ?? "Permission"
+            let message = message ?? "Allow this?"
+            
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "Deny", style: .cancel, handler: { action in
+                completionHandler(false)
+                return
+            }))
+
+            alert.addAction(UIAlertAction(title: "Allow", style: .default, handler: { action in
+                completionHandler(true)
+            }))
+            
+            guard let vc = UIApplication.shared.windows.first?.rootViewController else {
+                completionHandler(false)
+                return
+            }
+            
+            if let presented = vc.presentedViewController {
+                presented.present(alert, animated: true, completion: nil)
+            }
+            else {
+                vc.present(alert, animated: true, completion: nil)
+            }
         }
     }
 }
