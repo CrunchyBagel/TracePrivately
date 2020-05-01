@@ -5,10 +5,74 @@
 
 "app.title" = "निजी तौर पर पता लगाएं";
 
+"tracing.title" = "संपर्क पता करे";
+/* parameter is localized disease name */
+"tracing.message" = "अनाम जानकारी का सुरक्षित रूप से आदान-प्रदान करें जब आप अन्य लोगों से मिलते हैं, और अपने आप %@ की जांच करे।";
 "tracing.start.title" = "पता लगाना शुरू करे";
 "tracing.stop.title" = "पता लगाना निरस्त करे";
 
 "disease.covid19.title" = "कोरोना वायरस";
 
+"infection.title" = "
+संक्रमण प्रस्तुत करे";
+
 /* parameter is localized disease name */
-"infection.report.title" = "मुझे कोरोनावाइरस%@ है";
+"infection.report.title" = "मुझे %@ है";
+"infection.report.message" = "यदि आपको %@ होने का पता चला है, तो अपना निदान यहां जमा करें।\n\nआपको पुष्टि के लिए संकेत दिया जाएगा।";
+"infection.report.gathering_data.error" = "आपकी अनाम प्रोफ़ाइल बनाने में असमर्थ है।";
+"infection.report.gathering.empty.title" = "कोई सूचना नहीं है";
+"infection.report.gathering.empty.message" = "आपकी जानकारी ढूँढने में असमर्थ है। शायद आपने अनुरेखण सक्षम नहीं किया है?";
+"infection.report.submit.title" = "निदान प्रस्तुत करे";
+"infection.report.submit.message" = "कृपया पुष्टि करें कि आप प्रस्तुत करना चाहते हैं।\n\nयह उन लोगों को अनुमति देगा जो आपके निकट हैं यह जानने के लिए कि वे उजागर हो सकते हैं।";
+"infection.report.submit.error" = "आपकी जानकारी प्रस्तुत करने में असमर्थ हैं";
+"infection.report.submitting.title" = "एक क्षण…";
+"infection.report.submitting.message" = "अपनी अनाम जानकारी प्रस्तुत कर रहे है।";
+/* parameter is localized disease name */
+"infection.infected.title" = "आपको %@ हैं";
+"infection.pending.title" = "पुष्टीकरण बाक़ी हैं";
+
+/* parameter is localized disease name */
+"exposure.none.banner.title" = "कोई अनावृत्त नहीं मिला हैं";
+/* parameter is localized disease name */
+"exposure.none.message" = "%@ संक्रमण के साथ कोई संपर्क नहीं पाया गया हैं!\n\nसुरक्षित रहें और अपने हाथ धोते रहे।";
+/* parameter %@ may be included, which is localized disease name */
+"exposure.exposed.banner.title" = "आप उजागर हो गए है";
+"exposure.exposed.title" = "निवेश जोखिम";
+"exposure.exposed.details.title" = "खुलासा";
+/* parameter is localized disease name */
+"exposure.exposed.message" = "हमें विश्वास है कि आप %@ के संपर्क में आ गए होंगे|";
+/* parameter is a localized duration */
+"exposure.times.duration" = "अवधि: %@ हैं";
+
+"exposure.next_steps.title" = "अगला कदम";
+"exposure.next_steps.message" = "अपने अधिकारियों द्वारा उल्लिखित चरणों का पालन करें।";
+
+"unknown" = "अनजान";
+"submit" = "प्रस्तुत";
+"error" = "त्रुटि";
+
+"ok" = "ठीक";
+"cancel" = "रद्द करना";
+
+"keyserver.error.no_response_data" = "प्रतिक्रिया विवरण प्राप्त नहीं हुआ है";
+"keyserver.error.response_decoding_error" = "त्रुटि विसंकेतन प्रतिक्रिया";
+"keyserver.error.key_data_missing" = "ख़ास विवरण लापता है";
+"keyserver.error.date_missing" = "दिनांक अनुपस्थित";
+"keyserver.error.not_ok" = "ठीक स्थिति प्राप्त नहीं हुई है";
+"keyserver.error.invalid_config" = "अमान्य KeyServer config";
+
+/* parameter is localized disease name */
+"notification.exposure_detected.title" = "चेतावनी:%@ अनावरण का पता लगाया गया है";
+/* 1st parameter is formatted localized time, 2nd parameter is formatted localized duration */
+"notification.exposure_detected.single.body" = "आपको संभावित रूप से उजागर किया गया था: %1$@ %2$@ के लिए";
+"notification.exposure_detected.multiple.body" = "हमने पाया है कि आप कई बार उजागर हो सकते हैं";
+
+"privacy.title" = "गोपनीयता की जानकारी हैं";
+
+"settings.title" = "समायोजन";
+
+"reset_keys.title" = "अनुरेखण कुंजी पुन: नियोजन करे";
+"reset_keys.message" = "ऐसा करने से आप पहले होने वाले खुलासा का पता लगाने से बच जाएंगे।";
+"reset_keys.button.title" = "पुन: नियोजन";
+
+

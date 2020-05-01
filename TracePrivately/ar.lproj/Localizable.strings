@@ -1,0 +1,33 @@
+/* 
+  Localizable.strings
+  TracePrivately
+*/
+
+"app.title" = "التتبع بسريه";
+
+"tracing.start.title" = "بدء التتبع";
+"tracing.stop.title" = "ايقاف التتبع";
+
+"disease.covid19.title" = "كوفيد-١٩";
+
+"infection.title" = "الابلاغ عن عدوى";
+
+/* parameter is localized disease name */
+"infection.report.title" = "لدي %@";
+"infection.report.gathering.empty.title" = "لا يوجد معلومات";
+"infection.report.submitting.title" = "لحظة واحدة ...";
+/* parameter is localized disease name */
+"infection.infected.title" = "لديك %@";
+"infection.pending.title" = "في انتظار التأكيد";
+
+"exposure.exposed.title" = "التعرضات";
+"exposure.exposed.details.title" = "التعرض";
+"exposure.next_steps.title" = "الخطوات التالية";
+"unknown" = "غير معروف";
+"error" = "خطأ";
+
+"ok" = "نعم";
+"cancel" = "إلغاء";
+
+"settings.title" = "الإعدادات";
+

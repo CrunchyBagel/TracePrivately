@@ -1,0 +1,77 @@
+/* 
+  Localizable.strings
+  TracePrivately
+*/
+
+"app.title" = "Seguimiento privado";
+
+"tracing.title" = "Seguimiento de contactos";
+/* parameter is localized disease name */
+"tracing.message" = "Intercambia información anónima de forma segura cuando te encuentres con otras personas y verifica automáticamente la exposición a %@.";
+"tracing.start.title" = "Iniciar seguimiento";
+"tracing.stop.title" = "Detener seguimiento";
+
+"disease.covid19.title" = "COVID-19";
+
+"infection.title" = "Enviar infección";
+
+/* parameter is localized disease name */
+"infection.report.title" = "Tengo %@";
+"infection.report.message" = "Si te han diagnosticado %@, envía tu diagnóstico aquí.\n\nSe te pedirá confirmación.";
+"infection.report.gathering_data.error" = "No se puede crear tu perfil anónimo.";
+"infection.report.gathering.empty.title" = "Sin información";
+"infection.report.gathering.empty.message" = "No se puede encontrar tu información de seguimiento.  ¿Quizás no lo has habilitado?";
+"infection.report.submit.title" = "Enviar diagnóstico";
+"infection.report.submit.message" = "Por favor confirma que desea enviar.\n\nEsto permitirá que las personas que hayan estado cerca de ti sepan que pueden haber estado expuestas.\n";
+"infection.report.submit.error" = "No se puede enviar tu información.";
+"infection.report.submitting.title" = "Un momento…";
+"infection.report.submitting.message" = "Enviando tu información anónima";
+/* parameter is localized disease name */
+"infection.infected.title" = "Tienes %@";
+"infection.pending.title" = "Pendiente de confirmación";
+
+/* parameter is localized disease name */
+"exposure.none.banner.title" = "No se detectó exposición";
+/* parameter is localized disease name */
+"exposure.none.message" = "¡Ningún contacto detectado con una infección de %@!\n\nManténgase seguro y lávese las manos.";
+/* parameter %@ may be included, which is localized disease name */
+"exposure.exposed.banner.title" = "Es posible que hayas estado expuesto";
+"exposure.exposed.title" = "Nivel de exposición";
+"exposure.exposed.details.title" = "Exposición";
+/* parameter is localized disease name */
+"exposure.exposed.message" = "Creemos que puedes haber entrado en contacto con %@.";
+/* parameter is a localized duration */
+"exposure.times.duration" = "Duración: %@";
+
+"exposure.next_steps.title" = "Próximos pasos";
+"exposure.next_steps.message" = "Siga las indicaciones de las autoridades";
+
+"unknown" = "Desconocido";
+"submit" = "Enviar";
+"error" = "Error";
+
+"ok" = "OK";
+"cancel" = "Cancelar";
+
+"keyserver.error.no_response_data" = "Datos de respuesta no recibidos";
+"keyserver.error.response_decoding_error" = "Error al decodificar la respuesta";
+"keyserver.error.key_data_missing" = "Faltan datos clave";
+"keyserver.error.date_missing" = "Falta fecha";
+"keyserver.error.not_ok" = "Estado de OK no recibido";
+"keyserver.error.invalid_config" = "Configuración inválida de servidor de claves";
+
+/* parameter is localized disease name */
+"notification.exposure_detected.title" = "Alerta: %@ Exposición detectada";
+/* 1st parameter is formatted localized time, 2nd parameter is formatted localized duration */
+"notification.exposure_detected.single.body" = "Estuviste potencialmente expuesto: %1$@ por %2$@";
+"notification.exposure_detected.multiple.body" = "Hemos detectado que puedes haber estado expuesto varias veces.";
+
+"privacy.title" = "Información de privacidad";
+
+"settings.title" = "Configuración";
+
+"reset_keys.title" = "Resetear claves de seguimiento";
+"reset_keys.message" = "Hacerlo evitará que detectes exposiciones que ocurrieron antes.";
+"reset_keys.button.title" = "Resetear";
+
+

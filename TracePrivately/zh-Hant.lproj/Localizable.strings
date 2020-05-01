@@ -1,0 +1,77 @@
+/* 
+  Localizable.strings
+  TracePrivately
+*/
+
+"app.title" = "隱秘追蹤";
+
+"tracing.title" = "接觸追蹤";
+/* parameter is localized disease name */
+"tracing.message" = "當你遇到其他人，安全地交換匿名訊息並且自動檢查是否接觸%@";
+"tracing.start.title" = "開始追蹤";
+"tracing.stop.title" = "停止追蹤";
+
+"disease.covid19.title" = "2019新冠狀病毒";
+
+"infection.title" = "提交感染";
+
+/* parameter is localized disease name */
+"infection.report.title" = "我確診 %@";
+"infection.report.message" = "如果你被確診有%@，請在這裡提交你的診斷證明。\n你將會被提示確認要求。";
+"infection.report.gathering_data.error" = "無法創建你的匿名案例。";
+"infection.report.gathering.empty.title" = "無訊息";
+"infection.report.gathering.empty.message" = "無法查到你的追蹤訊息。也許你尚未開啟追蹤?";
+"infection.report.submit.title" = "提交診斷證明";
+"infection.report.submit.message" = "請確認你想提交。\n這將允許曾經在你附近的人知道他們可能接觸過你。";
+"infection.report.submit.error" = "無法提交你的訊息。";
+"infection.report.submitting.title" = "請稍候...";
+"infection.report.submitting.message" = "正在提交你的匿名訊息。";
+/* parameter is localized disease name */
+"infection.infected.title" = "你確診 %@";
+"infection.pending.title" = "等候確認";
+
+/* parameter is localized disease name */
+"exposure.none.banner.title" = "沒發現接觸史";
+/* parameter is localized disease name */
+"exposure.none.message" = "沒有發現任何感染%@接觸者!\n保持安全距離並勤洗手。";
+/* parameter %@ may be included, which is localized disease name */
+"exposure.exposed.banner.title" = "你也許已經接觸感染者";
+"exposure.exposed.title" = "接觸";
+"exposure.exposed.details.title" = "接觸";
+/* parameter is localized disease name */
+"exposure.exposed.message" = "我們相信你可能已經接觸%@。";
+/* parameter is a localized duration */
+"exposure.times.duration" = "期間:%@";
+
+"exposure.next_steps.title" = "下一步";
+"exposure.next_steps.message" = "請遵循政府給你的指示。";
+
+"unknown" = "未知";
+"submit" = "提交";
+"error" = "錯誤";
+
+"ok" = "好";
+"cancel" = "取消";
+
+"keyserver.error.no_response_data" = "沒收到回應資料";
+"keyserver.error.response_decoding_error" = "解析回應訊息錯誤";
+"keyserver.error.key_data_missing" = "關鍵資料遺失";
+"keyserver.error.date_missing" = "日期遺失";
+"keyserver.error.not_ok" = "未收到確定狀態";
+"keyserver.error.invalid_config" = "密鑰伺服器設定錯誤";
+
+/* parameter is localized disease name */
+"notification.exposure_detected.title" = "警告: %@已偵測接觸";
+/* 1st parameter is formatted localized time, 2nd parameter is formatted localized duration */
+"notification.exposure_detected.single.body" = "你可能在%1$@接觸過%2$@";
+"notification.exposure_detected.multiple.body" = "我們已經檢測到你有可能多次接觸過";
+
+"privacy.title" = "隱私政策";
+
+"settings.title" = "設定";
+
+"reset_keys.title" = "重置追蹤密鑰";
+"reset_keys.message" = "在這之前這樣做可以防止你接觸曝光";
+"reset_keys.button.title" = "重置";
+
+

@@ -28,6 +28,7 @@ class DataManager {
         if let description = container.persistentStoreDescriptions.first {
             description.shouldMigrateStoreAutomatically = true
             description.shouldInferMappingModelAutomatically = true
+            description.setOption(FileProtectionType.complete as NSObject, forKey: NSPersistentStoreFileProtectionKey)
             
             if #available(iOS 11.0, *) {
                 description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
@@ -80,19 +81,105 @@ class DataManager {
 }
 
 extension DataManager {
-    // TODO: Need to automatically purge old keys
+    func clearRemoteKeyAndLocalExposuresCache(completion: @escaping (Swift.Error?) -> Void) {
+        let context = self.persistentContainer.newBackgroundContext()
+        
+        context.perform {
+            do {
+                let fetchRequests: [NSFetchRequest<NSFetchRequestResult>] = [
+                    RemoteInfectedKeyEntity.fetchRequest(),
+                    ExposureContactInfoEntity.fetchRequest()
+                ]
+                
+                for fetchRequest in fetchRequests {
+                    let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+                    try context.execute(deleteRequest)
+                }
+                
+                try context.save()
+                completion(nil)
+            }
+            catch {
+                completion(error)
+            }
+        }
+    }
+}
 
-    func saveInfectedKeys(keys: [ENTemporaryExposureKey], completion: @escaping (_ numNewKeys: Int, _ error: Swift.Error?) -> Void) {
+extension DataManager {
+    func deleteLocalInfections(completion: @escaping (Swift.Error?) -> Void) {
+        
+        let context = self.persistentContainer.newBackgroundContext()
+        
+        context.perform {
+            do {
+                let fetchRequest: NSFetchRequest<NSFetchRequestResult> = LocalInfectionEntity.fetchRequest()
+                
+                let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+                try context.execute(deleteRequest)
+                
+                try context.save()
+                
+                NotificationCenter.default.post(name: DataManager.infectionsUpdatedNotification, object: nil)
+                completion(nil)
+            }
+            catch {
+                completion(error)
+            }
+        }
+    }
+
+    struct KeyUpdateCount {
+        let inserted: Int
+        let updated: Int
+        let deleted: Int
+        
+        static let empty = KeyUpdateCount(inserted: 0, updated: 0, deleted: 0)
+    }
+
+    func saveInfectedKeys(keys: [TPTemporaryExposureKey], deletedKeys: [TPTemporaryExposureKey], completion: @escaping (KeyUpdateCount?, Swift.Error?) -> Void) {
         
         guard keys.count > 0 else {
-            completion(0, nil)
+            completion(.empty, nil)
             return
         }
         
         let context = self.persistentContainer.newBackgroundContext()
         
         context.perform {
+            let request: NSFetchRequest<RemoteInfectedKeyEntity> = RemoteInfectedKeyEntity.fetchRequest()
             
+            let date = Date()
+                
+            var numInserted = 0
+            var numUpdated = 0
+
+            // Remove deleted keys first
+            
+            var deleteEntities: [RemoteInfectedKeyEntity] = []
+            
+            for key in deletedKeys {
+                
+                let data = key.keyData
+                
+                request.predicate = NSPredicate(format: "infectedKey = %@ AND rollingStartNumber = %@", data as CVarArg, Int64(key.rollingStartNumber) as NSNumber)
+                
+                do {
+                    let entities = try context.fetch(request)
+                    deleteEntities.append(contentsOf: entities)
+                }
+                catch {
+                    
+                }
+            }
+            
+            if deleteEntities.count > 0 {
+                print("Deleting entities: \(deleteEntities)")
+                deleteEntities.forEach { context.delete($0) }
+            }
+            
+            let numDeleted = deleteEntities.count
+
             // Check incoming keys against submitted keys to see if the
             // submitted infection has been approved
             
@@ -104,18 +191,18 @@ extension DataManager {
                 
                 let entities = try context.fetch(fetchRequest)
                 
-                let keyData: Set<Data> = Set(keys.map { $0.keyData })
+                let keyData: Set<Data> = Set(keys.map { $0.comparisonData })
                 
                 var approvedEntities: [LocalInfectionEntity] = []
                 
                 for entity in entities {
-                    guard let keySet = entity.infectedKey else {
+                    guard let keysSet = entity.infectedKey else {
                         continue
                     }
                     
-                    let keyEntities = keySet.compactMap { $0 as? LocalInfectionKeyEntity }
+                    let keyEntities = keysSet.compactMap { $0 as? LocalInfectionKeyEntity }
                     
-                    let localData: Set<Data> = Set(keyEntities.compactMap { $0.infectedKey })
+                    let localData: Set<Data> = Set(keyEntities.compactMap { $0.temporaryExposureKey?.comparisonData })
                     
                     if keyData.intersection(localData).count > 0 {
                         approvedEntities.append(entity)
@@ -133,37 +220,43 @@ extension DataManager {
             catch {
                 
             }
-            
-            
-            let request: NSFetchRequest<RemoteInfectedKeyEntity> = RemoteInfectedKeyEntity.fetchRequest()
-            
-            let date = Date()
-                
-            var numNewKeys = 0
 
             for key in keys {
                 
                 let data = key.keyData
                 
-                request.predicate = NSPredicate(format: "infectedKey = %@", data as CVarArg)
+                request.predicate = NSPredicate(format: "infectedKey = %@ AND rollingStartNumber = %@", data as CVarArg, Int64(key.rollingStartNumber) as NSNumber)
+                
+                let transmissionRiskLevel = Int16(key.transmissionRiskLevel.rawValue)
                 
                 do {
-                    let count = try context.count(for: request)
-                    let alreadyHasKey = count > 0
+                    let entities = try context.fetch(request)
                     
-                    if !alreadyHasKey {
+                    for entity in entities {
+                        if entity.transmissionRiskLevel != transmissionRiskLevel {
+                            entity.transmissionRiskLevel = transmissionRiskLevel
+                            numUpdated += 1
+                        }
+                    }
+                    
+                    if entities.count == 0 {
                         let entity = RemoteInfectedKeyEntity(context: context)
                         entity.dateAdded = date
                         entity.infectedKey = data
-                        
-                        numNewKeys += 1
+                        // Core data doesn't support unsigned ints, so using Int64 instead of UInt32
+                        entity.rollingStartNumber = Int64(key.rollingStartNumber)
+                        entity.transmissionRiskLevel = Int16(key.transmissionRiskLevel.rawValue)
+
+                        numInserted += 1
                     }
                 }
                 catch {
-                    completion(0, error)
+                    completion(nil, error)
                     return
                 }
             }
+            
+            let keyCount = KeyUpdateCount(inserted: numInserted, updated: numUpdated, deleted: numDeleted)
             
             do {
                 if context.hasChanges {
@@ -174,15 +267,15 @@ extension DataManager {
                     NotificationCenter.default.post(name: DataManager.infectionsUpdatedNotification, object: nil)
                 }
                 
-                completion(numNewKeys, nil)
+                completion(keyCount, nil)
             }
             catch {
-                completion(numNewKeys, error)
+                completion(keyCount, error)
             }
         }
     }
     
-    func allInfectedKeys(completion: @escaping ([ENTemporaryExposureKey]?, Swift.Error?) -> Void) {
+    func allInfectedKeys(completion: @escaping ([TPTemporaryExposureKey]?, Swift.Error?) -> Void) {
         let context = self.persistentContainer.newBackgroundContext()
         
         context.perform {
@@ -191,14 +284,100 @@ extension DataManager {
             do {
                 let entities = try context.fetch(request)
                 
-                // TODO: Handle rolling start number
-                let keys: [ENTemporaryExposureKey] = entities.compactMap { $0.infectedKey }.map { ENTemporaryExposureKey(keyData: $0, rollingStartNumber: 0) }
+                let keys: [TPTemporaryExposureKey] = entities.compactMap { $0.temporaryExposureKey }
                 completion(keys, nil)
             }
             catch {
                 completion(nil, error)
             }
         }
+    }
+}
+
+// This is used to has keys that need to be updated local. Could probably be improved.
+extension TPTemporaryExposureKey {
+    var comparisonData: Data {
+        let rollingData = withUnsafeBytes(of: rollingStartNumber) { Data($0) }
+        return self.keyData + rollingData
+    }
+}
+
+extension RemoteInfectedKeyEntity {
+    var temporaryExposureKey: TPTemporaryExposureKey? {
+        guard let keyData = self.infectedKey else {
+            return nil
+        }
+        
+        let riskLevel: TPRiskLevel? = TPRiskLevel(rawValue: UInt8(self.transmissionRiskLevel))
+
+        return .init(
+            keyData: keyData,
+            rollingStartNumber: TPIntervalNumber(self.rollingStartNumber),
+            transmissionRiskLevel: riskLevel ?? .invalid
+        )
+    }
+}
+
+extension LocalInfectionKeyEntity {
+    var temporaryExposureKey: TPTemporaryExposureKey? {
+        guard let keyData = self.infectedKey else {
+            return nil
+        }
+        
+        let riskLevel: TPRiskLevel? = TPRiskLevel(rawValue: UInt8(self.transmissionRiskLevel))
+        
+        return .init(
+            keyData: keyData,
+            rollingStartNumber: TPIntervalNumber(self.rollingStartNumber),
+            transmissionRiskLevel: riskLevel ?? .invalid
+        )
+    }
+}
+
+extension DataManager {
+    func submitReport(formData: InfectedKeysFormData, keys: [TPTemporaryExposureKey], completion: @escaping (Bool, Swift.Error?) -> Void) {
+        let context = self.persistentContainer.newBackgroundContext()
+        
+        context.perform {
+            // Putting this as pending effectively saves a draft in case something goes wrong in submission
+            
+            let entity = LocalInfectionEntity(context: context)
+            entity.dateAdded = Date()
+            entity.status = DataManager.InfectionStatus.pendingSubmission.rawValue
+            
+            try? context.save()
+        
+            NotificationCenter.default.post(name: DataManager.infectionsUpdatedNotification, object: nil)
+
+            KeyServer.shared.submitInfectedKeys(formData: formData, keys: keys, previousSubmissionId: nil) { success, submissionId, error in
+                
+                context.perform {
+                    if success {
+                        // XXX: Check against the local database to see if it should be submittedApproved or submittedUnapproved.
+                        entity.status = DataManager.InfectionStatus.submittedUnapproved.rawValue
+                        entity.remoteIdentifier = submissionId
+                        
+                        for key in keys {
+                            let keyEntity = LocalInfectionKeyEntity(context: context)
+                            keyEntity.infectedKey = key.keyData
+                            keyEntity.rollingStartNumber = Int64(key.rollingStartNumber)
+                            keyEntity.transmissionRiskLevel = Int16(key.transmissionRiskLevel.rawValue)
+                            keyEntity.infection = entity
+                        }
+
+                        try? context.save()
+                        
+                        NotificationCenter.default.post(name: DataManager.infectionsUpdatedNotification, object: nil)
+                        
+                        completion(true, nil)
+                    }
+                    else {
+                        completion(false, error)
+                    }
+                }
+            }
+        }
+
     }
 }
 
@@ -224,14 +403,14 @@ extension DataManager {
         case sent = "S"
     }
     
-    func saveExposures(contacts: [ENExposureInfo], completion: @escaping (Error?) -> Void) {
+    func saveExposures(exposures: [TPExposureInfo], completion: @escaping (Error?) -> Void) {
         
         let context = self.persistentContainer.newBackgroundContext()
         
         context.perform {
             
             var delete: [ExposureContactInfoEntity] = []
-            var insert: [ENExposureInfo] = []
+            var insert: [TPExposureInfo] = []
 
             do {
                 let request = ExposureFetchRequest(includeStatuses: [], includeNotificationStatuses: [], sortDirection: nil)
@@ -240,8 +419,8 @@ extension DataManager {
                 for entity in existingEntities {
                     var found = false
                     
-                    for contact in contacts {
-                        if entity.matches(contact: contact) {
+                    for exposure in exposures {
+                        if entity.matches(exposure: exposure) {
                             found = true
                             break
                         }
@@ -257,11 +436,11 @@ extension DataManager {
                     }
                 }
                 
-                for contact in contacts {
+                for exposure in exposures {
                     var found = false
                     
                     for entity in existingEntities {
-                        if entity.matches(contact: contact) {
+                        if entity.matches(exposure: exposure) {
                             found = true
                             break
                         }
@@ -271,8 +450,8 @@ extension DataManager {
                         // Already have this contact
                     }
                     else {
-                        print("New exposure detected: \(contact)")
-                        insert.append(contact)
+                        print("New exposure detected: \(exposure)")
+                        insert.append(exposure)
                     }
                 }
                 
@@ -286,6 +465,8 @@ extension DataManager {
                     entity.timestamp = contact.date
                     entity.duration = contact.duration
                     entity.attenuationValue = Int16(contact.attenuationValue)
+                    entity.totalRiskScore = Int16(contact.totalRiskScore)
+                    entity.transmissionRiskLevel = Int16(contact.transmissionRiskLevel.rawValue)
                     
                     entity.status = ExposureStatus.detected.rawValue
                     entity.localNotificationStatus = ExposureLocalNotificationStatus.notSent.rawValue
@@ -363,24 +544,44 @@ extension DataManager {
 }
 
 extension ExposureContactInfoEntity {
-    var contactInfo: ENExposureInfo? {
+    var contactInfo: TPExposureInfo? {
         guard let timestamp = self.timestamp else {
             return nil
         }
         
-        return ENExposureInfo(attenuationValue: UInt8(self.attenuationValue), date: timestamp, duration: self.duration)
+        let transmissionRiskLevel: TPRiskLevel? = TPRiskLevel(rawValue: UInt8(self.transmissionRiskLevel))
+        
+        return .init(
+            attenuationValue: UInt8(self.attenuationValue),
+            date: timestamp,
+            duration: self.duration,
+            totalRiskScore: TPRiskScore(self.totalRiskScore),
+            transmissionRiskLevel: transmissionRiskLevel ?? .invalid
+        )
     }
     
-    func matches(contact: ENExposureInfo) -> Bool {
-        if contact.attenuationValue != UInt8(self.attenuationValue) {
+    func matches(exposure b: TPExposureInfo) -> Bool {
+        guard let a = self.contactInfo else {
             return false
         }
         
-        if contact.duration != self.duration {
+        if a.attenuationValue != b.attenuationValue {
             return false
         }
         
-        if contact.date != self.timestamp {
+        if a.duration != b.duration  {
+            return false
+        }
+
+        if a.date != b.date {
+            return false
+        }
+
+        if a.transmissionRiskLevel != b.transmissionRiskLevel {
+            return false
+        }
+
+        if a.totalRiskScore != b.totalRiskScore {
             return false
         }
         

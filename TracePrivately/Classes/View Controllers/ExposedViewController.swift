@@ -6,6 +6,8 @@
 import UIKit
 import CoreData
 
+// TODO: Make use of the totalRiskScore and transmissionRiskLevel
+
 class ExposedViewController: UICollectionViewController {
 
     struct Segue {
@@ -19,7 +21,7 @@ class ExposedViewController: UICollectionViewController {
     }
 
     enum CellType {
-        case contact(ENExposureInfo)
+        case contact(TPExposureInfo)
         case intro(String)
         case nextSteps
     }
@@ -70,7 +72,7 @@ class ExposedViewController: UICollectionViewController {
             entities = []
         }
         
-        let contacts: [ENExposureInfo] = entities.compactMap { $0.contactInfo }
+        let contacts: [TPExposureInfo] = entities.compactMap { $0.contactInfo }
 
         if contacts.count == 0 {
             let title = String(format: NSLocalizedString("exposure.none.message", comment: ""), Disease.current.localizedTitle)
@@ -152,11 +154,14 @@ extension ExposedViewController {
                     cell.durationLabel?.text = nil
                 }
                 
-                if contact.duration < 600 {
-                    cell.setBackgroundColor(color: .systemOrange)
-                }
-                else {
+                // TODO: The docs are a bit weird here. It indicates the total should be 1 - 8, but also says the value could 0..100 and it also says could be less than 0
+                switch contact.simplifiedRisk {
+                case .high:
                     cell.setBackgroundColor(color: .systemRed)
+                case .medium:
+                    cell.setBackgroundColor(color: .systemOrange)
+                case .low:
+                    cell.setBackgroundColor(color: .systemPurple)
                 }
                 
                 cell.accessoryImageView.image = ActionButton.Accessory.disclosure.image
@@ -249,11 +254,11 @@ extension ExposedViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 20
+        return 10
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 20
+        return 10
     }
 }
 

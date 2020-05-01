@@ -47,6 +47,9 @@ paths:
                     description: A newly-generated token
                     schema:
                         type: object
+                        required:
+                            - status
+                            - token
                         properties:
                             status:
                                 type: string
@@ -56,6 +59,28 @@ paths:
                                 type: string
                                 example: "SOME_TOKEN_DATA"
                                 description: This can be in whatever format is necessary for your system
+                            expires_at:
+                                type: string
+                                format: date-time
+                                description: |
+                                    This indicates when the token will definitely no longer work, meaning the client
+                                    can simply request a new one without needing determine it's invalidated. Server
+                                    can choose expiry time, and it can expire the token prematurely if necessary. If expired
+                                    prematurely, client will receive a 401 and request a new token.
+                400:
+                    description: Invalid request data
+                    schema:
+                        type: object
+                        required:
+                            - status
+                        properties:
+                            status:
+                                type: string
+                                example: "ERROR"
+                                description: ERROR
+                            message:
+                                type: string
+                                description: Human-readable string of the error that occurred
                 401:
                     description: Unable to authorize user.
             
@@ -69,6 +94,7 @@ paths:
                 -  BearerAuth: []
             produces:
                 - "application/json"
+                - "application/x-msgpack"
             parameters:
                 - name: since
                   description: |
@@ -84,6 +110,10 @@ paths:
                     description: A list of infected keys since the specified date.
                     schema:
                         type: object
+                        required:
+                            - status
+                            - date
+                            - keys
                         properties:
                             status:
                                 type: string
@@ -96,18 +126,57 @@ paths:
                             keys:
                                 type: array
                                 items:
-                                    type: string
-                                    example: "Base 64 Encoded String"
-                                    description: Base 64 encoded binary data representing a single key
+                                    type: object
+                                    required:
+                                    - d
+                                    - r
+                                    description: Contains information about a single key
+                                    properties:
+                                        d:
+                                            type: string
+                                            example: "Base 64 Encoded String"
+                                            description: Base 64 encoded binary data representing a single key
+                                        r:
+                                            type: integer
+                                            example: 1234
+                                            description: The rolling start number for the key.
+                                        l:
+                                            type: integer
+                                            description: Represents the calculated risk level from 1-100
                             deleted_keys:
-                                type: array
                                 description: |
                                     A list of keys that have subsequently been marked as not infected. Client should remove them from their cache.
                                     These keys should also honor the "since" parameter and return deleted keys based on when their status was changed to deleted.
+                                type: array
                                 items:
-                                    type: string
-                                    example: "Base 64 Encoded String"
-                                    description: Base 64 encoded binary data representing a single key
+                                    type: object
+                                    required:
+                                    - d
+                                    - r
+                                    description: Contains information about a single key
+                                    properties:
+                                        d:
+                                            type: string
+                                            example: "Base 64 Encoded String"
+                                            description: Base 64 encoded binary data representing a single key
+                                        r:
+                                            type: integer
+                                            example: 1234
+                                            description: The rolling start number for the key.
+                400:
+                    description: Invalid request data
+                    schema:
+                        type: object
+                        required:
+                            - status
+                        properties:
+                            status:
+                                type: string
+                                example: "ERROR"
+                                description: ERROR
+                            message:
+                                type: string
+                                description: Human-readable string of the error that occurred
                 401:
                     description: Unable to authorize user. Need to request a token before calling this endpoint again.
 
@@ -135,9 +204,40 @@ paths:
                               description: List of infected keys
                               minimum: 1
                               items:
-                                  type: string
-                                  example: "Base 64 Encoded String"
-                                  description: Base 64 encoded binary data representing a single key
+                                  type: object
+                                  required:
+                                    - d
+                                    - r
+                                  description: Contains information about a single key
+                                  properties:
+                                      d:
+                                        type: string
+                                        example: "Base 64 Encoded String"
+                                        description: Base 64 encoded binary data representing a single key
+                                      r:
+                                        type: integer
+                                        example: 1234
+                                        description: The rolling start number for the key.
+                                      l:
+                                        type: integer
+                                        description: Represents the calculated risk level from 1-100
+                          form:
+                              type: array
+                              description: Additional form data gathered from user. Each item
+                              items:
+                                  type: object
+                                  description: A single form element
+                                  properties:
+                                      name:
+                                          type: string
+                                          description: The name of the form element
+                                      type:
+                                          type: string
+                                          description: The type of content
+                                          example: image/png
+                                      str:
+                                          type: string
+                                          description: The element data in string format
                           identifier:
                               type: string
                               description: An optional unique identifier from a previous submission so newly-submitted keys can be appended to an existing submission.
@@ -146,6 +246,8 @@ paths:
                     description: A list of infected keys since the specified date.
                     schema:
                         type: object
+                        required:
+                            - status
                         properties:
                             status:
                                 type: string
@@ -155,6 +257,19 @@ paths:
                                 type: string
                                 example: "SOME_UNIQUE_IDENTIFIER"
                                 description: An identifier specific to this report, so the client can append new keys to the newly-created submission.
-
+                400:
+                    description: Invalid request data
+                    schema:
+                        type: object
+                        required:
+                            - status
+                        properties:
+                            status:
+                                type: string
+                                example: "ERROR"
+                                description: ERROR
+                            message:
+                                type: string
+                                description: Human-readable string of the error that occurred
                 401:
                     description: Unable to authorize user. Need to request a token before calling this endpoint again.

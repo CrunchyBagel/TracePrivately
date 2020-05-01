@@ -1,10 +1,21 @@
 <?php
-$path = realpath(dirname(__FILE__) . '/../data/trace.sqlite');
-$db = new SQLite3($path, SQLITE3_OPEN_READWRITE);
+require_once('../vendor/autoload.php');
+require_once('shared.php');
 
-// TODO: Validate bearer token and throw 401 if not valid
-// TODO: Implement proper error responses
+if (!isValidBearer($db)) {
+    sendJsonErrorResponse(401, 'Invalid bearer token');
+    exit;
+}
 
+$useBinary = false;
+
+if (array_key_exists('HTTP_ACCEPT', $_SERVER)) {
+    $accept = $_SERVER['HTTP_ACCEPT'];
+    $useBinary = strpos($accept, 'msgpack') !== false;
+}
+
+// https://github.com/rybakit/msgpack.php
+use MessagePack\Packer;
 
 $minTime = time() - (86400 * 14);
 $time = $minTime;
@@ -19,7 +30,7 @@ if (array_key_exists('since', $_GET)) {
     }
 }
 
-$stmt = $db->prepare('SELECT infected_key FROM infected_keys WHERE status = :s AND status_updated >= :t');
+$stmt = $db->prepare('SELECT infected_key, rolling_start_number, risk_level FROM infected_keys WHERE status = :s AND status_updated >= :t');
 $stmt->bindValue(':t', $time, SQLITE3_INTEGER);
 $stmt->bindValue(':s', 'A', SQLITE3_TEXT);
 
@@ -27,8 +38,26 @@ $result = $stmt->execute();
 
 $keys = array();
 
-while (($row = $result->fetchArray(SQLITE3_NUM))) {
-    $keys[] = $row[0];
+$packer = new Packer();
+
+
+if ($useBinary) {
+    while (($row = $result->fetchArray(SQLITE3_NUM))) {
+        $keys[] = array(
+            'd' => base64_decode($row[0]),
+	    'r' => (int) $row[1],
+	    'l' => (int) $row[2]
+        );
+    }
+}
+else {
+    while (($row = $result->fetchArray(SQLITE3_NUM))) {
+        $keys[] = array(
+	    'd' => $row[0],
+	    'r' => (int) $row[1],
+	    'l' => (int) $row[2]
+        );
+    }
 }
 
 $date = new DateTime();
@@ -40,9 +69,15 @@ $json = array(
     'deleted_keys' => array()
 );
 
-//$data = json_encode($json, JSON_PRETTY_PRINT);
-$data = json_encode($json);
+if ($useBinary) {
+    $packed = $packer->pack($json);
 
-header('Content-type: application/json; charset=utf-8');
-echo $data;
+    header('Content-type: application/x-msgpack');
+    header(sprintf('Content-length: %d', strlen($packed)));
+
+    echo $packed;
+}
+else {
+    sendJsonResponse(200, $json);
+}
 

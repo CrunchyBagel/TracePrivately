@@ -6,8 +6,6 @@
 import UIKit
 import Intents
 
-// TODO: Allow the user to reset their keys with ENSelfExposureResetRequest
-
 class MainViewController: UIViewController {
 
     /// Constants
@@ -17,11 +15,13 @@ class MainViewController: UIViewController {
         static let privacy = "PrivacySegue"
         static let submitInfection = "SubmitInfectionSegue"
         static let viewInfection = "ViewInfectionSegue"
+        static let settings = "SettingsSegue"
     }
 
     
     /// Storyboard outlets
     
+    @IBOutlet var noIssuesButton: ActionButton!
     @IBOutlet var infectedButton: ActionButton!
     @IBOutlet var pendingButton: ActionButton!
     @IBOutlet var exposedButton: ActionButton!
@@ -31,12 +31,18 @@ class MainViewController: UIViewController {
     @IBOutlet var tracingDescriptionLabel: UILabel!
     @IBOutlet var tracingOnButton: ActionButton!
     @IBOutlet var tracingOffButton: ActionButton!
+    @IBOutlet var tracingLoadingButton: ActionButton!
     @IBOutlet var tracingPrivacyButton: ActionButton!
     @IBOutlet var submitInfectionContainer: UIView!
     @IBOutlet var submitInfectionTitleLabel: UILabel!
     @IBOutlet var submitInfectionDescriptionLabel: UILabel!
     @IBOutlet var submitInfectionButton: ActionButton!
     @IBOutlet var submitInfectionButtonDisabled: ActionButton!
+    
+    /// Constraints
+    @IBOutlet var stackViewWidthConstraint: NSLayoutConstraint!
+    @IBOutlet var stackViewLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet var stackViewTrailingConstraint: NSLayoutConstraint!
 
     /// Observers
     
@@ -46,16 +52,41 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.title = NSLocalizedString("app.title", comment: "")
         
+        self.title = String(format: NSLocalizedString("app.title", comment: ""), Disease.current.localizedTitle)
+        
+        self.noIssuesButton.setTitle(String(format: NSLocalizedString("exposure.none.banner.title", comment: ""), Disease.current.localizedTitle), for: .normal)
         self.exposedButton.setTitle(String(format: NSLocalizedString("exposure.exposed.banner.title", comment: ""), Disease.current.localizedTitle), for: .normal)
         self.pendingButton.setTitle(NSLocalizedString("infection.pending.title", comment: ""), for: .normal)
         self.infectedButton.setTitle(String(format: NSLocalizedString("infection.infected.title", comment: ""), Disease.current.localizedTitle), for: .normal)
         self.tracingOnButton.setTitle(NSLocalizedString("tracing.start.title", comment: ""), for: .normal)
         self.tracingOffButton.setTitle(NSLocalizedString("tracing.stop.title", comment: ""), for: .normal)
         self.tracingPrivacyButton.setTitle(NSLocalizedString("privacy.title", comment: ""), for: .normal)
+        
+        self.tracingLoadingButton.setTitle(nil, for: .normal)
+        self.tracingLoadingButton.isEnabled = false
+        
+        let style: UIActivityIndicatorView.Style
+        
+        if #available(iOS 13.0, *) {
+            style = .medium
+        } else {
+            style = .gray
+        }
+        
+        let indicator = UIActivityIndicatorView(style: style)
+        indicator.startAnimating()
+        indicator.color = .white
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.tracingLoadingButton.addSubview(indicator)
+        
+        NSLayoutConstraint.activate([
+            indicator.centerXAnchor.constraint(equalTo: self.tracingLoadingButton.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: self.tracingLoadingButton.centerYAnchor)
+        ])
 
+        self.noIssuesButton.accessory = .disclosure
         self.exposedButton.accessory = .disclosure
         self.infectedButton.accessory = .disclosure
         self.pendingButton.accessory = .disclosure
@@ -71,7 +102,7 @@ class MainViewController: UIViewController {
         self.submitInfectionTitleLabel.text = NSLocalizedString("infection.title", comment: "")
         self.submitInfectionDescriptionLabel.text = String(format: NSLocalizedString("infection.report.message", comment: ""), Disease.current.localizedTitle)
         
-        
+        self.noIssuesButton.isHidden = false
         self.infectedButton.isHidden = true
         self.pendingButton.isHidden = true
         self.exposedButton.isHidden = true
@@ -110,11 +141,42 @@ class MainViewController: UIViewController {
 
         self.updateViewTheme()
         self.updateViewState(animated: false)
+        
+        var settingsButton: UIBarButtonItem?
+        
+        if #available(iOS 13.0, *) {
+            if let image = UIImage(systemName: "ellipsis.circle.fill") {
+                settingsButton = UIBarButtonItem(image: image, style: .done, target: self, action: #selector(Self.settingsTapped(_:)))
+            }
+        }
+            
+        if settingsButton == nil {
+            settingsButton = UIBarButtonItem(title: NSLocalizedString("settings.title", comment: ""), style: .done, target: self, action: #selector(Self.settingsTapped(_:)))
+        }
+        
+        self.navigationItem.rightBarButtonItem = settingsButton
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         self.updateViewTheme()
+    }
+    
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
+
+        let padding: CGFloat = 20
+        
+        self.stackViewWidthConstraint.constant = -padding * 2
+
+        if self.view.effectiveUserInterfaceLayoutDirection == .rightToLeft {
+            self.stackViewLeadingConstraint.constant = -padding
+            self.stackViewTrailingConstraint.constant = padding
+        }
+        else {
+            self.stackViewLeadingConstraint.constant = padding
+            self.stackViewTrailingConstraint.constant = -padding
+        }
     }
     
     func updateViewTheme() {
@@ -135,7 +197,13 @@ class MainViewController: UIViewController {
             self.submitInfectionContainer.backgroundColor = color
         }
         else {
-            self.view.backgroundColor = .groupTableViewBackground
+            if #available(iOS 13, *) {
+                self.view.backgroundColor = .systemGroupedBackground
+            }
+            else {
+                self.view.backgroundColor = .groupTableViewBackground
+            }
+            
             self.tracingContainer.backgroundColor = .white
             self.submitInfectionContainer.backgroundColor = .white
         }
@@ -149,26 +217,31 @@ class MainViewController: UIViewController {
             self.exposedButton.isHidden = false
             self.infectedButton.isHidden = true
             self.pendingButton.isHidden = true
-            
+            self.noIssuesButton.isHidden = true
+
         case .infection:
             self.infectedButton.isHidden = false
             self.exposedButton.isHidden = true
             self.pendingButton.isHidden = true
-            
+            self.noIssuesButton.isHidden = true
+
         case .infectionPending:
             self.pendingButton.isHidden = false
             self.infectedButton.isHidden = true
             self.exposedButton.isHidden = true
-            
+            self.noIssuesButton.isHidden = true
+
         case .infectionPendingAndExposed:
             self.pendingButton.isHidden = false
             self.exposedButton.isHidden = false
             self.infectedButton.isHidden = true
-            
+            self.noIssuesButton.isHidden = true
+
         case .nothingDetected:
             self.infectedButton.isHidden = true
             self.exposedButton.isHidden = true
             self.pendingButton.isHidden = true
+            self.noIssuesButton.isHidden = false
         }
         
         if status == .infection {
@@ -181,36 +254,19 @@ class MainViewController: UIViewController {
         }
         
         if ContactTraceManager.shared.isUpdatingEnabledState {
-            if self.navigationItem.rightBarButtonItem == nil {
-                let style: UIActivityIndicatorView.Style
-                
-                if #available(iOS 13.0, *) {
-                    style = .medium
-                } else {
-                    style = .gray
-                }
-                
-                let indicator = UIActivityIndicatorView(style: style)
-                indicator.startAnimating()
-
-                let button = UIBarButtonItem(customView: indicator)
-
-                self.navigationItem.setRightBarButton(button, animated: animated)
-            }
+            self.tracingLoadingButton.isHidden = false
+            self.tracingOnButton.isHidden = true
+            self.tracingOffButton.isHidden = true
         }
-        else {
-            if self.navigationItem.rightBarButtonItem != nil {
-                self.navigationItem.setRightBarButton(nil, animated: animated)
-            }
-        }
-        
-        if ContactTraceManager.shared.isContactTracingEnabled {
+        else if ContactTraceManager.shared.isContactTracingEnabled {
             self.tracingOnButton.isHidden = true
             self.tracingOffButton.isHidden = false
+            self.tracingLoadingButton.isHidden = true
         }
         else {
             self.tracingOnButton.isHidden = false
             self.tracingOffButton.isHidden = true
+            self.tracingLoadingButton.isHidden = true
         }
     }
 }
@@ -223,6 +279,14 @@ extension MainViewController {
 }
 
 extension MainViewController {
+    @objc func settingsTapped(_ sender: Any) {
+        self.performSegue(withIdentifier: Segue.settings, sender: nil)
+    }
+
+    @IBAction func noIssuesButtonTapped(_ sender: ActionButton) {
+        self.performSegue(withIdentifier: Segue.viewExposures, sender: nil)
+    }
+
     @IBAction func infectedButtonTapped(_ sender: ActionButton) {
         self.performSegue(withIdentifier: Segue.viewInfection, sender: nil)
     }
@@ -237,27 +301,26 @@ extension MainViewController {
     
     @IBAction func tracingOnButtonTapped(_ sender: ActionButton) {
         guard !ContactTraceManager.shared.isUpdatingEnabledState else {
+            print("Already updating state, ignoring this tap")
             return
         }
         
         let haptics = UINotificationFeedbackGenerator()
         haptics.notificationOccurred(.success)
-
+        
         ContactTraceManager.shared.startTracing { error in
             if let error = error {
-                if let error = error as? ENError, error.errorCode == .notAuthorized {
-                    
-                }
-                else {
-                    let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
-                    
-                    self.present(alert, animated: true, completion: nil)
-                }
+                print("Error: \(error)")
                 
+                // Will show alert on permission denied as it's not possible to tell if the user made the decision now or earlier.
+                // Perhaps include instruction on how to resolve this
+
+                let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
+                
+                self.present(alert, animated: true, completion: nil)
                 return
             }
-            
             if #available(iOS 12, *) {
                 let intent = StartTracingIntent()
                 

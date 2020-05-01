@@ -1,6 +1,3 @@
-/* parameter is localized disease name */
-"infection.infected.title" = "Du hast %@";
-"exposure.exposed.details.title" = "Aufdeckung";
 /* 
   Localizable.strings
   TracePrivately
@@ -24,5 +21,57 @@
 "infection.report.gathering_data.error" = "Die Erstellung Ihres anonymen Profils war nicht möglich.";
 "infection.report.gathering.empty.title" = "Keine Informationen";
 "infection.report.gathering.empty.message" = "Ihre Kontaktverfolgungsinformationen konnten nicht gefunden werden. Vielleicht hatten Sie die Kontaktverfolgung nicht aktiviert?";
-"infection.report.submit.title" = "Diagnose einreichen";
+"infection.report.submit.title" = "Diagnosis einreichen";
 "infection.report.submit.message" = "Bitte bestätigen Sie, dass Sie einreichen möchten.\n\nDas wird Leuten die in Ihrer Nähe waren ermöglichen zu wissen, dass sie dem Virus ausgesetzt gewesen sein könnten.";
+"infection.report.submit.error" = "Nich möglich Ihr Information zu übermitteln";
+"infection.report.submitting.title" = "bitte warten Sie...";
+"infection.report.submitting.message" = "Ihr Anonym Daten wird übermittelt";
+/* parameter is localized disease name */
+"infection.infected.title" = "Sie haben %@";
+"infection.pending.title" = "Bestätigen abgewartet";
+
+/* parameter is localized disease name */
+"exposure.none.banner.title" = "Kein ansteckung  festgestellt";
+/* parameter is localized disease name */
+"exposure.none.message" = "Kein ansteckungsgefahr mit ein %@ Infektion! \n\nBleiben Sie gesund, und Ihr Hände waschen.";
+/* parameter %@ may be included, which is localized disease name */
+"exposure.exposed.banner.title" = "Ansteckungsgefahr möglich";
+"exposure.exposed.title" = "Ansteckungen";
+"exposure.exposed.details.title" = "Ansteckung";
+/* parameter is localized disease name */
+"exposure.exposed.message" = "Es ist möglich Sie sind im kontakt mit %@ gekommen.";
+/* parameter is a localized duration */
+"exposure.times.duration" = "Dauer: %@";
+
+"exposure.next_steps.title" = "Nächste Schritte";
+"exposure.next_steps.message" = "Bitte die zuständigen Behörder empfohlenden Schritten befolgen";
+
+"unknown" = "Unbekannt";
+"submit" = "Einsenden";
+"error" = "Fehler";
+
+"ok" = "OK";
+"cancel" = "Störnieren";
+
+"keyserver.error.no_response_data" = "Kein Antwortdaten erhalten";
+"keyserver.error.response_decoding_error" = "Fehler bei decodieren das Antwortdaten";
+"keyserver.error.key_data_missing" = "Fehlende Kritische Daten";
+"keyserver.error.date_missing" = "Datum fehlt";
+"keyserver.error.not_ok" = "Kein “OK Status” erhalten";
+"keyserver.error.invalid_config" = "Ungültig  KeyServer config";
+
+/* parameter is localized disease name */
+"notification.exposure_detected.title" = "Achtung: %@ Ansteckungsgefahr %@";
+/* 1st parameter is formatted localized time, 2nd parameter is formatted localized duration */
+"notification.exposure_detected.single.body" = "Sie waren möglicherweise in ansteckungsgefahr  %1$@ für %2$@";
+"notification.exposure_detected.multiple.body" = "Wir haben festgestellt, dass Sie möglicherweise mehrfach im ansteckungsgefahr gekommen waren.";
+
+"privacy.title" = "Datenschutzinformationen";
+
+"settings.title" = "Einstellungen";
+
+"reset_keys.title" = "Reset Aufzeichnung Schlüßeln";
+"reset_keys.message" = "Auf diese Weise können Sie verhindern, dass zuvor aufgetretene Expositionen erkannt werden.";
+"reset_keys.button.title" = "Reset";
+
+

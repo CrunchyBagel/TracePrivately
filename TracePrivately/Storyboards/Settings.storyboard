@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="RRM-tJ-9HL">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="7ki-pE-yuT">
+            <objects>
+                <navigationController id="RRM-tJ-9HL" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="hKb-8b-KNG">
+                        <rect key="frame" x="0.0" y="44" width="414" height="96"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="6l1-qo-aTA" kind="relationship" relationship="rootViewController" id="IOg-io-UYr"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="moJ-LV-XjK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-739" y="314"/>
+        </scene>
+        <!--Settings View Controller-->
+        <scene sceneID="XbO-4Q-L5H">
+            <objects>
+                <viewController id="6l1-qo-aTA" customClass="SettingsViewController" customModule="TracePrivately" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="gUr-ES-J1W">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bOj-BS-XDp" customClass="ActionButton" customModule="TracePrivately" customModuleProvider="target">
+                                <rect key="frame" x="20" y="160" width="374" height="52"/>
+                                <color key="backgroundColor" systemColor="systemGray2Color" red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="52" id="vNn-7D-G23"/>
+                                </constraints>
+                                <state key="normal" title="Reset"/>
+                                <connections>
+                                    <action selector="resetKeysTapped:" destination="6l1-qo-aTA" eventType="touchUpInside" id="aUo-XJ-7IT"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="bOj-BS-XDp" firstAttribute="leading" secondItem="NPK-LJ-WN8" secondAttribute="leading" constant="20" id="5jA-2r-TNo"/>
+                            <constraint firstItem="NPK-LJ-WN8" firstAttribute="trailing" secondItem="bOj-BS-XDp" secondAttribute="trailing" constant="20" id="C5O-5s-Pf1"/>
+                            <constraint firstItem="bOj-BS-XDp" firstAttribute="top" secondItem="NPK-LJ-WN8" secondAttribute="top" constant="20" id="RYK-j3-rqA"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="NPK-LJ-WN8"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="7Bc-Sm-acQ"/>
+                    <connections>
+                        <outlet property="resetKeysButton" destination="bOj-BS-XDp" id="WUW-Cf-OxU"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5MP-P0-oCO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="243" y="313"/>
+        </scene>
+    </scenes>
+</document>

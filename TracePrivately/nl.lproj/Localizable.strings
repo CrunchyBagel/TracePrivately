@@ -1,0 +1,77 @@
+/* 
+  Localizable.strings
+  TracePrivately
+*/
+
+"app.title" = "Traceer Anoniem";
+
+"tracing.title" = "Contacten traceren";
+/* parameter is localized disease name */
+"tracing.message" = "Deel veilig en anoniem informatie wanneer u andere personen tegenkomt en check automatisch blootstelling aan %@.";
+"tracing.start.title" = "Start traceren";
+"tracing.stop.title" = "Stop traceren";
+
+"disease.covid19.title" = "COVID-19";
+
+"infection.title" = "Verstuur infectie";
+
+/* parameter is localized disease name */
+"infection.report.title" = "Ik heb %@";
+"infection.report.message" = "Als geconstateerd is dat u %@ hebt, verstuur dan uw diagnose hier.\n\nU wordt gevraagd om dit te bevestigen.";
+"infection.report.gathering_data.error" = "Niet mogelijk om uw anonieme profiel te creëren.";
+"infection.report.gathering.empty.title" = "Geen informatie";
+"infection.report.gathering.empty.message" = "Niet mogelijk om uw traceerinformatie te vinden. Misschien had u traceren niet ingeschakeld?";
+"infection.report.submit.title" = "Verstuur diagnose";
+"infection.report.submit.message" = "Bevestig alstublieft dat u wilt insturen.\n\nDit zorgt ervoor dat personen die dicht bij u zijn geweest weten dat ze misschien blootgesteld zijn.";
+"infection.report.submit.error" = "Niet mogelijk om uw informatie te versturen.";
+"infection.report.submitting.title" = "Een moment...";
+"infection.report.submitting.message" = "Uw anonieme informatie wordt verstuurd.";
+/* parameter is localized disease name */
+"infection.infected.title" = "U hebt %@";
+"infection.pending.title" = "In afwachting van bevestiging";
+
+/* parameter is localized disease name */
+"exposure.none.banner.title" = "Geen blootstelling ontdekt";
+/* parameter is localized disease name */
+"exposure.none.message" = "Geen contact gevonden met een %@ infectie!\n\nBlijf zoveel mogelijk thuis en was uw handen.";
+/* parameter %@ may be included, which is localized disease name */
+"exposure.exposed.banner.title" = "U bent misschien blootgesteld";
+"exposure.exposed.title" = "Blootstellingen";
+"exposure.exposed.details.title" = "Blootstelling";
+/* parameter is localized disease name */
+"exposure.exposed.message" = "We denken dat u misschien in contact bent geweest met %@.";
+/* parameter is a localized duration */
+"exposure.times.duration" = "Duur: %@";
+
+"exposure.next_steps.title" = "Volgende stappen";
+"exposure.next_steps.message" = "Volg de stappen zoals aangegeven door de autoriteiten.";
+
+"unknown" = "Onbekend";
+"submit" = "Verstuur";
+"error" = "Fout";
+
+"ok" = "OK";
+"cancel" = "Annuleer";
+
+"keyserver.error.no_response_data" = "Datagegevens niet onvangen";
+"keyserver.error.response_decoding_error" = "Fout bij het decoderen van de gegevens";
+"keyserver.error.key_data_missing" = "Key gegevens ontbreken";
+"keyserver.error.date_missing" = "Datum ontbreekt";
+"keyserver.error.not_ok" = "OK status niet ontvangen";
+"keyserver.error.invalid_config" = "Ongeldige KeyServer configuratie";
+
+/* parameter is localized disease name */
+"notification.exposure_detected.title" = "Melding: %@ blootstelling ontdekt";
+/* 1st parameter is formatted localized time, 2nd parameter is formatted localized duration */
+"notification.exposure_detected.single.body" = "U bent mogelijk blootgesteld: %1$@ voor %2$@";
+"notification.exposure_detected.multiple.body" = "We hebben ontdekt dat u mogelijk meerdere keren bent blootgesteld.";
+
+"privacy.title" = "Privacy informatie";
+
+"settings.title" = "Instellingen";
+
+"reset_keys.title" = "Herstel traceer keys";
+"reset_keys.message" = "Als u dit wel doet, voorkomt u dat eerdere blootstellingen worden ontdekt.";
+"reset_keys.button.title" = "Herstellen";
+
+
