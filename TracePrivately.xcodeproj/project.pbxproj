@@ -284,14 +284,6 @@
 			path = "View Controllers";
 			sourceTree = "<group>";
 		};
-		6668908E245BC519000D5E54 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				660408A42458F49F004710F7 /* InfoPlist.strings */,
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
 		6679388C245460B600868B84 /* KeyServer */ = {
 			isa = PBXGroup;
 			children = (
@@ -327,7 +319,6 @@
 				66A00B79245BAB6E007DE11F /* SubmitFakeKeys */,
 				66F818682448FD5C0043AC2D /* Products */,
 				66A00B80245BB039007DE11F /* Frameworks */,
-				6668908E245BC519000D5E54 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -351,6 +342,7 @@
 				66F818732448FD5E0043AC2D /* Assets.xcassets */,
 				66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */,
 				66F818782448FD5E0043AC2D /* Info.plist */,
+				660408A42458F49F004710F7 /* InfoPlist.strings */,
 				66210552245127340011EB42 /* Intents.intentdefinition */,
 				6621057324525FC90011EB42 /* Localizable.strings */,
 				6698C573244BFAB600F046E4 /* KeyServer.plist */,
