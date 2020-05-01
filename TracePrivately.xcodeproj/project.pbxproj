@@ -28,6 +28,8 @@
 		668CE843244D01F50065960A /* ContactTraceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668CE842244D01F50065960A /* ContactTraceManager.swift */; };
 		6698C572244936AF00F046E4 /* ExposedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6698C571244936AF00F046E4 /* ExposedViewController.swift */; };
 		6698C574244BFAB600F046E4 /* KeyServer.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6698C573244BFAB600F046E4 /* KeyServer.plist */; };
+		66A00B7B245BAB6E007DE11F /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A00B7A245BAB6E007DE11F /* main.swift */; };
+		66A00B7F245BACDD007DE11F /* KeyServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6679388F245460B600868B84 /* KeyServer.swift */; };
 		66A039D7245005B700A569BE /* FontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A039D6245005B700A569BE /* FontExtension.swift */; };
 		66B5C6E72458559B0031B03C /* MessagePack in Frameworks */ = {isa = PBXBuildFile; productRef = 66B5C6E62458559B0031B03C /* MessagePack */; };
 		66C4BBC324564AFB008AACC2 /* ExposureNotifications.plist in Resources */ = {isa = PBXBuildFile; fileRef = 66C4BBC224564AFB008AACC2 /* ExposureNotifications.plist */; };
@@ -49,6 +51,15 @@
 
 /* Begin PBXCopyFilesBuildPhase section */
 		66210568245251B10011EB42 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		66A00B76245BAB6E007DE11F /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -121,6 +132,8 @@
 		668D4B22244D705100D90C26 /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
 		6698C571244936AF00F046E4 /* ExposedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposedViewController.swift; sourceTree = "<group>"; };
 		6698C573244BFAB600F046E4 /* KeyServer.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = KeyServer.plist; sourceTree = "<group>"; };
+		66A00B78245BAB6E007DE11F /* SubmitFakeKeys */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SubmitFakeKeys; sourceTree = BUILT_PRODUCTS_DIR; };
+		66A00B7A245BAB6E007DE11F /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		66A039D6245005B700A569BE /* FontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
 		66BF646624578E2B00492070 /* Model 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 6.xcdatamodel"; sourceTree = "<group>"; };
 		66C4BBC224564AFB008AACC2 /* ExposureNotifications.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ExposureNotifications.plist; sourceTree = "<group>"; };
@@ -146,6 +159,13 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		66210567245251B10011EB42 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		66A00B75245BAB6E007DE11F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -230,11 +250,20 @@
 			path = KeyServer;
 			sourceTree = "<group>";
 		};
+		66A00B79245BAB6E007DE11F /* SubmitFakeKeys */ = {
+			isa = PBXGroup;
+			children = (
+				66A00B7A245BAB6E007DE11F /* main.swift */,
+			);
+			path = SubmitFakeKeys;
+			sourceTree = "<group>";
+		};
 		66F8185E2448FD5C0043AC2D = {
 			isa = PBXGroup;
 			children = (
 				66F818692448FD5C0043AC2D /* TracePrivately */,
 				6621056B245251B10011EB42 /* OneSkyDownload */,
+				66A00B79245BAB6E007DE11F /* SubmitFakeKeys */,
 				66F818682448FD5C0043AC2D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -244,6 +273,7 @@
 			children = (
 				66F818672448FD5C0043AC2D /* TracePrivately.app */,
 				6621056A245251B10011EB42 /* OneSkyDownload */,
+				66A00B78245BAB6E007DE11F /* SubmitFakeKeys */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -286,6 +316,23 @@
 			productReference = 6621056A245251B10011EB42 /* OneSkyDownload */;
 			productType = "com.apple.product-type.tool";
 		};
+		66A00B77245BAB6E007DE11F /* SubmitFakeKeys */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 66A00B7E245BAB6E007DE11F /* Build configuration list for PBXNativeTarget "SubmitFakeKeys" */;
+			buildPhases = (
+				66A00B74245BAB6E007DE11F /* Sources */,
+				66A00B75245BAB6E007DE11F /* Frameworks */,
+				66A00B76245BAB6E007DE11F /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SubmitFakeKeys;
+			productName = SubmitFakeKeys;
+			productReference = 66A00B78245BAB6E007DE11F /* SubmitFakeKeys */;
+			productType = "com.apple.product-type.tool";
+		};
 		66F818662448FD5C0043AC2D /* TracePrivately */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 66F8187B2448FD5E0043AC2D /* Build configuration list for PBXNativeTarget "TracePrivately" */;
@@ -312,12 +359,15 @@
 		66F8185F2448FD5C0043AC2D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1140;
+				LastSwiftUpdateCheck = 1150;
 				LastUpgradeCheck = 1140;
 				ORGANIZATIONNAME = "Quentin Zervaas";
 				TargetAttributes = {
 					66210569245251B10011EB42 = {
 						CreatedOnToolsVersion = 11.4.1;
+					};
+					66A00B77245BAB6E007DE11F = {
+						CreatedOnToolsVersion = 11.5;
 					};
 					66F818662448FD5C0043AC2D = {
 						CreatedOnToolsVersion = 11.4.1;
@@ -360,6 +410,7 @@
 			targets = (
 				66F818662448FD5C0043AC2D /* TracePrivately */,
 				66210569245251B10011EB42 /* OneSkyDownload */,
+				66A00B77245BAB6E007DE11F /* SubmitFakeKeys */,
 			);
 		};
 /* End PBXProject section */
@@ -393,6 +444,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				6621056D245251B10011EB42 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		66A00B74245BAB6E007DE11F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66A00B7F245BACDD007DE11F /* KeyServer.swift in Sources */,
+				66A00B7B245BAB6E007DE11F /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -512,6 +572,32 @@
 			name = Debug;
 		};
 		6621056F245251B10011EB42 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CHZS3BHM57;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		66A00B7C245BAB6E007DE11F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CHZS3BHM57;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		66A00B7D245BAB6E007DE11F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -691,6 +777,15 @@
 			buildConfigurations = (
 				6621056E245251B10011EB42 /* Debug */,
 				6621056F245251B10011EB42 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		66A00B7E245BAB6E007DE11F /* Build configuration list for PBXNativeTarget "SubmitFakeKeys" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66A00B7C245BAB6E007DE11F /* Debug */,
+				66A00B7D245BAB6E007DE11F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
