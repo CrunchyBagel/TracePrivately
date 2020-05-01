@@ -28,7 +28,6 @@
 	<array>
 		<string>StartTracingIntent</string>
 		<string>StopTracingIntent</string>
-		<string>TracingStatusIntent</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

@@ -39,7 +39,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let shortcuts: [INShortcut?] = [
                 INShortcut(intent: StartTracingIntent()),
                 INShortcut(intent: StopTracingIntent()),
-                INShortcut(intent: TracingStatusIntent())
             ]
             
             INVoiceShortcutCenter.shared.setShortcutSuggestions(shortcuts.compactMap { $0 })

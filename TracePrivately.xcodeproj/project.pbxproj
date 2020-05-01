@@ -82,15 +82,6 @@
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		66CB7BD5245545500044D32B /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
 		66A00B76245BAB6E007DE11F /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -131,7 +122,6 @@
 		66210552245127340011EB42 /* Intents.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Intents.intentdefinition; sourceTree = "<group>"; };
 		6621055A245129690011EB42 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
 		6621055C245129690011EB42 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6621056524512D3B0011EB42 /* TracePrivately.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TracePrivately.entitlements; sourceTree = "<group>"; };
 		6621056A245251B10011EB42 /* OneSkyDownload */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OneSkyDownload; sourceTree = BUILT_PRODUCTS_DIR; };
 		6621056C245251B10011EB42 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		6621057224525FC90011EB42 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -183,7 +173,6 @@
 		66C4BBC424564B56008AACC2 /* ExposureNotificationConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureNotificationConfig.swift; sourceTree = "<group>"; };
 		66CB7BD02453D51A0044D32B /* ENMockFramework.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ENMockFramework.swift; sourceTree = "<group>"; };
 		66CB7BD22453EB190044D32B /* Model 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 5.xcdatamodel"; sourceTree = "<group>"; };
-		66CB7BD7245545500044D32B /* OneSkyDownload */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OneSkyDownload; sourceTree = BUILT_PRODUCTS_DIR; };
 		66CB7BDE245545DF0044D32B /* TracePrivately-Siri.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "TracePrivately-Siri.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		66CB95BC244FB51000D775B6 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		66CB95BE244FB5CD00D775B6 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -204,13 +193,6 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		66210555245129690011EB42 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		66CB7BD4245545500044D32B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -302,6 +284,14 @@
 			path = "View Controllers";
 			sourceTree = "<group>";
 		};
+		6668908E245BC519000D5E54 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				660408A42458F49F004710F7 /* InfoPlist.strings */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		6679388C245460B600868B84 /* KeyServer */ = {
 			isa = PBXGroup;
 			children = (
@@ -337,6 +327,7 @@
 				66A00B79245BAB6E007DE11F /* SubmitFakeKeys */,
 				66F818682448FD5C0043AC2D /* Products */,
 				66A00B80245BB039007DE11F /* Frameworks */,
+				6668908E245BC519000D5E54 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -388,23 +379,6 @@
 			productName = "TracePrivately-Siri";
 			productReference = 66CB7BDE245545DF0044D32B /* TracePrivately-Siri.appex */;
 			productType = "com.apple.product-type.app-extension";
-		};
-		66CB7BD6245545500044D32B /* OneSkyDownload */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 66CB7BDB245545500044D32B /* Build configuration list for PBXNativeTarget "OneSkyDownload" */;
-			buildPhases = (
-				66CB7BD3245545500044D32B /* Sources */,
-				66CB7BD4245545500044D32B /* Frameworks */,
-				66CB7BD5245545500044D32B /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = OneSkyDownload;
-			productName = OneSkyDownload;
-			productReference = 66CB7BD7245545500044D32B /* OneSkyDownload */;
-			productType = "com.apple.product-type.tool";
 		};
 		66A00B77245BAB6E007DE11F /* SubmitFakeKeys */ = {
 			isa = PBXNativeTarget;
@@ -461,9 +435,6 @@
 					66210557245129690011EB42 = {
 						CreatedOnToolsVersion = 11.4.1;
 					};
-					66CB7BD6245545500044D32B = {
-						CreatedOnToolsVersion = 11.4.1;
-					};
 					66A00B77245BAB6E007DE11F = {
 						CreatedOnToolsVersion = 11.5;
 					};
@@ -511,7 +482,6 @@
 			targets = (
 				66F818662448FD5C0043AC2D /* TracePrivately */,
 				66210557245129690011EB42 /* TracePrivately-Siri */,
-				66210569245251B10011EB42 /* OneSkyDownload */,
 				66A00B77245BAB6E007DE11F /* SubmitFakeKeys */,
 			);
 		};
@@ -554,13 +524,6 @@
 			files = (
 				662105642451299B0011EB42 /* Intents.intentdefinition in Sources */,
 				6621055B245129690011EB42 /* IntentHandler.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		66CB7BD3245545500044D32B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -732,32 +695,6 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		66CB7BDC245545500044D32B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CHZS3BHM57;
-				ENABLE_HARDENED_RUNTIME = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Debug;
-		};
-		66CB7BDD245545500044D32B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CHZS3BHM57;
-				ENABLE_HARDENED_RUNTIME = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -956,15 +893,6 @@
 			buildConfigurations = (
 				66210561245129690011EB42 /* Debug */,
 				66210562245129690011EB42 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		66CB7BDB245545500044D32B /* Build configuration list for PBXNativeTarget "OneSkyDownload" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				66CB7BDC245545500044D32B /* Debug */,
-				66CB7BDD245545500044D32B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
