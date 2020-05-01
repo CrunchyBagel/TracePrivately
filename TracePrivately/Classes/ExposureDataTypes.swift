@@ -56,3 +56,25 @@ extension ENExposureInfo {
         return .init(attenuationValue: attenuationValue, date: date, duration: duration, totalRiskScore: totalRiskScore, transmissionRiskLevel: transmissionRiskLevel)
     }
 }
+
+enum TPSimplifiedExposureRisk {
+    case high
+    case medium
+    case low
+}
+
+extension TPExposureInfo {
+    // TODO: The docs are a bit weird here. It indicates the total should be 1 - 8, but also says the value could 0..100 and it also says could be less than 0, so I've wrapped the value here so it can easily be updated
+    var simplifiedRisk: TPSimplifiedExposureRisk {
+        switch self.totalRiskScore {
+        case 7...:
+            return .high
+        case 5...6:
+            return .medium
+        case ..<5:
+            return .low
+        default:
+            return .low
+        }
+    }
+}

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="FnE-Qt-Q1V">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="FnE-Qt-Q1V">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -269,6 +269,9 @@ You will be prompted for confirmation.</string>
                         <outlet property="infectedButton" destination="sBE-i1-EpT" id="xfW-LL-vTH"/>
                         <outlet property="noIssuesButton" destination="hJM-gF-lb0" id="ufw-cV-jXA"/>
                         <outlet property="pendingButton" destination="im4-bJ-sBK" id="92O-Mc-0ZY"/>
+                        <outlet property="stackViewLeadingConstraint" destination="TGc-n6-hQ1" id="eUB-xF-Nah"/>
+                        <outlet property="stackViewTrailingConstraint" destination="PC5-z1-obs" id="qQg-hB-dV8"/>
+                        <outlet property="stackViewWidthConstraint" destination="P6g-FP-Xp6" id="951-Oc-Hw1"/>
                         <outlet property="submitInfectionButton" destination="yfi-2O-JFT" id="5HN-KK-Qdh"/>
                         <outlet property="submitInfectionButtonDisabled" destination="Tko-23-weP" id="7sL-jx-gvm"/>
                         <outlet property="submitInfectionContainer" destination="YSN-Jg-zw2" id="1Ke-kX-EQN"/>

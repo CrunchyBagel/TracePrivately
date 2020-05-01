@@ -14,7 +14,7 @@
 		<key>transmissionRisk</key>
 		<dict>
 			<key>note</key>
-			<string>8 values of 1-8. First 5 unused, The 6th corresponds to the risk level from the infected user. 7th is noted as phone score, 8th is noted as occupation.</string>
+			<string>8 values of 1-8. This value can be assigned when a user marks themselves as infected. Also, the value can be modified on the server later if necessary.</string>
 			<key>scores</key>
 			<array>
 				<integer>0</integer>

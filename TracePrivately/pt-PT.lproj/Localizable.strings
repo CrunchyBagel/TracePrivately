@@ -31,6 +31,8 @@
 "infection.pending.title" = "Confirmação Pendente";
 
 /* parameter is localized disease name */
+"exposure.none.banner.title" = "Não foi detectada exposição";
+/* parameter is localized disease name */
 "exposure.none.message" = "Nenhum contacto com a infecção %@ foi detectado!\nMantenha-se seguro e lave as suas mãos.";
 /* parameter %@ may be included, which is localized disease name */
 "exposure.exposed.banner.title" = "Talvez tenha sido exposto";
@@ -65,4 +67,11 @@
 "notification.exposure_detected.multiple.body" = "Detectámos que foi exposto múltiplas vezes.";
 
 "privacy.title" = "Informações sobre Privacidade";
+
+"settings.title" = "Definições";
+
+"reset_keys.title" = "Redefinir teclas de rastreio";
+"reset_keys.message" = "Faze-lo impedirá a detecção de exposições que ocorreram anteriormente.";
+"reset_keys.button.title" = "Redefinir";
+
 

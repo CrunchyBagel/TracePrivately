@@ -8,9 +8,6 @@ import BackgroundTasks
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-//    static let backgroundProcessingInterval: TimeInterval = 10
-    static let backgroundProcessingInterval: TimeInterval = 3600
     
     #if targetEnvironment(simulator)
     static let useModernBackgroundProcessing = false
@@ -49,13 +46,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
-        ContactTraceManager.shared.performBackgroundUpdate { _ in
-            self.scheduleNextBackgroundProcess(minimumDate: Date().addingTimeInterval(Self.backgroundProcessingInterval))
-        }
+        ContactTraceManager.shared.applicationDidBecomeActive()
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
-        self.scheduleNextBackgroundProcess(minimumDate: Date().addingTimeInterval(Self.backgroundProcessingInterval))
+        ContactTraceManager.shared.scheduleNextBackgroundUpdate()
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -73,7 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             
             completionHandler(.newData)
-            self.scheduleNextBackgroundProcess(minimumDate: Date().addingTimeInterval(Self.backgroundProcessingInterval))
+            ContactTraceManager.shared.scheduleNextBackgroundUpdate()
         }
     }
 }
@@ -144,7 +139,7 @@ extension AppDelegate {
                 let success = !operation.isCancelled
                 
                 if success {
-                    self.scheduleNextBackgroundProcess(minimumDate: Date().addingTimeInterval(Self.backgroundProcessingInterval))
+                    ContactTraceManager.shared.scheduleNextBackgroundUpdate()
                 }
                 
                 task.setTaskCompleted(success: success)

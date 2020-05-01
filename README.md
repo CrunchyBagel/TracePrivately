@@ -5,7 +5,7 @@ https://www.apple.com/covid19/contacttracing
 
 **29 April 2020:** Trace Privately has been updated to be compatible with v1.2 of Apple's framework. It will build against the `ExposureNotification` framework if you are running Xcode 11.5, and run on iOS 13.5 devices.
 
-*Note: To run the app the Apple framework, a special entitlement is required, only available to authorized organizations.*
+*Note: To run the app the Apple framework, a special entitlement is required, only available to authorized organizations. [More Info](https://github.com/CrunchyBagel/TracePrivately/issues/57)*
 
 This app will be evolving quickly as I'm trying to publish new functionality as quickly as possible.
 
@@ -46,7 +46,8 @@ Current server options:
 1. *PHP*: This project contains a reference implementation in PHP: https://github.com/CrunchyBagel/TracePrivately/tree/master/KeyServer
 2. *Ruby*: https://github.com/tatey/trace_privately by @tatey.
     * Includes a 1-click setup process for quick deployment
-3. Create your own according to the above OpenAPI specification
+3. *Vapor (Swift)*: https://github.com/kevinrmblr/traceprivately-server
+4. Create your own according to the above OpenAPI specification
 
 ### iOS App
 
@@ -82,7 +83,7 @@ If you can help translate the app, please help our crowd-sourced effort here:
 https://traceprivately.oneskyapp.com/collaboration/project?id=170066
 
 Currently available in:
-English, French, Spanish (ES, MX), Portuguese (PT, BR), German, Chinese (Simplified and Traditional), Croatian, Serbian, Japanese, Estonian, Latvian, Dutch, Italian, Ukrainian and Hindi.
+English, French, Spanish (ES, MX), Portuguese (PT, BR), German, Chinese (Simplified and Traditional), Croatian, Serbian, Japanese, Estonian, Latvian, Dutch, Italian, Ukrainian, Hindi, Arabic, Catalan, Hebrew.
 
 ## Screenshots
 

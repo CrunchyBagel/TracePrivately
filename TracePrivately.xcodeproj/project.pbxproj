@@ -134,6 +134,12 @@
 		6698C573244BFAB600F046E4 /* KeyServer.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = KeyServer.plist; sourceTree = "<group>"; };
 		66A00B78245BAB6E007DE11F /* SubmitFakeKeys */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SubmitFakeKeys; sourceTree = BUILT_PRODUCTS_DIR; };
 		66A00B7A245BAB6E007DE11F /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		66A00B6E245B9235007DE11F /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		66A00B6F245B9236007DE11F /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
+		66A00B70245B9242007DE11F /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		66A00B71245B9242007DE11F /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Localizable.strings; sourceTree = "<group>"; };
+		66A00B72245B9258007DE11F /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		66A00B73245B9258007DE11F /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		66A039D6245005B700A569BE /* FontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
 		66BF646624578E2B00492070 /* Model 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 6.xcdatamodel"; sourceTree = "<group>"; };
 		66C4BBC224564AFB008AACC2 /* ExposureNotifications.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ExposureNotifications.plist; sourceTree = "<group>"; };
@@ -399,6 +405,9 @@
 				nl,
 				uk,
 				"zh-Hant",
+				he,
+				ca,
+				ar,
 			);
 			mainGroup = 66F8185E2448FD5C0043AC2D;
 			packageReferences = (
@@ -510,6 +519,9 @@
 				660408B52458F555004710F7 /* nl */,
 				660408B72458F562004710F7 /* uk */,
 				660408B924595848004710F7 /* zh-Hant */,
+				66A00B6E245B9235007DE11F /* he */,
+				66A00B70245B9242007DE11F /* ca */,
+				66A00B72245B9258007DE11F /* ar */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -535,6 +547,9 @@
 				660408B62458F555004710F7 /* nl */,
 				660408B82458F562004710F7 /* uk */,
 				660408BA24595848004710F7 /* zh-Hant */,
+				66A00B6F245B9236007DE11F /* he */,
+				66A00B71245B9242007DE11F /* ca */,
+				66A00B73245B9258007DE11F /* ar */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

@@ -154,11 +154,14 @@ extension ExposedViewController {
                     cell.durationLabel?.text = nil
                 }
                 
-                if contact.duration < 600 {
-                    cell.setBackgroundColor(color: .systemOrange)
-                }
-                else {
+                // TODO: The docs are a bit weird here. It indicates the total should be 1 - 8, but also says the value could 0..100 and it also says could be less than 0
+                switch contact.simplifiedRisk {
+                case .high:
                     cell.setBackgroundColor(color: .systemRed)
+                case .medium:
+                    cell.setBackgroundColor(color: .systemOrange)
+                case .low:
+                    cell.setBackgroundColor(color: .systemPurple)
                 }
                 
                 cell.accessoryImageView.image = ActionButton.Accessory.disclosure.image

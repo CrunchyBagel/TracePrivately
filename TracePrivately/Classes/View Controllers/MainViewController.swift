@@ -37,6 +37,11 @@ class MainViewController: UIViewController {
     @IBOutlet var submitInfectionDescriptionLabel: UILabel!
     @IBOutlet var submitInfectionButton: ActionButton!
     @IBOutlet var submitInfectionButtonDisabled: ActionButton!
+    
+    /// Constraints
+    @IBOutlet var stackViewWidthConstraint: NSLayoutConstraint!
+    @IBOutlet var stackViewLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet var stackViewTrailingConstraint: NSLayoutConstraint!
 
     /// Observers
     
@@ -46,7 +51,7 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.title = String(format: NSLocalizedString("app.title", comment: ""), Disease.current.localizedTitle)
         
         self.noIssuesButton.setTitle(String(format: NSLocalizedString("exposure.none.banner.title", comment: ""), Disease.current.localizedTitle), for: .normal)
@@ -156,6 +161,23 @@ class MainViewController: UIViewController {
         self.updateViewTheme()
     }
     
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
+
+        let padding: CGFloat = 20
+        
+        self.stackViewWidthConstraint.constant = -padding * 2
+
+        if self.view.effectiveUserInterfaceLayoutDirection == .rightToLeft {
+            self.stackViewLeadingConstraint.constant = -padding
+            self.stackViewTrailingConstraint.constant = padding
+        }
+        else {
+            self.stackViewLeadingConstraint.constant = padding
+            self.stackViewTrailingConstraint.constant = -padding
+        }
+    }
+    
     func updateViewTheme() {
         let isDarkMode: Bool
         
@@ -248,7 +270,6 @@ class MainViewController: UIViewController {
     }
 }
 
-// TODO: Make use of the risk levels both here and on the exposure details screen
 extension MainViewController {
     var diseaseStatus: DataManager.DiseaseStatus {
         let context = DataManager.shared.persistentContainer.viewContext

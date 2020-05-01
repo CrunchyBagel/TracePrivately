@@ -31,6 +31,8 @@
 "infection.pending.title" = "正在等待确认";
 
 /* parameter is localized disease name */
+"exposure.none.banner.title" = "未发现接触";
+/* parameter is localized disease name */
 "exposure.none.message" = "没有发现任何确诊%@的接触者！\n\n请保持安全措施，多次洗手。";
 /* parameter %@ may be included, which is localized disease name */
 "exposure.exposed.banner.title" = "您有可能接触过%@";
@@ -65,4 +67,11 @@
 "notification.exposure_detected.multiple.body" = "我们检测到您有可能多次接触过。";
 
 "privacy.title" = "私隐资讯";
+
+"settings.title" = "设置";
+
+"reset_keys.title" = "重置追踪密钥";
+"reset_keys.message" = "重置将阻止您发现之前的接触。";
+"reset_keys.button.title" = "重置";
+
 

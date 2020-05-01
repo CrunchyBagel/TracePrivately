@@ -5,6 +5,8 @@
 
 import UIKit
 
+// TODO: Need a way to determine the risk level of a submitted infection. This could be determined on device or on the server. You could also assign different risk levels to each daily key based on what the person did that day
+
 class SubmitInfectionViewController: UIViewController {
 
     struct FormValidationError: LocalizedError {
@@ -26,18 +28,21 @@ class SubmitInfectionViewController: UIViewController {
         }
     }
     
+    var config: SubmitInfectionConfig = .empty
+
     @IBOutlet var submitButton: ActionButton!
     @IBOutlet var submitLoadingButton: ActionButton!
-
     @IBOutlet var infoLabel: UILabel!
-    
-    var config: SubmitInfectionConfig = .empty
-    
     @IBOutlet var scrollView: UIScrollView!
     
     // Holds the form elements
     @IBOutlet var stackView: UIStackView!
     
+    /// Constraints
+    @IBOutlet var stackViewWidthConstraint: NSLayoutConstraint!
+    @IBOutlet var stackViewLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet var stackViewTrailingConstraint: NSLayoutConstraint!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -106,6 +111,23 @@ class SubmitInfectionViewController: UIViewController {
         self.updateViewTheme()
     }
     
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
+
+        let padding: CGFloat = 20
+        
+        self.stackViewWidthConstraint.constant = -padding * 2
+
+        if self.view.effectiveUserInterfaceLayoutDirection == .rightToLeft {
+            self.stackViewLeadingConstraint.constant = -padding
+            self.stackViewTrailingConstraint.constant = padding
+        }
+        else {
+            self.stackViewLeadingConstraint.constant = padding
+            self.stackViewTrailingConstraint.constant = -padding
+        }
+    }
+
     func updateViewTheme() {
         let isDarkMode = self.isDarkMode
         
