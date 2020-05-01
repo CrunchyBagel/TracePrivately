@@ -3,7 +3,11 @@
 //  TracePrivately
 //
 
+#if canImport(UIKit)
 import UIKit
+#else
+import Foundation
+#endif
 
 protocol InfectedKeysFormDataField {
     var name: String { get }
@@ -29,6 +33,7 @@ struct InfectedKeysFormDataStringField: InfectedKeysFormDataField {
     }
 }
 
+#if !os(macOS)
 // TODO: Resize image to an adequate size
 struct InfectedKeysFormDataImageField: InfectedKeysFormDataField {
     let name: String
@@ -50,6 +55,7 @@ struct InfectedKeysFormDataImageField: InfectedKeysFormDataField {
         return true
     }
 }
+#endif
 
 struct InfectedKeysFormData {
     

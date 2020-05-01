@@ -405,7 +405,7 @@ class ENExposureConfiguration {
 
 class ENExposureDetectionSession: ENBaseRequest {
     var configuration = ENExposureConfiguration()
-    var maximumKeyCount: Int = 10
+    var maximumKeyCount: Int = 1000
     
     private var _infectedKeys: [ENTemporaryExposureKey] = []
 
@@ -428,7 +428,7 @@ class ENExposureDetectionSession: ENBaseRequest {
         
         let queue = self.dispatchQueue ?? .main
         
-        queue.asyncAfter(deadline: .now() + 0.5) {
+        queue.asyncAfter(deadline: .now() + 0.2) {
             completionHandler(nil)
         }
     }
@@ -766,10 +766,7 @@ private class ENInternalState {
 //                    continue
 //                }
                 
-                let intervalNumber = ENIntervalNumber(date.timeIntervalSince1970 / 600)
-                let rollingStartNumber = intervalNumber / 144 * 144
-
-                
+                let rollingStartNumber = UInt32.intervalNumberFrom(date: date)
                 
                 let key = ENTemporaryExposureKey()
                 key.keyData = keyData
@@ -785,14 +782,6 @@ private class ENInternalState {
         }
     }
 
-}
-
-extension UUID {
-    var data: Data {
-        return withUnsafePointer(to: self.uuid) {
-            Data(bytes: $0, count: MemoryLayout.size(ofValue: self.uuid))
-        }
-    }
 }
 
 extension String {

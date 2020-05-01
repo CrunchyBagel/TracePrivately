@@ -81,6 +81,32 @@ class DataManager {
 }
 
 extension DataManager {
+    func clearRemoteKeyAndLocalExposuresCache(completion: @escaping (Swift.Error?) -> Void) {
+        let context = self.persistentContainer.newBackgroundContext()
+        
+        context.perform {
+            do {
+                let fetchRequests: [NSFetchRequest<NSFetchRequestResult>] = [
+                    RemoteInfectedKeyEntity.fetchRequest(),
+                    ExposureContactInfoEntity.fetchRequest()
+                ]
+                
+                for fetchRequest in fetchRequests {
+                    let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+                    try context.execute(deleteRequest)
+                }
+                
+                try context.save()
+                completion(nil)
+            }
+            catch {
+                completion(error)
+            }
+        }
+    }
+}
+
+extension DataManager {
     func deleteLocalInfections(completion: @escaping (Swift.Error?) -> Void) {
         
         let context = self.persistentContainer.newBackgroundContext()

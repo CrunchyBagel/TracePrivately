@@ -29,27 +29,136 @@ func showHelpAndExit() {
     exit(EXIT_FAILURE)
 }
 
-func getPlistPath(str: String) throws -> URL {
+extension TPTemporaryExposureKey {
+    static func generateRandom(date: Date) -> Self {
+        
+        let keyData = UUID().data
+        
+        return Self(
+            keyData: keyData,
+            rollingStartNumber: TPIntervalNumber.intervalNumberFrom(date: date),
+            transmissionRiskLevel: .high
+        )
+    }
+}
+
+func getPlistPath(_ path: String) throws -> URL {
     
-}
-
-if CommandLine.arguments.count < 2 {
-    showHelpAndExit()
-}
-
-let command = CommandLine.arguments[1]
-
-switch command {
-case "new":
-    if CommandLine.arguments.count < 4 {
-        showHelpAndExit()
+    let url = URL(fileURLWithPath: path, isDirectory: false)
+    
+    guard FileManager.default.fileExists(atPath: url.path) else {
+        throw "Not found: \(path)"
     }
     
-    let plistPath = try getPlistPath(str: CommandLine.arguments[1])
-    
-case "update":
-    let plistPath = try getPlistPath(str: CommandLine.arguments[1])
+    return url
+}
 
-default:
+let dispatchGroup = DispatchGroup()
+
+do {
+    if CommandLine.arguments.count < 3 {
+        showHelpAndExit()
+    }
+
+    enum AppCommand: String {
+        case newSubmission = "new"
+        case updateSubmission = "update"
+    }
+
+    let commandStr = CommandLine.arguments[1]
+    guard let appCommand = AppCommand(rawValue: commandStr) else {
+        throw "Invalid app command: \(commandStr)"
+    }
+
+
+    let plistUrl = try getPlistPath(CommandLine.arguments[2])
+
+    guard let config = KeyServerConfig(plistUrl: plistUrl) else {
+        throw "Invalid KeyServer config"
+    }
+
+    switch appCommand {
+    case .newSubmission:
+        if CommandLine.arguments.count < 4 {
+            showHelpAndExit()
+        }
+        
+        KeyServer.shared.config = config
+
+        guard var numSubmissions = Int(CommandLine.arguments[3]) else {
+            throw "Must specify number of submissions"
+        }
+        
+        numSubmissions = max(0, min(1000, numSubmissions))
+        
+        let numKeys = 16
+        
+        let now = Date()
+        
+        let queue = OperationQueue()
+        queue.maxConcurrentOperationCount = 1
+        
+        for i in 1 ... numSubmissions {
+            
+            dispatchGroup.enter()
+            
+            let operation = AsyncBlockOperation { operation in
+                dispatchGroup.enter()
+
+                guard !operation.isCancelled else {
+                    operation.complete()
+                    return
+                }
+                
+                
+                writeToStdOut("Submitting \(i)/\(numSubmissions) ...\n")
+                
+                var keys: [TPTemporaryExposureKey] = []
+
+                for _ in 0 ..< numKeys {
+                    let date = now.addingTimeInterval(-86400)
+                    keys.append(TPTemporaryExposureKey.generateRandom(date: date))
+                }
+                
+                
+                let formData = InfectedKeysFormData(fields: [])
+                let previousSubmissionId: String? = nil
+                
+                
+                KeyServer.shared.submitInfectedKeys(formData: formData, keys: keys, previousSubmissionId: previousSubmissionId) { success, submissionId, error in
+
+                    if let error = error {
+                        writeToStdOut("\tFailed: \(error.localizedDescription)\n")
+                        queue.cancelAllOperations()
+                    }
+                    else {
+                        writeToStdOut("\tSuccess\n")
+                    }
+
+                    Thread.sleep(forTimeInterval: 0.05)
+                    
+                    operation.complete()
+                }
+            }
+            
+            operation.completionBlock = {
+                dispatchGroup.leave()
+            }
+            
+            queue.addOperation(operation)
+        }
+        
+    case .updateSubmission:
+        break
+    }
+}
+catch {
+    writeToStdError("\(error)\n")
     showHelpAndExit()
 }
+
+dispatchGroup.notify(queue: .main) {
+    exit(EXIT_SUCCESS)
+}
+
+dispatchMain()

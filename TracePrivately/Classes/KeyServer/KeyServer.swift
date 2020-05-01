@@ -50,7 +50,11 @@ class KeyServer {
         let config = URLSessionConfiguration.default
         config.allowsCellularAccess     = true
         config.isDiscretionary          = false
+        
+        #if !os(macOS)
         config.sessionSendsLaunchEvents = true
+        #endif
+        
         config.requestCachePolicy       = .reloadIgnoringLocalCacheData
 
         if #available(iOS 11.0, *) {
@@ -74,7 +78,7 @@ class KeyServer {
 
         if let authentication = authentication {
             if let token = authentication.currentAuthenticationToken {
-                print("Found token: \(token)")
+//                print("Found token: \(token)")
                 request.setValue("Bearer \(token.string)", forHTTPHeaderField: "Authorization")
             }
             else if throwIfMissing {
@@ -243,7 +247,7 @@ extension KeyServer {
                 "form": formData.requestJson
             ]
             
-            print("Form Data: \(requestData)")
+//            print("Form Data: \(requestData)")
 
             // TODO: Ensure this is secure and that identifiers can't be hijacked into false submissions
             if let identifier = previousSubmissionId {
@@ -345,9 +349,6 @@ extension KeyServer {
 
     private func _retrieveInfectedKeys(since date: Date?, completion: @escaping (InfectedKeysResponse?, Swift.Error?) -> Void) {
 
-        let date: Date? = nil // TODO: Remove
-        
-        
         guard var endPoint = self.config.getInfected else {
             completion(nil, Error.invalidConfig)
             return
@@ -398,6 +399,7 @@ extension KeyServer {
                     let decoded: KeyServerMessagePackInfectedKeys
                     
                     if normalized.contains("application/json") {
+                        print("Handling JSON response")
                         let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
                         
                         guard let json = jsonObject as? [String: Any] else {
@@ -411,6 +413,8 @@ extension KeyServer {
                         decoded = try KeyServerMessagePackInfectedKeys(json: json)
                     }
                     else if normalized.contains("application/x-msgpack") {
+                        print("Handling Binary response")
+
                         let decoder = MessagePackDecoder()
                         decoded = try decoder.decode(KeyServerMessagePackInfectedKeys.self, from: data)
                     }
@@ -428,6 +432,9 @@ extension KeyServer {
                     let deletedKeys: [TPTemporaryExposureKey] = decoded.deleted_keys.compactMap { $0.exposureKey }
 
                     let infectedKeysResponse = InfectedKeysResponse(date: date, keys: keys, deletedKeys: deletedKeys)
+                    
+                    
+                    print("keys.count=\(keys.count) deletedKeys.count=\(deletedKeys.count)")
 
                     completion(infectedKeysResponse, nil)
                 }
