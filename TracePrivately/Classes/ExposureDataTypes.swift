@@ -10,11 +10,32 @@ import ExposureNotification
 
 // These types map to the ExposureNotification framework so it can easily be factored out
 
+#if canImport(ExposureNotification)
 typealias TPIntervalNumber = ENIntervalNumber
 typealias TPAttenuation = ENAttenuation
 typealias TPRiskScore = ENRiskScore
-typealias TPRiskLevel = ENRiskLevel
 typealias TPExposureConfiguration = ENExposureConfiguration
+typealias TPRiskLevel = ENRiskLevel
+#else
+typealias TPIntervalNumber = UInt32
+typealias TPAttenuation = UInt8
+typealias TPRiskScore = UInt8
+class TPExposureConfiguration {
+    
+}
+
+enum TPRiskLevel: UInt8 {
+    case invalid = 0
+    case lowest = 1
+    case low = 10
+    case lowMedium = 25
+    case medium = 50
+    case mediumHigh = 65
+    case high = 80
+    case veryHigh = 90
+    case highest = 100
+}
+#endif
 
 struct TPTemporaryExposureKey {
     let keyData: Data
@@ -22,6 +43,7 @@ struct TPTemporaryExposureKey {
     let transmissionRiskLevel: TPRiskLevel!
 }
 
+#if !os(macOS)
 extension TPTemporaryExposureKey {
     var enExposureKey: ENTemporaryExposureKey {
         let key = ENTemporaryExposureKey()
@@ -76,5 +98,13 @@ extension TPExposureInfo {
         default:
             return .low
         }
+    }
+}
+#endif
+
+extension UInt32 {
+    static func intervalNumberFrom(date: Date) -> Self {
+        let intervalNumber = UInt32(date.timeIntervalSince1970 / 600)
+        return intervalNumber / 144 * 144
     }
 }

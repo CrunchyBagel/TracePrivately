@@ -4,14 +4,15 @@
 //
 
 import Foundation
-
-
+import MessagePack
 
 class KeyServer {
     static let shared = KeyServer()
     
     enum Error: LocalizedError {
         case responseDataNotReceived
+        case contentTypeMissing
+        case contentTypeNotRecognized(String)
         case jsonDecodingError
         case keyDataMissing
         case dateMissing
@@ -28,11 +29,18 @@ class KeyServer {
             case .okStatusNotReceived: return NSLocalizedString("keyserver.error.not_ok", comment: "")
             case .invalidConfig: return NSLocalizedString("keyserver.error.invalid_config", comment: "")
             case .notAuthorized: return NSLocalizedString("keyserver.error.not_authorized", comment: "")
+            case .contentTypeMissing: return NSLocalizedString("keyserver.error.content_type_missing", comment: "")
+            case .contentTypeNotRecognized(let str): return "Invalid content type: \(str)" // TODO: Use this NSLocalizedString("keyserver.error.content_type_not_recognized", comment: "") + str
             }
         }
         
         var shouldRetryWithAuthRequest: Bool {
-            return self == .notAuthorized
+            switch self {
+            case .notAuthorized:
+                return true
+            default:
+                return false
+            }
         }
     }
     
@@ -42,7 +50,11 @@ class KeyServer {
         let config = URLSessionConfiguration.default
         config.allowsCellularAccess     = true
         config.isDiscretionary          = false
+        
+        #if !os(macOS)
         config.sessionSendsLaunchEvents = true
+        #endif
+        
         config.requestCachePolicy       = .reloadIgnoringLocalCacheData
 
         if #available(iOS 11.0, *) {
@@ -66,7 +78,7 @@ class KeyServer {
 
         if let authentication = authentication {
             if let token = authentication.currentAuthenticationToken {
-                print("Found token: \(token)")
+//                print("Found token: \(token)")
                 request.setValue("Bearer \(token.string)", forHTTPHeaderField: "Authorization")
             }
             else if throwIfMissing {
@@ -137,7 +149,7 @@ extension KeyServer {
                             completion(false, Error.responseDataNotReceived)
                             return
                         }
-
+                        
                         guard let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
                             if let str = String(data: data, encoding: .utf8) {
                                 print("Response: \(str)")
@@ -235,7 +247,7 @@ extension KeyServer {
                 "form": formData.requestJson
             ]
             
-            print("Form Data: \(requestData)")
+//            print("Form Data: \(requestData)")
 
             // TODO: Ensure this is secure and that identifiers can't be hijacked into false submissions
             if let identifier = previousSubmissionId {
@@ -352,60 +364,84 @@ extension KeyServer {
         }
         
         do {
-            let request = try self.createRequest(endPoint: endPoint, authentication: self.config.authentication?.authentication)
+            var request = try self.createRequest(endPoint: endPoint, authentication: self.config.authentication?.authentication)
             
+            request.setValue("application/x-msgpack", forHTTPHeaderField: "Accept")
+//            request.setValue("application/json", forHTTPHeaderField: "Accept")
+
             let task = self.urlSession.dataTask(with: request) { data, response, error in
-                if let error = error {
-                    completion(nil, error)
-                    return
-                }
+                do {
+                    if let error = error {
+                        throw error
+                    }
                 
-                guard let response = response as? HTTPURLResponse else {
-                    completion(nil, Error.responseDataNotReceived)
-                    return
-                }
+                    guard let response = response as? HTTPURLResponse else {
+                        throw Error.responseDataNotReceived
+                    }
                 
-                switch response.statusCode {
-                case 401:
-                    completion(nil, Error.notAuthorized)
-                    return
-                default:
-                    break
-                }
+                    switch response.statusCode {
+                    case 401:
+                        throw Error.notAuthorized
+                    default:
+                        break
+                    }
 
-                guard let data = data else {
-                    completion(nil, Error.responseDataNotReceived)
-                    return
-                }
-
-                guard let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
-                    if let str = String(data: data, encoding: .utf8) {
-                        print("Response: \(str)")
+                    guard let data = data else {
+                        throw Error.responseDataNotReceived
                     }
                     
-                    completion(nil, Error.jsonDecodingError)
-                    return
-                }
-                
-                guard let keysData = json["keys"] as? [[String: Any]] else {
-                    completion(nil, Error.keyDataMissing)
-                    return
-                }
-                
-                let df = ISO8601DateFormatter()
+                    guard let contentType = response.allHeaderFields["Content-Type"] as? String else {
+                        throw Error.contentTypeMissing
+                    }
+                    
+                    let normalized = contentType.lowercased()
+                    
+                    let decoded: KeyServerMessagePackInfectedKeys
+                    
+                    if normalized.contains("application/json") {
+                        print("Handling JSON response")
+                        let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+                        
+                        guard let json = jsonObject as? [String: Any] else {
+                            if let str = String(data: data, encoding: .utf8) {
+                                print("Response: \(str)")
+                            }
+                            
+                            throw Error.jsonDecodingError
+                        }
+                        
+                        decoded = try KeyServerMessagePackInfectedKeys(json: json)
+                    }
+                    else if normalized.contains("application/x-msgpack") {
+                        print("Handling Binary response")
 
-                guard let dateStr = json["date"] as? String, let date = df.date(from: dateStr) else {
-                    completion(nil, Error.dateMissing)
-                    return
+                        let decoder = MessagePackDecoder()
+                        decoded = try decoder.decode(KeyServerMessagePackInfectedKeys.self, from: data)
+                    }
+                    else {
+                        throw Error.contentTypeNotRecognized(contentType)
+                    }
+
+                    let df = ISO8601DateFormatter()
+
+                    guard let date = df.date(from: decoded.date) else {
+                        throw Error.dateMissing
+                    }
+
+                    let keys: [TPTemporaryExposureKey] = decoded.keys.compactMap { $0.exposureKey }
+                    let deletedKeys: [TPTemporaryExposureKey] = decoded.deleted_keys.compactMap { $0.exposureKey }
+
+                    let infectedKeysResponse = InfectedKeysResponse(date: date, keys: keys, deletedKeys: deletedKeys)
+                    
+                    
+                    print("keys.count=\(keys.count) deletedKeys.count=\(deletedKeys.count)")
+
+                    completion(infectedKeysResponse, nil)
                 }
-                
-                let keys: [TPTemporaryExposureKey] = keysData.compactMap { TPTemporaryExposureKey(jsonData: $0) }
-                
-                print("Found \(keys.count) key(s)")
-                
-                let infectedKeysResponse = InfectedKeysResponse(date: date, keys: keys, deletedKeys: [])
-                
-                completion(infectedKeysResponse, nil)
+                catch {
+                    print("ERROR: \(error.localizedDescription)")
+                    completion(nil, error)
+                }
             }
             
             task.resume()
@@ -416,31 +452,69 @@ extension KeyServer {
     }
 }
 
-extension TPTemporaryExposureKey {
+struct KeyServerMessagePackInfectedKeys: Codable {
+    struct Key: Codable {
+        let d: Data
+        let r: Int
+        let l: Int
+
+        var exposureKey: TPTemporaryExposureKey? {
+            guard r < TPIntervalNumber.max else {
+                return nil
+            }
+            
+            let riskLevel: TPRiskLevel? = TPRiskLevel(rawValue: UInt8(l))
+            
+            return .init(
+                keyData: d,
+                rollingStartNumber: TPIntervalNumber(r),
+                transmissionRiskLevel: riskLevel ?? .invalid
+            )
+        }
+    }
+    
+    let status: String
+    let date: String
+    let keys: [Key]
+    let deleted_keys: [Key]
+}
+
+extension KeyServerMessagePackInfectedKeys {
+    init(json: [String: Any]) throws {
+        let statusStr = json["status"] as? String
+
+        guard let keysData = json["keys"] as? [[String: Any]] else {
+            throw KeyServer.Error.keyDataMissing
+        }
+        
+        let deletedKeysData: [[String: Any]] = (json["deleted_keys"] as? [[String: Any]] ?? [])
+        
+        guard let dateStr = json["date"] as? String else {
+            throw KeyServer.Error.dateMissing
+        }
+        
+        let keys = keysData.compactMap { KeyServerMessagePackInfectedKeys.Key(jsonData: $0) }
+        let deletedKeys = deletedKeysData.compactMap { KeyServerMessagePackInfectedKeys.Key(jsonData: $0) }
+
+        self.init(status: statusStr ?? "", date: dateStr, keys: keys, deleted_keys: deletedKeys)
+    }
+}
+
+extension KeyServerMessagePackInfectedKeys.Key {
     init?(jsonData: [String: Any]) {
         guard let base64str = jsonData["d"] as? String, let keyData = Data(base64Encoded: base64str) else {
             return nil
         }
         
-        guard let rollingStartNumber = jsonData["r"] as? UInt32 else {
+        guard let rollingStartNumber = jsonData["r"] as? Int else {
             return nil
         }
         
-        let riskLevel: TPRiskLevel?
-        
-        if let val = jsonData["l"] as? UInt8 {
-            riskLevel = TPRiskLevel(rawValue: val)
-        }
-        else {
-            riskLevel = nil
-        }
-        
-        self.init(
-            keyData: keyData,
-            rollingStartNumber: rollingStartNumber,
-            transmissionRiskLevel: riskLevel ?? .invalid
-        )
-    }
+        let riskLevel = jsonData["l"] as? Int ?? 0
+
+        self.init(d: keyData, r: rollingStartNumber, l: riskLevel)
+  
+      }
 }
 
 extension URL {

@@ -185,6 +185,11 @@ extension ContactTraceManager {
         return UserDefaults.standard.object(forKey: Self.lastReceivedInfectedKeysKey) as? Date
     }
 
+    func clearLastReceivedInfectedKeys() {
+        UserDefaults.standard.removeObject(forKey: Self.lastReceivedInfectedKeysKey)
+        UserDefaults.standard.synchronize()
+    }
+
     func saveLastReceivedInfectedKeys(date: Date) {
         UserDefaults.standard.set(date, forKey: Self.lastReceivedInfectedKeysKey)
         UserDefaults.standard.synchronize()
@@ -195,6 +200,7 @@ extension ContactTraceManager {
         // TODO: Use UIApplication.shared.beginBackgroundTask so this can finish
         
         guard !self.isUpdatingExposures else {
+            print("Already updating exposures, skipping")
             completion(nil)
             return
         }
@@ -235,7 +241,7 @@ extension ContactTraceManager {
                     completion(error ?? Error.unknownError)
                     return
                 }
-                
+
                 self.saveNewInfectedKeys(keys: response.keys, deletedKeys: response.deletedKeys) { keyCount, error in
                     guard let keyCount = keyCount else {
                         self.isUpdatingExposures = false
@@ -592,7 +598,7 @@ extension ENExposureDetectionSession {
         let batch = Array(keys.prefix(upTo: cursor))
         let remaining = Array(keys.suffix(from: cursor))
         
-        print("Adding: \(batch)")
+        print("Adding: \(batch.count) keys")
 
 //        withoutActuallyEscaping(completion) { escapingCompletion in
             addDiagnosisKeys(batch) { error in
@@ -630,13 +636,27 @@ extension ContactTraceManager {
 
 extension ContactTraceManager {
     func resetAllData(completion: @escaping (Swift.Error?) -> Void) {
-        guard let manager = self.enManager else {
-            completion(nil)
-            return
+        
+        self.stopTracing()
+        
+        let dispatchGroup = DispatchGroup()
+        
+        if let manager = self.enManager {
+            dispatchGroup.enter()
+            manager.resetAllData { error in
+                dispatchGroup.leave()
+            }
         }
         
-        manager.resetAllData { error in
-            completion(error)
+        self.clearLastReceivedInfectedKeys()
+
+        dispatchGroup.enter()
+        DataManager.shared.clearRemoteKeyAndLocalExposuresCache { error in
+            dispatchGroup.leave()
+        }
+
+        dispatchGroup.notify(queue: .main) {
+            completion(nil)
         }
     }
 }

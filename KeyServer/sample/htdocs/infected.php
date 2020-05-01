@@ -17,9 +17,6 @@ if (array_key_exists('HTTP_ACCEPT', $_SERVER)) {
 // https://github.com/rybakit/msgpack.php
 use MessagePack\Packer;
 
-
-// TODO: Validate bearer token and throw 401 if not valid
-
 $minTime = time() - (86400 * 14);
 $time = $minTime;
 

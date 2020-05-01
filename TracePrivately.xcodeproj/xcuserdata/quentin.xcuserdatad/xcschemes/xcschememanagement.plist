@@ -7,6 +7,11 @@
 		<key>OneSkyDownload.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
+		<key>SubmitFakeKeys.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
 		<key>TracePrivately.xcscheme_^#shared#^_</key>
@@ -17,6 +22,16 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>66210569245251B10011EB42</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>66A00B77245BAB6E007DE11F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>66F818662448FD5C0043AC2D</key>
 		<dict>
 			<key>primary</key>

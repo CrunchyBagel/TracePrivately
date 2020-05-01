@@ -94,6 +94,7 @@ paths:
                 -  BearerAuth: []
             produces:
                 - "application/json"
+                - "application/x-msgpack"
             parameters:
                 - name: since
                   description: |
