@@ -5,6 +5,7 @@
 
 import UIKit
 import BackgroundTasks
+import Intents
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -34,6 +35,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         ContactTraceManager.shared.applicationDidFinishLaunching()
 
+        if #available(iOS 12, *) {
+            let shortcuts: [INShortcut?] = [
+                INShortcut(intent: StartTracingIntent()),
+                INShortcut(intent: StopTracingIntent()),
+            ]
+            
+            INVoiceShortcutCenter.shared.setShortcutSuggestions(shortcuts.compactMap { $0 })
+        }
+        
         if Self.useModernBackgroundProcessing {
             if #available(iOS 13, *) {
                 BGTaskScheduler.shared.register(forTaskWithIdentifier: ContactTraceManager.backgroundProcessingTaskIdentifier, using: .main) { task in
@@ -150,5 +160,34 @@ extension AppDelegate {
         default:
             task.setTaskCompleted(success: true)
         }
+    }
+}
+
+extension AppDelegate {
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        
+        if #available(iOS 12.0, *) {
+            if let intent = userActivity.interaction?.intent {
+                switch intent {
+                case is StartTracingIntent:
+                    ContactTraceManager.shared.startTracing { _ in
+                        
+                    }
+                    
+                    return true
+                    
+                case is StopTracingIntent:
+                    ContactTraceManager.shared.stopTracing()
+                    
+                    return true
+                    
+                default:
+                    return false
+                }
+            }
+        }
+
+        return false
+
     }
 }

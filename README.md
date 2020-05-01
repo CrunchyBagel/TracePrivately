@@ -92,6 +92,10 @@ English, French, Spanish (ES, MX), Portuguese (PT, BR), German, Chinese (Simplif
 
 ![Screenshots](https://github.com/CrunchyBagel/TracePrivately/blob/master/screenshots/screenshots.png?raw=true)
 
+This screenshot shows how you can use the start/stop tracing shortcuts with automations. User is still manually prompted to start tracing, but this will initiate it automatically when you leave home:
+
+![Siri Shortcuts](https://github.com/CrunchyBagel/TracePrivately/blob/feat/siri_shortcuts/screenshots/shortcuts.png?raw=true)
+
 ## Other
 
 * Please submit suggestions and pull requests so this can function as best as possible.

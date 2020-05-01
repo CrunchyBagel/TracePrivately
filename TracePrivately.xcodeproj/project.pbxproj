@@ -10,7 +10,9 @@
 		39BD8849244C6D3D00EB8B6C /* ExposedView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 39BD8848244C6D3D00EB8B6C /* ExposedView.storyboard */; };
 		660408A22458F49F004710F7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 660408A42458F49F004710F7 /* InfoPlist.strings */; };
 		6614BB052452B9D900885F23 /* ExposureDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6614BB042452B9D900885F23 /* ExposureDetailsViewController.swift */; };
-		6621056D245251B10011EB42 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6621056C245251B10011EB42 /* main.swift */; };
+		66210553245127340011EB42 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 66210552245127340011EB42 /* Intents.intentdefinition */; };
+		6621055B245129690011EB42 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6621055A245129690011EB42 /* IntentHandler.swift */; };
+		662105642451299B0011EB42 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 66210552245127340011EB42 /* Intents.intentdefinition */; };
 		6621057124525FC90011EB42 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6621057324525FC90011EB42 /* Localizable.strings */; };
 		663BD8B9245A510C00A3E029 /* ExposureDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663BD8B8245A510C00A3E029 /* ExposureDataTypes.swift */; };
 		66437F76244A86AE000B8C6C /* Disease.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F75244A86AE000B8C6C /* Disease.swift */; };
@@ -43,6 +45,7 @@
 		66C4BBC324564AFB008AACC2 /* ExposureNotifications.plist in Resources */ = {isa = PBXBuildFile; fileRef = 66C4BBC224564AFB008AACC2 /* ExposureNotifications.plist */; };
 		66C4BBC524564B56008AACC2 /* ExposureNotificationConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C4BBC424564B56008AACC2 /* ExposureNotificationConfig.swift */; };
 		66CB7BD12453D51A0044D32B /* ENMockFramework.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CB7BD02453D51A0044D32B /* ENMockFramework.swift */; };
+		66CB7BDF245545EB0044D32B /* TracePrivately-Siri.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 66CB7BDE245545DF0044D32B /* TracePrivately-Siri.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		66CB95BD244FB51000D775B6 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CB95BC244FB51000D775B6 /* ActionButton.swift */; };
 		66CB95BF244FB5CD00D775B6 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CB95BE244FB5CD00D775B6 /* MainViewController.swift */; };
 		66CB95C1244FBBC800D775B6 /* Privacy.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66CB95C0244FBBC800D775B6 /* Privacy.storyboard */; };
@@ -57,15 +60,27 @@
 		66F818772448FD5E0043AC2D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66F818752448FD5E0043AC2D /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		6621055D245129690011EB42 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 66F8185F2448FD5C0043AC2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 66210557245129690011EB42;
+			remoteInfo = "TracePrivately-Siri";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
-		66210568245251B10011EB42 /* CopyFiles */ = {
+		66210563245129690011EB42 /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			dstPath = "";
+			dstSubfolderSpec = 13;
 			files = (
+				66CB7BDF245545EB0044D32B /* TracePrivately-Siri.appex in Embed App Extensions */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		66A00B76245BAB6E007DE11F /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -104,6 +119,9 @@
 		660408BA24595848004710F7 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		6614BB042452B9D900885F23 /* ExposureDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureDetailsViewController.swift; sourceTree = "<group>"; };
 		661B6C6A2452CE2500CC1DC6 /* Model 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 4.xcdatamodel"; sourceTree = "<group>"; };
+		66210552245127340011EB42 /* Intents.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Intents.intentdefinition; sourceTree = "<group>"; };
+		6621055A245129690011EB42 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
+		6621055C245129690011EB42 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6621056A245251B10011EB42 /* OneSkyDownload */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OneSkyDownload; sourceTree = BUILT_PRODUCTS_DIR; };
 		6621056C245251B10011EB42 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		6621057224525FC90011EB42 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -155,6 +173,7 @@
 		66C4BBC424564B56008AACC2 /* ExposureNotificationConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureNotificationConfig.swift; sourceTree = "<group>"; };
 		66CB7BD02453D51A0044D32B /* ENMockFramework.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ENMockFramework.swift; sourceTree = "<group>"; };
 		66CB7BD22453EB190044D32B /* Model 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 5.xcdatamodel"; sourceTree = "<group>"; };
+		66CB7BDE245545DF0044D32B /* TracePrivately-Siri.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "TracePrivately-Siri.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		66CB95BC244FB51000D775B6 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		66CB95BE244FB5CD00D775B6 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		66CB95C0244FBBC800D775B6 /* Privacy.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Privacy.storyboard; sourceTree = "<group>"; };
@@ -173,7 +192,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		66210567245251B10011EB42 /* Frameworks */ = {
+		66210555245129690011EB42 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -211,6 +230,15 @@
 				667C7C972457B10100D280A9 /* Settings.storyboard */,
 			);
 			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		66210559245129690011EB42 /* TracePrivately-Siri */ = {
+			isa = PBXGroup;
+			children = (
+				6621055A245129690011EB42 /* IntentHandler.swift */,
+				6621055C245129690011EB42 /* Info.plist */,
+			);
+			path = "TracePrivately-Siri";
 			sourceTree = "<group>";
 		};
 		6621056B245251B10011EB42 /* OneSkyDownload */ = {
@@ -286,6 +314,7 @@
 			isa = PBXGroup;
 			children = (
 				66F818692448FD5C0043AC2D /* TracePrivately */,
+				66210559245129690011EB42 /* TracePrivately-Siri */,
 				6621056B245251B10011EB42 /* OneSkyDownload */,
 				66A00B79245BAB6E007DE11F /* SubmitFakeKeys */,
 				66F818682448FD5C0043AC2D /* Products */,
@@ -298,6 +327,7 @@
 			children = (
 				66F818672448FD5C0043AC2D /* TracePrivately.app */,
 				6621056A245251B10011EB42 /* OneSkyDownload */,
+				66CB7BDE245545DF0044D32B /* TracePrivately-Siri.appex */,
 				66A00B78245BAB6E007DE11F /* SubmitFakeKeys */,
 			);
 			name = Products;
@@ -313,6 +343,7 @@
 				66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */,
 				66F818782448FD5E0043AC2D /* Info.plist */,
 				660408A42458F49F004710F7 /* InfoPlist.strings */,
+				66210552245127340011EB42 /* Intents.intentdefinition */,
 				6621057324525FC90011EB42 /* Localizable.strings */,
 				6698C573244BFAB600F046E4 /* KeyServer.plist */,
 				6673EED32451785300244287 /* SubmitConfig.plist */,
@@ -324,22 +355,22 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		66210569245251B10011EB42 /* OneSkyDownload */ = {
+		66210557245129690011EB42 /* TracePrivately-Siri */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 66210570245251B10011EB42 /* Build configuration list for PBXNativeTarget "OneSkyDownload" */;
+			buildConfigurationList = 66210560245129690011EB42 /* Build configuration list for PBXNativeTarget "TracePrivately-Siri" */;
 			buildPhases = (
-				66210566245251B10011EB42 /* Sources */,
-				66210567245251B10011EB42 /* Frameworks */,
-				66210568245251B10011EB42 /* CopyFiles */,
+				66210554245129690011EB42 /* Sources */,
+				66210555245129690011EB42 /* Frameworks */,
+				66210556245129690011EB42 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = OneSkyDownload;
-			productName = OneSkyDownload;
-			productReference = 6621056A245251B10011EB42 /* OneSkyDownload */;
-			productType = "com.apple.product-type.tool";
+			name = "TracePrivately-Siri";
+			productName = "TracePrivately-Siri";
+			productReference = 66CB7BDE245545DF0044D32B /* TracePrivately-Siri.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		66A00B77245BAB6E007DE11F /* SubmitFakeKeys */ = {
 			isa = PBXNativeTarget;
@@ -368,10 +399,12 @@
 				66F818632448FD5C0043AC2D /* Sources */,
 				66F818642448FD5C0043AC2D /* Frameworks */,
 				66F818652448FD5C0043AC2D /* Resources */,
+				66210563245129690011EB42 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				6621055E245129690011EB42 /* PBXTargetDependency */,
 			);
 			name = TracePrivately;
 			packageProductDependencies = (
@@ -391,7 +424,7 @@
 				LastUpgradeCheck = 1140;
 				ORGANIZATIONNAME = "Quentin Zervaas";
 				TargetAttributes = {
-					66210569245251B10011EB42 = {
+					66210557245129690011EB42 = {
 						CreatedOnToolsVersion = 11.4.1;
 					};
 					66A00B77245BAB6E007DE11F = {
@@ -440,13 +473,20 @@
 			projectRoot = "";
 			targets = (
 				66F818662448FD5C0043AC2D /* TracePrivately */,
-				66210569245251B10011EB42 /* OneSkyDownload */,
+				66210557245129690011EB42 /* TracePrivately-Siri */,
 				66A00B77245BAB6E007DE11F /* SubmitFakeKeys */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		66210556245129690011EB42 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		66F818652448FD5C0043AC2D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -470,11 +510,12 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		66210566245251B10011EB42 /* Sources */ = {
+		66210554245129690011EB42 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6621056D245251B10011EB42 /* main.swift in Sources */,
+				662105642451299B0011EB42 /* Intents.intentdefinition in Sources */,
+				6621055B245129690011EB42 /* IntentHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -508,6 +549,7 @@
 				66CB95BD244FB51000D775B6 /* ActionButton.swift in Sources */,
 				66793891245460B600868B84 /* KeyServerConfig.swift in Sources */,
 				66437F76244A86AE000B8C6C /* Disease.swift in Sources */,
+				66210553245127340011EB42 /* Intents.intentdefinition in Sources */,
 				66437FA0244A9B2C000B8C6C /* DataManager.swift in Sources */,
 				66F8186B2448FD5C0043AC2D /* AppDelegate.swift in Sources */,
 				66A00B8B245BB320007DE11F /* DataExtension.swift in Sources */,
@@ -525,6 +567,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6621055E245129690011EB42 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 66210557245129690011EB42 /* TracePrivately-Siri */;
+			targetProxy = 6621055D245129690011EB42 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		660408A42458F49F004710F7 /* InfoPlist.strings */ = {
@@ -602,29 +652,41 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		6621056E245251B10011EB42 /* Debug */ = {
+		66210561245129690011EB42 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CHZS3BHM57;
-				ENABLE_HARDENED_RUNTIME = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				INFOPLIST_FILE = "TracePrivately-Siri/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.TracePrivately.TracePrivately-Siri";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		6621056F245251B10011EB42 /* Release */ = {
+		66210562245129690011EB42 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CHZS3BHM57;
-				ENABLE_HARDENED_RUNTIME = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				INFOPLIST_FILE = "TracePrivately-Siri/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.TracePrivately.TracePrivately-Siri";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -773,6 +835,7 @@
 		66F8187C2448FD5E0043AC2D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = TracePrivately/TracePrivately.entitlements;
@@ -795,6 +858,7 @@
 		66F8187D2448FD5E0043AC2D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = TracePrivately/TracePrivately.entitlements;
@@ -816,11 +880,11 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		66210570245251B10011EB42 /* Build configuration list for PBXNativeTarget "OneSkyDownload" */ = {
+		66210560245129690011EB42 /* Build configuration list for PBXNativeTarget "TracePrivately-Siri" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				6621056E245251B10011EB42 /* Debug */,
-				6621056F245251B10011EB42 /* Release */,
+				66210561245129690011EB42 /* Debug */,
+				66210562245129690011EB42 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

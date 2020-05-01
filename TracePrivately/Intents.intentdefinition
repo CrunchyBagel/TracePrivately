@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>INEnums</key>
+	<array/>
+	<key>INIntentDefinitionModelVersion</key>
+	<string>1.1</string>
+	<key>INIntentDefinitionNamespace</key>
+	<string>DPczlP</string>
+	<key>INIntentDefinitionSystemVersion</key>
+	<string>19E287</string>
+	<key>INIntentDefinitionToolsBuildVersion</key>
+	<string>11E503a</string>
+	<key>INIntentDefinitionToolsVersion</key>
+	<string>11.4.1</string>
+	<key>INIntents</key>
+	<array>
+		<dict>
+			<key>INIntentCategory</key>
+			<string>start</string>
+			<key>INIntentDescriptionID</key>
+			<string>duROZJ</string>
+			<key>INIntentName</key>
+			<string>StartTracing</string>
+			<key>INIntentParameterCombinations</key>
+			<dict>
+				<key></key>
+				<dict>
+					<key>INIntentParameterCombinationIsPrimary</key>
+					<true/>
+					<key>INIntentParameterCombinationSubtitle</key>
+					<string>Launch and turn on contact tracing.</string>
+					<key>INIntentParameterCombinationSubtitleID</key>
+					<string>7tbI6r</string>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Start Tracing</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>u7fimL</string>
+				</dict>
+			</dict>
+			<key>INIntentResponse</key>
+			<dict>
+				<key>INIntentResponseCodes</key>
+				<array>
+					<dict>
+						<key>INIntentResponseCodeName</key>
+						<string>success</string>
+						<key>INIntentResponseCodeSuccess</key>
+						<true/>
+					</dict>
+					<dict>
+						<key>INIntentResponseCodeName</key>
+						<string>failure</string>
+					</dict>
+				</array>
+			</dict>
+			<key>INIntentTitle</key>
+			<string>Start Tracing</string>
+			<key>INIntentTitleID</key>
+			<string>dHOGLB</string>
+			<key>INIntentType</key>
+			<string>Custom</string>
+			<key>INIntentVerb</key>
+			<string>Start</string>
+		</dict>
+		<dict>
+			<key>INIntentCategory</key>
+			<string>generic</string>
+			<key>INIntentDescriptionID</key>
+			<string>moKdk4</string>
+			<key>INIntentName</key>
+			<string>StopTracing</string>
+			<key>INIntentParameterCombinations</key>
+			<dict>
+				<key></key>
+				<dict>
+					<key>INIntentParameterCombinationIsPrimary</key>
+					<true/>
+					<key>INIntentParameterCombinationSubtitle</key>
+					<string>Turn off contact tracing.</string>
+					<key>INIntentParameterCombinationSubtitleID</key>
+					<string>0ErpRI</string>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Stop Tracing</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>ZPyCxs</string>
+				</dict>
+			</dict>
+			<key>INIntentResponse</key>
+			<dict>
+				<key>INIntentResponseCodes</key>
+				<array>
+					<dict>
+						<key>INIntentResponseCodeName</key>
+						<string>success</string>
+						<key>INIntentResponseCodeSuccess</key>
+						<true/>
+					</dict>
+					<dict>
+						<key>INIntentResponseCodeName</key>
+						<string>failure</string>
+					</dict>
+				</array>
+				<key>INIntentResponseLastParameterTag</key>
+				<integer>2</integer>
+			</dict>
+			<key>INIntentTitle</key>
+			<string>Stop Tracing</string>
+			<key>INIntentTitleID</key>
+			<string>pMXmJa</string>
+			<key>INIntentType</key>
+			<string>Custom</string>
+			<key>INIntentVerb</key>
+			<string>Do</string>
+		</dict>
+	</array>
+	<key>INTypes</key>
+	<array/>
+</dict>
+</plist>
