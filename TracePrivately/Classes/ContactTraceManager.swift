@@ -202,8 +202,6 @@ extension ContactTraceManager {
         print("Updating exposures....")
         self.isUpdatingExposures = true
         
-        // TODO: Implement this
-        
         let operationQueue = OperationQueue()
         operationQueue.maxConcurrentOperationCount = 1
         

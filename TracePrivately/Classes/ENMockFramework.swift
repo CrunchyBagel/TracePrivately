@@ -774,7 +774,7 @@ private class ENInternalState {
                 let key = ENTemporaryExposureKey()
                 key.keyData = keyData
                 key.rollingStartNumber = rollingStartNumber
-                key.transmissionRiskLevel = .high // TODO: Make better use of risk level
+                key.transmissionRiskLevel = .high
                 
                 keys.append(key)
             }
