@@ -129,7 +129,6 @@ extension DataManager {
             var numUpdated = 0
 
             // Remove deleted keys first
-            // TODO: Implement
             
             var deleteEntities: [RemoteInfectedKeyEntity] = []
             
@@ -138,8 +137,6 @@ extension DataManager {
                 let data = key.keyData
                 
                 request.predicate = NSPredicate(format: "infectedKey = %@ AND rollingStartNumber = %@", data as CVarArg, Int64(key.rollingStartNumber) as NSNumber)
-                
-                let transmissionRiskLevel = Int16(key.transmissionRiskLevel.rawValue)
                 
                 do {
                     let entities = try context.fetch(request)
@@ -168,7 +165,7 @@ extension DataManager {
                 
                 let entities = try context.fetch(fetchRequest)
                 
-//                let keyData: +Set<Data> = Set(keys.map { $0.networkData })
+                let keyData: Set<Data> = Set(keys.map { $0.comparisonData })
                 
                 var approvedEntities: [LocalInfectionEntity] = []
                 
@@ -179,7 +176,7 @@ extension DataManager {
                     
                     let keyEntities = keysSet.compactMap { $0 as? LocalInfectionKeyEntity }
                     
-                    let localData: Set<Data> = Set(keyEntities.compactMap { $0.temporaryExposureKey?.networkData })
+                    let localData: Set<Data> = Set(keyEntities.compactMap { $0.temporaryExposureKey?.comparisonData })
                     
                     if keyData.intersection(localData).count > 0 {
                         approvedEntities.append(entity)
@@ -268,6 +265,14 @@ extension DataManager {
                 completion(nil, error)
             }
         }
+    }
+}
+
+// This is used to has keys that need to be updated local. Could probably be improved.
+extension TPTemporaryExposureKey {
+    var comparisonData: Data {
+        let rollingData = withUnsafeBytes(of: rollingStartNumber) { Data($0) }
+        return self.keyData + rollingData
     }
 }
 
