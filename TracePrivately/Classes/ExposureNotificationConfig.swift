@@ -9,17 +9,17 @@ struct ExposureNotificationConfig {
     struct BucketConfig {
         let weight: Double
         
-        let val1: ENRiskScore
-        let val2: ENRiskScore
-        let val3: ENRiskScore
-        let val4: ENRiskScore
-        let val5: ENRiskScore
-        let val6: ENRiskScore
-        let val7: ENRiskScore
-        let val8: ENRiskScore
+        let val1: TPRiskScore
+        let val2: TPRiskScore
+        let val3: TPRiskScore
+        let val4: TPRiskScore
+        let val5: TPRiskScore
+        let val6: TPRiskScore
+        let val7: TPRiskScore
+        let val8: TPRiskScore
         
         var scores: [NSNumber] {
-            let vals: [ENRiskScore] = [
+            let vals: [TPRiskScore] = [
                 val1, val2, val3, val4, val5, val6, val7, val8
             ]
             
@@ -27,7 +27,7 @@ struct ExposureNotificationConfig {
         }
     }
     
-    let minimumRiskScore: ENRiskScore
+    let minimumRiskScore: TPRiskScore
     
     let attenuation: BucketConfig
     let daysSinceLastExposure: BucketConfig
@@ -157,7 +157,7 @@ extension ExposureNotificationConfig.BucketConfig: CustomDebugStringConvertible 
             return nil
         }
         
-        let values: [ENRiskScore] = scores.map { $0.uint8Value }
+        let values: [TPRiskScore] = scores.map { $0.uint8Value }
         
         self.weight = weight
         self.val1 = values[0]
