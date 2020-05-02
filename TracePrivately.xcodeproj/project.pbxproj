@@ -42,6 +42,7 @@
 		66A00B8D245BB55C007DE11F /* AsyncBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66848C2C244D5F8800497D2A /* AsyncBlockOperation.swift */; };
 		66A039D7245005B700A569BE /* FontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A039D6245005B700A569BE /* FontExtension.swift */; };
 		66B5C6E72458559B0031B03C /* MessagePack in Frameworks */ = {isa = PBXBuildFile; productRef = 66B5C6E62458559B0031B03C /* MessagePack */; };
+		66C03600245D3BFB00643112 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C035FF245D3BFB00643112 /* main.swift */; };
 		66C4BBC324564AFB008AACC2 /* ExposureNotifications.plist in Resources */ = {isa = PBXBuildFile; fileRef = 66C4BBC224564AFB008AACC2 /* ExposureNotifications.plist */; };
 		66C4BBC524564B56008AACC2 /* ExposureNotificationConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C4BBC424564B56008AACC2 /* ExposureNotificationConfig.swift */; };
 		66CB7BD12453D51A0044D32B /* ENMockFramework.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CB7BD02453D51A0044D32B /* ENMockFramework.swift */; };
@@ -83,6 +84,15 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		66A00B76245BAB6E007DE11F /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		66C035FB245D3BFB00643112 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -169,6 +179,8 @@
 		66A00B8A245BB320007DE11F /* DataExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtension.swift; sourceTree = "<group>"; };
 		66A039D6245005B700A569BE /* FontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
 		66BF646624578E2B00492070 /* Model 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 6.xcdatamodel"; sourceTree = "<group>"; };
+		66C035FD245D3BFB00643112 /* OneSkyDownload */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OneSkyDownload; sourceTree = BUILT_PRODUCTS_DIR; };
+		66C035FF245D3BFB00643112 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		66C4BBC224564AFB008AACC2 /* ExposureNotifications.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ExposureNotifications.plist; sourceTree = "<group>"; };
 		66C4BBC424564B56008AACC2 /* ExposureNotificationConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureNotificationConfig.swift; sourceTree = "<group>"; };
 		66CB7BD02453D51A0044D32B /* ENMockFramework.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ENMockFramework.swift; sourceTree = "<group>"; };
@@ -204,6 +216,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				66A00B82245BB039007DE11F /* MessagePack in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		66C035FA245D3BFB00643112 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,6 +329,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		66C035FE245D3BFB00643112 /* OneSkyDownload */ = {
+			isa = PBXGroup;
+			children = (
+				66C035FF245D3BFB00643112 /* main.swift */,
+			);
+			path = OneSkyDownload;
+			sourceTree = "<group>";
+		};
 		66F8185E2448FD5C0043AC2D = {
 			isa = PBXGroup;
 			children = (
@@ -317,6 +344,7 @@
 				66210559245129690011EB42 /* TracePrivately-Siri */,
 				6621056B245251B10011EB42 /* OneSkyDownload */,
 				66A00B79245BAB6E007DE11F /* SubmitFakeKeys */,
+				66C035FE245D3BFB00643112 /* OneSkyDownload */,
 				66F818682448FD5C0043AC2D /* Products */,
 				66A00B80245BB039007DE11F /* Frameworks */,
 			);
@@ -329,6 +357,7 @@
 				6621056A245251B10011EB42 /* OneSkyDownload */,
 				66CB7BDE245545DF0044D32B /* TracePrivately-Siri.appex */,
 				66A00B78245BAB6E007DE11F /* SubmitFakeKeys */,
+				66C035FD245D3BFB00643112 /* OneSkyDownload */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -392,6 +421,23 @@
 			productReference = 66A00B78245BAB6E007DE11F /* SubmitFakeKeys */;
 			productType = "com.apple.product-type.tool";
 		};
+		66C035FC245D3BFB00643112 /* OneSkyDownload */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 66C03603245D3BFB00643112 /* Build configuration list for PBXNativeTarget "OneSkyDownload" */;
+			buildPhases = (
+				66C035F9245D3BFB00643112 /* Sources */,
+				66C035FA245D3BFB00643112 /* Frameworks */,
+				66C035FB245D3BFB00643112 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OneSkyDownload;
+			productName = OneSkyDownload;
+			productReference = 66C035FD245D3BFB00643112 /* OneSkyDownload */;
+			productType = "com.apple.product-type.tool";
+		};
 		66F818662448FD5C0043AC2D /* TracePrivately */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 66F8187B2448FD5E0043AC2D /* Build configuration list for PBXNativeTarget "TracePrivately" */;
@@ -420,7 +466,7 @@
 		66F8185F2448FD5C0043AC2D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1150;
+				LastSwiftUpdateCheck = 1140;
 				LastUpgradeCheck = 1140;
 				ORGANIZATIONNAME = "Quentin Zervaas";
 				TargetAttributes = {
@@ -429,6 +475,9 @@
 					};
 					66A00B77245BAB6E007DE11F = {
 						CreatedOnToolsVersion = 11.5;
+					};
+					66C035FC245D3BFB00643112 = {
+						CreatedOnToolsVersion = 11.4.1;
 					};
 					66F818662448FD5C0043AC2D = {
 						CreatedOnToolsVersion = 11.4.1;
@@ -475,6 +524,7 @@
 				66F818662448FD5C0043AC2D /* TracePrivately */,
 				66210557245129690011EB42 /* TracePrivately-Siri */,
 				66A00B77245BAB6E007DE11F /* SubmitFakeKeys */,
+				66C035FC245D3BFB00643112 /* OneSkyDownload */,
 			);
 		};
 /* End PBXProject section */
@@ -531,6 +581,14 @@
 				66A00B83245BB045007DE11F /* KeyServerConfig.swift in Sources */,
 				66A00B8D245BB55C007DE11F /* AsyncBlockOperation.swift in Sources */,
 				66A00B7B245BAB6E007DE11F /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		66C035F9245D3BFB00643112 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66C03600245D3BFB00643112 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -704,6 +762,32 @@
 			name = Debug;
 		};
 		66A00B7D245BAB6E007DE11F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CHZS3BHM57;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		66C03601245D3BFB00643112 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CHZS3BHM57;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		66C03602245D3BFB00643112 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -894,6 +978,15 @@
 			buildConfigurations = (
 				66A00B7C245BAB6E007DE11F /* Debug */,
 				66A00B7D245BAB6E007DE11F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		66C03603245D3BFB00643112 /* Build configuration list for PBXNativeTarget "OneSkyDownload" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66C03601245D3BFB00643112 /* Debug */,
+				66C03602245D3BFB00643112 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

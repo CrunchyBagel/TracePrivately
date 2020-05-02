@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "66210569245251B10011EB42"
+               BlueprintIdentifier = "66C035FC245D3BFB00643112"
                BuildableName = "OneSkyDownload"
                BlueprintName = "OneSkyDownload"
                ReferencedContainer = "container:TracePrivately.xcodeproj">
@@ -44,7 +44,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "66210569245251B10011EB42"
+            BlueprintIdentifier = "66C035FC245D3BFB00643112"
             BuildableName = "OneSkyDownload"
             BlueprintName = "OneSkyDownload"
             ReferencedContainer = "container:TracePrivately.xcodeproj">
@@ -61,7 +61,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "66210569245251B10011EB42"
+            BlueprintIdentifier = "66C035FC245D3BFB00643112"
             BuildableName = "OneSkyDownload"
             BlueprintName = "OneSkyDownload"
             ReferencedContainer = "container:TracePrivately.xcodeproj">
