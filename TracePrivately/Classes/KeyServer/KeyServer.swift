@@ -185,9 +185,17 @@ extension KeyServer {
      */
     
     struct InfectedKeysResponse {
+        enum ResponseType {
+            case shouldResetCache
+            case shouldAppendToCache
+        }
+        
+        let responseType: ResponseType
         let date: Date
+        let earliestNextUpdate: Date?
         let keys: [TPTemporaryExposureKey]
         let deletedKeys: [TPTemporaryExposureKey]
+        
     }
     
     func retrieveInfectedKeys(since date: Date?, completion: @escaping (InfectedKeysResponse?, Swift.Error?) -> Void) {

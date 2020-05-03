@@ -241,6 +241,17 @@ extension ContactTraceManager {
                     completion(error ?? Error.unknownError)
                     return
                 }
+                
+                
+                // TODO: Handle this
+//                switch response.responseType {
+//                case .shouldAppendToCache:
+//                case .shouldResetCache:
+//                }
+                
+                if let date = response.earliestNextUpdate {
+                    // TODO: Save and use this
+                }
 
                 self.saveNewInfectedKeys(keys: response.keys, deletedKeys: response.deletedKeys) { keyCount, error in
                     guard let keyCount = keyCount else {

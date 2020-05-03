@@ -151,6 +151,8 @@ class KeyServerTracePrivatelyAdapter: KeyServerBaseAdapter {
         return request
     }
     
+    // TODO: Ability to reset all keys
+    // TODO: Handle "next update time" value on server
     override func handleRetrieveInfectedKeysResponse(data: Data, response: HTTPURLResponse) throws -> KeyServer.InfectedKeysResponse {
 
         switch response.statusCode {
@@ -201,7 +203,13 @@ class KeyServerTracePrivatelyAdapter: KeyServerBaseAdapter {
         let keys: [TPTemporaryExposureKey] = decoded.keys.compactMap { $0.exposureKey }
         let deletedKeys: [TPTemporaryExposureKey] = decoded.deleted_keys.compactMap { $0.exposureKey }
 
-        return KeyServer.InfectedKeysResponse(date: date, keys: keys, deletedKeys: deletedKeys)
+        return KeyServer.InfectedKeysResponse(
+            responseType: .shouldAppendToCache, // TODO: Use
+            date: date,
+            earliestNextUpdate: nil, // TODO: Use
+            keys: keys,
+            deletedKeys: deletedKeys
+        )
     }
     
     override func handleSubmitInfectedKeysResponse(data: Data, response: HTTPURLResponse) throws -> String? {
