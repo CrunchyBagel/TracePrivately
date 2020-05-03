@@ -18,6 +18,8 @@
 		66437F76244A86AE000B8C6C /* Disease.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F75244A86AE000B8C6C /* Disease.swift */; };
 		66437F9E244A9A02000B8C6C /* TracePrivately.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */; };
 		66437FA0244A9B2C000B8C6C /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9F244A9B2C000B8C6C /* DataManager.swift */; };
+		6650A705245EDE1000F762FE /* KeyServerCtDiagServerAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6650A704245EDE1000F762FE /* KeyServerCtDiagServerAdapter.swift */; };
+		6650A708245EE02200F762FE /* KeyServerCtDiagServer.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6650A706245EE01100F762FE /* KeyServerCtDiagServer.plist */; };
 		6673EED42451785300244287 /* SubmitConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6673EED32451785300244287 /* SubmitConfig.plist */; };
 		6673EED62451C10000244287 /* SubmitInfectionConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6673EED52451C10000244287 /* SubmitInfectionConfig.swift */; };
 		66793890245460B600868B84 /* KeyServerAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6679388D245460B600868B84 /* KeyServerAuthentication.swift */; };
@@ -151,6 +153,8 @@
 		66437F9D244A9A02000B8C6C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		66437F9F244A9B2C000B8C6C /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		664C5236245802C9003EBE63 /* Model 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 7.xcdatamodel"; sourceTree = "<group>"; };
+		6650A704245EDE1000F762FE /* KeyServerCtDiagServerAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyServerCtDiagServerAdapter.swift; sourceTree = "<group>"; };
+		6650A706245EE01100F762FE /* KeyServerCtDiagServer.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = KeyServerCtDiagServer.plist; sourceTree = "<group>"; };
 		6673EED32451785300244287 /* SubmitConfig.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SubmitConfig.plist; sourceTree = "<group>"; };
 		6673EED52451C10000244287 /* SubmitInfectionConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitInfectionConfig.swift; sourceTree = "<group>"; };
 		6679388D245460B600868B84 /* KeyServerAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyServerAuthentication.swift; sourceTree = "<group>"; };
@@ -315,6 +319,7 @@
 				6679388F245460B600868B84 /* KeyServer.swift */,
 				66B242BA245E6CCE00E17AAA /* KeyServerAdapter.swift */,
 				66B242BC245E79B200E17AAA /* KeyServerTracePrivatelyAdapter.swift */,
+				6650A704245EDE1000F762FE /* KeyServerCtDiagServerAdapter.swift */,
 				6679389424568A3D00868B84 /* InfectedKeysFormData.swift */,
 			);
 			path = KeyServer;
@@ -381,6 +386,7 @@
 				66210552245127340011EB42 /* Intents.intentdefinition */,
 				6621057324525FC90011EB42 /* Localizable.strings */,
 				6698C573244BFAB600F046E4 /* KeyServer.plist */,
+				6650A706245EE01100F762FE /* KeyServerCtDiagServer.plist */,
 				6673EED32451785300244287 /* SubmitConfig.plist */,
 				66C4BBC224564AFB008AACC2 /* ExposureNotifications.plist */,
 			);
@@ -549,6 +555,7 @@
 			files = (
 				6698C574244BFAB600F046E4 /* KeyServer.plist in Resources */,
 				660408A22458F49F004710F7 /* InfoPlist.strings in Resources */,
+				6650A708245EE02200F762FE /* KeyServerCtDiagServer.plist in Resources */,
 				66F818772448FD5E0043AC2D /* LaunchScreen.storyboard in Resources */,
 				667C7C982457B10100D280A9 /* Settings.storyboard in Resources */,
 				66C4BBC324564AFB008AACC2 /* ExposureNotifications.plist in Resources */,
@@ -615,6 +622,7 @@
 				66793891245460B600868B84 /* KeyServerConfig.swift in Sources */,
 				66437F76244A86AE000B8C6C /* Disease.swift in Sources */,
 				66210553245127340011EB42 /* Intents.intentdefinition in Sources */,
+				6650A705245EDE1000F762FE /* KeyServerCtDiagServerAdapter.swift in Sources */,
 				66437FA0244A9B2C000B8C6C /* DataManager.swift in Sources */,
 				66F8186B2448FD5C0043AC2D /* AppDelegate.swift in Sources */,
 				66A00B8B245BB320007DE11F /* DataExtension.swift in Sources */,

@@ -18,7 +18,7 @@ protocol KeyServerAdapter {
     func handleSubmitInfectedKeysResponse(data: Data, response: HTTPURLResponse) throws -> String?
 }
 
-class KeyServerBaseAdapter: KeyServerAdapter {
+class KeyServerBaseAdapter {
     let config: KeyServerConfig
     
     init(config: KeyServerConfig) {
@@ -51,30 +51,6 @@ class KeyServerBaseAdapter: KeyServerAdapter {
         print("Request: \(request)")
         
         return request
-    }
-    
-    func buildRequestAuthorizationRequest(completion: @escaping (URLRequest?, Error?) -> Void) {
-        completion(nil, KeyServer.Error.invalidConfig)
-    }
-    
-    func handleRequestAuthorizationResponse(data: Data, response: HTTPURLResponse) throws {
-        throw KeyServer.Error.invalidConfig
-    }
-
-    func buildRetrieveInfectedKeysRequest(since date: Date?) throws -> URLRequest {
-        throw KeyServer.Error.invalidConfig
-    }
-    
-    func handleRetrieveInfectedKeysResponse(data: Data, response: HTTPURLResponse) throws -> KeyServer.InfectedKeysResponse {
-        throw KeyServer.Error.invalidConfig
-    }
-    
-    func buildSubmitInfectedKeysRequest(formData: InfectedKeysFormData, keys: [TPTemporaryExposureKey], previousSubmissionId: String?) throws -> URLRequest {
-        throw KeyServer.Error.invalidConfig
-    }
-
-    func handleSubmitInfectedKeysResponse(data: Data, response: HTTPURLResponse) throws -> String? {
-        throw KeyServer.Error.invalidConfig
     }
 }
 

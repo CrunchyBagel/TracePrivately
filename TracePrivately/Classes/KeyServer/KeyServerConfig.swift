@@ -50,7 +50,18 @@ extension KeyServerConfig {
             return nil
         }
         
-        return KeyServerTracePrivatelyAdapter(config: config)
+        var adapter: KeyServerAdapter?
+        
+        if let adapterName = dict["Adapter"] as? String {
+            switch adapterName {
+            case "ct_diag_server":
+                adapter = KeyServerCtDiagServerAdapter(config: config)
+            default:
+                break
+            }
+        }
+
+        return adapter ?? KeyServerTracePrivatelyAdapter(config: config)
     }
 
     init?(dict: NSDictionary) {

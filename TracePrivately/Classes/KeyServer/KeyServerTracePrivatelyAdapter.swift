@@ -6,11 +6,11 @@
 import Foundation
 import MessagePack
 
-class KeyServerTracePrivatelyAdapter: KeyServerBaseAdapter {
+class KeyServerTracePrivatelyAdapter: KeyServerBaseAdapter, KeyServerAdapter {
 
     private static let methodIdentifierKey = "t"
 
-    override func buildRequestAuthorizationRequest(completion: @escaping (URLRequest?, Swift.Error?) -> Void) {
+    func buildRequestAuthorizationRequest(completion: @escaping (URLRequest?, Swift.Error?) -> Void) {
         
         guard let authentication = self.config.authentication else {
             completion(nil, KeyServer.Error.invalidConfig)
@@ -49,7 +49,7 @@ class KeyServerTracePrivatelyAdapter: KeyServerBaseAdapter {
         }
     }
     
-    override func handleRequestAuthorizationResponse(data: Data, response: HTTPURLResponse) throws {
+    func handleRequestAuthorizationResponse(data: Data, response: HTTPURLResponse) throws {
         guard let authentication = self.config.authentication else {
             throw KeyServer.Error.invalidConfig
         }
@@ -91,45 +91,8 @@ class KeyServerTracePrivatelyAdapter: KeyServerBaseAdapter {
         authentication.authentication.saveAuthenticationToken(token: token)
     }
     
-    override func buildSubmitInfectedKeysRequest(formData: InfectedKeysFormData, keys: [TPTemporaryExposureKey], previousSubmissionId: String?) throws -> URLRequest {
-        
-        guard let endPoint = self.config.submitInfected else {
-            throw KeyServer.Error.invalidConfig
-        }
-        
-        var request = try self.createRequest(endPoint: endPoint, authentication: self.config.authentication?.authentication)
-        
-        let encodedKeys: [[String: Any]] = keys.map { key in
-            return [
-                "d": key.keyData.base64EncodedString(),
-                "r": key.rollingStartNumber,
-                "l": key.transmissionRiskLevel.rawValue
-            ]
-        }
-        
-        var requestData: [String: Any] = [
-            "keys": encodedKeys,
-            "form": formData.requestJson
-        ]
-        
-//            print("Form Data: \(requestData)")
-
-        // TODO: Ensure this is secure and that identifiers can't be hijacked into false submissions
-        if let identifier = previousSubmissionId {
-            requestData["identifier"] = identifier
-        }
-        
-        let jsonData = try JSONSerialization.data(withJSONObject: requestData, options: [])
-
-        request.httpBody = jsonData
-        request.setValue(String(jsonData.count), forHTTPHeaderField: "Content-Length")
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        return request
-    }
     
-    override func buildRetrieveInfectedKeysRequest(since date: Date?) throws -> URLRequest {
+    func buildRetrieveInfectedKeysRequest(since date: Date?) throws -> URLRequest {
         guard var endPoint = self.config.getInfected else {
             throw KeyServer.Error.invalidConfig
         }
@@ -153,7 +116,7 @@ class KeyServerTracePrivatelyAdapter: KeyServerBaseAdapter {
     
     // TODO: Ability to reset all keys
     // TODO: Handle "next update time" value on server
-    override func handleRetrieveInfectedKeysResponse(data: Data, response: HTTPURLResponse) throws -> KeyServer.InfectedKeysResponse {
+    func handleRetrieveInfectedKeysResponse(data: Data, response: HTTPURLResponse) throws -> KeyServer.InfectedKeysResponse {
 
         switch response.statusCode {
         case 401:
@@ -211,8 +174,46 @@ class KeyServerTracePrivatelyAdapter: KeyServerBaseAdapter {
             deletedKeys: deletedKeys
         )
     }
+
+    func buildSubmitInfectedKeysRequest(formData: InfectedKeysFormData, keys: [TPTemporaryExposureKey], previousSubmissionId: String?) throws -> URLRequest {
+        
+        guard let endPoint = self.config.submitInfected else {
+            throw KeyServer.Error.invalidConfig
+        }
+        
+        var request = try self.createRequest(endPoint: endPoint, authentication: self.config.authentication?.authentication)
+        
+        let encodedKeys: [[String: Any]] = keys.map { key in
+            return [
+                "d": key.keyData.base64EncodedString(),
+                "r": key.rollingStartNumber,
+                "l": key.transmissionRiskLevel.rawValue
+            ]
+        }
+        
+        var requestData: [String: Any] = [
+            "keys": encodedKeys,
+            "form": formData.requestJson
+        ]
+        
+//            print("Form Data: \(requestData)")
+
+        // TODO: Ensure this is secure and that identifiers can't be hijacked into false submissions
+        if let identifier = previousSubmissionId {
+            requestData["identifier"] = identifier
+        }
+        
+        let jsonData = try JSONSerialization.data(withJSONObject: requestData, options: [])
+
+        request.httpBody = jsonData
+        request.setValue(String(jsonData.count), forHTTPHeaderField: "Content-Length")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        return request
+    }
     
-    override func handleSubmitInfectedKeysResponse(data: Data, response: HTTPURLResponse) throws -> String? {
+    func handleSubmitInfectedKeysResponse(data: Data, response: HTTPURLResponse) throws -> String? {
         
         switch response.statusCode {
         case 401:
