@@ -20,6 +20,8 @@ struct AuthenticationToken: CustomDebugStringConvertible, CustomStringConvertibl
 }
 
 protocol KeyServerAuthentication {
+    var identifier: String? { get }
+    
     func saveAuthenticationToken(token: AuthenticationToken)
     var currentAuthenticationToken: AuthenticationToken? { get }
     
@@ -45,6 +47,10 @@ class KeyServerBaseAuthentication: KeyServerAuthentication {
         }
         
         defaults.synchronize()
+    }
+    
+    var identifier: String? {
+        return nil
     }
     
     var currentAuthenticationToken: AuthenticationToken? {
@@ -82,6 +88,10 @@ class KeyServerDeviceCheckAuthentication: KeyServerBaseAuthentication {
             completion(nil, AuthError.notAvailable)
         }
     }
+    
+    override var identifier: String? {
+        return "dc" // DeviceCheck
+    }
 }
 
 class KeyServerReceiptAuthentication: KeyServerBaseAuthentication {
@@ -117,5 +127,9 @@ class KeyServerReceiptAuthentication: KeyServerBaseAuthentication {
                 completion(nil, error)
             }
         }
+    }
+    
+    override var identifier: String? {
+        return "asr" // App Store receipt
     }
 }

@@ -11,8 +11,7 @@ class KeyServer {
     
     enum Error: LocalizedError {
         case responseDataNotReceived
-        case contentTypeMissing
-        case contentTypeNotRecognized(String)
+        case contentTypeNotRecognized(String?)
         case jsonDecodingError
         case keyDataMissing
         case dateMissing
@@ -29,8 +28,7 @@ class KeyServer {
             case .okStatusNotReceived: return NSLocalizedString("keyserver.error.not_ok", comment: "")
             case .invalidConfig: return NSLocalizedString("keyserver.error.invalid_config", comment: "")
             case .notAuthorized: return NSLocalizedString("keyserver.error.not_authorized", comment: "")
-            case .contentTypeMissing: return NSLocalizedString("keyserver.error.content_type_missing", comment: "")
-            case .contentTypeNotRecognized(let str): return "Invalid content type: \(str)" // TODO: Use this NSLocalizedString("keyserver.error.content_type_not_recognized", comment: "") + str
+            case .contentTypeNotRecognized(let str): return String(format: NSLocalizedString("keyserver.error.content_type_not_recognized", comment: ""), str ?? "none")
             }
         }
         
@@ -96,6 +94,8 @@ class KeyServer {
 }
 
 extension KeyServer {
+    private static let methodIdentifierKey = "t"
+    
     fileprivate func requestAuthorizationToken(completion: @escaping (Bool, Swift.Error?) -> Void) {
         
         guard let authentication = self.config.authentication else {
@@ -106,7 +106,7 @@ extension KeyServer {
         let auth = authentication.authentication
         
         do {
-            print("Requesting authorization ...")
+            print("Requesting authorization (\(auth)) ...")
             
             auth.buildAuthRequestJsonObject { requestJson, error in
                 do {
@@ -114,11 +114,17 @@ extension KeyServer {
                         throw error
                     }
                     
-                    let requestJson = requestJson ?? [:]
+                    
+                    var requestJson = requestJson ?? [:]
+                    
+                    if requestJson[Self.methodIdentifierKey] == nil, let identifier = auth.identifier {
+                        requestJson[Self.methodIdentifierKey] = identifier
+                    }
 
                     var request = try self.createRequest(endPoint: authentication.endpoint, authentication: auth, throwIfMissing: false)
 
                     let jsonData = try JSONSerialization.data(withJSONObject: requestJson, options: [])
+                    
                     
                     request.httpBody = jsonData
                     request.setValue(String(jsonData.count), forHTTPHeaderField: "Content-Length")
@@ -391,7 +397,7 @@ extension KeyServer {
                     }
                     
                     guard let contentType = response.allHeaderFields["Content-Type"] as? String else {
-                        throw Error.contentTypeMissing
+                        throw Error.contentTypeNotRecognized(nil)
                     }
                     
                     let normalized = contentType.lowercased()

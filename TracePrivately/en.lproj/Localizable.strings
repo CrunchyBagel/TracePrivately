@@ -63,6 +63,9 @@
 "keyserver.error.date_missing" = "Date Missing";
 "keyserver.error.not_ok" = "OK Status Not Received";
 "keyserver.error.invalid_config" = "Invalid KeyServer config";
+"keyserver.error.not_authorized" = "Not Authorized";
+/* Parameter is the content type received in the HTTP response */
+"keyserver.error.content_type_not_recognized" = "Invalid content type: %@";
 
 /* parameter is localized disease name */
 "notification.exposure_detected.title" = "Alert: %@ Exposure Detected";
