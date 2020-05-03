@@ -103,7 +103,7 @@ class ContactTraceManager: NSObject {
 
     private override init() {}
     
-    static let backgroundProcessingInterval: TimeInterval = 3600
+    static let backgroundProcessingMinimumInterval: TimeInterval = 3600 // TODO: Ability to define this at run time
 
     func applicationDidFinishLaunching() {
         
@@ -149,6 +149,7 @@ class ContactTraceManager: NSObject {
             return
         }
         
+        print("Did become active, performing background update.")
         ContactTraceManager.shared.performBackgroundUpdate { _ in
             self.scheduleNextBackgroundUpdate()
         }
@@ -159,8 +160,9 @@ class ContactTraceManager: NSObject {
             guard let delegate = UIApplication.shared.delegate as? AppDelegate else {
                 return
             }
-            
-            delegate.scheduleNextBackgroundProcess(minimumDate: Date().addingTimeInterval(Self.backgroundProcessingInterval))
+        
+            let minimumDate: Date = self.minimumNextRetryDate ?? Date().addingTimeInterval(Self.backgroundProcessingMinimumInterval)
+            delegate.scheduleNextBackgroundProcess(minimumDate: minimumDate)
         }
     }
 }
@@ -175,6 +177,31 @@ extension ContactTraceManager {
 
     fileprivate var shouldAutoStartIfPossible: Bool {
         return UserDefaults.standard.bool(forKey: Self.autostartKey)
+    }
+}
+
+extension ContactTraceManager {
+    private static let minimumNextRetryDateKey = "ctm_minimumNextRetryDate"
+    
+    fileprivate func setMinimumNextRetryDate(date: Date?) {
+        if let date = date {
+            
+            // Put an upper bound to protect against a server incorretly using a date too far in the future, which would render the app useless
+            let latestDate = Date().addingTimeInterval(86400)
+            
+            let date = min(date, latestDate)
+            
+            UserDefaults.standard.set(date, forKey: Self.minimumNextRetryDateKey)
+        }
+        else {
+            UserDefaults.standard.removeObject(forKey: Self.minimumNextRetryDateKey)
+        }
+        
+        UserDefaults.standard.synchronize()
+    }
+    
+    fileprivate var minimumNextRetryDate: Date? {
+        return UserDefaults.standard.object(forKey: Self.minimumNextRetryDateKey) as? Date
     }
 }
 
@@ -198,7 +225,27 @@ extension ContactTraceManager {
     func performBackgroundUpdate(completion: @escaping (Swift.Error?) -> Void) {
         
         // TODO: Use UIApplication.shared.beginBackgroundTask so this can finish
-        
+
+        if let date = self.minimumNextRetryDate {
+            let now = Date()
+            
+            guard now >= date else {
+                // Not allowed to update yet
+
+                let duration = date.timeIntervalSince(now)
+                
+                let dcf = DateComponentsFormatter()
+                dcf.unitsStyle = .short
+                
+                if let str = dcf.string(from: duration) {
+                    print("Not allowed to retrieve new keys for another \(str).")
+                }
+                
+                completion(nil)
+                return
+            }
+        }
+
         guard !self.isUpdatingExposures else {
             print("Already updating exposures, skipping")
             completion(nil)
@@ -213,21 +260,8 @@ extension ContactTraceManager {
         
         if let session = self.enDetectionSession, self.numKeysAdded == 0 {
             let operation = AsyncBlockOperation { operation in
-                DataManager.shared.allInfectedKeys { keys, error in
-                    guard let keys = keys, keys.count > 0 else {
-                        operation.complete()
-                        return
-                    }
-
-                    let k: [ENTemporaryExposureKey] = keys.map { $0.enExposureKey }
-                    
-                    session.batchAddDiagnosisKeys(k) { error in
-                        if error == nil {
-                            self.numKeysAdded += k.count
-                        }
-                        
-                        operation.complete()
-                    }
+                self.addAllKeysFromDatabase(session: session) { error in
+                    operation.complete()
                 }
             }
             
@@ -242,18 +276,19 @@ extension ContactTraceManager {
                     return
                 }
                 
+                let clearCacheFirst: Bool
                 
-                // TODO: Handle this
-//                switch response.responseType {
-//                case .shouldAppendToCache:
-//                case .shouldResetCache:
-//                }
+                switch response.listType {
+                case .fullList: clearCacheFirst = true
+                case .partialList: clearCacheFirst = false
+                }
+                
                 
                 if let date = response.earliestRetryDate {
-                    // TODO: Save and use this
+                    self.setMinimumNextRetryDate(date: date)
                 }
 
-                self.saveNewInfectedKeys(keys: response.keys, deletedKeys: response.deletedKeys) { keyCount, error in
+                self.saveNewInfectedKeys(keys: response.keys, deletedKeys: response.deletedKeys, clearCacheFirst: clearCacheFirst) { keyCount, error in
                     guard let keyCount = keyCount else {
                         self.isUpdatingExposures = false
                         completion(error)
@@ -261,23 +296,51 @@ extension ContactTraceManager {
                     }
 
                     self.saveLastReceivedInfectedKeys(date: response.date)
-
-                    guard let session = self.enDetectionSession else {
-                        self.isUpdatingExposures = false
-                        completion(nil)
-                        return
-                    }
                     
-                    if keyCount.deleted > 0 || keyCount.updated > 0 {
-                        // TODO: Rebuild the detection session
-                    }
                     
-                    self.addAndFinalizeKeys(session: session, keys: response.keys) { error in
-                        self.isUpdatingExposures = false
+                    let rebuildDetectionSession: Bool
+                    
+                    if clearCacheFirst {
+                        rebuildDetectionSession = true
+                    }
+                    else {
+                        rebuildDetectionSession = keyCount.deleted > 0 || keyCount.updated > 0
+                    }
 
-                        self.scheduleNextBackgroundUpdate()
+                    
+                    if let session = self.enDetectionSession, !rebuildDetectionSession {
+                        print("Appending new keys to existing session")
+                        self.addAndFinalizeKeys(session: session, keys: response.keys) { error in
+                            self.isUpdatingExposures = false
 
-                        completion(error)
+                            self.scheduleNextBackgroundUpdate()
+
+                            completion(error)
+                        }
+                    }
+                    else {
+                        guard self.isContactTracingEnabled else {
+                            self.isUpdatingExposures = false
+                            self.scheduleNextBackgroundUpdate()
+                            completion(nil)
+                            return
+                        }
+                        
+                        self.startExposureChecking { error in
+                            guard let session = self.enDetectionSession else {
+                                self.isUpdatingExposures = false
+                                self.scheduleNextBackgroundUpdate()
+                                completion(error)
+                                return
+                            }
+                            
+                            self.addAndFinalizeKeys(session: session, keys: response.keys) { error in
+                                self.isUpdatingExposures = false
+                                self.scheduleNextBackgroundUpdate()
+
+                                completion(error)
+                            }
+                        }
                     }
                 }
             }
@@ -286,12 +349,33 @@ extension ContactTraceManager {
         operationQueue.addOperation(operation)
     }
     
+    fileprivate func addAllKeysFromDatabase(session: ENExposureDetectionSession, completion: @escaping (Swift.Error?) -> Void) {
+        DataManager.shared.allInfectedKeys { keys, error in
+            guard let keys = keys, keys.count > 0 else {
+                completion(error)
+                return
+            }
+
+            let k: [ENTemporaryExposureKey] = keys.map { $0.enExposureKey }
+            
+            session.batchAddDiagnosisKeys(k) { error in
+                if error == nil {
+                    self.numKeysAdded += k.count
+                }
+
+                completion(error)
+            }
+        }
+    }
+    
     fileprivate func addAndFinalizeKeys(session: ENExposureDetectionSession, keys: [TPTemporaryExposureKey], completion: @escaping (Swift.Error?) -> Void) {
         
         guard keys.count > 0 else {
             completion(nil)
             return
         }
+        
+        print("Adding \(keys.count) to session")
 
         let k: [ENTemporaryExposureKey] = keys.map { $0.enExposureKey }
         
@@ -360,9 +444,9 @@ extension ContactTraceManager {
         }
     }
     
-    private func saveNewInfectedKeys(keys: [TPTemporaryExposureKey], deletedKeys: [TPTemporaryExposureKey], completion: @escaping (DataManager.KeyUpdateCount?, Swift.Error?) -> Void) {
+    private func saveNewInfectedKeys(keys: [TPTemporaryExposureKey], deletedKeys: [TPTemporaryExposureKey], clearCacheFirst: Bool, completion: @escaping (DataManager.KeyUpdateCount?, Swift.Error?) -> Void) {
         
-        DataManager.shared.saveInfectedKeys(keys: keys, deletedKeys: deletedKeys) { keyCount, error in
+        DataManager.shared.saveInfectedKeys(keys: keys, deletedKeys: deletedKeys, clearCacheFirst: clearCacheFirst) { keyCount, error in
             if let error = error {
                 completion(nil, error)
                 return
@@ -549,6 +633,9 @@ extension ContactTraceManager {
 
 extension ContactTraceManager {
     fileprivate func startExposureChecking(completion: @escaping (Swift.Error?) -> Void) {
+        
+        print("Creating new ENExposureDetectionSession")
+        
         let session = ENExposureDetectionSession()
         
         if let config = self.config {
@@ -570,7 +657,8 @@ extension ContactTraceManager {
 
             completion(nil)
         }
-        
+
+        self.enDetectionSession?.invalidate()
         self.enDetectionSession = session
         self.numKeysAdded = 0
     }

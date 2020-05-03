@@ -184,7 +184,7 @@ extension KeyServer {
         Refer to `KeyServer.yaml` for expected response format.
      */
     
-    struct InfectedKeysResponse {
+    struct InfectedKeysResponse: CustomDebugStringConvertible {
         enum ListType {
             case partialList
             case fullList
@@ -196,6 +196,9 @@ extension KeyServer {
         let keys: [TPTemporaryExposureKey]
         let deletedKeys: [TPTemporaryExposureKey]
         
+        var debugDescription: String {
+            return "listType=\(listType) date=\(date) earliestRetryDate=\(String(describing: earliestRetryDate)) keys.count=\(keys.count) deletedKeys.count=\(deletedKeys.count)"
+        }
     }
     
     func retrieveInfectedKeys(since date: Date?, completion: @escaping (InfectedKeysResponse?, Swift.Error?) -> Void) {
@@ -239,8 +242,7 @@ extension KeyServer {
 
                     let infectedKeysResponse = try self.adapter.handleRetrieveInfectedKeysResponse(data: data, response: response)
                 
-                    
-                    print("keys.count=\(infectedKeysResponse.keys.count) deletedKeys.count=\(infectedKeysResponse.deletedKeys.count)")
+                    print("Response: \(infectedKeysResponse)")
 
                     completion(infectedKeysResponse, nil)
                 }
