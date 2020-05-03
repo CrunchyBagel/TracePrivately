@@ -249,7 +249,7 @@ extension ContactTraceManager {
 //                case .shouldResetCache:
 //                }
                 
-                if let date = response.earliestNextUpdate {
+                if let date = response.earliestRetryDate {
                     // TODO: Save and use this
                 }
 

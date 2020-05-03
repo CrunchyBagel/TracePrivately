@@ -11,7 +11,7 @@
 		<key>SubmitInfectedKeys</key>
 		<string>diagnosis-keys</string>
 	</dict>
-	<key>Adapter</key>
+	<key>Method</key>
 	<string>ct_diag_server</string>
 </dict>
 </plist>

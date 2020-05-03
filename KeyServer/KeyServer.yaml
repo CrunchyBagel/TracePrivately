@@ -119,10 +119,29 @@ paths:
                                 type: string
                                 example: "OK"
                                 description: OK
+                            from_date:
+                                type: string
+                                format: date-time
+                                description: |
+                                    The minimum date keys are returned from. If not specified, client 
+                                    should treat this is a full set of keys and therefore clear any
+                                    cached keys. If this is empty, then it doesn't make sense for there
+                                    to be any deleted keys. This will likely be the same as the request
+                                    `since` parameter.
                             date:
                                 type: string
                                 format: date-time
-                                description: The date from which infected keys are returned
+                                description: |
+                                    The maximum date keys are returned up to. This date should be used 
+                                    as the `since` parameter in subsequent requests.
+                            min_retry_date:
+                                type: string
+                                format: date-time
+                                description: |
+                                    If specified, the client shouldn't ask for more keys until after 
+                                    this date. This can be used to rate limit clients, or if the server only
+                                    updates its infected key list periodically (e.g. every 24 hours), then
+
                             keys:
                                 type: array
                                 items:

@@ -36,12 +36,10 @@ class KeyServerCtDiagServerAdapter: KeyServerBaseAdapter, KeyServerAdapter {
             throw KeyServer.Error.okStatusNotReceived
         }
         
-        print("DATA: \(data)")
-        
         return KeyServer.InfectedKeysResponse(
-            responseType: .shouldResetCache,
+            fromDate: nil,
             date: Date(),
-            earliestNextUpdate: nil,
+            earliestRetryDate: nil,
             keys: keys,
             deletedKeys: []
         )

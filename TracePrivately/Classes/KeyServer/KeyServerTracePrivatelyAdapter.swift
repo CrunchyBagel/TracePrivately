@@ -114,8 +114,6 @@ class KeyServerTracePrivatelyAdapter: KeyServerBaseAdapter, KeyServerAdapter {
         return request
     }
     
-    // TODO: Ability to reset all keys
-    // TODO: Handle "next update time" value on server
     func handleRetrieveInfectedKeysResponse(data: Data, response: HTTPURLResponse) throws -> KeyServer.InfectedKeysResponse {
 
         switch response.statusCode {
@@ -162,14 +160,31 @@ class KeyServerTracePrivatelyAdapter: KeyServerBaseAdapter, KeyServerAdapter {
         guard let date = df.date(from: decoded.date) else {
             throw KeyServer.Error.dateMissing
         }
+        
+        let fromDate: Date?
+        let minRetryDate: Date?
+        
+        if let str = decoded.from_date {
+            fromDate = df.date(from: str)
+        }
+        else {
+            fromDate = nil
+        }
+        
+        if let str = decoded.min_retry_date {
+            minRetryDate = df.date(from: str)
+        }
+        else {
+            minRetryDate = nil
+        }
 
         let keys: [TPTemporaryExposureKey] = decoded.keys.compactMap { $0.exposureKey }
         let deletedKeys: [TPTemporaryExposureKey] = decoded.deleted_keys.compactMap { $0.exposureKey }
 
         return KeyServer.InfectedKeysResponse(
-            responseType: .shouldAppendToCache, // TODO: Use
+            fromDate: fromDate,
             date: date,
-            earliestNextUpdate: nil, // TODO: Use
+            earliestRetryDate: minRetryDate,
             keys: keys,
             deletedKeys: deletedKeys
         )
@@ -236,4 +251,81 @@ class KeyServerTracePrivatelyAdapter: KeyServerBaseAdapter, KeyServerAdapter {
 
         return json["identifier"] as? String
     }
+}
+
+struct KeyServerMessagePackInfectedKeys: Codable {
+    struct Key: Codable {
+        let d: Data
+        let r: Int
+        let l: Int
+
+        var exposureKey: TPTemporaryExposureKey? {
+            guard r < TPIntervalNumber.max else {
+                return nil
+            }
+            
+            let riskLevel: TPRiskLevel? = TPRiskLevel(rawValue: UInt8(l))
+            
+            return .init(
+                keyData: d,
+                rollingStartNumber: TPIntervalNumber(r),
+                transmissionRiskLevel: riskLevel ?? .invalid
+            )
+        }
+    }
+    
+    let status: String
+    let date: String
+    let keys: [Key]
+    let deleted_keys: [Key]
+    let min_retry_date: String?
+    let from_date: String?
+}
+
+extension KeyServerMessagePackInfectedKeys {
+    init(json: [String: Any]) throws {
+        let statusStr = json["status"] as? String
+
+        guard let keysData = json["keys"] as? [[String: Any]] else {
+            throw KeyServer.Error.keyDataMissing
+        }
+        
+        let deletedKeysData: [[String: Any]] = (json["deleted_keys"] as? [[String: Any]] ?? [])
+        
+        guard let dateStr = json["date"] as? String else {
+            throw KeyServer.Error.dateMissing
+        }
+        
+        let keys = keysData.compactMap { KeyServerMessagePackInfectedKeys.Key(jsonData: $0) }
+        let deletedKeys = deletedKeysData.compactMap { KeyServerMessagePackInfectedKeys.Key(jsonData: $0) }
+        
+        let fromDate = json["from_date"] as? String
+        let minRetryDate = json["min_retry_date"] as? String
+
+        self.init(
+            status: statusStr ?? "",
+            date: dateStr,
+            keys: keys,
+            deleted_keys: deletedKeys,
+            min_retry_date: minRetryDate,
+            from_date: fromDate
+        )
+    }
+}
+
+extension KeyServerMessagePackInfectedKeys.Key {
+    init?(jsonData: [String: Any]) {
+        guard let base64str = jsonData["d"] as? String, let keyData = Data(base64Encoded: base64str) else {
+            return nil
+        }
+        
+        guard let rollingStartNumber = jsonData["r"] as? Int else {
+            return nil
+        }
+        
+        let riskLevel = jsonData["l"] as? Int ?? 0
+
+        self.init(d: keyData, r: rollingStartNumber, l: riskLevel)
+  
+      }
 }
