@@ -119,21 +119,20 @@ paths:
                                 type: string
                                 example: "OK"
                                 description: OK
-                            from_date:
+                            list_type:
                                 type: string
-                                format: date-time
+                                example: "FULL"
                                 description: |
-                                    The minimum date keys are returned from. If not specified, client 
-                                    should treat this is a full set of keys and therefore clear any
-                                    cached keys. If this is empty, then it doesn't make sense for there
-                                    to be any deleted keys. This will likely be the same as the request
-                                    `since` parameter.
+                                    Indicates whether or not the returned keys constitute the full list of keys.
+                                    If so, client should clear cache and use this entire list. Otherwise, assume
+                                    it's a partial list that can be appended to existing cache. If it's a full list
+                                    then it doesn't make sense for `deleted_keys` to be populated.
                             date:
                                 type: string
                                 format: date-time
                                 description: |
                                     The maximum date keys are returned up to. This date should be used 
-                                    as the `since` parameter in subsequent requests.
+                                    as the value for the `since` parameter in subsequent requests.
                             min_retry_date:
                                 type: string
                                 format: date-time

@@ -74,9 +74,9 @@ $json = array(
 );
 
 if ($time > $minTime) {
-    $fromDate = new DateTime();
-    $fromDate->setTimestamp($time);
-    $json['from_date'] = $fromDate->format(DateTimeInterface::ISO8601);
+}
+else {
+    $json['list_type'] = 'FULL';
 }
 
 if ($useBinary) {

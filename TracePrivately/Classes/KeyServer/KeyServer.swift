@@ -185,12 +185,12 @@ extension KeyServer {
      */
     
     struct InfectedKeysResponse {
-        enum ResponseType {
-            case shouldResetCache
-            case shouldAppendToCache
+        enum ListType {
+            case partialList
+            case fullList
         }
         
-        let fromDate: Date?
+        let listType: ListType
         let date: Date
         let earliestRetryDate: Date?
         let keys: [TPTemporaryExposureKey]

@@ -37,7 +37,7 @@ class KeyServerCtDiagServerAdapter: KeyServerBaseAdapter, KeyServerAdapter {
         }
         
         return KeyServer.InfectedKeysResponse(
-            fromDate: nil,
+            listType: .fullList,
             date: Date(),
             earliestRetryDate: nil,
             keys: keys,

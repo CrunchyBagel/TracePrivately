@@ -161,16 +161,18 @@ class KeyServerTracePrivatelyAdapter: KeyServerBaseAdapter, KeyServerAdapter {
             throw KeyServer.Error.dateMissing
         }
         
-        let fromDate: Date?
-        let minRetryDate: Date?
+        let listType: KeyServer.InfectedKeysResponse.ListType
         
-        if let str = decoded.from_date {
-            fromDate = df.date(from: str)
+        
+        if let str = decoded.list_type {
+            listType = str == "FULL" ? .fullList : .partialList
         }
         else {
-            fromDate = nil
+            listType = .partialList
         }
         
+        let minRetryDate: Date?
+
         if let str = decoded.min_retry_date {
             minRetryDate = df.date(from: str)
         }
@@ -182,7 +184,7 @@ class KeyServerTracePrivatelyAdapter: KeyServerBaseAdapter, KeyServerAdapter {
         let deletedKeys: [TPTemporaryExposureKey] = decoded.deleted_keys.compactMap { $0.exposureKey }
 
         return KeyServer.InfectedKeysResponse(
-            fromDate: fromDate,
+            listType: listType,
             date: date,
             earliestRetryDate: minRetryDate,
             keys: keys,
@@ -279,7 +281,7 @@ struct KeyServerMessagePackInfectedKeys: Codable {
     let keys: [Key]
     let deleted_keys: [Key]
     let min_retry_date: String?
-    let from_date: String?
+    let list_type: String?
 }
 
 extension KeyServerMessagePackInfectedKeys {
@@ -299,7 +301,7 @@ extension KeyServerMessagePackInfectedKeys {
         let keys = keysData.compactMap { KeyServerMessagePackInfectedKeys.Key(jsonData: $0) }
         let deletedKeys = deletedKeysData.compactMap { KeyServerMessagePackInfectedKeys.Key(jsonData: $0) }
         
-        let fromDate = json["from_date"] as? String
+        let listType = json["list_type"] as? String
         let minRetryDate = json["min_retry_date"] as? String
 
         self.init(
@@ -308,7 +310,7 @@ extension KeyServerMessagePackInfectedKeys {
             keys: keys,
             deleted_keys: deletedKeys,
             min_retry_date: minRetryDate,
-            from_date: fromDate
+            list_type: listType
         )
     }
 }
