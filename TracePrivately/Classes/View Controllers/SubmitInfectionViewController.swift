@@ -294,6 +294,8 @@ extension SubmitInfectionViewController {
             container = c
 
         case .longText:
+            // XXX: This isn't fully implemented yet
+
             let textView = UITextView()
             bodySubViews.append(textView)
             
@@ -302,6 +304,8 @@ extension SubmitInfectionViewController {
             container = c
 
         case .photo:
+            // XXX: This isn't fully implemented yet
+            
             // A container with a button to open the photo picker and an image view for preview
             
             let button = UIButton(type: .custom)
