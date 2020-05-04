@@ -158,7 +158,7 @@ class ContactTraceManager: NSObject {
         
         print("Did become active, performing background update.")
         ContactTraceManager.shared.performBackgroundUpdate { _ in
-            self.scheduleNextBackgroundUpdate()
+
         }
     }
     
@@ -233,6 +233,25 @@ extension ContactTraceManager {
         
         // TODO: Use UIApplication.shared.beginBackgroundTask so this can finish
 
+        guard !self.isUpdatingExposures else {
+            print("Already updating exposures, skipping")
+            completion(nil)
+            return
+        }
+
+        print("Updating exposures....")
+        self.isUpdatingExposures = true
+        
+        self._performBackgroundUpdate { error in
+            self.scheduleNextBackgroundUpdate()
+            self.isUpdatingExposures = false
+            completion(error)
+        }
+    }
+    
+    private func _performBackgroundUpdate(completion: @escaping (Swift.Error?) -> Void) {
+
+        
         // TODO: This is somewhat messy and could be better organised using more sequential operations
         
         if let date = self.minimumNextRetryDate {
@@ -257,24 +276,18 @@ extension ContactTraceManager {
                             return
                         }
                         
-                        self.addAndFinalizeKeys(session: session, keys: [], completion: completion)
+                        self.addAndFinalizeKeys(session: session, keys: []) { error in
+                            completion(error)
+                        }
                     }
                 }
                 else {
                     completion(nil)
                 }
+                
                 return
             }
         }
-
-        guard !self.isUpdatingExposures else {
-            print("Already updating exposures, skipping")
-            completion(nil)
-            return
-        }
-        
-        print("Updating exposures....")
-        self.isUpdatingExposures = true
         
         let operationQueue = OperationQueue()
         operationQueue.maxConcurrentOperationCount = 1
@@ -292,7 +305,6 @@ extension ContactTraceManager {
         let operation = AsyncBlockOperation { operation in
             KeyServer.shared.retrieveInfectedKeys(since: self.lastReceivedInfectedKeys) { response, error in
                 guard let response = response else {
-                    self.isUpdatingExposures = false
                     completion(error ?? Error.unknownError)
                     return
                 }
@@ -311,7 +323,6 @@ extension ContactTraceManager {
 
                 self.saveNewInfectedKeys(keys: response.keys, deletedKeys: response.deletedKeys, clearCacheFirst: clearCacheFirst) { keyCount, error in
                     guard let keyCount = keyCount else {
-                        self.isUpdatingExposures = false
                         completion(error)
                         return
                     }
@@ -332,33 +343,22 @@ extension ContactTraceManager {
                     if let session = self.enDetectionSession, !rebuildDetectionSession {
                         print("Appending new keys to existing session")
                         self.addAndFinalizeKeys(session: session, keys: response.keys) { error in
-                            self.isUpdatingExposures = false
-
-                            self.scheduleNextBackgroundUpdate()
-
                             completion(error)
                         }
                     }
                     else {
                         guard self.isContactTracingEnabled else {
-                            self.isUpdatingExposures = false
-                            self.scheduleNextBackgroundUpdate()
                             completion(nil)
                             return
                         }
                         
                         self.startExposureChecking { error in
                             guard let session = self.enDetectionSession else {
-                                self.isUpdatingExposures = false
-                                self.scheduleNextBackgroundUpdate()
                                 completion(error)
                                 return
                             }
                             
                             self.addAndFinalizeKeys(session: session, keys: response.keys) { error in
-                                self.isUpdatingExposures = false
-                                self.scheduleNextBackgroundUpdate()
-
                                 completion(error)
                             }
                         }
