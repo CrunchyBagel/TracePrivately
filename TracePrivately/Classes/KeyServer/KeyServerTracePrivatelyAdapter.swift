@@ -6,6 +6,8 @@
 import Foundation
 import MessagePack
 
+/// This KeyServer adapter adheres to the API specificatoin at https://github.com/CrunchyBagel/TracePrivately/blob/master/KeyServer/KeyServer.yaml
+
 class KeyServerTracePrivatelyAdapter: KeyServerBaseAdapter, KeyServerAdapter {
 
     private static let methodIdentifierKey = "t"

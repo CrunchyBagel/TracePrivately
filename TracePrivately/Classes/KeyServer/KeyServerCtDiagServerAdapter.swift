@@ -5,6 +5,8 @@
 
 import Foundation
 
+/// This KeyServer adapter adheres to the API specificatoin at https://github.com/dstotijn/ct-diag-server
+
 class KeyServerCtDiagServerAdapter: KeyServerBaseAdapter, KeyServerAdapter {
     func buildRequestAuthorizationRequest(completion: @escaping (URLRequest?, Error?) -> Void) {
         completion(nil, nil)

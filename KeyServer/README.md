@@ -17,9 +17,20 @@ The server serves the following purposes:
 1. PHP: This repository contains a basic implementation in PHP
 2. Ruby: https://github.com/tatey/trace_privately
 3. Vapor (Swift): https://github.com/kevinrmblr/traceprivately-server
-4. Go: https://github.com/dstotijn/ct-diag-server - Note: not currently compatible with TracePrivately, but we're working on it.
+4. Go: https://github.com/dstotijn/ct-diag-server
 
-Want to build your own? Use the `KeyServer.yaml` for the requests and responses the mobile app expects.
+Want to build your own server? There are two options:
+
+1. Conform to the OpenAPI specification in `KeyServer.yaml`
+2. Use your own specification, then do the following:
+    1. Create a new class in the iOS app that implements `KeyServerAdapter`
+    2. In `KeyServer.plist`, create a name for your adapter and specify it in `Adapter`.
+    3. In `KeyServerConfig.swift`, handle that name in the `KeyServerConfig.createAdapter()` method so it creates your class.
+
+If you create your own specification, the TracePrivately iOS app still primarily expects two endpoints:
+
+1. Retrieve infected keys of other users
+2. Submit infected keys of app user if they're diagnosed with the disease.
 
 ## Additional Functionality
 
