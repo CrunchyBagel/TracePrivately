@@ -424,7 +424,8 @@ extension DataManager {
     // for a fact they were in their car alone, so they could mark an
     // exposure as not possible
     enum ExposureStatus: String {
-        case detected = "D"
+        case unread = "D"
+        case read = "V"
     }
     
     enum ExposureLocalNotificationStatus: String {
@@ -432,7 +433,37 @@ extension DataManager {
         case sent = "S"
     }
     
-    func saveExposures(exposures: [TPExposureInfo], completion: @escaping (Error?) -> Void) {
+    func updateStatus(exposure entity: ExposureContactInfoEntity, status: ExposureStatus, completion: @escaping (Swift.Error?) -> Void) {
+
+        let context = self.persistentContainer.newBackgroundContext()
+        
+        context.perform {
+            
+            guard let entity = context.object(with: entity.objectID) as? ExposureContactInfoEntity else {
+                completion(nil)
+                return
+            }
+            
+            if status.rawValue != entity.status {
+                entity.status = status.rawValue
+            }
+
+            do {
+                if context.hasChanges {
+                    try context.save()
+                    
+                    ContactTraceManager.shared.updateBadgeCount()
+                }
+                
+                completion(nil)
+            }
+            catch {
+                completion(error)
+            }
+        }
+    }
+    
+    func saveExposures(exposures: [TPExposureInfo], completion: @escaping (Swift.Error?) -> Void) {
         
         let context = self.persistentContainer.newBackgroundContext()
         
@@ -497,7 +528,7 @@ extension DataManager {
                     entity.totalRiskScore = Int16(contact.totalRiskScore)
                     entity.transmissionRiskLevel = Int16(contact.transmissionRiskLevel.rawValue)
                     
-                    entity.status = ExposureStatus.detected.rawValue
+                    entity.status = ExposureStatus.unread.rawValue
                     entity.localNotificationStatus = ExposureLocalNotificationStatus.notSent.rawValue
                 }
                 
@@ -525,7 +556,7 @@ extension DataManager {
     }
     
     func diseaseStatus(context: NSManagedObjectContext) -> DiseaseStatus {
-        let exposureRequest = ExposureFetchRequest(includeStatuses: [ .detected ], includeNotificationStatuses: [], sortDirection: .timestampAsc)
+        let exposureRequest = ExposureFetchRequest(includeStatuses: [ .unread, .read ], includeNotificationStatuses: [], sortDirection: .timestampAsc)
         let numContacts = (try? context.count(for: exposureRequest.fetchRequest)) ?? 0
         
         let infectionRequest = InfectionFetchRequest(minDate: nil, includeStatuses: [ .submittedApproved, .submittedUnapproved ])

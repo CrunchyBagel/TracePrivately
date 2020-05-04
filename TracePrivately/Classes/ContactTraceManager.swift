@@ -107,13 +107,8 @@ class ContactTraceManager: NSObject {
 
     func applicationDidFinishLaunching() {
         
-        let request = ExposureFetchRequest(includeStatuses: [ .detected ], includeNotificationStatuses: [], sortDirection: .timestampAsc)
-        
-        let context = DataManager.shared.persistentContainer.viewContext
-        
-        let count = (try? context.count(for: request.fetchRequest)) ?? 0
+        self.updateBadgeCount()
 
-        UIApplication.shared.applicationIconBadgeNumber = count == 0 ? -1 : count
         
         UNUserNotificationCenter.current().delegate = self
         
@@ -141,6 +136,18 @@ class ContactTraceManager: NSObject {
                     self.isBootStrapping = false
                 }
             }
+        }
+    }
+    
+    func updateBadgeCount() {
+        
+        DispatchQueue.main.async {
+            let request = ExposureFetchRequest(includeStatuses: [ .unread ], includeNotificationStatuses: [], sortDirection: .timestampAsc)
+            let context = DataManager.shared.persistentContainer.viewContext
+
+            let count = (try? context.count(for: request.fetchRequest)) ?? 0
+            print("Updating applicationIconBadgeNumber to \(count)")
+            UIApplication.shared.applicationIconBadgeNumber = count == 0 ? -1 : count
         }
     }
     
@@ -226,7 +233,7 @@ extension ContactTraceManager {
         
         // TODO: Use UIApplication.shared.beginBackgroundTask so this can finish
 
-        /// This is somewhat messy and could be better organised using more sequential operations
+        // TODO: This is somewhat messy and could be better organised using more sequential operations
         
         if let date = self.minimumNextRetryDate {
             let now = Date()
@@ -419,9 +426,7 @@ extension ContactTraceManager {
                     
                     DataManager.shared.saveExposures(exposures: exposures) { error in
                         
-                        DispatchQueue.main.sync {
-                            UIApplication.shared.applicationIconBadgeNumber = exposures.count == 0 ? -1 : exposures.count
-                        }
+                        self.updateBadgeCount()
                         
                         self.sendExposureNotificationForPendingContacts { notificationError in
                             completion(error ?? notificationError)
@@ -467,7 +472,7 @@ extension ContactTraceManager {
     
     private func sendExposureNotificationForPendingContacts(completion: @escaping (Swift.Error?) -> Void) {
         
-        let request = ExposureFetchRequest(includeStatuses: [.detected], includeNotificationStatuses: [.notSent], sortDirection: nil)
+        let request = ExposureFetchRequest(includeStatuses: [ .unread, .read ], includeNotificationStatuses: [.notSent], sortDirection: nil)
         
         let context = DataManager.shared.persistentContainer.newBackgroundContext()
         

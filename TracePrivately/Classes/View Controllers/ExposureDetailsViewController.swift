@@ -17,5 +17,9 @@ class ExposureDetailsViewController: UIViewController {
         super.viewDidLoad()
 
         self.title = NSLocalizedString("exposure.exposed.details.title", comment: "")
+        
+        DataManager.shared.updateStatus(exposure: self.contact, status: .read) { _ in
+            
+        }
     }
 }
