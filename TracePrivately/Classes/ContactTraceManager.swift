@@ -238,9 +238,6 @@ extension ContactTraceManager {
     
     private func _performBackgroundUpdate(completion: @escaping (Swift.Error?) -> Void) {
 
-        
-        // TODO: This is somewhat messy and could be better organised using more sequential operations
-
         if let date = self.minimumNextRetryDate {
             let now = Date()
             
@@ -566,12 +563,6 @@ extension ContactTraceManager {
             return
         }
         
-        // TODO: If you start tracing too quickly it'll fail here. Still allow tracing to start even if an update is occurring and handle it better further down this method.
-        guard !self.isUpdatingExposures else {
-            completion(nil)
-            return
-        }
-
         self.isUpdatingEnabledState = true
         
         self.enManager.setExposureNotificationEnabled(true) { error in
