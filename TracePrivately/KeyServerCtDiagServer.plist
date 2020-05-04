@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>BaseUrl</key>
+	<string>https://example.com/</string>
+	<key>EndPoints</key>
+	<dict>
+		<key>GetInfectedKeys</key>
+		<string>diagnosis-keys</string>
+		<key>SubmitInfectedKeys</key>
+		<string>diagnosis-keys</string>
+	</dict>
+	<key>Method</key>
+	<string>ct_diag_server</string>
+</dict>
+</plist>

@@ -137,7 +137,7 @@ extension DataManager {
         static let empty = KeyUpdateCount(inserted: 0, updated: 0, deleted: 0)
     }
 
-    func saveInfectedKeys(keys: [TPTemporaryExposureKey], deletedKeys: [TPTemporaryExposureKey], completion: @escaping (KeyUpdateCount?, Swift.Error?) -> Void) {
+    func saveInfectedKeys(keys: [TPTemporaryExposureKey], deletedKeys: [TPTemporaryExposureKey], clearCacheFirst: Bool, completion: @escaping (KeyUpdateCount?, Swift.Error?) -> Void) {
         
         guard keys.count > 0 else {
             completion(.empty, nil)
@@ -147,38 +147,56 @@ extension DataManager {
         let context = self.persistentContainer.newBackgroundContext()
         
         context.perform {
-            let request: NSFetchRequest<RemoteInfectedKeyEntity> = RemoteInfectedKeyEntity.fetchRequest()
             
-            let date = Date()
-                
             var numInserted = 0
             var numUpdated = 0
+            var numDeleted = 0
 
-            // Remove deleted keys first
-            
-            var deleteEntities: [RemoteInfectedKeyEntity] = []
-            
-            for key in deletedKeys {
+            let now = Date()
+
+            if clearCacheFirst {
+                let fetchRequest: NSFetchRequest<NSFetchRequestResult> = RemoteInfectedKeyEntity.fetchRequest()
                 
-                let data = key.keyData
-                
-                request.predicate = NSPredicate(format: "infectedKey = %@ AND rollingStartNumber = %@", data as CVarArg, Int64(key.rollingStartNumber) as NSNumber)
+                let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
                 
                 do {
-                    let entities = try context.fetch(request)
-                    deleteEntities.append(contentsOf: entities)
+                    try context.execute(deleteRequest)
                 }
                 catch {
-                    
+                    completion(nil, error)
                 }
             }
-            
-            if deleteEntities.count > 0 {
-                print("Deleting entities: \(deleteEntities)")
-                deleteEntities.forEach { context.delete($0) }
+            else {
+                let request: NSFetchRequest<RemoteInfectedKeyEntity> = RemoteInfectedKeyEntity.fetchRequest()
+                
+
+                // Remove deleted keys first
+                
+                var deleteEntities: [RemoteInfectedKeyEntity] = []
+                
+                for key in deletedKeys {
+                    
+                    let data = key.keyData
+                    
+                    request.predicate = NSPredicate(format: "infectedKey = %@ AND rollingStartNumber = %@", data as CVarArg, Int64(key.rollingStartNumber) as NSNumber)
+                    
+                    do {
+                        let entities = try context.fetch(request)
+                        deleteEntities.append(contentsOf: entities)
+                    }
+                    catch {
+                        
+                    }
+                }
+                
+                if deleteEntities.count > 0 {
+                    print("Deleting entities: \(deleteEntities)")
+                    deleteEntities.forEach { context.delete($0) }
+                }
+                
+                numDeleted = deleteEntities.count
             }
             
-            let numDeleted = deleteEntities.count
 
             // Check incoming keys against submitted keys to see if the
             // submitted infection has been approved
@@ -221,38 +239,49 @@ extension DataManager {
                 
             }
 
+            let request: NSFetchRequest<RemoteInfectedKeyEntity> = RemoteInfectedKeyEntity.fetchRequest()
+
             for key in keys {
                 
                 let data = key.keyData
                 
-                request.predicate = NSPredicate(format: "infectedKey = %@ AND rollingStartNumber = %@", data as CVarArg, Int64(key.rollingStartNumber) as NSNumber)
+                let insertKey: Bool
                 
-                let transmissionRiskLevel = Int16(key.transmissionRiskLevel.rawValue)
-                
-                do {
-                    let entities = try context.fetch(request)
+                if clearCacheFirst {
+                    insertKey = true
+                }
+                else {
+                    request.predicate = NSPredicate(format: "infectedKey = %@ AND rollingStartNumber = %@", data as CVarArg, Int64(key.rollingStartNumber) as NSNumber)
                     
-                    for entity in entities {
-                        if entity.transmissionRiskLevel != transmissionRiskLevel {
-                            entity.transmissionRiskLevel = transmissionRiskLevel
-                            numUpdated += 1
-                        }
-                    }
-                    
-                    if entities.count == 0 {
-                        let entity = RemoteInfectedKeyEntity(context: context)
-                        entity.dateAdded = date
-                        entity.infectedKey = data
-                        // Core data doesn't support unsigned ints, so using Int64 instead of UInt32
-                        entity.rollingStartNumber = Int64(key.rollingStartNumber)
-                        entity.transmissionRiskLevel = Int16(key.transmissionRiskLevel.rawValue)
+                    let transmissionRiskLevel = Int16(key.transmissionRiskLevel.rawValue)
 
-                        numInserted += 1
+                    do {
+                        let entities = try context.fetch(request)
+                        
+                        for entity in entities {
+                            if entity.transmissionRiskLevel != transmissionRiskLevel {
+                                entity.transmissionRiskLevel = transmissionRiskLevel
+                                numUpdated += 1
+                            }
+                        }
+                        
+                        insertKey = entities.count == 0
+                    }
+                    catch {
+                        completion(nil, error)
+                        return
                     }
                 }
-                catch {
-                    completion(nil, error)
-                    return
+                
+                if insertKey {
+                    let entity = RemoteInfectedKeyEntity(context: context)
+                    entity.dateAdded = now
+                    entity.infectedKey = data
+                    // Core data doesn't support unsigned ints, so using Int64 instead of UInt32
+                    entity.rollingStartNumber = Int64(key.rollingStartNumber)
+                    entity.transmissionRiskLevel = Int16(key.transmissionRiskLevel.rawValue)
+
+                    numInserted += 1
                 }
             }
             

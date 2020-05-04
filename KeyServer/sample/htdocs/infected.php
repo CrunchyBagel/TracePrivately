@@ -62,12 +62,22 @@ else {
 
 $date = new DateTime();
 
+$retryDate = new DateTime();
+$retryDate->add(new DateInterval('PT1H'));
+
 $json = array(
     'status' => 'OK',
     'date' => $date->format(DateTimeInterface::ISO8601),
     'keys' => $keys,
-    'deleted_keys' => array()
+    'deleted_keys' => array(),
+    'min_retry_date' => $retryDate->format(DateTimeInterface::ISO8601)
 );
+
+if ($time > $minTime) {
+}
+else {
+    $json['list_type'] = 'FULL';
+}
 
 if ($useBinary) {
     $packed = $packer->pack($json);
