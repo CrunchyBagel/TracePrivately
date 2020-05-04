@@ -170,3 +170,11 @@ extension ExposureNotificationConfig.BucketConfig: CustomDebugStringConvertible 
         self.val8 = values[7]
     }
 }
+
+extension ExposureNotificationConfig: Codable {
+    
+}
+
+extension ExposureNotificationConfig.BucketConfig: Codable {
+    
+}

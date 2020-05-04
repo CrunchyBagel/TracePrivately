@@ -16,7 +16,7 @@ class ContactTraceManager: NSObject {
 
     static let shared = ContactTraceManager()
     
-    var config: ExposureNotificationConfig?
+    var defaultConfiguration: ExposureNotificationConfig?
     
     enum Error: LocalizedError {
         case unknownError
@@ -162,6 +162,35 @@ class ContactTraceManager: NSObject {
 }
 
 extension ContactTraceManager {
+    private static let enConfigKey = "ctm_enConfig"
+
+    func saveConfiguration(config: ExposureNotificationConfig?) {
+        
+        if let config = config {
+            let encoder = JSONEncoder()
+
+            if let encoded = try? encoder.encode(config) {
+                UserDefaults.standard.set(encoded, forKey: Self.enConfigKey)
+                UserDefaults.standard.synchronize()
+            }
+        }
+        else {
+            UserDefaults.standard.removeObject(forKey: Self.enConfigKey)
+            UserDefaults.standard.synchronize()
+        }
+    }
+    
+    var savedConfiguration: ExposureNotificationConfig? {
+        guard let encoded = UserDefaults.standard.data(forKey: Self.enConfigKey) else {
+            return nil
+        }
+        
+        let decoder = JSONDecoder()
+        return try? decoder.decode(ExposureNotificationConfig.self, from: encoded)
+    }
+}
+
+extension ContactTraceManager {
     private static let autostartKey = "ctm_autoStart"
     
     fileprivate func setAutoStartIfPossible(flag: Bool) {
@@ -274,6 +303,10 @@ extension ContactTraceManager {
                     return
                 }
                 
+                if let config = response.enConfig {
+                    self.saveConfiguration(config: config)
+                }
+                
                 let clearCacheFirst: Bool
                 
                 switch response.listType {
@@ -325,7 +358,9 @@ extension ContactTraceManager {
         
         let session = ENExposureDetectionSession()
         
-        if let config = self.config {
+        let config = self.savedConfiguration ?? self.defaultConfiguration
+        
+        if let config = config {
             session.configuration = config.exposureConfig
         }
 

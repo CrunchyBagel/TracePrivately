@@ -190,7 +190,8 @@ class KeyServerTracePrivatelyAdapter: KeyServerBaseAdapter, KeyServerAdapter {
             date: date,
             earliestRetryDate: minRetryDate,
             keys: keys,
-            deletedKeys: deletedKeys
+            deletedKeys: deletedKeys,
+            enConfig: nil // TODO: Read the config from the server
         )
     }
 

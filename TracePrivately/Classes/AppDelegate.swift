@@ -28,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if let url = Bundle.main.url(forResource: "ExposureNotifications", withExtension: "plist") {
             if let config = ExposureNotificationConfig(plistUrl: url) {
-                ContactTraceManager.shared.config = config
+                ContactTraceManager.shared.defaultConfiguration = config
             }
         }
         
