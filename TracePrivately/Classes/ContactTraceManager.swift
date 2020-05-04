@@ -226,6 +226,8 @@ extension ContactTraceManager {
         
         // TODO: Use UIApplication.shared.beginBackgroundTask so this can finish
 
+        /// This is somewhat messy and could be better organised using more sequential operations
+        
         if let date = self.minimumNextRetryDate {
             let now = Date()
             
@@ -241,7 +243,19 @@ extension ContactTraceManager {
                     print("Not allowed to retrieve new keys for another \(str).")
                 }
                 
-                completion(nil)
+                if let session = self.enDetectionSession, self.numKeysAdded == 0 {
+                    self.addAllKeysFromDatabase(session: session) { error in
+                        guard error == nil else {
+                            completion(error)
+                            return
+                        }
+                        
+                        self.addAndFinalizeKeys(session: session, keys: [], completion: completion)
+                    }
+                }
+                else {
+                    completion(nil)
+                }
                 return
             }
         }
@@ -370,12 +384,7 @@ extension ContactTraceManager {
     
     fileprivate func addAndFinalizeKeys(session: ENExposureDetectionSession, keys: [TPTemporaryExposureKey], completion: @escaping (Swift.Error?) -> Void) {
         
-        guard keys.count > 0 else {
-            completion(nil)
-            return
-        }
-        
-        print("Adding \(keys.count) to session")
+        print("Adding \(keys.count) key(s) to session (\(self.numKeysAdded) existing key(s))")
 
         let k: [ENTemporaryExposureKey] = keys.map { $0.enExposureKey }
         

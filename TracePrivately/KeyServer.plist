@@ -18,5 +18,7 @@
 		<key>Type</key>
 		<string>receipt</string>
 	</dict>
+	<key>Method</key>
+	<string>default</string>
 </dict>
 </plist>

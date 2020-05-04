@@ -54,8 +54,13 @@ extension KeyServerConfig {
         
         if let adapterName = dict["Adapter"] as? String {
             switch adapterName {
+            case "default":
+                // Use default adapter
+                break
+                
             case "ct_diag_server":
                 adapter = KeyServerCtDiagServerAdapter(config: config)
+                
             default:
                 break
             }
