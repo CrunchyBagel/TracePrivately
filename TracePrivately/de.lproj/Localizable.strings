@@ -3,75 +3,75 @@
   TracePrivately
 */
 
-"app.title" = "Privat aufzeichnen";
+"app.title" = "Private Verfolgung";
 
 "tracing.title" = "Kontaktverfolgung";
 /* parameter is localized disease name */
-"tracing.message" = "Tauschen Sie anonyme Informationen sicher aus, wenn Sie anderen Personen begegnen, und überprüfen Sie automatisch, ob Sie Kontakt mit %@ haben.";
-"tracing.start.title" = "Aufzeichnung starten";
-"tracing.stop.title" = "Aufzeichnung stoppen";
+"tracing.message" = "Tauschen Sie sicher anonyme Informationen aus, wenn Sie anderen Personen begegnen und überprüfen Sie automatisch, ob Sie %@ ausgesetzt waren.";
+"tracing.start.title" = "Verfolgung starten";
+"tracing.stop.title" = "Verfolgung stoppen";
 
 "disease.covid19.title" = "COVID-19";
 
-"infection.title" = "Infektion mitteilen";
+"infection.title" = "Infektion melden";
 
 /* parameter is localized disease name */
 "infection.report.title" = "Ich habe %@";
-"infection.report.message" = "Wenn bei Ihnen eine Infektion mit %@ diagnostiziert wurde, reichen Sie hier Ihre Diagnose ein.\n\nSie können es dann bestätigen.";
+"infection.report.message" = "Wenn bei Ihnen eine Infektion mit %@ diagnostiziert wurde, reichen Sie hier Ihre Diagnose ein.\n\nSie werden dann um eine Bestätigung gebeten.";
 "infection.report.gathering_data.error" = "Die Erstellung Ihres anonymen Profils war nicht möglich.";
 "infection.report.gathering.empty.title" = "Keine Informationen";
-"infection.report.gathering.empty.message" = "Ihre Kontaktverfolgungsinformationen konnten nicht gefunden werden. Vielleicht hatten Sie die Kontaktverfolgung nicht aktiviert?";
-"infection.report.submit.title" = "Diagnosis einreichen";
-"infection.report.submit.message" = "Bitte bestätigen Sie, dass Sie einreichen möchten.\n\nDas wird Leuten die in Ihrer Nähe waren ermöglichen zu wissen, dass sie dem Virus ausgesetzt gewesen sein könnten.";
-"infection.report.submit.error" = "Nich möglich Ihr Information zu übermitteln";
-"infection.report.submitting.title" = "bitte warten Sie...";
-"infection.report.submitting.message" = "Ihr Anonym Daten wird übermittelt";
+"infection.report.gathering.empty.message" = "Ihre Verfolgungsdaten konnten nicht gefunden werden. Vielleicht hatten Sie die Kontaktverfolgung nicht aktiviert?";
+"infection.report.submit.title" = "Diagnose einreichen";
+"infection.report.submit.message" = "Bitte bestätigen Sie das Absenden.\n\nDies wird es Leuten, die sich in Ihrer Nähe befanden ermöglichen zu wissen, dass Sie dem Virus ausgesetzt waren.";
+"infection.report.submit.error" = "Ihre Daten konnten nicht übermittelt werden.";
+"infection.report.submitting.title" = "Einen Moment ...";
+"infection.report.submitting.message" = "Ihre anonymen Daten werden versendet.";
 /* parameter is localized disease name */
 "infection.infected.title" = "Sie haben %@";
-"infection.pending.title" = "Bestätigen abgewartet";
+"infection.pending.title" = "Warte auf Bestätigung";
 
 /* parameter is localized disease name */
-"exposure.none.banner.title" = "Kein ansteckung  festgestellt";
+"exposure.none.banner.title" = "Keine Aussetzung festgestellt";
 /* parameter is localized disease name */
-"exposure.none.message" = "Kein ansteckungsgefahr mit ein %@ Infektion! \n\nBleiben Sie gesund, und Ihr Hände waschen.";
+"exposure.none.message" = "Kein Kontakt mit einer %@-Infektion festgestellt!\n\nBleiben Sie gesund und waschen Sie ihre Hände.";
 /* parameter %@ may be included, which is localized disease name */
-"exposure.exposed.banner.title" = "Ansteckungsgefahr möglich";
-"exposure.exposed.title" = "Ansteckungen";
-"exposure.exposed.details.title" = "Ansteckung";
+"exposure.exposed.banner.title" = "Mögliche Aussetzung";
+"exposure.exposed.title" = "Aussetzungen";
+"exposure.exposed.details.title" = "Aussetzung";
 /* parameter is localized disease name */
-"exposure.exposed.message" = "Es ist möglich Sie sind im kontakt mit %@ gekommen.";
+"exposure.exposed.message" = "Wir glauben, dass Sie mit %@ in Kontakt gewesen sein könnten.";
 /* parameter is a localized duration */
 "exposure.times.duration" = "Dauer: %@";
 
 "exposure.next_steps.title" = "Nächste Schritte";
-"exposure.next_steps.message" = "Bitte die zuständigen Behörder empfohlenden Schritten befolgen";
+"exposure.next_steps.message" = "Folgen Sie den Anweisungen Ihrer lokalen Behörden.";
 
 "unknown" = "Unbekannt";
 "submit" = "Einsenden";
 "error" = "Fehler";
 
 "ok" = "OK";
-"cancel" = "Störnieren";
+"cancel" = "Abbrechen";
 
-"keyserver.error.no_response_data" = "Kein Antwortdaten erhalten";
-"keyserver.error.response_decoding_error" = "Fehler bei decodieren das Antwortdaten";
-"keyserver.error.key_data_missing" = "Fehlende Kritische Daten";
-"keyserver.error.date_missing" = "Datum fehlt";
-"keyserver.error.not_ok" = "Kein “OK Status” erhalten";
-"keyserver.error.invalid_config" = "Ungültig  KeyServer config";
+"keyserver.error.no_response_data" = "Keine Antwortdaten erhalten";
+"keyserver.error.response_decoding_error" = "Fehler bei Dekodieren der Antwort";
+"keyserver.error.key_data_missing" = "Schlüsseldaten fehlen";
+"keyserver.error.date_missing" = "Fehlendes Datum";
+"keyserver.error.not_ok" = "Kein OK-Status empfangen";
+"keyserver.error.invalid_config" = "Ungültige KeyServer-Konfiguration";
 
 /* parameter is localized disease name */
-"notification.exposure_detected.title" = "Achtung: %@ Ansteckungsgefahr %@";
+"notification.exposure_detected.title" = "Alarm: Aussetzung zu %@ festgestellt";
 /* 1st parameter is formatted localized time, 2nd parameter is formatted localized duration */
-"notification.exposure_detected.single.body" = "Sie waren möglicherweise in ansteckungsgefahr  %1$@ für %2$@";
-"notification.exposure_detected.multiple.body" = "Wir haben festgestellt, dass Sie möglicherweise mehrfach im ansteckungsgefahr gekommen waren.";
+"notification.exposure_detected.single.body" = "Sie waren möglicherweise ausgesetzt: %1$@ für %2$@";
+"notification.exposure_detected.multiple.body" = "Wir haben festgestellt, dass Sie dem Virus möglicherweise mehrfach ausgesetzt waren.";
 
-"privacy.title" = "Datenschutzinformationen";
+"privacy.title" = "Datenschutzbestimmungen";
 
 "settings.title" = "Einstellungen";
 
-"reset_keys.title" = "Reset Aufzeichnung Schlüßeln";
-"reset_keys.message" = "Auf diese Weise können Sie verhindern, dass zuvor aufgetretene Expositionen erkannt werden.";
-"reset_keys.button.title" = "Reset";
+"reset_keys.title" = "Verfolgungsschlüssel zurücksetzen";
+"reset_keys.message" = "Dadurch können keine Aussetzungen festgestellt werden, die in der Vergangenheit passiert sind.";
+"reset_keys.button.title" = "Zurücksetzen";
 
 

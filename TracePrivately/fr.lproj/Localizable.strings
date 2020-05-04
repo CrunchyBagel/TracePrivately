@@ -71,6 +71,7 @@
 "settings.title" = "paramètres";
 
 "reset_keys.title" = "effacer les clés de traçage";
+"reset_keys.message" = "Cette action vous empêchera de détecter les expositions qui on été découvertes dans le passé.";
 "reset_keys.button.title" = "Ré-initialiser";
 
 
