@@ -76,6 +76,7 @@ extension KeyServer {
                 return
             }
             
+            // TODO: DNS error doesn't seem to timeout very quickly
             let task = self.urlSession.dataTask(with: request) { data, response, error in
                 
                 if let error = error {

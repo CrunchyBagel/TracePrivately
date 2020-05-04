@@ -321,6 +321,7 @@ extension MainViewController {
                 self.present(alert, animated: true, completion: nil)
                 return
             }
+            
             if #available(iOS 12, *) {
                 let intent = StartTracingIntent()
                 

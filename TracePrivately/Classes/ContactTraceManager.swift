@@ -572,11 +572,7 @@ extension ContactTraceManager {
             return
         }
         
-        guard !self.isUpdatingEnabledState else {
-            completion(nil)
-            return
-        }
-        
+        // TODO: If you start tracing too quickly it'll fail here. Still allow tracing to start even if an update is occurring and handle it better further down this method.
         guard !self.isUpdatingExposures else {
             completion(nil)
             return
