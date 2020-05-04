@@ -24,23 +24,8 @@ class ContactTraceManager: NSObject {
     
     static let backgroundProcessingTaskIdentifier = "ctm.processor"
 
-    fileprivate var enManager: ENManager?
-    fileprivate var enDetectionSession: ENExposureDetectionSession?
+    fileprivate var enManager = ENManager()
     
-    fileprivate var _numKeysAdded = 0
-    var numKeysAdded: Int {
-        get {
-            return queue.sync {
-                return self._numKeysAdded
-            }
-        }
-        set {
-            queue.sync {
-                self._numKeysAdded = newValue
-            }
-        }
-    }
-
     private var _isUpdatingEnabledState = false
     @objc dynamic var isUpdatingEnabledState: Bool {
         get {
@@ -101,8 +86,13 @@ class ContactTraceManager: NSObject {
         }
     }
 
-    private override init() {}
+    private override init() {
+    }
     
+    deinit {
+        enManager.invalidate()
+    }
+
     static let backgroundProcessingMinimumInterval: TimeInterval = 3600 // TODO: Ability to define this at run time
 
     func applicationDidFinishLaunching() {
@@ -114,19 +104,16 @@ class ContactTraceManager: NSObject {
         
         // It's not clear how new keys will automatically be submitted, since the documentation indicates auth is required every time you retrieve keys. Maybe need to prompt the user with a notification.
         
-        let manager = ENManager()
-        self.enManager = manager
-        
         self.isBootStrapping = true
         
-        manager.activate { error in
+        self.enManager.activate { error in
             
             guard error == nil else {
                 self.isBootStrapping = false
                 return
             }
             
-            if self.shouldAutoStartIfPossible && manager.exposureNotificationStatus == .active {
+            if self.shouldAutoStartIfPossible && self.enManager.exposureNotificationStatus == .active {
                 self.startTracing { _ in
                     self.isBootStrapping = false
                 }
@@ -253,7 +240,7 @@ extension ContactTraceManager {
 
         
         // TODO: This is somewhat messy and could be better organised using more sequential operations
-        
+
         if let date = self.minimumNextRetryDate {
             let now = Date()
             
@@ -269,40 +256,18 @@ extension ContactTraceManager {
                     print("Not allowed to retrieve new keys for another \(str).")
                 }
                 
-                if let session = self.enDetectionSession, self.numKeysAdded == 0 {
-                    self.addAllKeysFromDatabase(session: session) { error in
-                        guard error == nil else {
-                            completion(error)
-                            return
-                        }
-                        
-                        self.addAndFinalizeKeys(session: session, keys: []) { error in
-                            completion(error)
-                        }
-                    }
-                }
-                else {
-                    completion(nil)
+                self.detectExposures { error in
+                    completion(error)
                 }
                 
                 return
             }
         }
-        
+
         let operationQueue = OperationQueue()
         operationQueue.maxConcurrentOperationCount = 1
         
-        if let session = self.enDetectionSession, self.numKeysAdded == 0 {
-            let operation = AsyncBlockOperation { operation in
-                self.addAllKeysFromDatabase(session: session) { error in
-                    operation.complete()
-                }
-            }
-            
-            operationQueue.addOperation(operation)
-        }
-        
-        let operation = AsyncBlockOperation { operation in
+        let retrieveKeysOperation = AsyncBlockOperation { operation in
             KeyServer.shared.retrieveInfectedKeys(since: self.lastReceivedInfectedKeys) { response, error in
                 guard let response = response else {
                     completion(error ?? Error.unknownError)
@@ -322,94 +287,96 @@ extension ContactTraceManager {
                 }
 
                 self.saveNewInfectedKeys(keys: response.keys, deletedKeys: response.deletedKeys, clearCacheFirst: clearCacheFirst) { keyCount, error in
-                    guard let keyCount = keyCount else {
-                        completion(error)
-                        return
+                    
+                    if error != nil {
+                        operation.cancel()
                     }
-
+                    
                     self.saveLastReceivedInfectedKeys(date: response.date)
                     
-                    
-                    let rebuildDetectionSession: Bool
-                    
-                    if clearCacheFirst {
-                        rebuildDetectionSession = true
-                    }
-                    else {
-                        rebuildDetectionSession = keyCount.deleted > 0 || keyCount.updated > 0
-                    }
-
-                    
-                    if let session = self.enDetectionSession, !rebuildDetectionSession {
-                        print("Appending new keys to existing session")
-                        self.addAndFinalizeKeys(session: session, keys: response.keys) { error in
-                            completion(error)
-                        }
-                    }
-                    else {
-                        guard self.isContactTracingEnabled else {
-                            completion(nil)
-                            return
-                        }
-                        
-                        self.startExposureChecking { error in
-                            guard let session = self.enDetectionSession else {
-                                completion(error)
-                                return
-                            }
-                            
-                            self.addAndFinalizeKeys(session: session, keys: response.keys) { error in
-                                completion(error)
-                            }
-                        }
-                    }
+                    operation.complete()
                 }
             }
         }
-
-        operationQueue.addOperation(operation)
-    }
-    
-    fileprivate func addAllKeysFromDatabase(session: ENExposureDetectionSession, completion: @escaping (Swift.Error?) -> Void) {
-        DataManager.shared.allInfectedKeys { keys, error in
-            guard let keys = keys, keys.count > 0 else {
-                completion(error)
+        
+        retrieveKeysOperation.completionBlock = {
+            guard !retrieveKeysOperation.isCancelled else {
+                completion(nil)
                 return
             }
 
-            let k: [ENTemporaryExposureKey] = keys.map { $0.enExposureKey }
-            
-            session.batchAddDiagnosisKeys(k) { error in
-                if error == nil {
-                    self.numKeysAdded += k.count
-                }
-
-                completion(error)
+            self.detectExposures { error in
+                completion(nil)
             }
         }
+
+        operationQueue.addOperation(retrieveKeysOperation)
     }
     
-    fileprivate func addAndFinalizeKeys(session: ENExposureDetectionSession, keys: [TPTemporaryExposureKey], completion: @escaping (Swift.Error?) -> Void) {
+    fileprivate func detectExposures(completion: @escaping (Swift.Error?) -> Void) {
         
-        print("Adding \(keys.count) key(s) to session (\(self.numKeysAdded) existing key(s))")
+        guard self.enManager.exposureNotificationEnabled else {
+            print("Exposure notification not enabled")
+            completion(nil)
+            return
+        }
+        
+        print("Detecting exposures...")
+        
+        let session = ENExposureDetectionSession()
+        
+        if let config = self.config {
+            session.configuration = config.exposureConfig
+        }
 
-        let k: [ENTemporaryExposureKey] = keys.map { $0.enExposureKey }
+        let operationQueue = OperationQueue()
+        operationQueue.maxConcurrentOperationCount = 1
         
-        session.batchAddDiagnosisKeys(k) { error in
-            
-            if error == nil {
-                self.numKeysAdded += k.count
+        let activateOperation = AsyncBlockOperation { operation in
+            session.activate { error in
+                if error != nil {
+                    operation.cancel()
+                }
+                
+                operation.complete()
             }
-            
+        }
+        
+        let addKeysOperation = AsyncBlockOperation { operation in
+            DataManager.shared.allInfectedKeys { keys, error in
+                guard let keys = keys, keys.count > 0 else {
+                    operation.cancel()
+                    operation.complete()
+                    return
+                }
+
+                let k: [ENTemporaryExposureKey] = keys.map { $0.enExposureKey }
+                
+                session.batchAddDiagnosisKeys(k) { error in
+                    if error != nil {
+                        operation.cancel()
+                    }
+
+                    operation.complete()
+                }
+            }
+        }
+        
+        let diagnoseOperation = AsyncBlockOperation { operation in
             session.finishedDiagnosisKeys { summary, error in
                 guard let summary = summary else {
-                    completion(error)
+                    operation.cancel()
+                    operation.complete()
                     return
                 }
 
                 guard summary.matchedKeyCount > 0 else {
                     DataManager.shared.saveExposures(exposures: []) { error in
-                        completion(error)
+                        
+                        if error != nil {
+                            operation.cancel()
+                        }
+                        operation.complete()
                     }
                     
                     return
@@ -420,7 +387,8 @@ extension ContactTraceManager {
                 
                 self.getExposures(session: session, maximumCount: maximumCount, exposures: []) { exposures, error in
                     guard let exposures = exposures else {
-                        completion(error)
+                        operation.cancel()
+                        operation.complete()
                         return
                     }
                     
@@ -435,7 +403,33 @@ extension ContactTraceManager {
                 }
             }
         }
+
+        activateOperation.completionBlock = {
+            guard !activateOperation.isCancelled else {
+                return
+            }
+
+            operationQueue.addOperation(addKeysOperation)
+        }
+        
+        addKeysOperation.completionBlock = {
+            print("In addKeysOperation completion block")
+
+            guard !addKeysOperation.isCancelled else {
+                return
+            }
+            
+            
+            operationQueue.addOperation(diagnoseOperation)
+        }
+        
+        diagnoseOperation.completionBlock = {
+            print("In diagnoseOperation completion block")
+        }
+
+        operationQueue.addOperation(activateOperation)
     }
+
     
     // Recursively retrieves exposures until all are received
     private func getExposures(session: ENExposureDetectionSession, maximumCount: Int, exposures: [TPExposureInfo], completion: @escaping ([TPExposureInfo]?, Swift.Error?) -> Void) {
@@ -578,17 +572,10 @@ extension ContactTraceManager {
             return
         }
 
-        guard let manager = self.enManager else {
-            completion(nil)
-            return
-        }
-        
         self.isUpdatingEnabledState = true
         
-        manager.setExposureNotificationEnabled(true) { error in
+        self.enManager.setExposureNotificationEnabled(true) { error in
             if let error = error {
-                manager.invalidate()
-
                 print("ERROR: \(error)")
                 
                 self.isUpdatingEnabledState = false
@@ -597,28 +584,22 @@ extension ContactTraceManager {
                 return
             }
 
-            self.startExposureChecking { error in
-                
-                if error != nil {
-                    manager.invalidate()
+            let unc = UNUserNotificationCenter.current()
+            
+            unc.requestAuthorization(options: [ .alert, .sound, .badge ]) { success, error in
 
-                    self.isUpdatingEnabledState = false
-                    self.isContactTracingEnabled = false
-                    completion(error)
-                    return
-                }
-                
-                self.isContactTracingEnabled = true
-                self.isUpdatingEnabledState = false
-                
-                self.setAutoStartIfPossible(flag: error == nil)
-
-                self.performBackgroundUpdate { _ in
-                    
-                }
-                
-                completion(error)
             }
+
+            self.isContactTracingEnabled = true
+            self.isUpdatingEnabledState = false
+            
+            self.setAutoStartIfPossible(flag: error == nil)
+
+            self.performBackgroundUpdate { _ in
+                
+            }
+                
+            completion(error)
         }
     }
     
@@ -630,9 +611,8 @@ extension ContactTraceManager {
         self.setAutoStartIfPossible(flag: false)
 
         self.isUpdatingEnabledState = true
-        self.stopExposureChecking()
         
-        self.enManager?.setExposureNotificationEnabled(false) { _ in
+        self.enManager.setExposureNotificationEnabled(false) { _ in
             
         }
         
@@ -641,45 +621,6 @@ extension ContactTraceManager {
     }
 }
 
-extension ContactTraceManager {
-    fileprivate func startExposureChecking(completion: @escaping (Swift.Error?) -> Void) {
-        
-        print("Creating new ENExposureDetectionSession")
-        
-        let session = ENExposureDetectionSession()
-        
-        if let config = self.config {
-            session.configuration = config.exposureConfig
-        }
-        
-        session.activate { error in
-            
-            if let error = error {
-                completion(error)
-                return
-            }
-
-            let unc = UNUserNotificationCenter.current()
-            
-            unc.requestAuthorization(options: [ .alert, .sound, .badge ]) { success, error in
-
-            }
-
-            completion(nil)
-        }
-
-        self.enDetectionSession?.invalidate()
-        self.enDetectionSession = session
-        self.numKeysAdded = 0
-    }
-    
-    fileprivate func stopExposureChecking() {
-        self.enDetectionSession?.invalidate()
-        self.enDetectionSession = nil
-        self.numKeysAdded = 0
-    }
-}
- 
 extension ContactTraceManager: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         
@@ -724,13 +665,7 @@ extension ENExposureDetectionSession {
 extension ContactTraceManager {
     func retrieveSelfDiagnosisKeys(completion: @escaping ([TPTemporaryExposureKey]?, Swift.Error?) -> Void) {
         
-        guard let manager = self.enManager else {
-            // XXX: Shouldn't get here, but handle this error better
-            completion(nil, nil)
-            return
-        }
-        
-        manager.getDiagnosisKeys { keys, error in
+        self.enManager.getDiagnosisKeys { keys, error in
             guard let keys = keys else {
                 completion(nil, error)
                 return
@@ -750,11 +685,9 @@ extension ContactTraceManager {
         
         let dispatchGroup = DispatchGroup()
         
-        if let manager = self.enManager {
-            dispatchGroup.enter()
-            manager.resetAllData { error in
-                dispatchGroup.leave()
-            }
+        dispatchGroup.enter()
+        self.enManager.resetAllData { error in
+            dispatchGroup.leave()
         }
         
         self.clearLastReceivedInfectedKeys()
