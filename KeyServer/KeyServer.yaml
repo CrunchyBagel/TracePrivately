@@ -4,7 +4,7 @@ info:
     description: |
         This is the format of the API that the Trace Privately app expects from its corresponding key server.
 
-    version: "0.1"
+    version: "0.2"
 
 host: example.com
 
@@ -139,7 +139,7 @@ paths:
                                 description: |
                                     If specified, the client shouldn't ask for more keys until after 
                                     this date. This can be used to rate limit clients, or if the server only
-                                    updates its infected key list periodically (e.g. every 24 hours), then
+                                    updates its infected key list periodically (e.g. every 24 hours).
 
                             keys:
                                 type: array
@@ -153,7 +153,9 @@ paths:
                                         d:
                                             type: string
                                             example: "Base 64 Encoded String"
-                                            description: Base 64 encoded binary data representing a single key
+                                            description: |
+                                                Base 64 encoded binary data representing a single key. If the `x-msgpack` format is used,
+                                                this is the original binary key, not base 64 encoded.
                                         r:
                                             type: integer
                                             example: 1234
@@ -176,8 +178,10 @@ paths:
                                         d:
                                             type: string
                                             example: "Base 64 Encoded String"
-                                            description: Base 64 encoded binary data representing a single key
-                                        r:
+                                            description: |
+                                                Base 64 encoded binary data representing a single key. If the `x-msgpack` format is used,
+                                                this is the original binary key, not base 64 encoded.
+                                         r:
                                             type: integer
                                             example: 1234
                                             description: The rolling start number for the key.
