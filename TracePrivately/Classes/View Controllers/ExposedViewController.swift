@@ -21,7 +21,7 @@ class ExposedViewController: UICollectionViewController {
     }
 
     enum CellType {
-        case contact(TPExposureInfo)
+        case contact(ExposureContactInfoEntity)
         case intro(String)
         case nextSteps
     }
@@ -59,7 +59,7 @@ class ExposedViewController: UICollectionViewController {
         let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(Self.doneTapped(_:)))
         self.navigationItem.rightBarButtonItem = button
 
-        let request = ExposureFetchRequest(includeStatuses: [ .detected ], includeNotificationStatuses: [], sortDirection: .timestampAsc)
+        let request = ExposureFetchRequest(includeStatuses: [ .unread, .read ], includeNotificationStatuses: [], sortDirection: .timestampAsc)
         
         let context = DataManager.shared.persistentContainer.viewContext
         
@@ -72,9 +72,7 @@ class ExposedViewController: UICollectionViewController {
             entities = []
         }
         
-        let contacts: [TPExposureInfo] = entities.compactMap { $0.contactInfo }
-
-        if contacts.count == 0 {
+        if entities.count == 0 {
             let title = String(format: NSLocalizedString("exposure.none.message", comment: ""), Disease.current.localizedTitle)
             self.sections = [
                 Section(cells: [
@@ -88,9 +86,14 @@ class ExposedViewController: UICollectionViewController {
 
             self.sections = [
                 Section(cells: [ .intro(title) ]),
-                Section(cells: contacts.map { .contact($0)}),
+                Section(cells: entities.map { .contact($0)}),
                 Section(cells: [ .nextSteps ])
             ]
+        }
+        
+        // Handles an exposure being marked as read or otherwise update
+        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: .main) { _ in
+            self.collectionView.reloadData()
         }
     }
     
@@ -139,13 +142,19 @@ extension ExposedViewController {
             
             return cell
             
-        case .contact(let contact):
+        case .contact(let entity):
 
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Cells.contact, for: indexPath)
                 
-            if let cell = cell as? ExposedContactCell {
-
-                cell.timeLabel.text = self.timeFormatter.string(from: contact.date)
+            if let cell = cell as? ExposedContactCell, let contact = entity.contactInfo {
+                
+                var title = self.timeFormatter.string(from: contact.date)
+                
+                if entity.status == DataManager.ExposureStatus.unread.rawValue {
+                    title = "● " + title
+                }
+                
+                cell.timeLabel.text = title
 
                 if let str = self.durationFormatter.string(from: contact.duration) {
                     cell.durationLabel?.text = String(format: NSLocalizedString("exposure.times.duration", comment: ""), str)

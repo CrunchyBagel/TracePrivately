@@ -195,6 +195,8 @@ class ENManager: ENBaseRequest {
     @objc dynamic private(set) var exposureNotificationEnabled = false
     
     override func activate(queue: DispatchQueue, completionHandler: @escaping (Error?) -> Void) {
+        print("Activating ENManager ...")
+
         let queue = self.dispatchQueue ?? .main
         
         queue.asyncAfter(deadline: .now() + 0.1) {
@@ -577,7 +579,7 @@ class ENAuthorizableBaseRequest: ENBaseRequest, ENAuthorizable {
     
     fileprivate func activateWithPermission(queue: DispatchQueue, completionHandler: @escaping (Error?) -> Void) {
         queue.async {
-            print("Should be overridden")
+//            print("Should be overridden")
             completionHandler(nil)
         }
     }
@@ -634,8 +636,6 @@ class ENBaseRequest: ENActivatable {
 
     final func activate(_ completionHandler: @escaping (Swift.Error?) -> Void) {
         
-        print("Activating ENManager ...")
-        
         let queue: DispatchQueue = self.dispatchQueue ?? .main
         
         self.isRunning = true
@@ -653,7 +653,7 @@ class ENBaseRequest: ENActivatable {
     
     fileprivate func activate(queue: DispatchQueue, completionHandler: @escaping (Swift.Error?) -> Void) {
         queue.async {
-            print("Should be overridden")
+//            print("Should be overridden")
             completionHandler(nil)
         }
     }

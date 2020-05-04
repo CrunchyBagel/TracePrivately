@@ -21,8 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         if let url = Bundle.main.url(forResource: "KeyServer", withExtension: "plist") {
-            if let config = KeyServerConfig(plistUrl: url) {
-                KeyServer.shared.config = config
+            if let adapter = KeyServerConfig.createAdapter(plistUrl: url) {
+                KeyServer.shared.adapter = adapter
             }
         }
         

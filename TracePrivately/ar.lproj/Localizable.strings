@@ -3,31 +3,75 @@
   TracePrivately
 */
 
-"app.title" = "التتبع بسريه";
+"app.title" = "التتبع بخصوصية";
 
+"tracing.title" = "تتبع الاحتكاك";
+/* parameter is localized disease name */
+"tracing.message" = "تبادل معلومات مجهولة المصدر بأمان أثناء الالتقاء بأشخاص أخرين و الفحص التلقائي للتعرض ل%@";
 "tracing.start.title" = "بدء التتبع";
 "tracing.stop.title" = "ايقاف التتبع";
 
 "disease.covid19.title" = "كوفيد-١٩";
 
-"infection.title" = "الابلاغ عن عدوى";
+"infection.title" = "الإبلاغ عن إصابة";
 
 /* parameter is localized disease name */
 "infection.report.title" = "لدي %@";
+"infection.report.message" = "إذا تم تشخيصك على أنك مصاب ب%@، أرسل التشخيص هنا\n\nسيتم طلب التأكيد";
+"infection.report.gathering_data.error" = "تعذر إنشاء الملف الشخصي مجهول المصدر";
 "infection.report.gathering.empty.title" = "لا يوجد معلومات";
+"infection.report.gathering.empty.message" = "تعذر إيجاد معلومات التتبع الخاصة بك. ربما لم يتم تشغيل التتبع ؟";
+"infection.report.submit.title" = "أرسال التشخيص";
+"infection.report.submit.message" = "المرجو تأكيد رغبتك في الإرسال.\n\nسيمكن هذا الأشخاص الذين التقيت بهم من معرفة احتمال تعرضهم.";
+"infection.report.submit.error" = "تعذر إرسال المعلومات الخاصة بك";
 "infection.report.submitting.title" = "لحظة واحدة ...";
+"infection.report.submitting.message" = "المعلومات مجهولة المصدر الخاصة بك في طور الإرسال";
 /* parameter is localized disease name */
 "infection.infected.title" = "لديك %@";
 "infection.pending.title" = "في انتظار التأكيد";
 
+/* parameter is localized disease name */
+"exposure.none.banner.title" = "لم يتم اكتشاف أي تعرض";
+/* parameter is localized disease name */
+"exposure.none.message" = "لم يتم اكتشاف أي احتكاك مع أشخاص مصابين ب %@\n\nابق آمنا و اغسل يديك";
+/* parameter %@ may be included, which is localized disease name */
+"exposure.exposed.banner.title" = "ربما تم تعرضك";
 "exposure.exposed.title" = "التعرضات";
 "exposure.exposed.details.title" = "التعرض";
+/* parameter is localized disease name */
+"exposure.exposed.message" = "نعتقد أنك قمت بالاحتكاك بشخص مصاب ب %@";
+/* parameter is a localized duration */
+"exposure.times.duration" = "المدة : %@";
+
 "exposure.next_steps.title" = "الخطوات التالية";
+"exposure.next_steps.message" = "اتبع الخطوات الموجزة من قبل الجهات المختصة.";
+
 "unknown" = "غير معروف";
+"submit" = "إرسال";
 "error" = "خطأ";
 
 "ok" = "نعم";
 "cancel" = "إلغاء";
 
+"keyserver.error.no_response_data" = "لم يتم التوصل بالإجابة";
+"keyserver.error.response_decoding_error" = "خطأ أثناء قراءة الإجابة";
+"keyserver.error.key_data_missing" = "بيانات غير مملوؤة";
+"keyserver.error.date_missing" = "التاريخ غير مملوء";
+"keyserver.error.not_ok" = "لم يتم التوصل بإجابة صحيحة";
+"keyserver.error.invalid_config" = "إعدادات غير صحيحة";
+
+/* parameter is localized disease name */
+"notification.exposure_detected.title" = "تحذير: %@ تم اكشاف تعرض";
+/* 1st parameter is formatted localized time, 2nd parameter is formatted localized duration */
+"notification.exposure_detected.single.body" = "هنالك احتمال تعرضك : %1$@ ل %2$@";
+"notification.exposure_detected.multiple.body" = "تم اكتشاف احتمالية تعرضك عدة مرات.";
+
+"privacy.title" = "معلومات الخصوصية";
+
 "settings.title" = "الإعدادات";
+
+"reset_keys.title" = "افراغ مفاتيح التتبع";
+"reset_keys.message" = "هذه العملية ستسبب عدم إمكانية اكتشاف تعرضاتك التي حصلت من قبل";
+"reset_keys.button.title" = "إفراغ";
+
 

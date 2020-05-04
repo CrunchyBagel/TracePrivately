@@ -3,22 +3,15 @@
 <plist version="1.0">
 <dict>
 	<key>BaseUrl</key>
-	<string>https://example.com/api/</string>
+	<string>https://example.com/</string>
 	<key>EndPoints</key>
 	<dict>
 		<key>GetInfectedKeys</key>
-		<string>infected</string>
+		<string>diagnosis-keys</string>
 		<key>SubmitInfectedKeys</key>
-		<string>submit</string>
-		<key>Authentication</key>
-		<string>auth</string>
-	</dict>
-	<key>Authentication</key>
-	<dict>
-		<key>Type</key>
-		<string>receipt</string>
+		<string>diagnosis-keys</string>
 	</dict>
 	<key>Method</key>
-	<string>default</string>
+	<string>ct_diag_server</string>
 </dict>
 </plist>

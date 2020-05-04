@@ -119,10 +119,28 @@ paths:
                                 type: string
                                 example: "OK"
                                 description: OK
+                            list_type:
+                                type: string
+                                example: "FULL"
+                                description: |
+                                    Indicates whether or not the returned keys constitute the full list of keys.
+                                    If so, client should clear cache and use this entire list. Otherwise, assume
+                                    it's a partial list that can be appended to existing cache. If it's a full list
+                                    then it doesn't make sense for `deleted_keys` to be populated.
                             date:
                                 type: string
                                 format: date-time
-                                description: The date from which infected keys are returned
+                                description: |
+                                    The maximum date keys are returned up to. This date should be used 
+                                    as the value for the `since` parameter in subsequent requests.
+                            min_retry_date:
+                                type: string
+                                format: date-time
+                                description: |
+                                    If specified, the client shouldn't ask for more keys until after 
+                                    this date. This can be used to rate limit clients, or if the server only
+                                    updates its infected key list periodically (e.g. every 24 hours), then
+
                             keys:
                                 type: array
                                 items:

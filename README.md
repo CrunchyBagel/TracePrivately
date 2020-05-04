@@ -47,7 +47,8 @@ Current server options:
 2. *Ruby*: https://github.com/tatey/trace_privately by @tatey.
     * Includes a 1-click setup process for quick deployment
 3. *Vapor (Swift)*: https://github.com/kevinrmblr/traceprivately-server
-4. Create your own according to the above OpenAPI specification
+4. *Go*: https://github.com/dstotijn/ct-diag-server
+5. Create your own, either according to the above OpenAPI specification or by creating your own adapter implementing `KeyServerAdapter`.
 
 ### iOS App
 

@@ -41,14 +41,38 @@ struct KeyServerConfig {
 }
 
 extension KeyServerConfig {
-    init?(plistUrl: URL) {
-        guard let config = NSDictionary(contentsOf: plistUrl) else {
+    static func createAdapter(plistUrl: URL) -> KeyServerAdapter? {
+        guard let dict = NSDictionary(contentsOf: plistUrl) else {
             return nil
         }
-
-        let prefix = config.object(forKey: "BaseUrl") as? String ?? ""
         
-        guard let endpoints = config.object(forKey: "EndPoints") as? [String: String] else {
+        guard let config = KeyServerConfig(dict: dict) else {
+            return nil
+        }
+        
+        var adapter: KeyServerAdapter?
+        
+        if let adapterName = dict["Adapter"] as? String {
+            switch adapterName {
+            case "default":
+                // Use default adapter
+                break
+                
+            case "ct_diag_server":
+                adapter = KeyServerCtDiagServerAdapter(config: config)
+                
+            default:
+                break
+            }
+        }
+
+        return adapter ?? KeyServerTracePrivatelyAdapter(config: config)
+    }
+
+    init?(dict: NSDictionary) {
+        let prefix = dict["BaseUrl"] as? String ?? ""
+        
+        guard let endpoints = dict["EndPoints"] as? [String: String] else {
             return nil
         }
         
@@ -78,7 +102,7 @@ extension KeyServerConfig {
         }
 
         if let authUrl = authUrl {
-            if let authConfig = config["Authentication"] as? [String: Any] {
+            if let authConfig = dict["Authentication"] as? [String: Any] {
                 if let typeStr = authConfig["Type"] as? String {
                     switch typeStr {
                     case "receipt":
