@@ -167,6 +167,11 @@ extension ContactTraceManager {
     func saveConfiguration(config: ExposureNotificationConfig?) {
         
         if let config = config {
+            guard config.isValid else {
+                print("Config to save is not valid: \(config)")
+                return
+            }
+
             let encoder = JSONEncoder()
 
             if let encoded = try? encoder.encode(config) {
@@ -267,9 +272,6 @@ extension ContactTraceManager {
     
     private func _performBackgroundUpdate(completion: @escaping (Swift.Error?) -> Void) {
 
-        
-        // TODO: This is somewhat messy and could be better organised using more sequential operations
-
         if let date = self.minimumNextRetryDate {
             let now = Date()
             
@@ -304,7 +306,11 @@ extension ContactTraceManager {
                 }
                 
                 if let config = response.enConfig {
+                    print("Received configuration: \(config)")
                     self.saveConfiguration(config: config)
+                }
+                else {
+                    print("Did not receive updated configuration")
                 }
                 
                 let clearCacheFirst: Bool

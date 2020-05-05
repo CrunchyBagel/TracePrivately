@@ -191,7 +191,7 @@ class KeyServerTracePrivatelyAdapter: KeyServerBaseAdapter, KeyServerAdapter {
             earliestRetryDate: minRetryDate,
             keys: keys,
             deletedKeys: deletedKeys,
-            enConfig: nil // TODO: Read the config from the server
+            enConfig: decoded.config?.enConfig
         )
     }
 
@@ -293,11 +293,11 @@ extension KeyServerMessagePackInfectedKeys {
 // This config is not validated in any way this point. This should occur before being saved and used in detection session.
 extension KeyServerMessagePackInfectedKeys {
     struct Config: Codable {
-        let minimumRiskScore: Int
+        let minimum_risk_score: Int
         let attenuation: Bucket
-        let daysSinceLastExposure: Bucket
+        let days_since_last_exposure: Bucket
         let duration: Bucket
-        let transmissionRisk: Bucket
+        let transmission_risk: Bucket
     }
 }
 
@@ -368,32 +368,37 @@ extension KeyServerMessagePackInfectedKeys.Key {
 extension KeyServerMessagePackInfectedKeys.Config {
     init?(jsonData: [String: Any]) {
         
-        guard let minimumRiskScore = jsonData["minimumRiskScore"] as? Int else {
+        guard let minimumRiskScore = jsonData["minimum_risk_score"] as? Int else {
+            print("Unable to read value: minimumRiskScore")
             return nil
         }
         
         guard let attenuationData = jsonData["attenuation"] as? [String: Any], let attenuationBucket = Bucket(jsonData: attenuationData) else {
+            print("Unable to read value: attenuation")
             return nil
         }
         
         guard let daysSinceLastExposureData = jsonData["days_since_last_exposure"] as? [String: Any], let daysSinceLastExposureBucket = Bucket(jsonData: daysSinceLastExposureData) else {
+            print("Unable to read value: days_since_last_exposure")
             return nil
         }
         
         guard let durationData = jsonData["duration"] as? [String: Any], let durationBucket = Bucket(jsonData: durationData) else {
+            print("Unable to read value: duration")
             return nil
         }
         
         guard let transmissionRiskData = jsonData["transmission_risk"] as? [String: Any], let transmissionRiskBucket = Bucket(jsonData: transmissionRiskData) else {
+            print("Unable to read value: transmission_risk")
             return nil
         }
         
         self.init(
-            minimumRiskScore: minimumRiskScore,
+            minimum_risk_score: minimumRiskScore,
             attenuation: attenuationBucket,
-            daysSinceLastExposure: daysSinceLastExposureBucket,
+            days_since_last_exposure: daysSinceLastExposureBucket,
             duration: durationBucket,
-            transmissionRisk: transmissionRiskBucket
+            transmission_risk: transmissionRiskBucket
         )
     }
 }
@@ -401,14 +406,70 @@ extension KeyServerMessagePackInfectedKeys.Config {
 extension KeyServerMessagePackInfectedKeys.Config.Bucket {
     init?(jsonData: [String: Any]) {
         guard let weight = jsonData["weight"] as? Int else {
+            print("Unable to read weight")
             return nil
         }
         
         guard let scores = jsonData["scores"] as? [Int] else {
+            print("Unable to read scores")
             return nil
 
         }
         
         self.init(weight: weight, scores: scores)
+    }
+}
+
+extension KeyServerMessagePackInfectedKeys.Config {
+    var enConfig: ExposureNotificationConfig? {
+        
+        guard let attenuation = self.attenuation.enConfig else {
+            print("Unable to create attenuation config")
+            return nil
+        }
+        
+        guard let daysSinceLastExposure = self.days_since_last_exposure.enConfig else {
+            print("Unable to create daysSinceLastExposure config")
+            return nil
+        }
+        
+        guard let duration = self.duration.enConfig else {
+            print("Unable to create duration config")
+            return nil
+        }
+        
+        guard let transmissionRisk = self.transmission_risk.enConfig else {
+            print("Unable to create transmissionRisk config")
+            return nil
+        }
+        
+        return .init(
+            minimumRiskScore: TPRiskScore(self.minimum_risk_score),
+            attenuation: attenuation,
+            daysSinceLastExposure: daysSinceLastExposure,
+            duration: duration,
+            transmissionRisk: transmissionRisk
+        )
+    }
+}
+
+extension KeyServerMessagePackInfectedKeys.Config.Bucket {
+    var enConfig: ExposureNotificationConfig.BucketConfig? {
+        guard self.scores.count == 8 else {
+            print("Scores must have 8 values, has \(self.scores.count)")
+            return nil
+        }
+        
+        return .init(
+            weight: Double(self.weight),
+            val1: TPRiskScore(self.scores[0]),
+            val2: TPRiskScore(self.scores[1]),
+            val3: TPRiskScore(self.scores[2]),
+            val4: TPRiskScore(self.scores[3]),
+            val5: TPRiskScore(self.scores[4]),
+            val6: TPRiskScore(self.scores[5]),
+            val7: TPRiskScore(self.scores[6]),
+            val8: TPRiskScore(self.scores[7])
+        )
     }
 }

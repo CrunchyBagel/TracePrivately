@@ -251,7 +251,7 @@ extension KeyServer {
                     completion(infectedKeysResponse, nil)
                 }
                 catch {
-                    print("ERROR: \(error.localizedDescription)")
+                    print("ERROR: \(error)")
                     completion(nil, error)
                 }
             }

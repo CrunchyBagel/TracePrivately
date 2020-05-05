@@ -5,7 +5,7 @@
 
 import UIKit
 
-// TODO: Need a way to determine the risk level of a submitted infection. This could be determined on device or on the server. You could also assign different risk levels to each daily key based on what the person did that day
+// TODO: Need a way to determine the risk level of a submitted infection. This could be determined on device or on the server. You could also assign different risk levels to each daily key based on what the person did that day or by how many days since they're were diagnosed.
 
 class SubmitInfectionViewController: UIViewController {
 
