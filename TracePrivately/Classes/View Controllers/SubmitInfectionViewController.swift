@@ -257,6 +257,10 @@ class SubmitInfectionFormLongTextContainerView: SubmitInfectionFormContainerView
     }
 }
 
+class SubmitInfectionFormDateContainerView: SubmitInfectionFormContainerView {
+    
+}
+
 class SubmitInfectionFormPhotoContainerView: SubmitInfectionFormContainerView {
     
 }
@@ -300,6 +304,11 @@ extension SubmitInfectionViewController {
             bodySubViews.append(textView)
             
             let c = SubmitInfectionFormLongTextContainerView(formName: field.formName)
+            
+            container = c
+            
+        case .date:
+            let c = SubmitInfectionFormDateContainerView(formName: field.formName)
             
             container = c
 

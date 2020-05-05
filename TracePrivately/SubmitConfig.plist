@@ -29,6 +29,24 @@
 					<string>e.g. 12345678</string>
 				</dict>
 			</dict>
+			<dict>
+				<key>Type</key>
+				<string>Date</string>
+				<key>Required</key>
+				<true/>
+				<key>FormName</key>
+				<string>date</string>
+				<key>LocalizedTitle</key>
+				<dict>
+					<key>Base</key>
+					<string>Date</string>
+				</dict>
+				<key>LocalizedDescription</key>
+				<dict>
+					<key>Base</key>
+					<string>Select the date of your diagnoses.</string>
+				</dict>
+			</dict>
 		</array>
 	</dict>
 </dict>
