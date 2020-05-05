@@ -48,15 +48,16 @@ class KeyServer {
         let config = URLSessionConfiguration.default
         config.allowsCellularAccess     = true
         config.isDiscretionary          = false
-        
+        config.requestCachePolicy       = .reloadIgnoringLocalCacheData
+        config.timeoutIntervalForResource = 5
+
         #if !os(macOS)
         config.sessionSendsLaunchEvents = true
         #endif
         
-        config.requestCachePolicy       = .reloadIgnoringLocalCacheData
 
         if #available(iOS 11.0, *) {
-            config.waitsForConnectivity     = true
+            config.waitsForConnectivity = true
         }
         
         return URLSession(configuration: config, delegate: nil, delegateQueue: nil)
@@ -76,7 +77,6 @@ extension KeyServer {
                 return
             }
             
-            // TODO: DNS error doesn't seem to timeout very quickly
             let task = self.urlSession.dataTask(with: request) { data, response, error in
                 
                 if let error = error {
@@ -224,7 +224,7 @@ extension KeyServer {
             completion(response, error)
         }
     }
-
+    
     private func _retrieveInfectedKeys(since date: Date?, completion: @escaping (InfectedKeysResponse?, Swift.Error?) -> Void) {
 
         do {
@@ -246,12 +246,9 @@ extension KeyServer {
 
                     let infectedKeysResponse = try self.adapter.handleRetrieveInfectedKeysResponse(data: data, response: response)
                 
-                    print("Response: \(infectedKeysResponse)")
-
                     completion(infectedKeysResponse, nil)
                 }
                 catch {
-                    print("ERROR: \(error)")
                     completion(nil, error)
                 }
             }

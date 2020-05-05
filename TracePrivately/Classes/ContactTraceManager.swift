@@ -93,7 +93,7 @@ class ContactTraceManager: NSObject {
         enManager.invalidate()
     }
 
-    static let backgroundProcessingMinimumInterval: TimeInterval = 3600 // TODO: Ability to define this at run time
+    static let backgroundProcessingMinimumInterval: TimeInterval = 3600
 
     func applicationDidFinishLaunching() {
         
