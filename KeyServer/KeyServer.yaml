@@ -195,7 +195,7 @@ paths:
                                     in order to determine if a user is exposed.
                                 type: object
                                 properties:
-                                    minimumRiskScore:
+                                    minimum_risk_score:
                                         type: integer
                                         description: |
                                             Exposures with a score below this won't be returned.
@@ -203,11 +203,11 @@ paths:
                                         maximum: 8
                                     attenuation:
                                         $ref: '#/definitions/bucketObject'
-                                    daysSinceLastExposure:
+                                    days_since_last_exposure:
                                         $ref: '#/definitions/bucketObject'
                                     duration:
                                         $ref: '#/definitions/bucketObject'
-                                    transmissionRisk:
+                                    transmission_risk:
                                         $ref: '#/definitions/bucketObject'
 
                 400:

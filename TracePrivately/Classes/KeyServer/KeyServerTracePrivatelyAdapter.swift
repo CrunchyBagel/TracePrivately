@@ -259,6 +259,16 @@ class KeyServerTracePrivatelyAdapter: KeyServerBaseAdapter, KeyServerAdapter {
 }
 
 struct KeyServerMessagePackInfectedKeys: Codable {
+    let status: String
+    let date: String
+    let keys: [Key]
+    let deleted_keys: [Key]
+    let min_retry_date: String?
+    let list_type: String?
+    let config: Config?
+}
+
+extension KeyServerMessagePackInfectedKeys {
     struct Key: Codable {
         let d: Data
         let r: Int
@@ -278,13 +288,24 @@ struct KeyServerMessagePackInfectedKeys: Codable {
             )
         }
     }
-    
-    let status: String
-    let date: String
-    let keys: [Key]
-    let deleted_keys: [Key]
-    let min_retry_date: String?
-    let list_type: String?
+}
+
+// This config is not validated in any way this point. This should occur before being saved and used in detection session.
+extension KeyServerMessagePackInfectedKeys {
+    struct Config: Codable {
+        let minimumRiskScore: Int
+        let attenuation: Bucket
+        let daysSinceLastExposure: Bucket
+        let duration: Bucket
+        let transmissionRisk: Bucket
+    }
+}
+
+extension KeyServerMessagePackInfectedKeys.Config {
+    struct Bucket: Codable {
+        let weight: Int
+        let scores: [Int]
+    }
 }
 
 extension KeyServerMessagePackInfectedKeys {
@@ -306,6 +327,15 @@ extension KeyServerMessagePackInfectedKeys {
         
         let listType = json["list_type"] as? String
         let minRetryDate = json["min_retry_date"] as? String
+        
+        let config: KeyServerMessagePackInfectedKeys.Config?
+        
+        if let configJson = json["config"] as? [String: Any] {
+            config = KeyServerMessagePackInfectedKeys.Config(jsonData: configJson)
+        }
+        else {
+            config = nil
+        }
 
         self.init(
             status: statusStr ?? "",
@@ -313,7 +343,8 @@ extension KeyServerMessagePackInfectedKeys {
             keys: keys,
             deleted_keys: deletedKeys,
             min_retry_date: minRetryDate,
-            list_type: listType
+            list_type: listType,
+            config: config
         )
     }
 }
@@ -331,6 +362,53 @@ extension KeyServerMessagePackInfectedKeys.Key {
         let riskLevel = jsonData["l"] as? Int ?? 0
 
         self.init(d: keyData, r: rollingStartNumber, l: riskLevel)
-  
       }
+}
+
+extension KeyServerMessagePackInfectedKeys.Config {
+    init?(jsonData: [String: Any]) {
+        
+        guard let minimumRiskScore = jsonData["minimumRiskScore"] as? Int else {
+            return nil
+        }
+        
+        guard let attenuationData = jsonData["attenuation"] as? [String: Any], let attenuationBucket = Bucket(jsonData: attenuationData) else {
+            return nil
+        }
+        
+        guard let daysSinceLastExposureData = jsonData["days_since_last_exposure"] as? [String: Any], let daysSinceLastExposureBucket = Bucket(jsonData: daysSinceLastExposureData) else {
+            return nil
+        }
+        
+        guard let durationData = jsonData["duration"] as? [String: Any], let durationBucket = Bucket(jsonData: durationData) else {
+            return nil
+        }
+        
+        guard let transmissionRiskData = jsonData["transmission_risk"] as? [String: Any], let transmissionRiskBucket = Bucket(jsonData: transmissionRiskData) else {
+            return nil
+        }
+        
+        self.init(
+            minimumRiskScore: minimumRiskScore,
+            attenuation: attenuationBucket,
+            daysSinceLastExposure: daysSinceLastExposureBucket,
+            duration: durationBucket,
+            transmissionRisk: transmissionRiskBucket
+        )
+    }
+}
+
+extension KeyServerMessagePackInfectedKeys.Config.Bucket {
+    init?(jsonData: [String: Any]) {
+        guard let weight = jsonData["weight"] as? Int else {
+            return nil
+        }
+        
+        guard let scores = jsonData["scores"] as? [Int] else {
+            return nil
+
+        }
+        
+        self.init(weight: weight, scores: scores)
+    }
 }
