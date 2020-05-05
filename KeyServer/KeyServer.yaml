@@ -119,6 +119,7 @@ paths:
                                 type: string
                                 example: "OK"
                                 description: OK
+
                             list_type:
                                 type: string
                                 example: "FULL"
@@ -127,12 +128,14 @@ paths:
                                     If so, client should clear cache and use this entire list. Otherwise, assume
                                     it's a partial list that can be appended to existing cache. If it's a full list
                                     then it doesn't make sense for `deleted_keys` to be populated.
+
                             date:
                                 type: string
                                 format: date-time
                                 description: |
                                     The maximum date keys are returned up to. This date should be used 
                                     as the value for the `since` parameter in subsequent requests.
+
                             min_retry_date:
                                 type: string
                                 format: date-time
@@ -163,6 +166,7 @@ paths:
                                         l:
                                             type: integer
                                             description: Represents the calculated risk level from 1-100
+
                             deleted_keys:
                                 description: |
                                     A list of keys that have subsequently been marked as not infected. Client should remove them from their cache.
@@ -181,10 +185,31 @@ paths:
                                             description: |
                                                 Base 64 encoded binary data representing a single key. If the `x-msgpack` format is used,
                                                 this is the original binary key, not base 64 encoded.
-                                         r:
+                                        r:
                                             type: integer
                                             example: 1234
                                             description: The rolling start number for the key.
+                            config:
+                                description: |
+                                    This contains the configuration to use in the exposure detection session. It defines the weights to use
+                                    in order to determine if a user is exposed.
+                                type: object
+                                properties:
+                                    minimum_risk_score:
+                                        type: integer
+                                        description: |
+                                            Exposures with a score below this won't be returned.
+                                        minimum: 1
+                                        maximum: 8
+                                    attenuation:
+                                        $ref: '#/definitions/bucketObject'
+                                    days_since_last_exposure:
+                                        $ref: '#/definitions/bucketObject'
+                                    duration:
+                                        $ref: '#/definitions/bucketObject'
+                                    transmission_risk:
+                                        $ref: '#/definitions/bucketObject'
+
                 400:
                     description: Invalid request data
                     schema:
@@ -295,3 +320,20 @@ paths:
                                 description: Human-readable string of the error that occurred
                 401:
                     description: Unable to authorize user. Need to request a token before calling this endpoint again.
+
+definitions:
+    bucketObject:
+        type: object
+        properties:
+            weight:
+                type: integer
+                minimum: 0
+                maximum: 100
+            scores:
+                type: array
+                minItems: 8
+                maxItems: 8
+                items:
+                    type: integer
+                    minimum: 1
+                    maximum: 8

@@ -18,12 +18,22 @@ struct ExposureNotificationConfig {
         let val7: TPRiskScore
         let val8: TPRiskScore
         
+        var tpRiskScores: [TPRiskScore] {
+            return [ val1, val2, val3, val4, val5, val6, val7, val8 ]
+        }
+        
         var scores: [NSNumber] {
-            let vals: [TPRiskScore] = [
-                val1, val2, val3, val4, val5, val6, val7, val8
-            ]
+            return self.tpRiskScores.map { $0 as NSNumber }
+        }
+        
+        var isValid: Bool {
+            for score in tpRiskScores {
+                guard score >= 0 && score <= 8 else {
+                    return false
+                }
+            }
             
-            return vals.map { $0 as NSNumber }
+            return true
         }
     }
     
@@ -51,6 +61,14 @@ struct ExposureNotificationConfig {
         config.transmissionRiskScores = transmissionRisk.scores
 
         return config
+    }
+    
+    var isValid: Bool {
+        guard minimumRiskScore >= 0 && minimumRiskScore <= 8 else {
+            return false
+        }
+        
+        return attenuation.isValid && daysSinceLastExposure.isValid && duration.isValid && transmissionRisk.isValid
     }
 }
 
@@ -169,4 +187,12 @@ extension ExposureNotificationConfig.BucketConfig: CustomDebugStringConvertible 
         self.val7 = values[6]
         self.val8 = values[7]
     }
+}
+
+extension ExposureNotificationConfig: Codable {
+    
+}
+
+extension ExposureNotificationConfig.BucketConfig: Codable {
+    
 }

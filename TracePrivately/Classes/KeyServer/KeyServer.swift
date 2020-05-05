@@ -197,6 +197,9 @@ extension KeyServer {
         let keys: [TPTemporaryExposureKey]
         let deletedKeys: [TPTemporaryExposureKey]
         
+        /// If the server provides a config for exposure notifications it will be held here so it can be subsequently stored and used
+        let enConfig: ExposureNotificationConfig?
+        
         var debugDescription: String {
             return "listType=\(listType) date=\(date) earliestRetryDate=\(String(describing: earliestRetryDate)) keys.count=\(keys.count) deletedKeys.count=\(deletedKeys.count)"
         }
@@ -248,7 +251,7 @@ extension KeyServer {
                     completion(infectedKeysResponse, nil)
                 }
                 catch {
-                    print("ERROR: \(error.localizedDescription)")
+                    print("ERROR: \(error)")
                     completion(nil, error)
                 }
             }
@@ -275,3 +278,4 @@ extension URL {
         return components.url
     }
 }
+

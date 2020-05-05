@@ -43,7 +43,8 @@ class KeyServerCtDiagServerAdapter: KeyServerBaseAdapter, KeyServerAdapter {
             date: Date(),
             earliestRetryDate: nil,
             keys: keys,
-            deletedKeys: []
+            deletedKeys: [],
+            enConfig: nil
         )
     }
     
