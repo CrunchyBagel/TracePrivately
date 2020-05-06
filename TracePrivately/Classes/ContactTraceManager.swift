@@ -25,6 +25,8 @@ class ContactTraceManager: NSObject {
     static let backgroundProcessingTaskIdentifier = "ctm.processor"
 
     fileprivate var enManager = ENManager()
+
+    fileprivate var statusObserver: NSKeyValueObservation?
     
     private var _isUpdatingEnabledState = false
     @objc dynamic var isUpdatingEnabledState: Bool {
@@ -96,9 +98,12 @@ class ContactTraceManager: NSObject {
     static let backgroundProcessingMinimumInterval: TimeInterval = 3600
 
     func applicationDidFinishLaunching() {
-        
+
         self.updateBadgeCount()
 
+        self.statusObserver = self.enManager.observe(\.exposureNotificationStatus) { [unowned self] manager, change in
+            self.exposureNotificationStatusUpdated()
+        }
         
         UNUserNotificationCenter.current().delegate = self
         
@@ -107,13 +112,12 @@ class ContactTraceManager: NSObject {
         self.isBootStrapping = true
         
         self.enManager.activate { error in
-            
             guard error == nil else {
                 self.isBootStrapping = false
                 return
             }
             
-            if self.shouldAutoStartIfPossible && self.enManager.exposureNotificationStatus == .active {
+            if self.shouldAutoStartIfPossible && ENManager.authorizationStatus == .authorized {
                 self.startTracing { _ in
                     self.isBootStrapping = false
                 }
@@ -260,7 +264,6 @@ extension ContactTraceManager {
             return
         }
 
-        print("Updating exposures....")
         self.isUpdatingExposures = true
         
         self._performBackgroundUpdate { error in
@@ -299,9 +302,12 @@ extension ContactTraceManager {
         operationQueue.maxConcurrentOperationCount = 1
         
         let retrieveKeysOperation = AsyncBlockOperation { operation in
+            print("Beginning operation: retrieveKeysOperation")
+            
             KeyServer.shared.retrieveInfectedKeys(since: self.lastReceivedInfectedKeys) { response, error in
                 guard let response = response else {
-                    completion(error ?? Error.unknownError)
+                    operation.cancel()
+                    operation.complete()
                     return
                 }
                 
@@ -339,6 +345,7 @@ extension ContactTraceManager {
         }
         
         retrieveKeysOperation.completionBlock = {
+            print("Completing operation: retrieveKeysOperation")
             guard !retrieveKeysOperation.isCancelled else {
                 completion(nil)
                 return
@@ -374,6 +381,8 @@ extension ContactTraceManager {
         operationQueue.maxConcurrentOperationCount = 1
         
         let activateOperation = AsyncBlockOperation { operation in
+            print("Beginning operation: activateOperation")
+
             session.activate { error in
                 if error != nil {
                     operation.cancel()
@@ -384,6 +393,8 @@ extension ContactTraceManager {
         }
         
         let addKeysOperation = AsyncBlockOperation { operation in
+            print("Beginning operation: addKeysOperation")
+
             DataManager.shared.allInfectedKeys { keys, error in
                 guard let keys = keys, keys.count > 0 else {
                     operation.cancel()
@@ -404,6 +415,8 @@ extension ContactTraceManager {
         }
         
         let diagnoseOperation = AsyncBlockOperation { operation in
+            print("Beginning operation: diagnoseOperation")
+
             session.finishedDiagnosisKeys { summary, error in
                 guard let summary = summary else {
                     operation.cancel()
@@ -447,8 +460,11 @@ extension ContactTraceManager {
         }
 
         activateOperation.completionBlock = {
+            print("Completing operation: activateOperation")
+
             guard !activateOperation.isCancelled else {
                 session.invalidate()
+                completion(nil)
                 return
             }
 
@@ -456,10 +472,11 @@ extension ContactTraceManager {
         }
         
         addKeysOperation.completionBlock = {
-            print("In addKeysOperation completion block")
+            print("Completing operation: addKeysOperation")
 
             guard !addKeysOperation.isCancelled else {
                 session.invalidate()
+                completion(nil)
                 return
             }
             
@@ -468,8 +485,9 @@ extension ContactTraceManager {
         }
         
         diagnoseOperation.completionBlock = {
-            print("In diagnoseOperation completion block")
+            print("Completing operation: diagnoseOperation")
             session.invalidate()
+            completion(nil)
         }
 
         operationQueue.addOperation(activateOperation)
@@ -611,39 +629,55 @@ extension ContactTraceManager {
             return
         }
         
+        guard !self.enManager.exposureNotificationEnabled else {
+            completion(nil)
+            return
+        }
+        
         self.isUpdatingEnabledState = true
         
+        print("ENManager.setExposureNotificationEnabled(true)")
         self.enManager.setExposureNotificationEnabled(true) { error in
             if let error = error {
                 print("ERROR: \(error)")
                 
                 self.isUpdatingEnabledState = false
-                self.isContactTracingEnabled = false
                 completion(error)
                 return
             }
-
+            
             let unc = UNUserNotificationCenter.current()
             
             unc.requestAuthorization(options: [ .alert, .sound, .badge ]) { success, error in
 
             }
 
-            self.isContactTracingEnabled = true
             self.isUpdatingEnabledState = false
             
             self.setAutoStartIfPossible(flag: error == nil)
 
-            self.performBackgroundUpdate { _ in
-                
-            }
-                
             completion(error)
         }
     }
     
+    func exposureNotificationStatusUpdated() {
+        print("Exposure notification status update: \(self.enManager.exposureNotificationStatus)")
+        
+        self.isContactTracingEnabled = self.enManager.exposureNotificationEnabled
+        
+        if self.enManager.exposureNotificationStatus == .active {
+            self.performBackgroundUpdate { _ in
+                
+            }
+        }
+    }
+    
     func stopTracing() {
-        guard self.isContactTracingEnabled && !self.isUpdatingEnabledState else {
+        guard self.enManager.exposureNotificationEnabled else {
+            return
+        }
+        
+        guard !self.isUpdatingEnabledState else {
             return
         }
         
@@ -651,12 +685,14 @@ extension ContactTraceManager {
 
         self.isUpdatingEnabledState = true
         
-        self.enManager.setExposureNotificationEnabled(false) { _ in
-            
+        print("ENManager.setExposureNotificationEnabled(false)")
+        self.enManager.setExposureNotificationEnabled(false) { error in
+            if let error = error {
+                print("Error: \(error)")
+            }
+
+            self.isUpdatingEnabledState = false
         }
-        
-        self.isContactTracingEnabled = false
-        self.isUpdatingEnabledState = false
     }
 }
 
@@ -738,6 +774,18 @@ extension ContactTraceManager {
 
         dispatchGroup.notify(queue: .main) {
             completion(nil)
+        }
+    }
+}
+
+extension ENStatus: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        switch self {
+            case .active: return "Active"
+            case .disabled: return "Disabled"
+            case .restricted: return "Restricted"
+            case .unknown: return "Unknown"
+            case .bluetoothOff: return "Bluetooth Off"
         }
     }
 }
