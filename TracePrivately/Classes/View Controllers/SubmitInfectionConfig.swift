@@ -11,6 +11,7 @@ struct SubmitInfectionConfig {
         case shortText = "ShortText"
         case longText = "LongText"
         case photo = "Photo"
+        case date = "Date"
     }
     
     struct Field {

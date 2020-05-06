@@ -211,9 +211,11 @@ class KeyServerTracePrivatelyAdapter: KeyServerBaseAdapter, KeyServerAdapter {
             ]
         }
         
+        let formDataJson = formData.requestJson
+        
         var requestData: [String: Any] = [
             "keys": encodedKeys,
-            "form": formData.requestJson
+            "form": formDataJson
         ]
         
 //            print("Form Data: \(requestData)")
