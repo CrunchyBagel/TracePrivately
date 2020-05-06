@@ -73,7 +73,7 @@ do {
 
     let plistUrl = try getPlistPath(CommandLine.arguments[2])
 
-    guard let config = KeyServerConfig(plistUrl: plistUrl) else {
+    guard let adapter = KeyServerConfig.createAdapter(plistUrl: plistUrl) else {
         throw "Invalid KeyServer config"
     }
 
@@ -83,7 +83,7 @@ do {
             showHelpAndExit()
         }
         
-        KeyServer.shared.config = config
+        KeyServer.shared.adapter = adapter
 
         guard var numSubmissions = Int(CommandLine.arguments[3]) else {
             throw "Must specify number of submissions"

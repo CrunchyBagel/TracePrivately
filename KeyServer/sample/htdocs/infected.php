@@ -14,6 +14,17 @@ if (array_key_exists('HTTP_ACCEPT', $_SERVER)) {
     $useBinary = strpos($accept, 'msgpack') !== false;
 }
 
+$offset = 0;
+$limit  = 0;
+
+if (array_key_exists('offset', $_GET)) {
+    $offset = max(0, (int) $_GET['offset']);
+}
+
+if (array_key_exists('limit', $_GET)) {
+    $limit = max(0, (int) $_GET['limit']);
+}
+
 // https://github.com/rybakit/msgpack.php
 use MessagePack\Packer;
 
@@ -30,7 +41,13 @@ if (array_key_exists('since', $_GET)) {
     }
 }
 
-$stmt = $db->prepare('SELECT infected_key, rolling_start_number, risk_level FROM infected_keys WHERE status = :s AND status_updated >= :t');
+$query = 'SELECT infected_key, rolling_start_number, risk_level FROM infected_keys WHERE status = :s AND status_updated >= :t ORDER BY status_updated';
+
+if ($limit > 0) {
+    $query .= sprintf(' LIMIT %d, %d', $offset, $limit);
+}
+
+$stmt = $db->prepare($query);
 $stmt->bindValue(':t', $time, SQLITE3_INTEGER);
 $stmt->bindValue(':s', 'A', SQLITE3_TEXT);
 
@@ -39,6 +56,26 @@ $result = $stmt->execute();
 $keys = array();
 
 $packer = new Packer();
+
+$config = array(
+    'minimum_risk_score' => 6,
+    'attenuation' => array(
+	'weight' => 50,
+	'scores' => [ 1, 2, 3, 4, 5, 6, 7, 8 ]
+    ),
+    'days_since_last_exposure' => array(
+        'weight' => 50,
+        'scores' => [ 1, 2, 3, 4, 5, 6, 7, 8 ]
+    ),
+    'duration' => array(
+        'weight' => 50,
+        'scores' => [ 1, 2, 3, 4, 5, 6, 7, 8 ]
+    ),
+    'transmission_risk' => array(
+        'weight' => 50,
+        'scores' => [ 1, 2, 3, 4, 5, 6, 7, 8 ]
+    )
+);
 
 
 if ($useBinary) {
@@ -70,7 +107,8 @@ $json = array(
     'date' => $date->format(DateTimeInterface::ISO8601),
     'keys' => $keys,
     'deleted_keys' => array(),
-    'min_retry_date' => $retryDate->format(DateTimeInterface::ISO8601)
+    'min_retry_date' => $retryDate->format(DateTimeInterface::ISO8601),
+    'config' => $config
 );
 
 if ($time > $minTime) {

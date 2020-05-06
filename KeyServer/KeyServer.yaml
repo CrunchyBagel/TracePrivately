@@ -104,6 +104,21 @@ paths:
                   required: false
                   type: string
                   format: date-time
+                - name: offset
+                  description: |
+                      The 0-indexed starting point for the returned results. Results must be returned by their "last updated date ascending" to ensure
+                      consistency between subsequent calls. It is intended that a client retrieving the results by page will retrieve all pages in a short
+                      burst.
+                  in: query
+                  required: false
+                  type: integer
+                - name: limit
+                  description: |
+                      The maximum number of results to return. See the notes for the offset parameter. This number will typically correspond to the
+                      ENExposureDetectionSession.maximumKeyCount value, so the right number of results can be piped in accordingly.
+                  in: query
+                  required: false
+                  type: integer
 
             responses:
                 200:
