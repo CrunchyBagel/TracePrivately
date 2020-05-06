@@ -417,6 +417,7 @@ extension ContactTraceManager {
                         if error != nil {
                             operation.cancel()
                         }
+                        
                         operation.complete()
                     }
                     
@@ -447,6 +448,7 @@ extension ContactTraceManager {
 
         activateOperation.completionBlock = {
             guard !activateOperation.isCancelled else {
+                session.invalidate()
                 return
             }
 
@@ -457,6 +459,7 @@ extension ContactTraceManager {
             print("In addKeysOperation completion block")
 
             guard !addKeysOperation.isCancelled else {
+                session.invalidate()
                 return
             }
             
@@ -466,6 +469,7 @@ extension ContactTraceManager {
         
         diagnoseOperation.completionBlock = {
             print("In diagnoseOperation completion block")
+            session.invalidate()
         }
 
         operationQueue.addOperation(activateOperation)
