@@ -39,12 +39,7 @@
 				<key>LocalizedTitle</key>
 				<dict>
 					<key>Base</key>
-					<string>Date</string>
-				</dict>
-				<key>LocalizedDescription</key>
-				<dict>
-					<key>Base</key>
-					<string>Select the date of your diagnoses.</string>
+					<string>Diagnosis Date</string>
 				</dict>
 			</dict>
 		</array>
