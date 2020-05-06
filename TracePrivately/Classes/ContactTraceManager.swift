@@ -368,10 +368,36 @@ extension ContactTraceManager {
         }
         
         print("Detecting exposures...")
-        
+
+        let config = self.savedConfiguration ?? self.defaultConfiguration
+        let enConfig = config?.exposureConfig ?? ENExposureConfiguration()
+
+        self.enManager.detectExposures(configuration: enConfig, diagnosisKeyURLs: []) { summary, error in
+            guard let summary = summary else {
+                completion(nil)
+                return
+            }
+            
+            // TODO: Explanation
+            self.enManager.getExposureInfo(summary: summary, userExplanation: "TODO") { exposures, error in
+                guard let exposures = exposures else {
+                    completion(error)
+                    return
+                }
+             
+//                DataManager.shared.saveExposures(exposures: exposures) { error in
+//
+//                    self.updateBadgeCount()
+//
+//                    self.sendExposureNotificationForPendingContacts { notificationError in
+//                        completion(error ?? notificationError)
+//                    }
+//                }
+            }
+        }
+/*
         let session = ENExposureDetectionSession()
         
-        let config = self.savedConfiguration ?? self.defaultConfiguration
         
         if let config = config {
             session.configuration = config.exposureConfig
@@ -491,9 +517,10 @@ extension ContactTraceManager {
         }
 
         operationQueue.addOperation(activateOperation)
+ */
     }
 
-    
+    /*
     // Recursively retrieves exposures until all are received
     private func getExposures(session: ENExposureDetectionSession, maximumCount: Int, exposures: [TPExposureInfo], completion: @escaping ([TPExposureInfo]?, Swift.Error?) -> Void) {
         
@@ -514,7 +541,7 @@ extension ContactTraceManager {
             }
         }
     }
-    
+    */
     private func saveNewInfectedKeys(keys: [TPTemporaryExposureKey], deletedKeys: [TPTemporaryExposureKey], clearCacheFirst: Bool, completion: @escaping (DataManager.KeyUpdateCount?, Swift.Error?) -> Void) {
         
         DataManager.shared.saveInfectedKeys(keys: keys, deletedKeys: deletedKeys, clearCacheFirst: clearCacheFirst) { keyCount, error in
@@ -705,38 +732,6 @@ extension ContactTraceManager: UNUserNotificationCenterDelegate {
     }
 }
 
-extension ENExposureDetectionSession {
-    // Modified from https://gist.github.com/mattt/17c880d64c362b923e13c765f5b1c75a
-    func batchAddDiagnosisKeys(_ keys: [ENTemporaryExposureKey], completion: @escaping ENErrorHandler) {
-        
-        guard !keys.isEmpty else {
-            completion(nil)
-            return
-        }
-        
-        guard maximumKeyCount > 0 else {
-            completion(nil)
-            return
-        }
-
-        let cursor = keys.index(keys.startIndex, offsetBy: maximumKeyCount, limitedBy: keys.endIndex) ?? keys.endIndex
-        let batch = Array(keys.prefix(upTo: cursor))
-        let remaining = Array(keys.suffix(from: cursor))
-        
-        print("Adding: \(batch.count) keys")
-
-//        withoutActuallyEscaping(completion) { escapingCompletion in
-            addDiagnosisKeys(batch) { error in
-                if let error = error {
-                    completion(error)
-                } else {
-                    self.batchAddDiagnosisKeys(remaining, completion: completion)
-                }
-            }
-//        }
-    }
-}
-
 extension ContactTraceManager {
     func retrieveSelfDiagnosisKeys(completion: @escaping ([TPTemporaryExposureKey]?, Swift.Error?) -> Void) {
         
@@ -755,7 +750,10 @@ extension ContactTraceManager {
 
 extension ContactTraceManager {
     func resetAllData(completion: @escaping (Swift.Error?) -> Void) {
-        
+
+        // TODO: Rethink how this works
+        completion(nil)
+        /*
         self.stopTracing()
         
         let dispatchGroup = DispatchGroup()
@@ -775,17 +773,19 @@ extension ContactTraceManager {
         dispatchGroup.notify(queue: .main) {
             completion(nil)
         }
+ */
     }
 }
 
 extension ENStatus: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
-            case .active: return "Active"
-            case .disabled: return "Disabled"
-            case .restricted: return "Restricted"
-            case .unknown: return "Unknown"
-            case .bluetoothOff: return "Bluetooth Off"
+        case .active: return "Active"
+        case .disabled: return "Disabled"
+        case .restricted: return "Restricted"
+        case .unknown: return "Unknown"
+        case .bluetoothOff: return "Bluetooth Off"
+        @unknown default: return "Unknown Default"
         }
     }
 }

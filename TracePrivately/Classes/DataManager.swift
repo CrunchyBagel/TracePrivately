@@ -253,7 +253,7 @@ extension DataManager {
                 else {
                     request.predicate = NSPredicate(format: "infectedKey = %@ AND rollingStartNumber = %@", data as CVarArg, Int64(key.rollingStartNumber) as NSNumber)
                     
-                    let transmissionRiskLevel = Int16(key.transmissionRiskLevel.rawValue)
+                    let transmissionRiskLevel = Int16(key.transmissionRiskLevel)
 
                     do {
                         let entities = try context.fetch(request)
@@ -274,12 +274,13 @@ extension DataManager {
                 }
                 
                 if insertKey {
+                    // TODO: Handle rolling period
                     let entity = RemoteInfectedKeyEntity(context: context)
                     entity.dateAdded = now
                     entity.infectedKey = data
                     // Core data doesn't support unsigned ints, so using Int64 instead of UInt32
                     entity.rollingStartNumber = Int64(key.rollingStartNumber)
-                    entity.transmissionRiskLevel = Int16(key.transmissionRiskLevel.rawValue)
+                    entity.transmissionRiskLevel = Int16(key.transmissionRiskLevel)
 
                     numInserted += 1
                 }
@@ -337,12 +338,11 @@ extension RemoteInfectedKeyEntity {
             return nil
         }
         
-        let riskLevel: TPRiskLevel? = TPRiskLevel(rawValue: UInt8(self.transmissionRiskLevel))
-
         return .init(
             keyData: keyData,
+            rollingPeriod: TPIntervalNumber(0), // TODO: Period
             rollingStartNumber: TPIntervalNumber(self.rollingStartNumber),
-            transmissionRiskLevel: riskLevel ?? .invalid
+            transmissionRiskLevel: TPRiskLevel(self.transmissionRiskLevel)
         )
     }
 }
@@ -353,12 +353,11 @@ extension LocalInfectionKeyEntity {
             return nil
         }
         
-        let riskLevel: TPRiskLevel? = TPRiskLevel(rawValue: UInt8(self.transmissionRiskLevel))
-        
         return .init(
             keyData: keyData,
+            rollingPeriod: TPIntervalNumber(0), // TODO: Period
             rollingStartNumber: TPIntervalNumber(self.rollingStartNumber),
-            transmissionRiskLevel: riskLevel ?? .invalid
+            transmissionRiskLevel: TPRiskLevel(self.transmissionRiskLevel)
         )
     }
 }
@@ -390,7 +389,8 @@ extension DataManager {
                             let keyEntity = LocalInfectionKeyEntity(context: context)
                             keyEntity.infectedKey = key.keyData
                             keyEntity.rollingStartNumber = Int64(key.rollingStartNumber)
-                            keyEntity.transmissionRiskLevel = Int16(key.transmissionRiskLevel.rawValue)
+                            keyEntity.transmissionRiskLevel = Int16(key.transmissionRiskLevel)
+                            // TODO: Rolling period
                             keyEntity.infection = entity
                         }
 
@@ -526,7 +526,7 @@ extension DataManager {
                     entity.duration = contact.duration
                     entity.attenuationValue = Int16(contact.attenuationValue)
                     entity.totalRiskScore = Int16(contact.totalRiskScore)
-                    entity.transmissionRiskLevel = Int16(contact.transmissionRiskLevel.rawValue)
+                    entity.transmissionRiskLevel = Int16(contact.transmissionRiskLevel)
                     
                     entity.status = ExposureStatus.unread.rawValue
                     entity.localNotificationStatus = ExposureLocalNotificationStatus.notSent.rawValue
@@ -609,14 +609,12 @@ extension ExposureContactInfoEntity {
             return nil
         }
         
-        let transmissionRiskLevel: TPRiskLevel? = TPRiskLevel(rawValue: UInt8(self.transmissionRiskLevel))
-        
         return .init(
             attenuationValue: UInt8(self.attenuationValue),
             date: timestamp,
             duration: self.duration,
             totalRiskScore: TPRiskScore(self.totalRiskScore),
-            transmissionRiskLevel: transmissionRiskLevel ?? .invalid
+            transmissionRiskLevel: TPRiskLevel(self.transmissionRiskLevel)
         )
     }
     

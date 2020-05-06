@@ -207,7 +207,8 @@ class KeyServerTracePrivatelyAdapter: KeyServerBaseAdapter, KeyServerAdapter {
             return [
                 "d": key.keyData.base64EncodedString(),
                 "r": key.rollingStartNumber,
-                "l": key.transmissionRiskLevel.rawValue
+                "p": key.rollingPeriod,
+                "l": key.transmissionRiskLevel
             ]
         }
         
@@ -273,6 +274,7 @@ struct KeyServerMessagePackInfectedKeys: Codable {
 extension KeyServerMessagePackInfectedKeys {
     struct Key: Codable {
         let d: Data
+        let p: Int
         let r: Int
         let l: Int
 
@@ -281,12 +283,11 @@ extension KeyServerMessagePackInfectedKeys {
                 return nil
             }
             
-            let riskLevel: TPRiskLevel? = TPRiskLevel(rawValue: UInt8(l))
-            
             return .init(
                 keyData: d,
+                rollingPeriod: TPIntervalNumber(p),
                 rollingStartNumber: TPIntervalNumber(r),
-                transmissionRiskLevel: riskLevel ?? .invalid
+                transmissionRiskLevel: TPRiskLevel(l)
             )
         }
     }
@@ -357,13 +358,17 @@ extension KeyServerMessagePackInfectedKeys.Key {
             return nil
         }
         
-        guard let rollingStartNumber = jsonData["r"] as? Int else {
+        guard let rollingPeriod = jsonData["p"] as? Int else {
             return nil
         }
         
+        guard let rollingStartNumber = jsonData["r"] as? Int else {
+            return nil
+        }
+
         let riskLevel = jsonData["l"] as? Int ?? 0
 
-        self.init(d: keyData, r: rollingStartNumber, l: riskLevel)
+        self.init(d: keyData, p: rollingPeriod, r: rollingStartNumber, l: riskLevel)
       }
 }
 

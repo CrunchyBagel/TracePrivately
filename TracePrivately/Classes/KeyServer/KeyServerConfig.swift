@@ -59,7 +59,8 @@ extension KeyServerConfig {
                 break
                 
             case "ct_diag_server":
-                adapter = KeyServerCtDiagServerAdapter(config: config)
+                break // TODO: Fix
+//                adapter = KeyServerCtDiagServerAdapter(config: config)
                 
             default:
                 break

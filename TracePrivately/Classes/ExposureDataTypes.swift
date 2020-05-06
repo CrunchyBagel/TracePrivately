@@ -33,24 +33,16 @@ class TPExposureConfiguration {
     var transmissionRiskWeight: Double = 100
 }
 
-enum TPRiskLevel: UInt8 {
-    case invalid = 0
-    case lowest = 1
-    case low = 10
-    case lowMedium = 25
-    case medium = 50
-    case mediumHigh = 65
-    case high = 80
-    case veryHigh = 90
-    case highest = 100
-}
+typealias TPRiskLevel = UInt8
 #endif
 
 struct TPTemporaryExposureKey {
     let keyData: Data
+    let rollingPeriod: TPIntervalNumber // TODO: Store this somewhere and send to server
     let rollingStartNumber: TPIntervalNumber
-    let transmissionRiskLevel: TPRiskLevel!
+    let transmissionRiskLevel: TPRiskLevel
 }
+
 
 #if !os(macOS)
 extension TPTemporaryExposureKey {
@@ -58,6 +50,7 @@ extension TPTemporaryExposureKey {
         let key = ENTemporaryExposureKey()
         key.keyData = keyData
         key.rollingStartNumber = rollingStartNumber
+        key.rollingPeriod = rollingPeriod
         key.transmissionRiskLevel = transmissionRiskLevel
         
         return key
@@ -68,6 +61,7 @@ extension ENTemporaryExposureKey {
     var tpExposureKey: TPTemporaryExposureKey {
         return .init(
             keyData: keyData,
+            rollingPeriod: rollingPeriod,
             rollingStartNumber: rollingStartNumber,
             transmissionRiskLevel: transmissionRiskLevel
         )

@@ -17,12 +17,10 @@
 		663AEE912462EA4400A19037 /* KeyServerAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B242BA245E6CCE00E17AAA /* KeyServerAdapter.swift */; };
 		663AEE922462EA4C00A19037 /* KeyServerTracePrivatelyAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B242BC245E79B200E17AAA /* KeyServerTracePrivatelyAdapter.swift */; };
 		663AEE932462EA5400A19037 /* ExposureNotificationConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C4BBC424564B56008AACC2 /* ExposureNotificationConfig.swift */; };
-		663AEE942462EA5E00A19037 /* KeyServerCtDiagServerAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6650A704245EDE1000F762FE /* KeyServerCtDiagServerAdapter.swift */; };
 		663BD8B9245A510C00A3E029 /* ExposureDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663BD8B8245A510C00A3E029 /* ExposureDataTypes.swift */; };
 		66437F76244A86AE000B8C6C /* Disease.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F75244A86AE000B8C6C /* Disease.swift */; };
 		66437F9E244A9A02000B8C6C /* TracePrivately.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */; };
 		66437FA0244A9B2C000B8C6C /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9F244A9B2C000B8C6C /* DataManager.swift */; };
-		6650A705245EDE1000F762FE /* KeyServerCtDiagServerAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6650A704245EDE1000F762FE /* KeyServerCtDiagServerAdapter.swift */; };
 		6650A708245EE02200F762FE /* KeyServerCtDiagServer.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6650A706245EE01100F762FE /* KeyServerCtDiagServer.plist */; };
 		6673EED42451785300244287 /* SubmitConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6673EED32451785300244287 /* SubmitConfig.plist */; };
 		6673EED62451C10000244287 /* SubmitInfectionConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6673EED52451C10000244287 /* SubmitInfectionConfig.swift */; };
@@ -599,7 +597,6 @@
 				66A00B8C245BB320007DE11F /* DataExtension.swift in Sources */,
 				66A00B83245BB045007DE11F /* KeyServerConfig.swift in Sources */,
 				66A00B8D245BB55C007DE11F /* AsyncBlockOperation.swift in Sources */,
-				663AEE942462EA5E00A19037 /* KeyServerCtDiagServerAdapter.swift in Sources */,
 				66A00B7B245BAB6E007DE11F /* main.swift in Sources */,
 				663AEE922462EA4C00A19037 /* KeyServerTracePrivatelyAdapter.swift in Sources */,
 			);
@@ -630,7 +627,6 @@
 				66793891245460B600868B84 /* KeyServerConfig.swift in Sources */,
 				66437F76244A86AE000B8C6C /* Disease.swift in Sources */,
 				66210553245127340011EB42 /* Intents.intentdefinition in Sources */,
-				6650A705245EDE1000F762FE /* KeyServerCtDiagServerAdapter.swift in Sources */,
 				66437FA0244A9B2C000B8C6C /* DataManager.swift in Sources */,
 				66F8186B2448FD5C0043AC2D /* AppDelegate.swift in Sources */,
 				66A00B8B245BB320007DE11F /* DataExtension.swift in Sources */,
@@ -950,7 +946,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CHZS3BHM57;
 				INFOPLIST_FILE = TracePrivately/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -973,7 +969,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CHZS3BHM57;
 				INFOPLIST_FILE = TracePrivately/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
