@@ -22,7 +22,7 @@ class ContactTraceManager: NSObject {
         case unknownError
     }
     
-    static let backgroundProcessingTaskIdentifier = "ctm.processor"
+    static let backgroundProcessingTaskIdentifier = Bundle.main.bundleIdentifier! + ".processor"
 
     fileprivate var enManager = ENManager()
 

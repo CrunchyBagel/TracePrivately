@@ -47,6 +47,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if Self.useModernBackgroundProcessing {
             if #available(iOS 13, *) {
                 BGTaskScheduler.shared.register(forTaskWithIdentifier: ContactTraceManager.backgroundProcessingTaskIdentifier, using: .main) { task in
+                    
+                    task.expirationHandler = {
+                        
+                    }
+                    
                     self.handleBackgroundTask(task: task)
                 }
             }
@@ -87,8 +92,10 @@ extension AppDelegate {
     func scheduleNextBackgroundProcess(minimumDate: Date) {
         if Self.useModernBackgroundProcessing {
             if #available(iOS 13, *) {
-                let request = BGAppRefreshTaskRequest(identifier: ContactTraceManager.backgroundProcessingTaskIdentifier)
+                let request = BGProcessingTaskRequest(identifier: ContactTraceManager.backgroundProcessingTaskIdentifier)
+                request.requiresNetworkConnectivity = true
                 request.earliestBeginDate = minimumDate
+                
                 do {
                     try BGTaskScheduler.shared.submit(request)
                     print("Scheduling background request for \(minimumDate)")
