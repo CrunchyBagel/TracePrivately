@@ -3,7 +3,7 @@
 //  TracePrivately
 //
 
-import UIKit
+import Foundation
 
 struct ExposureNotificationConfig {
     struct BucketConfig {

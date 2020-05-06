@@ -14,6 +14,10 @@
 		6621055B245129690011EB42 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6621055A245129690011EB42 /* IntentHandler.swift */; };
 		662105642451299B0011EB42 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 66210552245127340011EB42 /* Intents.intentdefinition */; };
 		6621057124525FC90011EB42 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6621057324525FC90011EB42 /* Localizable.strings */; };
+		663AEE912462EA4400A19037 /* KeyServerAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B242BA245E6CCE00E17AAA /* KeyServerAdapter.swift */; };
+		663AEE922462EA4C00A19037 /* KeyServerTracePrivatelyAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B242BC245E79B200E17AAA /* KeyServerTracePrivatelyAdapter.swift */; };
+		663AEE932462EA5400A19037 /* ExposureNotificationConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C4BBC424564B56008AACC2 /* ExposureNotificationConfig.swift */; };
+		663AEE942462EA5E00A19037 /* KeyServerCtDiagServerAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6650A704245EDE1000F762FE /* KeyServerCtDiagServerAdapter.swift */; };
 		663BD8B9245A510C00A3E029 /* ExposureDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663BD8B8245A510C00A3E029 /* ExposureDataTypes.swift */; };
 		66437F76244A86AE000B8C6C /* Disease.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F75244A86AE000B8C6C /* Disease.swift */; };
 		66437F9E244A9A02000B8C6C /* TracePrivately.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */; };
@@ -586,14 +590,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				663AEE912462EA4400A19037 /* KeyServerAdapter.swift in Sources */,
 				66A00B89245BB203007DE11F /* KeyServer.swift in Sources */,
 				66A00B86245BB0BC007DE11F /* InfectedKeysFormData.swift in Sources */,
 				66A00B88245BB11B007DE11F /* ExposureDataTypes.swift in Sources */,
+				663AEE932462EA5400A19037 /* ExposureNotificationConfig.swift in Sources */,
 				66A00B84245BB053007DE11F /* KeyServerAuthentication.swift in Sources */,
 				66A00B8C245BB320007DE11F /* DataExtension.swift in Sources */,
 				66A00B83245BB045007DE11F /* KeyServerConfig.swift in Sources */,
 				66A00B8D245BB55C007DE11F /* AsyncBlockOperation.swift in Sources */,
+				663AEE942462EA5E00A19037 /* KeyServerCtDiagServerAdapter.swift in Sources */,
 				66A00B7B245BAB6E007DE11F /* main.swift in Sources */,
+				663AEE922462EA4C00A19037 /* KeyServerTracePrivatelyAdapter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
