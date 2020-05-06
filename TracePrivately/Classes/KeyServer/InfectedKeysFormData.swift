@@ -33,6 +33,36 @@ struct InfectedKeysFormDataStringField: InfectedKeysFormDataField {
     }
 }
 
+struct InfectedKeysFormDataDateField: InfectedKeysFormDataField {
+    let name: String
+    
+    let date: Date
+    let timeZone: TimeZone
+    
+    var requestJson: [String : Any]? {
+        
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timeZone
+        let dc = calendar.dateComponents([ .year, .month, .day ], from: date)
+        
+        guard let y = dc.year, let m = dc.month, let d = dc.day else {
+            return nil
+        }
+        
+        return [
+            "name": self.name,
+            "type": "date",
+            "y": y,
+            "m": m,
+            "d": d
+        ]
+    }
+    
+    var isValid: Bool {
+        return true
+    }
+}
+
 #if !os(macOS)
 // TODO: Resize image to an adequate size
 struct InfectedKeysFormDataImageField: InfectedKeysFormDataField {

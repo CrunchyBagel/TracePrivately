@@ -257,6 +257,27 @@ class SubmitInfectionFormLongTextContainerView: SubmitInfectionFormContainerView
     }
 }
 
+class SubmitInfectionFormDateContainerView: SubmitInfectionFormContainerView {
+    var picker: UIDatePicker?
+    
+    override var formField: InfectedKeysFormDataField? {
+        guard let picker = self.picker else {
+            return nil
+        }
+        
+        return InfectedKeysFormDataDateField(name: self.formName, date: picker.date, timeZone: .current)
+    }
+    
+    override func becomeFirstResponder() -> Bool {
+        return self.picker?.becomeFirstResponder() ?? super.becomeFirstResponder()
+    }
+    
+    override func resignFirstResponder() -> Bool {
+        picker?.resignFirstResponder()
+        return super.resignFirstResponder()
+    }
+}
+
 class SubmitInfectionFormPhotoContainerView: SubmitInfectionFormContainerView {
     
 }
@@ -285,6 +306,8 @@ extension SubmitInfectionViewController {
             textField.font = UIFont.preferredFont(forTextStyle: .headline)
             textField.placeholder = field.placeholder
             textField.autocorrectionType = .no
+            textField.delegate = self
+            textField.returnKeyType = .done
             
             bodySubViews.append(textField)
 
@@ -301,6 +324,22 @@ extension SubmitInfectionViewController {
             
             let c = SubmitInfectionFormLongTextContainerView(formName: field.formName)
             
+            container = c
+            
+        case .date:
+            let picker = UIDatePicker()
+            picker.date = Date()
+            picker.datePickerMode = .date
+            // Possible heights: 162/180/216
+            
+            picker.translatesAutoresizingMaskIntoConstraints = false
+            picker.heightAnchor.constraint(equalToConstant: 162).isActive = true
+            
+            bodySubViews.append(picker)
+
+            let c = SubmitInfectionFormDateContainerView(formName: field.formName)
+            c.picker = picker
+
             container = c
 
         case .photo:
@@ -376,6 +415,13 @@ extension SubmitInfectionViewController {
         ])
         
         return container
+    }
+}
+
+extension SubmitInfectionViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
 
