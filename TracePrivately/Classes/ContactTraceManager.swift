@@ -276,7 +276,7 @@ extension ContactTraceManager {
     }
     
     private func _performBackgroundUpdate(completion: @escaping (Swift.Error?) -> Void) {
-
+/*
         if let date = self.minimumNextRetryDate {
             let now = Date()
             
@@ -299,7 +299,7 @@ extension ContactTraceManager {
                 return
             }
         }
-
+*/
         let operationQueue = OperationQueue()
         operationQueue.maxConcurrentOperationCount = 1
         
@@ -314,11 +314,7 @@ extension ContactTraceManager {
                 }
                 
                 if let config = response.enConfig {
-                    print("Received configuration: \(config)")
                     self.saveConfiguration(config: config)
-                }
-                else {
-                    print("Did not receive updated configuration")
                 }
                 
                 let clearCacheFirst: Bool
@@ -386,164 +382,21 @@ extension ContactTraceManager {
                     completion(error)
                     return
                 }
+                
+                let exp = exposures.map{ $0.tpExposureInfo }
              
-//                DataManager.shared.saveExposures(exposures: exposures) { error in
-//
-//                    self.updateBadgeCount()
-//
-//                    self.sendExposureNotificationForPendingContacts { notificationError in
-//                        completion(error ?? notificationError)
-//                    }
-//                }
-            }
-        }
-/*
-        let session = ENExposureDetectionSession()
-        
-        
-        if let config = config {
-            session.configuration = config.exposureConfig
-        }
+                DataManager.shared.saveExposures(exposures: exp) { error in
 
-        let operationQueue = OperationQueue()
-        operationQueue.maxConcurrentOperationCount = 1
-        
-        let activateOperation = AsyncBlockOperation { operation in
-            print("Beginning operation: activateOperation")
+                    self.updateBadgeCount()
 
-            session.activate { error in
-                if error != nil {
-                    operation.cancel()
-                }
-                
-                operation.complete()
-            }
-        }
-        
-        let addKeysOperation = AsyncBlockOperation { operation in
-            print("Beginning operation: addKeysOperation")
-
-            DataManager.shared.allInfectedKeys { keys, error in
-                guard let keys = keys, keys.count > 0 else {
-                    operation.cancel()
-                    operation.complete()
-                    return
-                }
-
-                let k: [ENTemporaryExposureKey] = keys.map { $0.enExposureKey }
-                
-                session.batchAddDiagnosisKeys(k) { error in
-                    if error != nil {
-                        operation.cancel()
-                    }
-
-                    operation.complete()
-                }
-            }
-        }
-        
-        let diagnoseOperation = AsyncBlockOperation { operation in
-            print("Beginning operation: diagnoseOperation")
-
-            session.finishedDiagnosisKeys { summary, error in
-                guard let summary = summary else {
-                    operation.cancel()
-                    operation.complete()
-                    return
-                }
-
-                guard summary.matchedKeyCount > 0 else {
-                    DataManager.shared.saveExposures(exposures: []) { error in
-                        
-                        if error != nil {
-                            operation.cancel()
-                        }
-                        
-                        operation.complete()
-                    }
-                    
-                    return
-                }
-                
-                // Documentation says use a reasonable number, such as 100
-                let maximumCount: Int = 100
-                
-                self.getExposures(session: session, maximumCount: maximumCount, exposures: []) { exposures, error in
-                    guard let exposures = exposures else {
-                        operation.cancel()
-                        operation.complete()
-                        return
-                    }
-                    
-                    DataManager.shared.saveExposures(exposures: exposures) { error in
-                        
-                        self.updateBadgeCount()
-                        
-                        self.sendExposureNotificationForPendingContacts { notificationError in
-                            completion(error ?? notificationError)
-                        }
+                    self.sendExposureNotificationForPendingContacts { notificationError in
+                        completion(error ?? notificationError)
                     }
                 }
-            }
-        }
-
-        activateOperation.completionBlock = {
-            print("Completing operation: activateOperation")
-
-            guard !activateOperation.isCancelled else {
-                session.invalidate()
-                completion(nil)
-                return
-            }
-
-            operationQueue.addOperation(addKeysOperation)
-        }
-        
-        addKeysOperation.completionBlock = {
-            print("Completing operation: addKeysOperation")
-
-            guard !addKeysOperation.isCancelled else {
-                session.invalidate()
-                completion(nil)
-                return
-            }
-            
-            
-            operationQueue.addOperation(diagnoseOperation)
-        }
-        
-        diagnoseOperation.completionBlock = {
-            print("Completing operation: diagnoseOperation")
-            session.invalidate()
-            completion(nil)
-        }
-
-        operationQueue.addOperation(activateOperation)
- */
-    }
-
-    /*
-    // Recursively retrieves exposures until all are received
-    private func getExposures(session: ENExposureDetectionSession, maximumCount: Int, exposures: [TPExposureInfo], completion: @escaping ([TPExposureInfo]?, Swift.Error?) -> Void) {
-        
-        session.getExposureInfo(withMaximumCount: maximumCount) { newExposures, done, error in
-            
-            guard let newExposures = newExposures else {
-                completion(exposures, error)
-                return
-            }
-
-            let allExposures = exposures + newExposures.map { $0.tpExposureInfo }
-            
-            if done {
-                completion(allExposures, nil)
-            }
-            else {
-                self.getExposures(session: session, maximumCount: maximumCount, exposures: allExposures, completion: completion)
             }
         }
     }
-    */
+
     private func saveNewInfectedKeys(keys: [TPTemporaryExposureKey], deletedKeys: [TPTemporaryExposureKey], clearCacheFirst: Bool, completion: @escaping (DataManager.KeyUpdateCount?, Swift.Error?) -> Void) {
         
         DataManager.shared.saveInfectedKeys(keys: keys, deletedKeys: deletedKeys, clearCacheFirst: clearCacheFirst) { keyCount, error in

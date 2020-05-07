@@ -32,7 +32,7 @@ class KeyServerCtDiagServerAdapter: KeyServerBaseAdapter, KeyServerAdapter {
         case 200:
             let elements = self.dataToStreamElements(data: data)
             
-            keys = elements.map { TPTemporaryExposureKey(keyData: $0.keyData, rollingStartNumber: $0.rollingStartNumber, transmissionRiskLevel: .high) }
+            keys = elements.map { TPTemporaryExposureKey(keyData: $0.keyData, rollingPeriod: 144, rollingStartNumber: $0.rollingStartNumber, transmissionRiskLevel: 7) }
             
         default:
             throw KeyServer.Error.okStatusNotReceived

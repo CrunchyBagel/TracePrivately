@@ -148,7 +148,7 @@ class KeyServerTracePrivatelyAdapter: KeyServerBaseAdapter, KeyServerAdapter {
             decoded = try KeyServerMessagePackInfectedKeys(json: json)
         }
         else if normalized.contains("application/x-msgpack") {
-            print("Handling Binary response")
+            print("Handling binary response")
 
             let decoder = MessagePackDecoder()
             decoded = try decoder.decode(KeyServerMessagePackInfectedKeys.self, from: data)

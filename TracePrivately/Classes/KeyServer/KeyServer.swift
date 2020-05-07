@@ -245,6 +245,8 @@ extension KeyServer {
                     }
 
                     let infectedKeysResponse = try self.adapter.handleRetrieveInfectedKeysResponse(data: data, response: response)
+                    
+                    print("Response: \(infectedKeysResponse)")
                 
                     completion(infectedKeysResponse, nil)
                 }

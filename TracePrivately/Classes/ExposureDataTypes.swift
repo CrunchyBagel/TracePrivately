@@ -23,13 +23,13 @@ typealias TPRiskScore = UInt8
 
 class TPExposureConfiguration {
     var minimumRiskScore: TPRiskScore = .zero
-    var attenuationScores: [NSNumber] = []
+    var attenuationLevelValues: [NSNumber] = []
     var attenuationWeight: Double = 100
-    var daysSinceLastExposureScores: [NSNumber] = []
+    var daysSinceLastExposureLevelValues: [NSNumber] = []
     var daysSinceLastExposureWeight: Double = 100
-    var durationScores: [NSNumber] = []
+    var durationLevelValues: [NSNumber] = []
     var durationWeight: Double = 100
-    var transmissionRiskScores: [NSNumber] = []
+    var transmissionRiskLevelValues: [NSNumber] = []
     var transmissionRiskWeight: Double = 100
 }
 
