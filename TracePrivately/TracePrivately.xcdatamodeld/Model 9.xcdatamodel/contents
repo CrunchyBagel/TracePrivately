@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19E287" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="ExposureContactInfoEntity" representedClassName="ExposureContactInfoEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="attenuationValue" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="duration" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="localNotificationStatus" optional="YES" attributeType="String"/>
+        <attribute name="status" optional="YES" attributeType="String"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="totalRiskScore" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="transmissionRiskLevel" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="LocalInfectionEntity" representedClassName="LocalInfectionEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="dateAdded" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="remoteIdentifier" optional="YES" attributeType="String"/>
+        <attribute name="status" optional="YES" attributeType="String"/>
+        <relationship name="infectedKey" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="LocalInfectionKeyEntity" inverseName="infection" inverseEntity="LocalInfectionKeyEntity"/>
+    </entity>
+    <entity name="LocalInfectionKeyEntity" representedClassName="LocalInfectionKeyEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="infectedKey" optional="YES" attributeType="Binary"/>
+        <attribute name="rollingPeriod" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="rollingStartNumber" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="transmissionRiskLevel" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="infection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="LocalInfectionEntity" inverseName="infectedKey" inverseEntity="LocalInfectionEntity"/>
+    </entity>
+    <entity name="RemoteInfectedKeyEntity" representedClassName="RemoteInfectedKeyEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="dateAdded" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="infectedKey" optional="YES" attributeType="Binary"/>
+        <attribute name="rollingPeriod" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="rollingStartNumber" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="transmissionRiskLevel" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <fetchIndex name="byInfectedKey">
+            <fetchIndexElement property="infectedKey" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <elements>
+        <element name="ExposureContactInfoEntity" positionX="-45" positionY="27" width="128" height="148"/>
+        <element name="LocalInfectionEntity" positionX="-36" positionY="18" width="128" height="103"/>
+        <element name="LocalInfectionKeyEntity" positionX="-54" positionY="9" width="128" height="118"/>
+        <element name="RemoteInfectedKeyEntity" positionX="-63" positionY="-18" width="128" height="118"/>
+    </elements>
+</model>

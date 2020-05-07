@@ -174,6 +174,10 @@ paths:
                                             description: |
                                                 Base 64 encoded binary data representing a single key. If the `x-msgpack` format is used,
                                                 this is the original binary key, not base 64 encoded.
+                                        p:
+                                            type: integer
+                                            example: 123
+                                            description: The rolling period number for the key.
                                         r:
                                             type: integer
                                             example: 1234
@@ -200,6 +204,10 @@ paths:
                                             description: |
                                                 Base 64 encoded binary data representing a single key. If the `x-msgpack` format is used,
                                                 this is the original binary key, not base 64 encoded.
+                                        p:
+                                            type: integer
+                                            example: 1234
+                                            description: The rolling period number for the key.
                                         r:
                                             type: integer
                                             example: 1234
@@ -276,6 +284,10 @@ paths:
                                         type: string
                                         example: "Base 64 Encoded String"
                                         description: Base 64 encoded binary data representing a single key
+                                      p:
+                                        type: integer
+                                        example: 1234
+                                        description: The rolling period number for the key.
                                       r:
                                         type: integer
                                         example: 1234

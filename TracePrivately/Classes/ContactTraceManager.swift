@@ -3,6 +3,8 @@
 //  TracePrivately
 //
 
+// TODO: Merge in protobuf file and other stuff
+
 import Foundation
 import UserNotifications
 import UIKit

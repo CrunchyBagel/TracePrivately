@@ -279,6 +279,7 @@ extension DataManager {
                     entity.dateAdded = now
                     entity.infectedKey = data
                     // Core data doesn't support unsigned ints, so using Int64 instead of UInt32
+                    entity.rollingPeriod = Int64(key.rollingPeriod)
                     entity.rollingStartNumber = Int64(key.rollingStartNumber)
                     entity.transmissionRiskLevel = Int16(key.transmissionRiskLevel)
 
@@ -340,7 +341,7 @@ extension RemoteInfectedKeyEntity {
         
         return .init(
             keyData: keyData,
-            rollingPeriod: TPIntervalNumber(0), // TODO: Period
+            rollingPeriod: TPIntervalNumber(self.rollingPeriod),
             rollingStartNumber: TPIntervalNumber(self.rollingStartNumber),
             transmissionRiskLevel: TPRiskLevel(self.transmissionRiskLevel)
         )
@@ -355,7 +356,7 @@ extension LocalInfectionKeyEntity {
         
         return .init(
             keyData: keyData,
-            rollingPeriod: TPIntervalNumber(0), // TODO: Period
+            rollingPeriod: TPIntervalNumber(self.rollingPeriod),
             rollingStartNumber: TPIntervalNumber(self.rollingStartNumber),
             transmissionRiskLevel: TPRiskLevel(self.transmissionRiskLevel)
         )
@@ -388,9 +389,9 @@ extension DataManager {
                         for key in keys {
                             let keyEntity = LocalInfectionKeyEntity(context: context)
                             keyEntity.infectedKey = key.keyData
+                            keyEntity.rollingPeriod = Int64(key.rollingPeriod)
                             keyEntity.rollingStartNumber = Int64(key.rollingStartNumber)
                             keyEntity.transmissionRiskLevel = Int16(key.transmissionRiskLevel)
-                            // TODO: Rolling period
                             keyEntity.infection = entity
                         }
 

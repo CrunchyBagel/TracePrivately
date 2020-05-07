@@ -38,7 +38,7 @@ typealias TPRiskLevel = UInt8
 
 struct TPTemporaryExposureKey {
     let keyData: Data
-    let rollingPeriod: TPIntervalNumber // TODO: Store this somewhere and send to server
+    let rollingPeriod: TPIntervalNumber
     let rollingStartNumber: TPIntervalNumber
     let transmissionRiskLevel: TPRiskLevel
 }

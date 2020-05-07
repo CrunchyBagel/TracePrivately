@@ -151,6 +151,7 @@
 		663BD8B7245A3F8100A3E029 /* TracePrivately.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TracePrivately.entitlements; sourceTree = "<group>"; };
 		663BD8B8245A510C00A3E029 /* ExposureDataTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureDataTypes.swift; sourceTree = "<group>"; };
 		663BD8BA245A537900A3E029 /* Model 8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 8.xcdatamodel"; sourceTree = "<group>"; };
+		664244AE2463A06100F038D3 /* Model 9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 9.xcdatamodel"; sourceTree = "<group>"; };
 		66437F75244A86AE000B8C6C /* Disease.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disease.swift; sourceTree = "<group>"; };
 		66437F9D244A9A02000B8C6C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		66437F9F244A9B2C000B8C6C /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
@@ -1059,6 +1060,7 @@
 		66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				664244AE2463A06100F038D3 /* Model 9.xcdatamodel */,
 				663BD8BA245A537900A3E029 /* Model 8.xcdatamodel */,
 				664C5236245802C9003EBE63 /* Model 7.xcdatamodel */,
 				66BF646624578E2B00492070 /* Model 6.xcdatamodel */,
@@ -1068,7 +1070,7 @@
 				668D4B22244D705100D90C26 /* Model 2.xcdatamodel */,
 				66437F9D244A9A02000B8C6C /* Model.xcdatamodel */,
 			);
-			currentVersion = 663BD8BA245A537900A3E029 /* Model 8.xcdatamodel */;
+			currentVersion = 664244AE2463A06100F038D3 /* Model 9.xcdatamodel */;
 			path = TracePrivately.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
