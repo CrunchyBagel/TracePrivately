@@ -3,7 +3,7 @@ A functioning app using Apple's contact tracing framework, as documented here:
 
 https://www.apple.com/covid19/contacttracing
 
-**4 May 2020:** Apple have released additional guidelines and sample documentation. We are working to ensure TracePrivately operates in line with these guidelines. It will build against the `ExposureNotification` framework if you are running Xcode 11.5, and run on iOS 13.5 devices.
+**6 May 2020:** In iOS 13.5 beta 2, the framework has more changes. The `feat/beta2` branch has been updated accordingly, but it is not yet complete. The framework now accepts only keys from protocol buffers, so I'm still working on server changes for this. Additionally, the mock framework implementation doesn't yet fully function generate fake exposures.
 
 *Note: To run the app the Apple framework, a special entitlement is required, only available to authorized organizations. [More Info](https://github.com/CrunchyBagel/TracePrivately/issues/57)*
 
