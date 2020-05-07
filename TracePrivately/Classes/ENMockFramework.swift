@@ -324,7 +324,10 @@ extension ENManager {
             summary.daysSinceLastExposure = 0
             summary.matchedKeyCount = 0 // TODO: Fix UInt64(min(Self.maximumFakeMatches, keys.count)),
             summary.maximumRiskScore = 0 // TODO: Fix
-            summary.attenuationDurations = []
+            /// Array index 0: Sum of durations for all exposures when attenuation was <= 50.
+            /// Array index 1: Sum of durations for all exposures when attenuation was > 50.
+            /// These durations are aggregated across all exposures and capped at 30 minutes.
+            summary.attenuationDurations = [ 0, 0 ]
             summary.metadata = nil
             
             completionHandler(summary, nil)
