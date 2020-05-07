@@ -318,19 +318,45 @@ extension ENManager {
         let queue = self.dispatchQueue ?? .main
 
         queue.asyncAfter(deadline: .now() + delay) {
-            let keys = enQueue.sync { return self.remoteInfectedKeys }
             
-            let summary = ENExposureDetectionSummary()
-            summary.daysSinceLastExposure = 0
-            summary.matchedKeyCount = 0 // TODO: Fix UInt64(min(Self.maximumFakeMatches, keys.count)),
-            summary.maximumRiskScore = 0 // TODO: Fix
-            /// Array index 0: Sum of durations for all exposures when attenuation was <= 50.
-            /// Array index 1: Sum of durations for all exposures when attenuation was > 50.
-            /// These durations are aggregated across all exposures and capped at 30 minutes.
-            summary.attenuationDurations = [ 0, 0 ]
-            summary.metadata = nil
+            var keys: [ENTemporaryExposureKey] = []
             
-            completionHandler(summary, nil)
+            do {
+                for url in diagnosisKeyURLs {
+                    let data = try Data(contentsOf: url)
+                    let file = try File(serializedData: data)
+                    
+                    let fileKeys: [ENTemporaryExposureKey] = file.key.map { k in
+                        let key = ENTemporaryExposureKey()
+                        key.keyData = k.keyData
+                        key.rollingPeriod = ENIntervalNumber(k.rollingPeriod)
+                        key.rollingStartNumber = ENIntervalNumber(k.rollingStartNumber)
+                        key.transmissionRiskLevel = ENRiskLevel(k.transmissionRiskLevel)
+                        
+                        return key
+                    }
+                    
+                    keys.append(contentsOf: fileKeys)
+                }
+                
+                print("FOUND KEYS: \(keys)")
+            
+                let summary = ENExposureDetectionSummary()
+                summary.daysSinceLastExposure = 0
+                summary.matchedKeyCount = 0 // TODO: Fix UInt64(min(Self.maximumFakeMatches, keys.count)),
+                summary.maximumRiskScore = 0 // TODO: Fix
+                /// Array index 0: Sum of durations for all exposures when attenuation was <= 50.
+                /// Array index 1: Sum of durations for all exposures when attenuation was > 50.
+                /// These durations are aggregated across all exposures and capped at 30 minutes.
+                summary.attenuationDurations = [ 0, 0 ]
+                summary.metadata = nil
+                
+                completionHandler(summary, nil)
+            }
+            catch {
+                completionHandler(nil, error)
+                return
+            }
         }
 
         return Progress(totalUnitCount: 1) // TODO: Ensure this works right

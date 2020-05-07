@@ -370,29 +370,74 @@ extension ContactTraceManager {
         let config = self.savedConfiguration ?? self.defaultConfiguration
         let enConfig = config?.exposureConfig ?? ENExposureConfiguration()
 
-        self.enManager.detectExposures(configuration: enConfig, diagnosisKeyURLs: []) { summary, error in
-            guard let summary = summary else {
-                completion(nil)
+        
+        self.writeDatabaseToLocalProtobuf { localUrl, error in
+            guard let localUrl = localUrl else {
+                completion(error)
                 return
             }
-            
-            // TODO: Explanation
-            self.enManager.getExposureInfo(summary: summary, userExplanation: "TODO") { exposures, error in
-                guard let exposures = exposures else {
-                    completion(error)
+
+            // TODO: This is so far untested
+            self.enManager.detectExposures(configuration: enConfig, diagnosisKeyURLs: [localUrl]) { summary, error in
+                guard let summary = summary else {
+                    completion(nil)
                     return
                 }
                 
-                let exp = exposures.map{ $0.tpExposureInfo }
-             
-                DataManager.shared.saveExposures(exposures: exp) { error in
+                // TODO: Explanation
+                self.enManager.getExposureInfo(summary: summary, userExplanation: "TODO") { exposures, error in
+                    guard let exposures = exposures else {
+                        completion(error)
+                        return
+                    }
+                    
+                    let exp = exposures.map{ $0.tpExposureInfo }
+                 
+                    DataManager.shared.saveExposures(exposures: exp) { error in
 
-                    self.updateBadgeCount()
+                        self.updateBadgeCount()
 
-                    self.sendExposureNotificationForPendingContacts { notificationError in
-                        completion(error ?? notificationError)
+                        self.sendExposureNotificationForPendingContacts { notificationError in
+                            completion(error ?? notificationError)
+                        }
                     }
                 }
+            }
+        }
+    }
+    
+    // This code to create a protobuf and write to disk is listed from Apple's sample project
+    
+    // TODO: This is now an intermediate step of going through the database then to a filesystem file.
+    // Seems like overengineering now. The infected keys should just avoid the database altogether
+    // and be written straight to filesystem in protobuf format.
+    // TODO: These are limited to 500kb, so need to break up accordingly
+    private func writeDatabaseToLocalProtobuf(completion: @escaping (URL?, Swift.Error?) -> Void) {
+        DataManager.shared.allInfectedKeys { keys, error in
+            guard let keys = keys else {
+                completion(nil, error)
+                return
+            }
+            
+            let file = File.with { file in
+                file.key = keys.map { diagnosisKey in
+                    Key.with { key in
+                        key.keyData = diagnosisKey.keyData
+                        key.rollingPeriod = diagnosisKey.rollingPeriod
+                        key.rollingStartNumber = diagnosisKey.rollingStartNumber
+                        key.transmissionRiskLevel = Int32(diagnosisKey.transmissionRiskLevel)
+                    }
+                }
+            }
+
+            do {
+                let data = try file.serializedData()
+                let localUrl = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("diagnosisKeys")
+                try data.write(to: localUrl)
+                completion(localUrl, nil)
+            }
+            catch {
+                completion(nil, error)
             }
         }
     }
