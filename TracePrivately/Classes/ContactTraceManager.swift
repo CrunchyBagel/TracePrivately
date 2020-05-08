@@ -3,8 +3,6 @@
 //  TracePrivately
 //
 
-// TODO: Merge in protobuf file and other stuff
-
 import Foundation
 import UserNotifications
 import UIKit
@@ -359,7 +357,7 @@ extension ContactTraceManager {
     
     fileprivate func detectExposures(completion: @escaping (Swift.Error?) -> Void) {
         
-        guard self.enManager.exposureNotificationEnabled else {
+        guard self.isContactTracingEnabled else {
             print("Exposure notification not enabled")
             completion(nil)
             return
@@ -373,11 +371,13 @@ extension ContactTraceManager {
         
         self.writeDatabaseToLocalProtobuf { localUrl, error in
             guard let localUrl = localUrl else {
+                print("No local URL received")
                 completion(error)
                 return
             }
-
-            // TODO: This is so far untested
+            
+            print("Keys were written to \(localUrl)")
+            
             self.enManager.detectExposures(configuration: enConfig, diagnosisKeyURLs: [localUrl]) { summary, error in
                 guard let summary = summary else {
                     completion(nil)
@@ -556,7 +556,7 @@ extension ContactTraceManager {
             return
         }
         
-        guard !self.enManager.exposureNotificationEnabled else {
+        guard !self.isContactTracingEnabled else {
             completion(nil)
             return
         }
@@ -590,7 +590,7 @@ extension ContactTraceManager {
     func exposureNotificationStatusUpdated() {
         print("Exposure notification status update: \(self.enManager.exposureNotificationStatus)")
         
-        self.isContactTracingEnabled = self.enManager.exposureNotificationEnabled
+        self.isContactTracingEnabled = self.enManager.exposureNotificationStatus == .active
         
         if self.enManager.exposureNotificationStatus == .active {
             self.performBackgroundUpdate { _ in
@@ -600,7 +600,7 @@ extension ContactTraceManager {
     }
     
     func stopTracing() {
-        guard self.enManager.exposureNotificationEnabled else {
+        guard self.isContactTracingEnabled else {
             return
         }
         
@@ -650,18 +650,9 @@ extension ContactTraceManager {
 
 extension ContactTraceManager {
     func resetAllData(completion: @escaping (Swift.Error?) -> Void) {
-
-        // TODO: Rethink how this works
-        completion(nil)
-        /*
         self.stopTracing()
         
         let dispatchGroup = DispatchGroup()
-        
-        dispatchGroup.enter()
-        self.enManager.resetAllData { error in
-            dispatchGroup.leave()
-        }
         
         self.clearLastReceivedInfectedKeys()
 
@@ -673,7 +664,6 @@ extension ContactTraceManager {
         dispatchGroup.notify(queue: .main) {
             completion(nil)
         }
- */
     }
 }
 

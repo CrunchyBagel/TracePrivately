@@ -5,10 +5,6 @@
 
 import UIKit
 
-// TODO: Treat an exposure as unread until user visits this screen, then mark it as viewed and update the app badge accordingly.
-
-// TODO: If severe then allow exposed user to submit their potential exposure
-
 class ExposureDetailsViewController: UIViewController {
 
     var contact: ExposureContactInfoEntity!

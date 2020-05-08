@@ -274,7 +274,6 @@ extension DataManager {
                 }
                 
                 if insertKey {
-                    // TODO: Handle rolling period
                     let entity = RemoteInfectedKeyEntity(context: context)
                     entity.dateAdded = now
                     entity.infectedKey = data

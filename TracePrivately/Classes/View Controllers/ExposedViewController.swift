@@ -6,8 +6,6 @@
 import UIKit
 import CoreData
 
-// TODO: Make use of the totalRiskScore and transmissionRiskLevel
-
 class ExposedViewController: UICollectionViewController {
 
     struct Segue {
@@ -35,7 +33,7 @@ class ExposedViewController: UICollectionViewController {
     lazy var timeFormatter: DateFormatter = {
         let ret = DateFormatter()
         ret.dateStyle = .long
-        ret.timeStyle = .short
+        ret.timeStyle = .none // we only know the date, not time
         
         return ret
     }()
@@ -163,7 +161,6 @@ extension ExposedViewController {
                     cell.durationLabel?.text = nil
                 }
                 
-                // TODO: The docs are a bit weird here. It indicates the total should be 1 - 8, but also says the value could 0..100 and it also says could be less than 0
                 switch contact.simplifiedRisk {
                 case .high:
                     cell.setBackgroundColor(color: .systemRed)

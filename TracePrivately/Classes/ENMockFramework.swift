@@ -149,6 +149,8 @@ class ENManager: ENBaseRequest {
     
     static var authorizationStatus: ENAuthorizationStatus { return .authorized }
     
+    fileprivate var diagnosisKeys: [ENTemporaryExposureKey] = []
+
     override func activate(queue: DispatchQueue, completionHandler: @escaping (Error?) -> Void) {
         print("Activating ENManager ...")
 
@@ -177,6 +179,7 @@ class ENManager: ENBaseRequest {
     
     func setExposureNotificationEnabled(_ flag: Bool, completionHandler: @escaping ENErrorHandler) {
         if !flag {
+            self.exposureNotificationStatus = .disabled
             self.exposureNotificationEnabled = false
             completionHandler(nil)
             return
@@ -195,6 +198,7 @@ class ENManager: ENBaseRequest {
             let queue = self.dispatchQueue ?? .main
             
             queue.asyncAfter(deadline: .now() + 0.3) {
+                self.exposureNotificationStatus = flag ? .active : .disabled
                 self.exposureNotificationEnabled = flag
                 completionHandler(nil)
             }
@@ -208,12 +212,14 @@ class ENManager: ENBaseRequest {
                     
                     queue.asyncAfter(deadline: .now() + 0.3) {
                         self.saveMockStatus(status: .active)
+                        self.exposureNotificationStatus = .active
                         self.exposureNotificationEnabled = flag
                         completionHandler(nil)
                     }
                 }
                 else {
                     self.saveMockStatus(status: .disabled)
+                    self.exposureNotificationStatus = .disabled
                     self.exposureNotificationEnabled = false
                     completionHandler(ENError(code: .notAuthorized))
                 }
@@ -309,14 +315,15 @@ extension ENManager {
             return key.keyData != localDeviceId
         }
     }
-
-    // TODO: Get this working with URLs
+    
     @discardableResult func detectExposures(configuration: ENExposureConfiguration, diagnosisKeyURLs: [URL], completionHandler: @escaping ENDetectExposuresHandler) -> Progress {
         
         let delay: TimeInterval = 0.5
         
         let queue = self.dispatchQueue ?? .main
 
+        let progress = Progress(totalUnitCount: 1)
+        
         queue.asyncAfter(deadline: .now() + delay) {
             
             var keys: [ENTemporaryExposureKey] = []
@@ -339,17 +346,19 @@ extension ENManager {
                     keys.append(contentsOf: fileKeys)
                 }
                 
-                print("FOUND KEYS: \(keys)")
-            
+                enQueue.sync { self.diagnosisKeys = keys }
+                
                 let summary = ENExposureDetectionSummary()
                 summary.daysSinceLastExposure = 0
-                summary.matchedKeyCount = 0 // TODO: Fix UInt64(min(Self.maximumFakeMatches, keys.count)),
-                summary.maximumRiskScore = 0 // TODO: Fix
+                summary.matchedKeyCount = UInt64(min(Self.maximumFakeMatches, keys.count))
+                summary.maximumRiskScore = 8
                 /// Array index 0: Sum of durations for all exposures when attenuation was <= 50.
                 /// Array index 1: Sum of durations for all exposures when attenuation was > 50.
                 /// These durations are aggregated across all exposures and capped at 30 minutes.
                 summary.attenuationDurations = [ 0, 0 ]
                 summary.metadata = nil
+                
+                progress.completedUnitCount = progress.totalUnitCount
                 
                 completionHandler(summary, nil)
             }
@@ -359,7 +368,7 @@ extension ENManager {
             }
         }
 
-        return Progress(totalUnitCount: 1) // TODO: Ensure this works right
+        return progress
     }
     
     @discardableResult func getExposureInfo(summary: ENExposureDetectionSummary, userExplanation: String, completionHandler: @escaping ENGetExposureInfoHandler) -> Progress {
@@ -368,6 +377,8 @@ extension ENManager {
 
         let delay: TimeInterval = 0.5
                 
+        let progress = Progress(totalUnitCount: 1)
+        
         queue.asyncAfter(deadline: .now() + delay) {
             guard !self.isInvalidated else {
                 completionHandler(nil, ENError(code: .invalidated))
@@ -375,7 +386,7 @@ extension ENManager {
             }
 
             // For now this is assuming that every key is infected. Obviously this isn't accurate, just useful for testing.
-            let allKeys: [ENTemporaryExposureKey] = [] // TODO: Fix enQueue.sync { self.remoteInfectedKeys }
+            let allKeys: [ENTemporaryExposureKey] = enQueue.sync { self.remoteInfectedKeys(keys: self.diagnosisKeys) }
             
             guard allKeys.count > 0 else {
                 completionHandler([], nil)
@@ -401,10 +412,12 @@ extension ENManager {
                 return exposure
             }
             
+            progress.completedUnitCount = progress.totalUnitCount
+            
             completionHandler(contacts, nil)
         }
         
-        return Progress(totalUnitCount: 1) // TODO: Ensure this works right
+        return progress
     }
 }
 
