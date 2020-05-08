@@ -3,7 +3,7 @@ A functioning app using Apple's contact tracing framework, as documented here:
 
 https://www.apple.com/covid19/contacttracing
 
-**6 May 2020:** In iOS 13.5 beta 2, the framework has more changes. The `feat/beta2` branch has been updated accordingly, but it is not yet complete. The framework now accepts only keys from protocol buffers, so I'm still working on server changes for this. Additionally, the mock framework implementation doesn't yet fully function generate fake exposures.
+**7 May 2020:** App is now updated for iOS 13.5 beta 2 changes. The framework now has a more defined structure for how the server should work, so we'll likely be making some additional changes to further integrate with protocol buffers.
 
 *Note: To run the app the Apple framework, a special entitlement is required, only available to authorized organizations. [More Info](https://github.com/CrunchyBagel/TracePrivately/issues/57)*
 
