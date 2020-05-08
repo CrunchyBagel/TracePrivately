@@ -49,16 +49,16 @@ struct ExposureNotificationConfig {
         config.minimumRiskScore = self.minimumRiskScore
         
         config.attenuationWeight = attenuation.weight
-        config.attenuationScores = attenuation.scores
+        config.attenuationLevelValues = attenuation.scores
         
         config.daysSinceLastExposureWeight = daysSinceLastExposure.weight
-        config.daysSinceLastExposureScores = daysSinceLastExposure.scores
+        config.daysSinceLastExposureLevelValues = daysSinceLastExposure.scores
         
         config.durationWeight = duration.weight
-        config.durationScores = duration.scores
+        config.durationLevelValues = duration.scores
         
         config.transmissionRiskWeight = transmissionRisk.weight
-        config.transmissionRiskScores = transmissionRisk.scores
+        config.transmissionRiskLevelValues = transmissionRisk.scores
 
         return config
     }

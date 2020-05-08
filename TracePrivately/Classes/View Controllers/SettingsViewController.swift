@@ -31,7 +31,7 @@ extension SettingsViewController {
         let haptics = UINotificationFeedbackGenerator()
         haptics.notificationOccurred(.success)
 
-        let alert = UIAlertController(title: NSLocalizedString("reset_keys.title", comment: ""), message: NSLocalizedString("reset_keys.message", comment: ""), preferredStyle: .alert)
+        let alert = UIAlertController(title: NSLocalizedString("reset_data.title", comment: ""), message: NSLocalizedString("reset_data.message", comment: ""), preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
         

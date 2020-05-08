@@ -81,4 +81,6 @@
 "reset_keys.message" = "Doing so will prevent you from detecting exposures that occurred before now.";
 "reset_keys.button.title" = "Reset";
 
+"reset_data.title" = "Reset All Data";
+"reset_data.message" = "This will clear any infections or exposures recorded on this device.";
 

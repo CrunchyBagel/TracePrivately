@@ -33,11 +33,12 @@ extension TPTemporaryExposureKey {
     static func generateRandom(date: Date) -> Self {
         
         let keyData = UUID().data
-        
+
         return Self(
             keyData: keyData,
+            rollingPeriod: TPIntervalNumber(144),
             rollingStartNumber: TPIntervalNumber.intervalNumberFrom(date: date),
-            transmissionRiskLevel: .high
+            transmissionRiskLevel: .random(in: 0...7)
         )
     }
 }

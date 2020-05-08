@@ -23,34 +23,26 @@ typealias TPRiskScore = UInt8
 
 class TPExposureConfiguration {
     var minimumRiskScore: TPRiskScore = .zero
-    var attenuationScores: [NSNumber] = []
+    var attenuationLevelValues: [NSNumber] = []
     var attenuationWeight: Double = 100
-    var daysSinceLastExposureScores: [NSNumber] = []
+    var daysSinceLastExposureLevelValues: [NSNumber] = []
     var daysSinceLastExposureWeight: Double = 100
-    var durationScores: [NSNumber] = []
+    var durationLevelValues: [NSNumber] = []
     var durationWeight: Double = 100
-    var transmissionRiskScores: [NSNumber] = []
+    var transmissionRiskLevelValues: [NSNumber] = []
     var transmissionRiskWeight: Double = 100
 }
 
-enum TPRiskLevel: UInt8 {
-    case invalid = 0
-    case lowest = 1
-    case low = 10
-    case lowMedium = 25
-    case medium = 50
-    case mediumHigh = 65
-    case high = 80
-    case veryHigh = 90
-    case highest = 100
-}
+typealias TPRiskLevel = UInt8
 #endif
 
 struct TPTemporaryExposureKey {
     let keyData: Data
+    let rollingPeriod: TPIntervalNumber
     let rollingStartNumber: TPIntervalNumber
-    let transmissionRiskLevel: TPRiskLevel!
+    let transmissionRiskLevel: TPRiskLevel
 }
+
 
 #if !os(macOS)
 extension TPTemporaryExposureKey {
@@ -58,6 +50,7 @@ extension TPTemporaryExposureKey {
         let key = ENTemporaryExposureKey()
         key.keyData = keyData
         key.rollingStartNumber = rollingStartNumber
+        key.rollingPeriod = rollingPeriod
         key.transmissionRiskLevel = transmissionRiskLevel
         
         return key
@@ -68,6 +61,7 @@ extension ENTemporaryExposureKey {
     var tpExposureKey: TPTemporaryExposureKey {
         return .init(
             keyData: keyData,
+            rollingPeriod: rollingPeriod,
             rollingStartNumber: rollingStartNumber,
             transmissionRiskLevel: transmissionRiskLevel
         )
@@ -95,7 +89,6 @@ enum TPSimplifiedExposureRisk {
 }
 
 extension TPExposureInfo {
-    // TODO: The docs are a bit weird here. It indicates the total should be 1 - 8, but also says the value could 0..100 and it also says could be less than 0, so I've wrapped the value here so it can easily be updated
     var simplifiedRisk: TPSimplifiedExposureRisk {
         switch self.totalRiskScore {
         case 7...:

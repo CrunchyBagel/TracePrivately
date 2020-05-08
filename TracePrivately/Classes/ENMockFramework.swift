@@ -74,46 +74,18 @@ protocol ENActivatable {
 }
 
 protocol ENAuthorizable {
-    var authorizationStatus: ENAuthorizationStatus { get }
-    var authorizationMode: ENAuthorizationMode { get set }
+
 }
 
 typealias ENIntervalNumber = UInt32
 
 typealias ENAttenuation = UInt8
  
-public enum ENRiskLevel : UInt8 {
-
-    
-    case invalid = 0 /// Invalid level. Used when it isn't available.
-
-    /// Invalid level. Used when it isn't available.
-    case lowest = 1 /// Lowest risk.
-
-    /// Lowest risk.
-    case low = 10 /// Low risk.
-
-    /// Low risk.
-    case lowMedium = 25 /// Risk between low and medium.
-
-    /// Risk between low and medium.
-    case medium = 50 /// Medium risk.
-
-    /// Medium risk.
-    case mediumHigh = 65 /// Risk between medium and high.
-
-    /// Risk between medium and high.
-    case high = 80 /// High risk.
-
-    /// High risk.
-    case veryHigh = 90 /// Very high risk.
-
-    /// Very high risk.
-    case highest = 100 /// Highest risk.
-}
+typealias ENRiskLevel = UInt8
 
 class ENTemporaryExposureKey {
     var keyData: Data!
+    var rollingPeriod: ENIntervalNumber!
     var rollingStartNumber: ENIntervalNumber!
     var transmissionRiskLevel: ENRiskLevel!
     
@@ -161,29 +133,10 @@ extension ENTemporaryExposureKey {
 typealias ENGetDiagnosisKeysHandler = ([ENTemporaryExposureKey]?, Error?) -> Void
  
 @objc enum ENStatus : Int {
-
-    
-    /// Status of Exposure Notification is unknown. This is the status before ENManager has activated successfully.
     case unknown = 0
-
-    
-    /// Exposure Notification is active on the system.
     case active = 1
-
-    
-    /// Exposure Notification is disabled. setExposureNotificationEnabled:completionHandler can be used to enable it.
     case disabled = 2
-
-    
-    /// Bluetooth has been turned off on the system. Bluetooth is required for Exposure Notification.
-        /// Note: this may not match the state of Bluetooth as reported by CoreBluetooth.
-        /// Exposure Notification is a system service and can use Bluetooth in situations when apps cannot.
-        /// So for the purposes of Exposure Notification, it's better to use this API instead of CoreBluetooth.
     case bluetoothOff = 3
-
-    
-    /// Exposure Notification is not active due to system restrictions, such as parental controls.
-        /// When in this state, the app cannot enable Exposure Notification.
     case restricted = 4
 }
 
@@ -194,6 +147,10 @@ class ENManager: ENBaseRequest {
     
     @objc dynamic private(set) var exposureNotificationEnabled = false
     
+    static var authorizationStatus: ENAuthorizationStatus { return .authorized }
+    
+    fileprivate var diagnosisKeys: [ENTemporaryExposureKey] = []
+
     override func activate(queue: DispatchQueue, completionHandler: @escaping (Error?) -> Void) {
         print("Activating ENManager ...")
 
@@ -222,6 +179,7 @@ class ENManager: ENBaseRequest {
     
     func setExposureNotificationEnabled(_ flag: Bool, completionHandler: @escaping ENErrorHandler) {
         if !flag {
+            self.exposureNotificationStatus = .disabled
             self.exposureNotificationEnabled = false
             completionHandler(nil)
             return
@@ -240,6 +198,7 @@ class ENManager: ENBaseRequest {
             let queue = self.dispatchQueue ?? .main
             
             queue.asyncAfter(deadline: .now() + 0.3) {
+                self.exposureNotificationStatus = flag ? .active : .disabled
                 self.exposureNotificationEnabled = flag
                 completionHandler(nil)
             }
@@ -253,12 +212,14 @@ class ENManager: ENBaseRequest {
                     
                     queue.asyncAfter(deadline: .now() + 0.3) {
                         self.saveMockStatus(status: .active)
+                        self.exposureNotificationStatus = .active
                         self.exposureNotificationEnabled = flag
                         completionHandler(nil)
                     }
                 }
                 else {
                     self.saveMockStatus(status: .disabled)
+                    self.exposureNotificationStatus = .disabled
                     self.exposureNotificationEnabled = false
                     completionHandler(ENError(code: .notAuthorized))
                 }
@@ -300,10 +261,12 @@ class ENManager: ENBaseRequest {
 
 typealias ENRiskScore = UInt8
  
-struct ENExposureDetectionSummary {
-    let daysSinceLastExposure: Int
-    let matchedKeyCount: UInt64
-    let maximumRiskScore: ENRiskScore
+class ENExposureDetectionSummary {
+    var daysSinceLastExposure: Int!
+    var matchedKeyCount: UInt64!
+    var maximumRiskScore: ENRiskScore!
+    var attenuationDurations: [NSNumber]!
+    var metadata: [AnyHashable : Any]?
 }
 
 typealias ENExposureDetectionFinishCompletion = ((ENExposureDetectionSummary?, Swift.Error?) -> Void)
@@ -314,10 +277,10 @@ class ENExposureConfiguration {
     init() {
         self.minimumRiskScore = 0
         
-        self.attenuationScores = [ 1, 2, 3, 4, 5, 6, 7, 8 ]
-        self.daysSinceLastExposureScores = [ 1, 2, 3, 4, 5, 6, 7, 8 ]
-        self.durationScores = [ 1, 2, 3, 4, 5, 6, 7, 8 ]
-        self.transmissionRiskScores = [ 1, 2, 3, 4, 5, 6, 7, 8 ]
+        self.attenuationLevelValues = [ 1, 2, 3, 4, 5, 6, 7, 8 ]
+        self.daysSinceLastExposureLevelValues = [ 1, 2, 3, 4, 5, 6, 7, 8 ]
+        self.durationLevelValues = [ 1, 2, 3, 4, 5, 6, 7, 8 ]
+        self.transmissionRiskLevelValues = [ 1, 2, 3, 4, 5, 6, 7, 8 ]
 
         self.daysSinceLastExposureWeight = 100
         self.attenuationWeight = 100
@@ -325,200 +288,147 @@ class ENExposureConfiguration {
         self.transmissionRiskWeight = 100
     }
     
-    /// Minimum risk score. Excludes exposure incidents with scores lower than this. Defaults to no minimum.
+     var metadata: [AnyHashable : Any]?
     var minimumRiskScore: ENRiskScore
-
-    
-    //---------------------------------------------------------------------------------------------------------------------------
-    /**    @brief    Scores for attenuation buckets. Must contain 8 scores, one for each bucket as defined below:
-        
-        attenuationScores[0] when Attenuation > 73.
-        attenuationScores[1] when 73 >= Attenuation > 63.
-        attenuationScores[2] when 63 >= Attenuation > 51.
-        attenuationScores[3] when 51 >= Attenuation > 33.
-        attenuationScores[4] when 33 >= Attenuation > 27.
-        attenuationScores[5] when 27 >= Attenuation > 15.
-        attenuationScores[6] when 15 >= Attenuation > 10.
-        attenuationScores[7] when 10 >= Attenuation.
-    */
-    var attenuationScores: [NSNumber]
-
-    
-    /// Weight to apply to the attenuation score. Must be in the range 0-100.
+    var attenuationLevelValues: [NSNumber]
     var attenuationWeight: Double
-
-    
-    //---------------------------------------------------------------------------------------------------------------------------
-    /**    @brief    Scores for days since last exposure buckets. Must contain 8 scores, one for each bucket as defined below:
-    
-        daysSinceLastExposureScores[0] when Days >= 14.
-        daysSinceLastExposureScores[1] else Days >= 12
-        daysSinceLastExposureScores[2] else Days >= 10
-        daysSinceLastExposureScores[3] else Days >= 8
-        daysSinceLastExposureScores[4] else Days >= 6
-        daysSinceLastExposureScores[5] else Days >= 4
-        daysSinceLastExposureScores[6] else Days >= 2
-        daysSinceLastExposureScores[7] else Days >= 0
-    */
-    var daysSinceLastExposureScores: [NSNumber]
-
-    
-    /// Weight to apply to the days since last exposure score. Must be in the range 0-100.
+    var daysSinceLastExposureLevelValues: [NSNumber]
     var daysSinceLastExposureWeight: Double
-
-    
-    //---------------------------------------------------------------------------------------------------------------------------
-    /**    @brief    Scores for duration buckets. Must contain 8 scores, one for each bucket as defined below:
-    
-        durationScores[0] when Duration == 0
-        durationScores[1] else Duration <= 5
-        durationScores[2] else Duration <= 10
-        durationScores[3] else Duration <= 15
-        durationScores[4] else Duration <= 20
-        durationScores[5] else Duration <= 25
-        durationScores[6] else Duration <= 30
-        durationScores[7] else Duration  > 30
-    */
-    var durationScores: [NSNumber]
-
-    
-    /// Weight to apply to the duration score. Must be in the range 0-100.
+    var durationLevelValues: [NSNumber]
     var durationWeight: Double
-
-    
-    //---------------------------------------------------------------------------------------------------------------------------
-    /**    @brief    Scores for transmission risk buckets. Must contain 8 scores, one for each bucket as defined below:
-    
-        transmissionRiskScores[0] for ENRiskLevelLowest.
-        transmissionRiskScores[1] for ENRiskLevelLow.
-        transmissionRiskScores[2] for ENRiskLevelLowMedium.
-        transmissionRiskScores[3] for ENRiskLevelMedium.
-        transmissionRiskScores[4] for ENRiskLevelMediumHigh.
-        transmissionRiskScores[5] for ENRiskLevelHigh.
-        transmissionRiskScores[6] for ENRiskLevelVeryHigh.
-        transmissionRiskScores[7] for ENRiskLevelHighest.
-    */
-    var transmissionRiskScores: [NSNumber]
-
-    
-    /// Weight to apply to the transmission risk score. Must be in the range 0-100.
+    var transmissionRiskLevelValues: [NSNumber]
     var transmissionRiskWeight: Double
 }
 
-class ENExposureDetectionSession: ENBaseRequest {
-    var configuration = ENExposureConfiguration()
-    var maximumKeyCount: Int = 1000
-    
-    private var _infectedKeys: [ENTemporaryExposureKey] = []
+typealias ENDetectExposuresHandler = (ENExposureDetectionSummary?, Error?) -> Void
+typealias ENGetExposureInfoHandler = ([ENExposureInfo]?, Error?) -> Void
 
+extension ENManager {
     private static let maximumFakeMatches = 5
     
-    private var remoteInfectedKeys: [ENTemporaryExposureKey] {
+    private func remoteInfectedKeys(keys: [ENTemporaryExposureKey]) -> [ENTemporaryExposureKey] {
         // Filters out keys for local device for the purposes of better testing
         
         let localDeviceId = ENInternalState.shared.localDeviceId.data
         
-        return self._infectedKeys.filter { key in
+        return keys.filter { key in
             return key.keyData != localDeviceId
         }
     }
-
-    func addDiagnosisKeys(_ keys: [ENTemporaryExposureKey], completionHandler: @escaping ENErrorHandler) {
-        enQueue.sync {
-            self._infectedKeys.append(contentsOf: keys)
-        }
-        
-        let queue = self.dispatchQueue ?? .main
-        
-        queue.asyncAfter(deadline: .now() + 0.2) {
-            completionHandler(nil)
-        }
-    }
     
-    func finishedDiagnosisKeys(completionHandler: @escaping ENExposureDetectionFinishCompletion) {
+    @discardableResult func detectExposures(configuration: ENExposureConfiguration, diagnosisKeyURLs: [URL], completionHandler: @escaping ENDetectExposuresHandler) -> Progress {
         
         let delay: TimeInterval = 0.5
         
         let queue = self.dispatchQueue ?? .main
 
+        let progress = Progress(totalUnitCount: 1)
+        
         queue.asyncAfter(deadline: .now() + delay) {
-            let keys = enQueue.sync { return self.remoteInfectedKeys }
             
-            let summary = ENExposureDetectionSummary(
-                daysSinceLastExposure: 0,
-                matchedKeyCount: UInt64(min(Self.maximumFakeMatches, keys.count)),
-                maximumRiskScore: 8
-            )
+            var keys: [ENTemporaryExposureKey] = []
             
-            completionHandler(summary, nil)
+            do {
+                for url in diagnosisKeyURLs {
+                    let data = try Data(contentsOf: url)
+                    let file = try File(serializedData: data)
+                    
+                    let fileKeys: [ENTemporaryExposureKey] = file.key.map { k in
+                        let key = ENTemporaryExposureKey()
+                        key.keyData = k.keyData
+                        key.rollingPeriod = ENIntervalNumber(k.rollingPeriod)
+                        key.rollingStartNumber = ENIntervalNumber(k.rollingStartNumber)
+                        key.transmissionRiskLevel = ENRiskLevel(k.transmissionRiskLevel)
+                        
+                        return key
+                    }
+                    
+                    keys.append(contentsOf: fileKeys)
+                }
+                
+                enQueue.sync { self.diagnosisKeys = keys }
+                
+                let summary = ENExposureDetectionSummary()
+                summary.daysSinceLastExposure = 0
+                summary.matchedKeyCount = UInt64(min(Self.maximumFakeMatches, keys.count))
+                summary.maximumRiskScore = 8
+                /// Array index 0: Sum of durations for all exposures when attenuation was <= 50.
+                /// Array index 1: Sum of durations for all exposures when attenuation was > 50.
+                /// These durations are aggregated across all exposures and capped at 30 minutes.
+                summary.attenuationDurations = [ 0, 0 ]
+                summary.metadata = nil
+                
+                progress.completedUnitCount = progress.totalUnitCount
+                
+                completionHandler(summary, nil)
+            }
+            catch {
+                completionHandler(nil, error)
+                return
+            }
         }
 
+        return progress
     }
     
-    private var cursor: Int = 0
-    
-    func getExposureInfo(withMaximumCount maximumCount: Int, completionHandler: @escaping ENGetExposureInfoCompletion) {
+    @discardableResult func getExposureInfo(summary: ENExposureDetectionSummary, userExplanation: String, completionHandler: @escaping ENGetExposureInfoHandler) -> Progress {
         
         let queue: DispatchQueue = self.dispatchQueue ?? .main
 
         let delay: TimeInterval = 0.5
                 
+        let progress = Progress(totalUnitCount: 1)
+        
         queue.asyncAfter(deadline: .now() + delay) {
             guard !self.isInvalidated else {
-                self.cursor = 0
-                completionHandler(nil, true, ENError(code: .invalidated))
+                completionHandler(nil, ENError(code: .invalidated))
                 return
             }
 
             // For now this is assuming that every key is infected. Obviously this isn't accurate, just useful for testing.
-            let allKeys: [ENTemporaryExposureKey] = enQueue.sync { self.remoteInfectedKeys }
+            let allKeys: [ENTemporaryExposureKey] = enQueue.sync { self.remoteInfectedKeys(keys: self.diagnosisKeys) }
             
             guard allKeys.count > 0 else {
-                completionHandler([], true, nil)
+                completionHandler([], nil)
                 return
             }
             
             let allMatchedKeys: [ENTemporaryExposureKey] = Array(allKeys[0 ..< min(Self.maximumFakeMatches, allKeys.count)])
             
-            let fromIndex = self.cursor
-            let toIndex   = min(allMatchedKeys.count, self.cursor + Int(maximumCount))
-            
-            guard fromIndex < toIndex else {
-                self.cursor = 0
-                completionHandler([], true, nil)
-                return
-            }
-            
-            let keys = Array(allMatchedKeys[fromIndex ..< toIndex])
-            
-            let contacts: [ENExposureInfo] = keys.compactMap { key in
+            let contacts: [ENExposureInfo] = allMatchedKeys.compactMap { key in
 
                 let date = Date(timeIntervalSince1970: TimeInterval(key.rollingStartNumber * 600))
                 let duration: TimeInterval = 15 * 60
 
-                return ENExposureInfo(
-                    attenuationValue: 0,
-                    date: date,
-                    duration: duration,
-                    totalRiskScore: 8,
-                    transmissionRiskLevel: .medium
-                )
+                let exposure = ENExposureInfo()
+                exposure.attenuationDurations = []
+                exposure.attenuationValue = 0
+                exposure.date = date
+                exposure.duration = duration
+                exposure.totalRiskScore = 8
+                exposure.transmissionRiskLevel = 5
+                exposure.metadata = nil
+
+                return exposure
             }
             
-            let done = toIndex >= allMatchedKeys.count
-            self.cursor = done ? 0 : toIndex
+            progress.completedUnitCount = progress.totalUnitCount
             
-            completionHandler(contacts, done, nil)
+            completionHandler(contacts, nil)
         }
+        
+        return progress
     }
 }
 
-struct ENExposureInfo {
-    let attenuationValue: ENAttenuation
-    let date: Date
-    let duration: TimeInterval
-    let totalRiskScore: ENRiskScore
-    let transmissionRiskLevel: ENRiskLevel
+class ENExposureInfo {
+    var attenuationDurations: [NSNumber]!
+    var attenuationValue: ENAttenuation!
+    var date: Date!
+    var duration: TimeInterval!
+    var metadata: [AnyHashable : Any]?
+    var totalRiskScore: ENRiskScore!
+    var transmissionRiskLevel: ENRiskLevel!
 }
 
 class ENSelfExposureResetRequest: ENAuthorizableBaseRequest {
@@ -540,9 +450,6 @@ class ENSelfExposureResetRequest: ENAuthorizableBaseRequest {
 }
 
 class ENAuthorizableBaseRequest: ENBaseRequest, ENAuthorizable {
-    var authorizationStatus: ENAuthorizationStatus = .unknown
-    var authorizationMode: ENAuthorizationMode = .defaultMode
-    
     fileprivate var permissionDialogTitle: String? {
         return nil
     }
@@ -587,7 +494,7 @@ class ENAuthorizableBaseRequest: ENBaseRequest, ENAuthorizable {
 
 fileprivate let enQueue = DispatchQueue(label: "TracePrivately", qos: .default, attributes: [])
 
-class ENBaseRequest: ENActivatable {
+class ENBaseRequest: NSObject, ENActivatable {
     /// This property holds the the dispatch queue used to invoke handlers on. If this property isn’t set, the framework uses the main queue.
     var dispatchQueue: DispatchQueue?
     
@@ -770,8 +677,9 @@ private class ENInternalState {
                 
                 let key = ENTemporaryExposureKey()
                 key.keyData = keyData
+                key.rollingPeriod = 144
                 key.rollingStartNumber = rollingStartNumber
-                key.transmissionRiskLevel = .high
+                key.transmissionRiskLevel = 0
                 
                 keys.append(key)
             }
@@ -793,5 +701,4 @@ extension String {
         }
     }
 }
-
 

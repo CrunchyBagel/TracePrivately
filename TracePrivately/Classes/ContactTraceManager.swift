@@ -274,7 +274,7 @@ extension ContactTraceManager {
     }
     
     private func _performBackgroundUpdate(completion: @escaping (Swift.Error?) -> Void) {
-
+/*
         if let date = self.minimumNextRetryDate {
             let now = Date()
             
@@ -297,7 +297,7 @@ extension ContactTraceManager {
                 return
             }
         }
-
+*/
         let operationQueue = OperationQueue()
         operationQueue.maxConcurrentOperationCount = 1
         
@@ -312,11 +312,7 @@ extension ContactTraceManager {
                 }
                 
                 if let config = response.enConfig {
-                    print("Received configuration: \(config)")
                     self.saveConfiguration(config: config)
-                }
-                else {
-                    print("Did not receive updated configuration")
                 }
                 
                 let clearCacheFirst: Bool
@@ -361,96 +357,46 @@ extension ContactTraceManager {
     
     fileprivate func detectExposures(completion: @escaping (Swift.Error?) -> Void) {
         
-        guard self.enManager.exposureNotificationEnabled else {
+        guard self.isContactTracingEnabled else {
             print("Exposure notification not enabled")
             completion(nil)
             return
         }
         
         print("Detecting exposures...")
-        
-        let session = ENExposureDetectionSession()
-        
+
         let config = self.savedConfiguration ?? self.defaultConfiguration
-        
-        if let config = config {
-            session.configuration = config.exposureConfig
-        }
+        let enConfig = config?.exposureConfig ?? ENExposureConfiguration()
 
-        let operationQueue = OperationQueue()
-        operationQueue.maxConcurrentOperationCount = 1
         
-        let activateOperation = AsyncBlockOperation { operation in
-            print("Beginning operation: activateOperation")
-
-            session.activate { error in
-                if error != nil {
-                    operation.cancel()
-                }
-                
-                operation.complete()
+        self.writeDatabaseToLocalProtobuf { localUrl, error in
+            guard let localUrl = localUrl else {
+                print("No local URL received")
+                completion(error)
+                return
             }
-        }
-        
-        let addKeysOperation = AsyncBlockOperation { operation in
-            print("Beginning operation: addKeysOperation")
-
-            DataManager.shared.allInfectedKeys { keys, error in
-                guard let keys = keys, keys.count > 0 else {
-                    operation.cancel()
-                    operation.complete()
-                    return
-                }
-
-                let k: [ENTemporaryExposureKey] = keys.map { $0.enExposureKey }
-                
-                session.batchAddDiagnosisKeys(k) { error in
-                    if error != nil {
-                        operation.cancel()
-                    }
-
-                    operation.complete()
-                }
-            }
-        }
-        
-        let diagnoseOperation = AsyncBlockOperation { operation in
-            print("Beginning operation: diagnoseOperation")
-
-            session.finishedDiagnosisKeys { summary, error in
+            
+            print("Keys were written to \(localUrl)")
+            
+            self.enManager.detectExposures(configuration: enConfig, diagnosisKeyURLs: [localUrl]) { summary, error in
                 guard let summary = summary else {
-                    operation.cancel()
-                    operation.complete()
-                    return
-                }
-
-                guard summary.matchedKeyCount > 0 else {
-                    DataManager.shared.saveExposures(exposures: []) { error in
-                        
-                        if error != nil {
-                            operation.cancel()
-                        }
-                        
-                        operation.complete()
-                    }
-                    
+                    completion(nil)
                     return
                 }
                 
-                // Documentation says use a reasonable number, such as 100
-                let maximumCount: Int = 100
-                
-                self.getExposures(session: session, maximumCount: maximumCount, exposures: []) { exposures, error in
+                // TODO: Explanation
+                self.enManager.getExposureInfo(summary: summary, userExplanation: "TODO") { exposures, error in
                     guard let exposures = exposures else {
-                        operation.cancel()
-                        operation.complete()
+                        completion(error)
                         return
                     }
                     
-                    DataManager.shared.saveExposures(exposures: exposures) { error in
-                        
+                    let exp = exposures.map{ $0.tpExposureInfo }
+                 
+                    DataManager.shared.saveExposures(exposures: exp) { error in
+
                         self.updateBadgeCount()
-                        
+
                         self.sendExposureNotificationForPendingContacts { notificationError in
                             completion(error ?? notificationError)
                         }
@@ -458,63 +404,44 @@ extension ContactTraceManager {
                 }
             }
         }
-
-        activateOperation.completionBlock = {
-            print("Completing operation: activateOperation")
-
-            guard !activateOperation.isCancelled else {
-                session.invalidate()
-                completion(nil)
-                return
-            }
-
-            operationQueue.addOperation(addKeysOperation)
-        }
-        
-        addKeysOperation.completionBlock = {
-            print("Completing operation: addKeysOperation")
-
-            guard !addKeysOperation.isCancelled else {
-                session.invalidate()
-                completion(nil)
-                return
-            }
-            
-            
-            operationQueue.addOperation(diagnoseOperation)
-        }
-        
-        diagnoseOperation.completionBlock = {
-            print("Completing operation: diagnoseOperation")
-            session.invalidate()
-            completion(nil)
-        }
-
-        operationQueue.addOperation(activateOperation)
     }
-
     
-    // Recursively retrieves exposures until all are received
-    private func getExposures(session: ENExposureDetectionSession, maximumCount: Int, exposures: [TPExposureInfo], completion: @escaping ([TPExposureInfo]?, Swift.Error?) -> Void) {
-        
-        session.getExposureInfo(withMaximumCount: maximumCount) { newExposures, done, error in
-            
-            guard let newExposures = newExposures else {
-                completion(exposures, error)
+    // This code to create a protobuf and write to disk is listed from Apple's sample project
+    
+    // TODO: This is now an intermediate step of going through the database then to a filesystem file.
+    // Seems like overengineering now. The infected keys should just avoid the database altogether
+    // and be written straight to filesystem in protobuf format.
+    // TODO: These are limited to 500kb, so need to break up accordingly
+    private func writeDatabaseToLocalProtobuf(completion: @escaping (URL?, Swift.Error?) -> Void) {
+        DataManager.shared.allInfectedKeys { keys, error in
+            guard let keys = keys else {
+                completion(nil, error)
                 return
             }
-
-            let allExposures = exposures + newExposures.map { $0.tpExposureInfo }
             
-            if done {
-                completion(allExposures, nil)
+            let file = File.with { file in
+                file.key = keys.map { diagnosisKey in
+                    Key.with { key in
+                        key.keyData = diagnosisKey.keyData
+                        key.rollingPeriod = diagnosisKey.rollingPeriod
+                        key.rollingStartNumber = diagnosisKey.rollingStartNumber
+                        key.transmissionRiskLevel = Int32(diagnosisKey.transmissionRiskLevel)
+                    }
+                }
             }
-            else {
-                self.getExposures(session: session, maximumCount: maximumCount, exposures: allExposures, completion: completion)
+
+            do {
+                let data = try file.serializedData()
+                let localUrl = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("diagnosisKeys")
+                try data.write(to: localUrl)
+                completion(localUrl, nil)
+            }
+            catch {
+                completion(nil, error)
             }
         }
     }
-    
+
     private func saveNewInfectedKeys(keys: [TPTemporaryExposureKey], deletedKeys: [TPTemporaryExposureKey], clearCacheFirst: Bool, completion: @escaping (DataManager.KeyUpdateCount?, Swift.Error?) -> Void) {
         
         DataManager.shared.saveInfectedKeys(keys: keys, deletedKeys: deletedKeys, clearCacheFirst: clearCacheFirst) { keyCount, error in
@@ -629,7 +556,7 @@ extension ContactTraceManager {
             return
         }
         
-        guard !self.enManager.exposureNotificationEnabled else {
+        guard !self.isContactTracingEnabled else {
             completion(nil)
             return
         }
@@ -663,7 +590,7 @@ extension ContactTraceManager {
     func exposureNotificationStatusUpdated() {
         print("Exposure notification status update: \(self.enManager.exposureNotificationStatus)")
         
-        self.isContactTracingEnabled = self.enManager.exposureNotificationEnabled
+        self.isContactTracingEnabled = self.enManager.exposureNotificationStatus == .active
         
         if self.enManager.exposureNotificationStatus == .active {
             self.performBackgroundUpdate { _ in
@@ -673,7 +600,7 @@ extension ContactTraceManager {
     }
     
     func stopTracing() {
-        guard self.enManager.exposureNotificationEnabled else {
+        guard self.isContactTracingEnabled else {
             return
         }
         
@@ -705,38 +632,6 @@ extension ContactTraceManager: UNUserNotificationCenterDelegate {
     }
 }
 
-extension ENExposureDetectionSession {
-    // Modified from https://gist.github.com/mattt/17c880d64c362b923e13c765f5b1c75a
-    func batchAddDiagnosisKeys(_ keys: [ENTemporaryExposureKey], completion: @escaping ENErrorHandler) {
-        
-        guard !keys.isEmpty else {
-            completion(nil)
-            return
-        }
-        
-        guard maximumKeyCount > 0 else {
-            completion(nil)
-            return
-        }
-
-        let cursor = keys.index(keys.startIndex, offsetBy: maximumKeyCount, limitedBy: keys.endIndex) ?? keys.endIndex
-        let batch = Array(keys.prefix(upTo: cursor))
-        let remaining = Array(keys.suffix(from: cursor))
-        
-        print("Adding: \(batch.count) keys")
-
-//        withoutActuallyEscaping(completion) { escapingCompletion in
-            addDiagnosisKeys(batch) { error in
-                if let error = error {
-                    completion(error)
-                } else {
-                    self.batchAddDiagnosisKeys(remaining, completion: completion)
-                }
-            }
-//        }
-    }
-}
-
 extension ContactTraceManager {
     func retrieveSelfDiagnosisKeys(completion: @escaping ([TPTemporaryExposureKey]?, Swift.Error?) -> Void) {
         
@@ -755,15 +650,9 @@ extension ContactTraceManager {
 
 extension ContactTraceManager {
     func resetAllData(completion: @escaping (Swift.Error?) -> Void) {
-        
         self.stopTracing()
         
         let dispatchGroup = DispatchGroup()
-        
-        dispatchGroup.enter()
-        self.enManager.resetAllData { error in
-            dispatchGroup.leave()
-        }
         
         self.clearLastReceivedInfectedKeys()
 
@@ -781,11 +670,12 @@ extension ContactTraceManager {
 extension ENStatus: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
-            case .active: return "Active"
-            case .disabled: return "Disabled"
-            case .restricted: return "Restricted"
-            case .unknown: return "Unknown"
-            case .bluetoothOff: return "Bluetooth Off"
+        case .active: return "Active"
+        case .disabled: return "Disabled"
+        case .restricted: return "Restricted"
+        case .unknown: return "Unknown"
+        case .bluetoothOff: return "Bluetooth Off"
+        @unknown default: return "Unknown Default"
         }
     }
 }

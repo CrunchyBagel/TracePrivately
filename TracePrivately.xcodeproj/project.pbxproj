@@ -17,12 +17,12 @@
 		663AEE912462EA4400A19037 /* KeyServerAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B242BA245E6CCE00E17AAA /* KeyServerAdapter.swift */; };
 		663AEE922462EA4C00A19037 /* KeyServerTracePrivatelyAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B242BC245E79B200E17AAA /* KeyServerTracePrivatelyAdapter.swift */; };
 		663AEE932462EA5400A19037 /* ExposureNotificationConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C4BBC424564B56008AACC2 /* ExposureNotificationConfig.swift */; };
-		663AEE942462EA5E00A19037 /* KeyServerCtDiagServerAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6650A704245EDE1000F762FE /* KeyServerCtDiagServerAdapter.swift */; };
 		663BD8B9245A510C00A3E029 /* ExposureDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663BD8B8245A510C00A3E029 /* ExposureDataTypes.swift */; };
+		664244B12463A94200F038D3 /* KeyServerCtDiagServerAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6650A704245EDE1000F762FE /* KeyServerCtDiagServerAdapter.swift */; };
+		664244B22463A94300F038D3 /* KeyServerCtDiagServerAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6650A704245EDE1000F762FE /* KeyServerCtDiagServerAdapter.swift */; };
 		66437F76244A86AE000B8C6C /* Disease.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F75244A86AE000B8C6C /* Disease.swift */; };
 		66437F9E244A9A02000B8C6C /* TracePrivately.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */; };
 		66437FA0244A9B2C000B8C6C /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66437F9F244A9B2C000B8C6C /* DataManager.swift */; };
-		6650A705245EDE1000F762FE /* KeyServerCtDiagServerAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6650A704245EDE1000F762FE /* KeyServerCtDiagServerAdapter.swift */; };
 		6650A708245EE02200F762FE /* KeyServerCtDiagServer.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6650A706245EE01100F762FE /* KeyServerCtDiagServer.plist */; };
 		6673EED42451785300244287 /* SubmitConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6673EED32451785300244287 /* SubmitConfig.plist */; };
 		6673EED62451C10000244287 /* SubmitInfectionConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6673EED52451C10000244287 /* SubmitInfectionConfig.swift */; };
@@ -36,6 +36,9 @@
 		668CE843244D01F50065960A /* ContactTraceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668CE842244D01F50065960A /* ContactTraceManager.swift */; };
 		6698C572244936AF00F046E4 /* ExposedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6698C571244936AF00F046E4 /* ExposedViewController.swift */; };
 		6698C574244BFAB600F046E4 /* KeyServer.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6698C573244BFAB600F046E4 /* KeyServer.plist */; };
+		6699BCF42463FC4C001C8541 /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 6699BCF32463FC4C001C8541 /* SwiftProtobuf */; };
+		6699BCFA2463FD3D001C8541 /* DeveloperDiagnosisKeyFileProtobuf.proto in Sources */ = {isa = PBXBuildFile; fileRef = 6699BCF82463FD3D001C8541 /* DeveloperDiagnosisKeyFileProtobuf.proto */; };
+		6699BCFB2463FD3D001C8541 /* DeveloperDiagnosisKeyFileProtobuf.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6699BCF92463FD3D001C8541 /* DeveloperDiagnosisKeyFileProtobuf.pb.swift */; };
 		66A00B7B245BAB6E007DE11F /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A00B7A245BAB6E007DE11F /* main.swift */; };
 		66A00B82245BB039007DE11F /* MessagePack in Frameworks */ = {isa = PBXBuildFile; productRef = 66A00B81245BB039007DE11F /* MessagePack */; };
 		66A00B83245BB045007DE11F /* KeyServerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6679388E245460B600868B84 /* KeyServerConfig.swift */; };
@@ -153,6 +156,7 @@
 		663BD8B7245A3F8100A3E029 /* TracePrivately.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TracePrivately.entitlements; sourceTree = "<group>"; };
 		663BD8B8245A510C00A3E029 /* ExposureDataTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureDataTypes.swift; sourceTree = "<group>"; };
 		663BD8BA245A537900A3E029 /* Model 8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 8.xcdatamodel"; sourceTree = "<group>"; };
+		664244AE2463A06100F038D3 /* Model 9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 9.xcdatamodel"; sourceTree = "<group>"; };
 		66437F75244A86AE000B8C6C /* Disease.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disease.swift; sourceTree = "<group>"; };
 		66437F9D244A9A02000B8C6C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		66437F9F244A9B2C000B8C6C /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
@@ -178,6 +182,8 @@
 		668D4B22244D705100D90C26 /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
 		6698C571244936AF00F046E4 /* ExposedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposedViewController.swift; sourceTree = "<group>"; };
 		6698C573244BFAB600F046E4 /* KeyServer.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = KeyServer.plist; sourceTree = "<group>"; };
+		6699BCF82463FD3D001C8541 /* DeveloperDiagnosisKeyFileProtobuf.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.protobuf; path = DeveloperDiagnosisKeyFileProtobuf.proto; sourceTree = "<group>"; };
+		6699BCF92463FD3D001C8541 /* DeveloperDiagnosisKeyFileProtobuf.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeveloperDiagnosisKeyFileProtobuf.pb.swift; sourceTree = "<group>"; };
 		66A00B6E245B9235007DE11F /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		66A00B6F245B9236007DE11F /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
 		66A00B70245B9242007DE11F /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -243,6 +249,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				66B5C6E72458559B0031B03C /* MessagePack in Frameworks */,
+				6699BCF42463FC4C001C8541 /* SwiftProtobuf in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,6 +290,7 @@
 		66437F77244A8A4C000B8C6C /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				6699BCF72463FD3D001C8541 /* Protobuf */,
 				66437F78244A8A54000B8C6C /* View Controllers */,
 				6679388C245460B600868B84 /* KeyServer */,
 				66F8186A2448FD5C0043AC2D /* AppDelegate.swift */,
@@ -327,6 +335,15 @@
 				6679389424568A3D00868B84 /* InfectedKeysFormData.swift */,
 			);
 			path = KeyServer;
+			sourceTree = "<group>";
+		};
+		6699BCF72463FD3D001C8541 /* Protobuf */ = {
+			isa = PBXGroup;
+			children = (
+				6699BCF82463FD3D001C8541 /* DeveloperDiagnosisKeyFileProtobuf.proto */,
+				6699BCF92463FD3D001C8541 /* DeveloperDiagnosisKeyFileProtobuf.pb.swift */,
+			);
+			path = Protobuf;
 			sourceTree = "<group>";
 		};
 		66A00B79245BAB6E007DE11F /* SubmitFakeKeys */ = {
@@ -471,6 +488,7 @@
 			name = TracePrivately;
 			packageProductDependencies = (
 				66B5C6E62458559B0031B03C /* MessagePack */,
+				6699BCF32463FC4C001C8541 /* SwiftProtobuf */,
 			);
 			productName = TracePrivately;
 			productReference = 66F818672448FD5C0043AC2D /* TracePrivately.app */;
@@ -532,6 +550,7 @@
 			mainGroup = 66F8185E2448FD5C0043AC2D;
 			packageReferences = (
 				66B5C6E52458559B0031B03C /* XCRemoteSwiftPackageReference "MessagePack" */,
+				6699BCF22463FC4C001C8541 /* XCRemoteSwiftPackageReference "swift-protobuf" */,
 			);
 			productRefGroup = 66F818682448FD5C0043AC2D /* Products */;
 			projectDirPath = "";
@@ -599,7 +618,7 @@
 				66A00B8C245BB320007DE11F /* DataExtension.swift in Sources */,
 				66A00B83245BB045007DE11F /* KeyServerConfig.swift in Sources */,
 				66A00B8D245BB55C007DE11F /* AsyncBlockOperation.swift in Sources */,
-				663AEE942462EA5E00A19037 /* KeyServerCtDiagServerAdapter.swift in Sources */,
+				664244B12463A94200F038D3 /* KeyServerCtDiagServerAdapter.swift in Sources */,
 				66A00B7B245BAB6E007DE11F /* main.swift in Sources */,
 				663AEE922462EA4C00A19037 /* KeyServerTracePrivatelyAdapter.swift in Sources */,
 			);
@@ -630,7 +649,7 @@
 				66793891245460B600868B84 /* KeyServerConfig.swift in Sources */,
 				66437F76244A86AE000B8C6C /* Disease.swift in Sources */,
 				66210553245127340011EB42 /* Intents.intentdefinition in Sources */,
-				6650A705245EDE1000F762FE /* KeyServerCtDiagServerAdapter.swift in Sources */,
+				664244B22463A94300F038D3 /* KeyServerCtDiagServerAdapter.swift in Sources */,
 				66437FA0244A9B2C000B8C6C /* DataManager.swift in Sources */,
 				66F8186B2448FD5C0043AC2D /* AppDelegate.swift in Sources */,
 				66A00B8B245BB320007DE11F /* DataExtension.swift in Sources */,
@@ -639,7 +658,9 @@
 				66CB95BF244FB5CD00D775B6 /* MainViewController.swift in Sources */,
 				66437F9E244A9A02000B8C6C /* TracePrivately.xcdatamodeld in Sources */,
 				66CB7BD12453D51A0044D32B /* ENMockFramework.swift in Sources */,
+				6699BCFA2463FD3D001C8541 /* DeveloperDiagnosisKeyFileProtobuf.proto in Sources */,
 				66EAEB66244DC62A0044FF70 /* SubmittedInfectionViewController.swift in Sources */,
+				6699BCFB2463FD3D001C8541 /* DeveloperDiagnosisKeyFileProtobuf.pb.swift in Sources */,
 				6698C572244936AF00F046E4 /* ExposedViewController.swift in Sources */,
 				6614BB052452B9D900885F23 /* ExposureDetailsViewController.swift in Sources */,
 				66C4BBC524564B56008AACC2 /* ExposureNotificationConfig.swift in Sources */,
@@ -950,7 +971,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CHZS3BHM57;
 				INFOPLIST_FILE = TracePrivately/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -973,7 +994,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CHZS3BHM57;
 				INFOPLIST_FILE = TracePrivately/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1036,6 +1057,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		6699BCF22463FC4C001C8541 /* XCRemoteSwiftPackageReference "swift-protobuf" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-protobuf/";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.8.0;
+			};
+		};
 		66B5C6E52458559B0031B03C /* XCRemoteSwiftPackageReference "MessagePack" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Flight-School/MessagePack";
@@ -1047,6 +1076,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		6699BCF32463FC4C001C8541 /* SwiftProtobuf */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6699BCF22463FC4C001C8541 /* XCRemoteSwiftPackageReference "swift-protobuf" */;
+			productName = SwiftProtobuf;
+		};
 		66A00B81245BB039007DE11F /* MessagePack */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 66B5C6E52458559B0031B03C /* XCRemoteSwiftPackageReference "MessagePack" */;
@@ -1063,6 +1097,7 @@
 		66437F9C244A9A02000B8C6C /* TracePrivately.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				664244AE2463A06100F038D3 /* Model 9.xcdatamodel */,
 				663BD8BA245A537900A3E029 /* Model 8.xcdatamodel */,
 				664C5236245802C9003EBE63 /* Model 7.xcdatamodel */,
 				66BF646624578E2B00492070 /* Model 6.xcdatamodel */,
@@ -1072,7 +1107,7 @@
 				668D4B22244D705100D90C26 /* Model 2.xcdatamodel */,
 				66437F9D244A9A02000B8C6C /* Model.xcdatamodel */,
 			);
-			currentVersion = 663BD8BA245A537900A3E029 /* Model 8.xcdatamodel */;
+			currentVersion = 664244AE2463A06100F038D3 /* Model 9.xcdatamodel */;
 			path = TracePrivately.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
