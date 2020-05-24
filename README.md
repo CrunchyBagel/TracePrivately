@@ -16,7 +16,7 @@ This app will be evolving quickly as I'm trying to publish new functionality as 
 * Remain open source for independent verification
 * Properly use the Apple / Google contact tracing specification
 * Accessible to as many users as possible:
-    * Localized to many langauges
+    * Localized to many languages
     * Adopt correct accessibility principles and functions
     * Support older devices
 * Be easily configurable to suit needs of different jurisdictions:
